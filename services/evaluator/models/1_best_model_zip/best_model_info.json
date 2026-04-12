@@ -1,0 +1,12 @@
+{
+  "epoch": 5,
+  "global_step": 1245,
+  "train_huber_loss": 0.10744681027549577,
+  "train_rank_loss": 0.07912120403699487,
+  "train_total_loss": 0.1470074122939932,
+  "val_huber_loss": 0.1119,
+  "val_rank_loss": 0.0832,
+  "val_total_loss": 0.1535,
+  "val_spearman": 0.7918,
+  "val_p_value": 0.0
+}

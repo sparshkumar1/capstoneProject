@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PrepAIred | Interview Preparation Platform</title>
+    <meta name="description" content="Adaptive AI-powered C and DSA interview practice with voice, code, and real-time feedback." />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%234f7eff'/><text x='6' y='23' font-size='18' font-family='monospace' font-weight='bold' fill='white'>P</text></svg>" />
+
+    <!-- Monaco Editor AMD Loader from CDN -->
+    <script>
+      // Kick off Monaco load early — parallel with React bundle
+      var monacoScript = document.createElement('script');
+      monacoScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js';
+      monacoScript.onload = function() {
+        require.config({
+          paths: {
+            vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs'
+          }
+        });
+        require(['vs/editor/editor.main'], function(monaco) {
+          window.monaco = monaco;
+          // Notify any waiting component
+          if (typeof window.__onMonacoReady === 'function') {
+            window.__onMonacoReady();
+          }
+          window.__monacoLoaded = true;
+        });
+      };
+      document.head.appendChild(monacoScript);
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

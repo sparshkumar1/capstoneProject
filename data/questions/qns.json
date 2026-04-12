@@ -1,0 +1,1367 @@
+[
+  {
+    "qid": "1",
+    "question_text": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "topic": "Arrays",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "2",
+    "question_text": "Explain the logic behind Kadane\u2019s algorithm for the maximum subarray sum.",
+    "topic": "Arrays",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "3",
+    "question_text": "Describe the approach to reverse a singly linked list in-place.",
+    "topic": "LinkedLists",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "4",
+    "question_text": "Explain Floyd\u2019s Cycle-Finding algorithm to detect a loop in a linked list.",
+    "topic": "LinkedLists",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "5",
+    "question_text": "How would you check if two strings are anagrams without sorting them?",
+    "topic": "Strings",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "6",
+    "question_text": "Explain the step-by-step logic of a Binary Search on a sorted array.",
+    "topic": "BinarySearch",
+    "difficulty": 0.3,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "7",
+    "question_text": "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place.",
+    "topic": "Matrix",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 120,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "8",
+    "question_text": "Describe the recursive logic to find the Nth Fibonacci number.",
+    "topic": "Recursion",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "9",
+    "question_text": "Explain the logic to validate balanced parentheses in an expression using a stack.",
+    "topic": "Stack",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "10",
+    "question_text": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "topic": "Trees",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "11",
+    "question_text": "How do you check if an integer is a power of two using bitwise operators?",
+    "topic": "BitManipulation",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "12",
+    "question_text": "Explain the Partition logic used in the QuickSort algorithm.",
+    "topic": "Sorting",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "13",
+    "question_text": "How would you find the Kth largest element in an unsorted array using a Min-Heap?",
+    "topic": "Heaps",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "14",
+    "question_text": "Explain the logic of Dijkstra's algorithm for finding the shortest path.",
+    "topic": "Graphs",
+    "difficulty": 0.8,
+    "type": "theory",
+    "time_limit_sec": 120,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "15",
+    "question_text": "Describe the Three-Way Partition logic used in the Dutch National Flag problem.",
+    "topic": "Arrays",
+    "difficulty": 0.8,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "16",
+    "question_text": "Explain the approach to solve the 0/1 Knapsack problem using Dynamic Programming.",
+    "topic": "DynamicProgramming",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 120,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "17",
+    "question_text": "Explain the Center Expansion logic to find the longest palindromic substring.",
+    "topic": "Strings",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "18",
+    "question_text": "Explain the logic to find the middle node of a linked list in a single pass.",
+    "topic": "LinkedLists",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "19",
+    "question_text": "Describe the approach to find the Lowest Common Ancestor (LCA) in a BST.",
+    "topic": "Trees",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "20",
+    "question_text": "Explain the Sliding Window approach to find the maximum sum of K consecutive elements.",
+    "topic": "Arrays",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "21",
+    "question_text": "Explain the recursive backtracking logic to solve the N-Queens problem.",
+    "topic": "Backtracking",
+    "difficulty": 0.9,
+    "type": "theory",
+    "time_limit_sec": 150,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "22",
+    "question_text": "Explain the logic to detect a cycle in an undirected graph using BFS.",
+    "topic": "Graphs",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "23",
+    "question_text": "Explain the approach to merge two sorted arrays without using extra space.",
+    "topic": "Arrays",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "24",
+    "question_text": "Explain how to swap two numbers using only the XOR operator.",
+    "topic": "BitManipulation",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "25",
+    "question_text": "Describe the logic to merge K sorted linked lists efficiently.",
+    "topic": "LinkedLists",
+    "difficulty": 0.8,
+    "type": "theory",
+    "time_limit_sec": 120,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "26",
+    "question_text": "Explain the logic to find the Longest Common Subsequence between two strings.",
+    "topic": "DynamicProgramming",
+    "difficulty": 0.8,
+    "type": "theory",
+    "time_limit_sec": 120,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "27",
+    "question_text": "Explain the recursive logic to check if a binary tree is a mirror image of itself.",
+    "topic": "Trees",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "28",
+    "question_text": "Explain the logic to traverse a matrix in a spiral order.",
+    "topic": "Matrix",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "29",
+    "question_text": "Describe the approach to reverse every word in a sentence while keeping the sentence order same.",
+    "topic": "Strings",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "30",
+    "question_text": "Explain the logic of Merge Sort and how it uses the Divide and Conquer strategy.",
+    "topic": "Sorting",
+    "difficulty": 0.8,
+    "type": "theory",
+    "time_limit_sec": 120,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "31",
+    "question_text": "Explain the logic to find the equilibrium index where the sum of left and right elements are equal.",
+    "topic": "Arrays",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "32",
+    "question_text": "Explain how to evaluate a Postfix expression using a stack.",
+    "topic": "Stack",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "33",
+    "question_text": "Explain the logic to find the median of a running data stream using two heaps.",
+    "topic": "Heaps",
+    "difficulty": 0.8,
+    "type": "theory",
+    "time_limit_sec": 120,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "34",
+    "question_text": "Explain Kahn's algorithm logic for Topological Sorting.",
+    "topic": "Graphs",
+    "difficulty": 0.8,
+    "type": "theory",
+    "time_limit_sec": 120,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "35",
+    "question_text": "Describe the logic to find the diameter of a binary tree.",
+    "topic": "Trees",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "36",
+    "question_text": "Explain the logic of the KMP algorithm for pattern matching in strings.",
+    "topic": "Strings",
+    "difficulty": 0.9,
+    "type": "theory",
+    "time_limit_sec": 150,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "37",
+    "question_text": "Explain the logic to move all zeroes to the end of an array while maintaining relative order.",
+    "topic": "Arrays",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "38",
+    "question_text": "Explain the logic of the Tower of Hanoi problem for 3 disks.",
+    "topic": "Recursion",
+    "difficulty": 0.8,
+    "type": "theory",
+    "time_limit_sec": 120,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "39",
+    "question_text": "Describe the approach to find the minimum number of coins needed to make change for a value.",
+    "topic": "DynamicProgramming",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "40",
+    "question_text": "Explain the logic to find the starting node of a loop in a linked list.",
+    "topic": "LinkedLists",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "41",
+    "question_text": "What is a pointer in C and how do you declare one?",
+    "topic": "C_Programming",
+    "difficulty": 0.2,
+    "type": "general_tech",
+    "time_limit_sec": 45,
+    "bloom_level": "L1"
+  },
+  {
+    "qid": "42",
+    "question_text": "What is the difference between malloc() and calloc() in C?",
+    "topic": "C_Programming",
+    "difficulty": 0.4,
+    "type": "general_tech",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "43",
+    "question_text": "What is a dangling pointer and why is it dangerous?",
+    "topic": "C_Programming",
+    "difficulty": 0.3,
+    "type": "general_tech",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "44",
+    "question_text": "Define Big O notation and explain why we use it.",
+    "topic": "DSA_Theory",
+    "difficulty": 0.2,
+    "type": "general_tech",
+    "time_limit_sec": 45,
+    "bloom_level": "L1"
+  },
+  {
+    "qid": "45",
+    "question_text": "What is the use of the static keyword in C?",
+    "topic": "C_Programming",
+    "difficulty": 0.5,
+    "type": "general_tech",
+    "time_limit_sec": 75,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "46",
+    "question_text": "What is the difference between a structure and a union in C?",
+    "topic": "C_Programming",
+    "difficulty": 0.5,
+    "type": "general_tech",
+    "time_limit_sec": 75,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "47",
+    "question_text": "What are function pointers and what is their primary use case?",
+    "topic": "C_Programming",
+    "difficulty": 0.6,
+    "type": "general_tech",
+    "time_limit_sec": 90,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "48",
+    "question_text": "Compare an Array and a Linked List in terms of search and insertion time.",
+    "topic": "DSA_Theory",
+    "difficulty": 0.4,
+    "type": "general_tech",
+    "time_limit_sec": 75,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "49",
+    "question_text": "Explain the concept of Pass by Value versus Pass by Reference.",
+    "topic": "C_Programming",
+    "difficulty": 0.3,
+    "type": "general_tech",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "50",
+    "question_text": "What is a segmentation fault and how is it caused?",
+    "topic": "C_Programming",
+    "difficulty": 0.4,
+    "type": "general_tech",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "51",
+    "question_text": "What is a hash collision and mention one way to resolve it.",
+    "topic": "Hashing",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "52",
+    "question_text": "What is the size of a pointer variable in C on a 64-bit system?",
+    "topic": "Pointers",
+    "difficulty": 0.2,
+    "type": "theory",
+    "time_limit_sec": 30,
+    "bloom_level": "L1"
+  },
+  {
+    "qid": "53",
+    "question_text": "What is a memory leak and how do you prevent it in C?",
+    "topic": "Memory Management",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "54",
+    "question_text": "What is a stack and name two real-world applications.",
+    "topic": "Stack",
+    "difficulty": 0.3,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L1"
+  },
+  {
+    "qid": "55",
+    "question_text": "What is the difference between a volatile and a const variable?",
+    "topic": "C Variables",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "56",
+    "question_text": "What is the difference between a complete binary tree and a full binary tree?",
+    "topic": "Binary Trees",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "57",
+    "question_text": "What does the free() function do in C?",
+    "topic": "Memory Management",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 45,
+    "bloom_level": "L1"
+  },
+  {
+    "qid": "58",
+    "question_text": "Explain the difference between BFS and DFS traversal.",
+    "topic": "Graph Traversal",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "59",
+    "question_text": "Explain the use of preprocessor directives in C.",
+    "topic": "Preprocessor",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "60",
+    "question_text": "What is the time complexity of searching in a balanced Binary Search Tree?",
+    "topic": "Binary Search Tree",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 45,
+    "bloom_level": "L1"
+  },
+  {
+    "qid": "61",
+    "question_text": "Explain the difference between internal and external linkage in C.",
+    "topic": "Linkage",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "62",
+    "question_text": "What are L-values and R-values? Provide an example of each.",
+    "topic": "Expressions",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "63",
+    "question_text": "What is the difference between an adjacency matrix and an adjacency list for graphs?",
+    "topic": "Graph Representation",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "64",
+    "question_text": "How do you use the enum keyword in C, and why is it preferred over #define?",
+    "topic": "Enum",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "65",
+    "question_text": "Explain the concept of amortized analysis in the context of a dynamic array.",
+    "topic": "Amortized Analysis",
+    "difficulty": 0.8,
+    "type": "theory",
+    "time_limit_sec": 120,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "66",
+    "question_text": "What is type punning in C and how can it be achieved using unions?",
+    "topic": "Advanced C",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "67",
+    "question_text": "How do you convert an infix expression to postfix using a stack?",
+    "topic": "Stack Applications",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "68",
+    "question_text": "What is the difference between stack and heap memory allocation?",
+    "topic": "Memory Allocation",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "69",
+    "question_text": "What is the dreaded diamond problem and does C suffer from it?",
+    "topic": "Programming Concepts",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "70",
+    "question_text": "Explain the difference between a linear and a non-linear data structure.",
+    "topic": "Data Structures",
+    "difficulty": 0.3,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "71",
+    "question_text": "What are the four storage classes in C (auto, register, static, extern)?",
+    "topic": "Storage Classes",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "72",
+    "question_text": "What is the purpose of the extern keyword in C?",
+    "topic": "Storage Classes",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "73",
+    "question_text": "How do you find the height of a binary tree recursively?",
+    "topic": "Binary Trees",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "74",
+    "question_text": "What are inline functions and what are their advantages?",
+    "topic": "Functions",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "75",
+    "question_text": "What is the difference between typedef and #define?",
+    "topic": "C Preprocessor",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "76",
+    "question_text": "Explain the Heapify process in a binary heap.",
+    "topic": "DSA_Theory",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "77",
+    "question_text": "What are self-referential structures and provide an example.",
+    "topic": "C_Programming",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "78",
+    "question_text": "Compare Bubble Sort and Selection Sort in terms of efficiency.",
+    "topic": "DSA_Theory",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "79",
+    "question_text": "Name three common applications of a Priority Queue.",
+    "topic": "DSA_Theory",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "80",
+    "question_text": "Explain the difference between Recursion and Iteration.",
+    "topic": "C_Programming",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "81",
+    "question_text": "Explain how an array name decays into a pointer.",
+    "topic": "C_Programming",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "82",
+    "question_text": "What is the difference between a NULL pointer and a void pointer?",
+    "topic": "C_Programming",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "83",
+    "question_text": "Explain two practical uses of Bit Masking in embedded C.",
+    "topic": "C_Programming",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "84",
+    "question_text": "What is a Trie data structure and where is it commonly used?",
+    "topic": "DSA_Theory",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "85",
+    "question_text": "What is the purpose of Tree Balancing in AVL or Red-Black trees?",
+    "topic": "DSA_Theory",
+    "difficulty": 0.8,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "86",
+    "question_text": "What is the GDB debugger and how do you set a breakpoint?",
+    "topic": "C_Programming",
+    "difficulty": 0.3,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "87",
+    "question_text": "What does the sizeof operator return, and is it a compile-time or run-time operator?",
+    "topic": "C_Programming",
+    "difficulty": 0.2,
+    "type": "theory",
+    "time_limit_sec": 45,
+    "bloom_level": "L1"
+  },
+  {
+    "qid": "88",
+    "question_text": "Explain the concept of double pointers (pointers to pointers).",
+    "topic": "C_Programming",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "89",
+    "question_text": "What is a Circular Linked List and what is its primary benefit?",
+    "topic": "DSA_Theory",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "90",
+    "question_text": "How does realloc() work if the memory block cannot be expanded in place?",
+    "topic": "C_Programming",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "91",
+    "question_text": "Explain the difference between pre-increment (++i) and post-increment (i++) in C.",
+    "topic": "C_Programming",
+    "difficulty": 0.3,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "92",
+    "question_text": "Explain bitwise Left Shift vs Right Shift behavior with negative numbers.",
+    "topic": "C_Programming",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "93",
+    "question_text": "How do you count the number of leaf nodes in a Binary Tree?",
+    "topic": "DSA_Theory",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L3"
+  },
+  {
+    "qid": "94",
+    "question_text": "What is the difference between a string literal and a character array?",
+    "topic": "C_Programming",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "95",
+    "question_text": "Explain the difference between a Greedy strategy and Dynamic Programming.",
+    "topic": "DSA_Theory",
+    "difficulty": 0.6,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "96",
+    "question_text": "What is Open Addressing in Hash Table collision resolution?",
+    "topic": "DSA_Theory",
+    "difficulty": 0.7,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "97",
+    "question_text": "Explain the four stages of C compilation (Pre-processing, Compilation, Assembly, Linking).",
+    "topic": "C_Programming",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 90,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "98",
+    "question_text": "What are Header Guards (#ifndef) and why are they used?",
+    "topic": "C_Programming",
+    "difficulty": 0.4,
+    "type": "theory",
+    "time_limit_sec": 60,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "99",
+    "question_text": "What causes a Stack Overflow in recursion, and how can it be avoided?",
+    "topic": "DSA_Theory",
+    "difficulty": 0.8,
+    "type": "theory",
+    "time_limit_sec": 105,
+    "bloom_level": "L2"
+  },
+  {
+    "qid": "100",
+    "question_text": "Explain the difference between an In-place and an Out-of-place sorting algorithm.",
+    "topic": "DSA_Theory",
+    "difficulty": 0.5,
+    "type": "theory",
+    "time_limit_sec": 75,
+    "bloom_level": "L4"
+  },
+  {
+    "qid": "101",
+    "question_text": "You need to find the shortest path in a graph. When would you choose Dijkstra's algorithm over BFS, and when would BFS be the better choice? Justify your decision.",
+    "topic": "Graphs",
+    "difficulty": 0.7,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "102",
+    "question_text": "Your team is debating whether to use a hash map or a balanced BST to store user session data that requires fast lookup and also needs to be iterated in sorted order. Which would you recommend and why?",
+    "topic": "DSA_Theory",
+    "difficulty": 0.7,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "103",
+    "question_text": "A recursive function to compute Fibonacci numbers is correct but extremely slow for n=50. Identify the core problem and evaluate two different strategies to fix it. Which is better and in what context?",
+    "topic": "DynamicProgramming",
+    "difficulty": 0.7,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "104",
+    "question_text": "You are writing a C program that must run on a microcontroller with 4KB RAM. Evaluate the trade-offs between using a linked list versus a fixed-size array for your data storage. Which would you choose?",
+    "topic": "C_Programming",
+    "difficulty": 0.8,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "105",
+    "question_text": "QuickSort averages O(n log n) but degrades to O(n\u00b2) in the worst case. MergeSort is always O(n log n). Yet QuickSort is often preferred in practice. Evaluate both algorithms and justify when you would choose each.",
+    "topic": "Sorting",
+    "difficulty": 0.8,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "106",
+    "question_text": "You have a function that mallocs memory inside it and returns a pointer. A colleague says this is bad practice. Do you agree? Evaluate the design decision and propose a better alternative if needed.",
+    "topic": "C_Programming",
+    "difficulty": 0.7,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "107",
+    "question_text": "A sorted array of 1 million integers needs frequent search operations but very rare insertions. Evaluate whether to use a sorted array with binary search or a balanced BST. Which design decision would you make?",
+    "topic": "DSA_Theory",
+    "difficulty": 0.7,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "108",
+    "question_text": "Two developers disagree: one says DFS is better for finding connected components, the other prefers BFS. Evaluate both positions. Is one objectively better or does it depend on context?",
+    "topic": "Graphs",
+    "difficulty": 0.7,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "109",
+    "question_text": "You are implementing a cache with a fixed capacity that evicts the least recently used item. Evaluate the data structures you would combine to achieve O(1) get and put operations. Is there a better alternative?",
+    "topic": "DSA_Theory",
+    "difficulty": 0.9,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 150
+  },
+  {
+    "qid": "110",
+    "question_text": "Your C program is running correctly but Valgrind reports memory leaks. A junior developer suggests just adding free() at the end of main(). Evaluate this suggestion. Is it sufficient? What is the correct approach?",
+    "topic": "C_Programming",
+    "difficulty": 0.7,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "111",
+    "question_text": "Evaluate the trade-offs between using recursion versus an explicit stack for a depth-first search on a graph with potentially 100,000 nodes. Which approach would you choose for production code?",
+    "topic": "Graphs",
+    "difficulty": 0.8,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "112",
+    "question_text": "A teammate uses a global variable to share state between functions instead of passing parameters. Evaluate this design. When, if ever, is this acceptable in C? What are the risks?",
+    "topic": "C_Programming",
+    "difficulty": 0.6,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 105
+  },
+  {
+    "qid": "113",
+    "question_text": "You need to implement autocomplete for a search bar with a dictionary of 500,000 words. Evaluate the use of a Trie versus a sorted array with binary search. Which would you choose and why?",
+    "topic": "DSA_Theory",
+    "difficulty": 0.8,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "114",
+    "question_text": "Evaluate the following claim: 'A greedy algorithm is always faster than dynamic programming for optimization problems, so you should always try greedy first.' Is this true? Justify your answer with examples.",
+    "topic": "DynamicProgramming",
+    "difficulty": 0.7,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "115",
+    "question_text": "You are designing a phone book application in C that needs to support insert, delete, and search by name. Evaluate the best data structure choice among: array, linked list, hash map, and BST. Justify your final recommendation.",
+    "topic": "DSA_Theory",
+    "difficulty": 0.8,
+    "type": "evaluate",
+    "bloom_level": "L5",
+    "time_limit_sec": 120
+  },
+  {
+    "qid": "C01",
+    "question_text": "Write a C function that finds the two indices in an array that sum up to a target value. Return -1 -1 if no such pair exists.",
+    "topic": "Arrays",
+    "difficulty": 0.4,
+    "type": "code",
+    "bloom_level": "L6",
+    "time_limit_sec": 180,
+    "code_template": "#include <stdio.h>\n#include <stdlib.h>\n\n// Return indices via output parameters\nvoid two_sum(int *arr, int n, int target, int *idx1, int *idx2) {\n    *idx1 = -1;\n    *idx2 = -1;\n    // Your implementation here\n}\n\nint main() {\n    int n, target;\n    scanf(\"%d %d\", &n, &target);\n    int *arr = malloc(n * sizeof(int));\n    for (int i = 0; i < n; i++) scanf(\"%d\", &arr[i]);\n    int i1, i2;\n    two_sum(arr, n, target, &i1, &i2);\n    printf(\"%d %d\\n\", i1, i2);\n    free(arr);\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "4 9\n2 7 11 15",
+        "expected_output": "0 1",
+        "hidden": false
+      },
+      {
+        "input": "3 6\n3 2 4",
+        "expected_output": "1 2",
+        "hidden": false
+      },
+      {
+        "input": "2 10\n1 5",
+        "expected_output": "-1 -1",
+        "hidden": true
+      },
+      {
+        "input": "5 8\n1 4 3 5 8",
+        "expected_output": "1 2",
+        "hidden": true
+      }
+    ],
+    "partial_credit_per_case": true
+  },
+  {
+    "qid": "C02",
+    "question_text": "Write a C function to reverse a singly linked list in-place and return the new head.",
+    "topic": "LinkedLists",
+    "difficulty": 0.6,
+    "type": "code",
+    "bloom_level": "L6",
+    "time_limit_sec": 180,
+    "code_template": "#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\nstruct Node* reverse(struct Node *head) {\n    // Your implementation here\n}\n\n// --- Scaffold (do not modify below) ---\nstruct Node* build(int *a, int n) {\n    if (!n) return NULL;\n    struct Node *h = malloc(sizeof(struct Node));\n    h->data = a[0]; h->next = NULL;\n    struct Node *t = h;\n    for (int i = 1; i < n; i++) {\n        struct Node *nd = malloc(sizeof(struct Node));\n        nd->data = a[i]; nd->next = NULL;\n        t->next = nd; t = nd;\n    }\n    return h;\n}\nvoid print_list(struct Node *h) {\n    while (h) { printf(\"%d\", h->data); if (h->next) printf(\" \"); h = h->next; }\n    printf(\"\\n\");\n}\nint main() {\n    int n; scanf(\"%d\", &n);\n    int *a = malloc(n * sizeof(int));\n    for (int i = 0; i < n; i++) scanf(\"%d\", &a[i]);\n    struct Node *head = build(a, n);\n    head = reverse(head);\n    print_list(head);\n    free(a);\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "5\n1 2 3 4 5",
+        "expected_output": "5 4 3 2 1",
+        "hidden": false
+      },
+      {
+        "input": "1\n42",
+        "expected_output": "42",
+        "hidden": false
+      },
+      {
+        "input": "2\n7 8",
+        "expected_output": "8 7",
+        "hidden": true
+      },
+      {
+        "input": "3\n9 1 3",
+        "expected_output": "3 1 9",
+        "hidden": true
+      }
+    ],
+    "partial_credit_per_case": true
+  },
+  {
+    "qid": "C03",
+    "question_text": "Write a C function implementing Kadane's algorithm to find the maximum subarray sum.",
+    "topic": "Arrays",
+    "difficulty": 0.6,
+    "type": "code",
+    "bloom_level": "L6",
+    "time_limit_sec": 180,
+    "code_template": "#include <stdio.h>\n#include <stdlib.h>\n\nint max_subarray_sum(int *arr, int n) {\n    // Your implementation here\n}\n\nint main() {\n    int n; scanf(\"%d\", &n);\n    int *arr = malloc(n * sizeof(int));\n    for (int i = 0; i < n; i++) scanf(\"%d\", &arr[i]);\n    printf(\"%d\\n\", max_subarray_sum(arr, n));\n    free(arr);\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "9\n-2 1 -3 4 -1 2 1 -5 4",
+        "expected_output": "6",
+        "hidden": false
+      },
+      {
+        "input": "4\n-1 -2 -3 -4",
+        "expected_output": "-1",
+        "hidden": false
+      },
+      {
+        "input": "5\n1 2 3 4 5",
+        "expected_output": "15",
+        "hidden": true
+      },
+      {
+        "input": "6\n-2 -3 4 -1 -2 1",
+        "expected_output": "4",
+        "hidden": true
+      }
+    ],
+    "partial_credit_per_case": true
+  },
+  {
+    "qid": "C04",
+    "question_text": "Write a C function to check if parentheses in an expression string are balanced. Print 1 if balanced, 0 otherwise.",
+    "topic": "Stack",
+    "difficulty": 0.5,
+    "type": "code",
+    "bloom_level": "L6",
+    "time_limit_sec": 180,
+    "code_template": "#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n\nint is_balanced(char *expr) {\n    // Your implementation here\n}\n\nint main() {\n    char expr[1001];\n    scanf(\"%s\", expr);\n    printf(\"%d\\n\", is_balanced(expr));\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "({[]})",
+        "expected_output": "1",
+        "hidden": false
+      },
+      {
+        "input": "([)]",
+        "expected_output": "0",
+        "hidden": false
+      },
+      {
+        "input": "{[]()}",
+        "expected_output": "1",
+        "hidden": true
+      },
+      {
+        "input": "(((",
+        "expected_output": "0",
+        "hidden": true
+      }
+    ],
+    "partial_credit_per_case": true
+  },
+  {
+    "qid": "C05",
+    "question_text": "Write a C function to find the height of a binary tree. Read the tree as a level-order input where -1 represents null.",
+    "topic": "Trees",
+    "difficulty": 0.6,
+    "type": "code",
+    "bloom_level": "L6",
+    "time_limit_sec": 180,
+    "code_template": "#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node *left, *right;\n};\n\nint height(struct Node *root) {\n    // Your implementation here\n}\n\n// Scaffold: builds tree from level-order array\nstruct Node* new_node(int d) {\n    struct Node *n = malloc(sizeof(struct Node));\n    n->data = d; n->left = n->right = NULL;\n    return n;\n}\nstruct Node* build_tree(int *arr, int n) {\n    if (!n || arr[0] == -1) return NULL;\n    struct Node **q = malloc(n * sizeof(struct Node*));\n    int front = 0, back = 0;\n    struct Node *root = new_node(arr[0]);\n    q[back++] = root;\n    int i = 1;\n    while (front < back && i < n) {\n        struct Node *cur = q[front++];\n        if (i < n && arr[i] != -1) { cur->left = new_node(arr[i]); q[back++] = cur->left; } i++;\n        if (i < n && arr[i] != -1) { cur->right = new_node(arr[i]); q[back++] = cur->right; } i++;\n    }\n    free(q);\n    return root;\n}\nint main() {\n    int n; scanf(\"%d\", &n);\n    int *arr = malloc(n * sizeof(int));\n    for (int i = 0; i < n; i++) scanf(\"%d\", &arr[i]);\n    printf(\"%d\\n\", height(build_tree(arr, n)));\n    free(arr);\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "7\n1 2 3 4 5 -1 -1",
+        "expected_output": "3",
+        "hidden": false
+      },
+      {
+        "input": "1\n1",
+        "expected_output": "1",
+        "hidden": false
+      },
+      {
+        "input": "5\n1 2 -1 3 -1",
+        "expected_output": "3",
+        "hidden": true
+      },
+      {
+        "input": "9\n1 2 3 4 5 6 7 -1 -1",
+        "expected_output": "3",
+        "hidden": true
+      }
+    ],
+    "partial_credit_per_case": true
+  },
+  {
+    "qid": "C06",
+    "question_text": "Write a C function implementing binary search on a sorted array. Return the index of the target, or -1 if not found.",
+    "topic": "BinarySearch",
+    "difficulty": 0.3,
+    "type": "code",
+    "bloom_level": "L6",
+    "time_limit_sec": 150,
+    "code_template": "#include <stdio.h>\n#include <stdlib.h>\n\nint binary_search(int *arr, int n, int target) {\n    // Your implementation here\n}\n\nint main() {\n    int n, target;\n    scanf(\"%d %d\", &n, &target);\n    int *arr = malloc(n * sizeof(int));\n    for (int i = 0; i < n; i++) scanf(\"%d\", &arr[i]);\n    printf(\"%d\\n\", binary_search(arr, n, target));\n    free(arr);\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "5 3\n1 2 3 4 5",
+        "expected_output": "2",
+        "hidden": false
+      },
+      {
+        "input": "5 6\n1 2 3 4 5",
+        "expected_output": "-1",
+        "hidden": false
+      },
+      {
+        "input": "1 1\n1",
+        "expected_output": "0",
+        "hidden": true
+      },
+      {
+        "input": "6 4\n1 3 4 6 7 9",
+        "expected_output": "2",
+        "hidden": true
+      }
+    ],
+    "partial_credit_per_case": true
+  },
+  {
+    "qid": "C07",
+    "question_text": "Write a C function to swap two numbers using only the XOR operator (no temporary variable).",
+    "topic": "BitManipulation",
+    "difficulty": 0.4,
+    "type": "code",
+    "bloom_level": "L6",
+    "time_limit_sec": 120,
+    "code_template": "#include <stdio.h>\n\nvoid xor_swap(int *a, int *b) {\n    // Your implementation \u2014 only XOR allowed, no temp variable\n}\n\nint main() {\n    int a, b;\n    scanf(\"%d %d\", &a, &b);\n    xor_swap(&a, &b);\n    printf(\"%d %d\\n\", a, b);\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "5 10",
+        "expected_output": "10 5",
+        "hidden": false
+      },
+      {
+        "input": "0 7",
+        "expected_output": "7 0",
+        "hidden": false
+      },
+      {
+        "input": "-3 9",
+        "expected_output": "9 -3",
+        "hidden": true
+      },
+      {
+        "input": "42 42",
+        "expected_output": "42 42",
+        "hidden": true
+      }
+    ],
+    "partial_credit_per_case": true
+  },
+  {
+    "qid": "C08",
+    "question_text": "Write a C function that moves all zeroes in an array to the end while maintaining the relative order of non-zero elements. Modify in-place.",
+    "topic": "Arrays",
+    "difficulty": 0.5,
+    "type": "code",
+    "bloom_level": "L6",
+    "time_limit_sec": 150,
+    "code_template": "#include <stdio.h>\n#include <stdlib.h>\n\nvoid move_zeroes(int *arr, int n) {\n    // Your implementation here\n}\n\nint main() {\n    int n; scanf(\"%d\", &n);\n    int *arr = malloc(n * sizeof(int));\n    for (int i = 0; i < n; i++) scanf(\"%d\", &arr[i]);\n    move_zeroes(arr, n);\n    for (int i = 0; i < n; i++) {\n        printf(\"%d\", arr[i]);\n        if (i < n - 1) printf(\" \");\n    }\n    printf(\"\\n\");\n    free(arr);\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "5\n0 1 0 3 12",
+        "expected_output": "1 3 12 0 0",
+        "hidden": false
+      },
+      {
+        "input": "3\n0 0 0",
+        "expected_output": "0 0 0",
+        "hidden": false
+      },
+      {
+        "input": "4\n1 2 3 4",
+        "expected_output": "1 2 3 4",
+        "hidden": true
+      },
+      {
+        "input": "6\n1 0 2 0 3 0",
+        "expected_output": "1 2 3 0 0 0",
+        "hidden": true
+      }
+    ],
+    "partial_credit_per_case": true
+  },
+  {
+    "qid": "C09",
+    "question_text": "Write a C function to implement a min-heap insertion. Given n integers one by one, insert each into a min-heap and print the root after all insertions.",
+    "topic": "Heaps",
+    "difficulty": 0.7,
+    "type": "code",
+    "bloom_level": "L6",
+    "time_limit_sec": 210,
+    "code_template": "#include <stdio.h>\n#include <stdlib.h>\n\n#define MAX_SIZE 1001\n\nint heap[MAX_SIZE];\nint heap_size = 0;\n\nvoid insert(int val) {\n    // Your implementation: insert val and bubble up\n}\n\nint get_min() {\n    return heap[0];\n}\n\nint main() {\n    int n; scanf(\"%d\", &n);\n    for (int i = 0; i < n; i++) {\n        int x; scanf(\"%d\", &x);\n        insert(x);\n    }\n    printf(\"%d\\n\", get_min());\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "5\n5 3 8 1 4",
+        "expected_output": "1",
+        "hidden": false
+      },
+      {
+        "input": "3\n10 20 5",
+        "expected_output": "5",
+        "hidden": false
+      },
+      {
+        "input": "1\n42",
+        "expected_output": "42",
+        "hidden": true
+      },
+      {
+        "input": "4\n7 7 7 2",
+        "expected_output": "2",
+        "hidden": true
+      }
+    ],
+    "partial_credit_per_case": true
+  },
+  {
+    "qid": "C10",
+    "question_text": "Write a C function to find the longest common subsequence (LCS) length of two strings using dynamic programming.",
+    "topic": "DynamicProgramming",
+    "difficulty": 0.8,
+    "type": "code",
+    "bloom_level": "L6",
+    "time_limit_sec": 210,
+    "code_template": "#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n\nint lcs(char *s1, char *s2) {\n    // Your implementation here\n}\n\nint main() {\n    char s1[1001], s2[1001];\n    scanf(\"%s %s\", s1, s2);\n    printf(\"%d\\n\", lcs(s1, s2));\n    return 0;\n}",
+    "test_cases": [
+      {
+        "input": "ABCBDAB BDCAB",
+        "expected_output": "4",
+        "hidden": false
+      },
+      {
+        "input": "AGGTAB GXTXAYB",
+        "expected_output": "4",
+        "hidden": false
+      },
+      {
+        "input": "ABC AC",
+        "expected_output": "2",
+        "hidden": true
+      },
+      {
+        "input": "ABCD ABCD",
+        "expected_output": "4",
+        "hidden": true
+      }
+    ],
+    "partial_credit_per_case": true
+  }
+]

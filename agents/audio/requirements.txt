@@ -1,0 +1,17 @@
+# Audio recording and feature extraction
+numpy==1.26.4
+sounddevice==0.4.6
+soundfile==0.12.1
+librosa==0.10.1
+praat-parselmouth==0.4.5
+
+# WhisperX transcription and alignment
+whisperx==3.1.1
+
+# Linguistic confidence classification
+transformers==4.40.0
+torch==2.2.2
+torchaudio==2.2.2
+
+# Optional NLP utilities
+spacy==3.7.4

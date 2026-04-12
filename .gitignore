@@ -1,0 +1,35 @@
+# Python caches and environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+rl/venv/
+
+# Frontend artifacts
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+apps/web/node_modules/
+apps/web/dist/
+apps/web/build/
+
+# Local model artifacts
+models/
+services/qwen/models/
+
+# Logs and generated artifacts
+*.log
+orchestrator_logs/
+training_logs/
+rl/training_logs/
+rl/rl_runs/
+rl/data/
+rl/logs/
+*.faiss
+
+# OS files
+desktop.ini
+.DS_Store

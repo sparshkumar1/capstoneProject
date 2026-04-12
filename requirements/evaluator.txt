@@ -1,0 +1,4 @@
+-r base.txt
+sentence-transformers>=2.3.0,<3.0.0
+scikit-learn>=1.4.0,<2.0.0
+faiss-cpu>=1.7.4,<2.0.0
