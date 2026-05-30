@@ -143,7 +143,8 @@ PrepAIred/
 ### Core Control
 
 - **InterviewOrchestrator** coordinates session lifecycle and agent calls.
-- **Strategy agent** suggests next action: Easier / Same / Harder / Hint / Follow-up.
+- **Strategy agent** suggests next action: Easier / Same / Harder.
+- **Hint and Follow-up** are guardrail-triggered interventions, not RL actions.
 - **Question selector** chooses next question by difficulty/topic constraints.
 
 ### Evaluation Layer
@@ -213,7 +214,8 @@ If you want static architecture images in GitHub preview, place images under `do
 
 - Algorithm: PPO (Stable-Baselines3)
 - State (6D): performance, rolling average, confidence, hesitation, time_norm, difficulty
-- Actions (5): Easier, Same, Harder, Hint, Follow-up
+- Actions (3): Easier, Same, Harder
+- Guardrail interventions: Hint, Follow-up
 - Baseline phase: deterministic initial questions before RL control
 - Runtime safety: post-policy guardrails to prevent unstable actions
 - Trained artifacts: `rl/checkpoints/seed_123/ppo_final.zip`, `vecnormalize.pkl`
@@ -223,7 +225,7 @@ If you want static architecture images in GitHub preview, place images under `do
 `launch.py` starts these services in order:
 
 1. Evaluator API: `http://localhost:5000`
-2. Qwen microservice (optional): `http://localhost:8001`
+2. Qwen microservice (optional, single-model): `http://localhost:8001`
 3. Backend API/WebSocket: `http://localhost:8000`
 4. Frontend dev server (optional): usually `http://localhost:5173`
 
@@ -301,13 +303,15 @@ From `Evaluator_final/Evaluator/evaluate.py`:
 
 ## API Endpoints (Qwen Service)
 
-From `qwen_integration/main.py`:
+From `services/qwen/app.py`:
 
 - `GET /health`
 - `POST /hint`
 - `POST /followup`
 - `POST /partial_eval`
 - `POST /report`
+
+The Qwen service is intentionally kept as a single model tier so the runtime stays simpler to explain, easier to validate, and easier to keep consistent across prompts.
 
 ## Setup
 
@@ -413,6 +417,8 @@ npm run dev
 - RL artifacts and training logs under `rl_agent/rl_runs/`
 
 ## Research Artifacts
+
+**Human evaluation pipeline:** see `ablation/HUMAN_EVAL_README.md` for an interactive rater harness, synthetic-proxy generator for testing, averaging scripts, and analysis commands used to produce the figures in `ablation/results/`.
 
 Draft manuscripts:
 
