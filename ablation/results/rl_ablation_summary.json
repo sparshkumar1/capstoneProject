@@ -1,0 +1,281 @@
+{
+  "PPO + Guardrails": {
+    "n_sessions": 10,
+    "n_questions": 100,
+    "mean_score": {
+      "n": 10,
+      "mean": 0.6199999999999996,
+      "std": 0.03241369491821358,
+      "ci95": 0.020090216251382506
+    },
+    "mean_difficulty": {
+      "n": 10,
+      "mean": 4.49,
+      "std": 0.11005049346146098,
+      "ci95": 0.06821000252488213
+    },
+    "adaptation_rho": {
+      "n": 10,
+      "mean": 0.8707198720078498,
+      "std": 0.10314055791279472,
+      "ci95": 0.063927180100407
+    },
+    "adjusted_slope": {
+      "n": 10,
+      "mean": 0.04752913395691534,
+      "std": 0.01292925252383191,
+      "ci95": 0.0080136337380827
+    },
+    "ppo_rate": {
+      "n": 10,
+      "mean": 0.6199999999999999,
+      "std": 0.14757295747452434,
+      "ci95": 0.09146666666666664
+    },
+    "ppo_decisions": 62,
+    "heuristic_decisions": 7,
+    "total_decisions": 100,
+    "guardrail_counts": {
+      "G1": 1,
+      "G2": 1,
+      "G3": 20,
+      "G4": 4,
+      "G5": 3,
+      "G6": 2
+    },
+    "question_metrics": {
+      "n_questions": 100,
+      "mean_score": 0.6199999999999996,
+      "mean_difficulty": 4.49,
+      "std_score": 0.1809068067466581,
+      "std_difficulty": 0.7452882297839846,
+      "adaptation_rho": 0.5800466688831329,
+      "adaptation_p": 3.1365112848631595e-10,
+      "adjusted_slope": 0.0004841042972621499,
+      "has_action_source": true,
+      "total_decisions": 100,
+      "ppo_decisions": 62,
+      "heuristic_decisions": 7,
+      "ppo_rate": 0.62,
+      "guardrail_counts": {
+        "G1": 1,
+        "G2": 1,
+        "G3": 20,
+        "G4": 4,
+        "G5": 3,
+        "G6": 2
+      }
+    }
+  },
+  "PPO only": {
+    "n_sessions": 10,
+    "n_questions": 100,
+    "mean_score": {
+      "n": 10,
+      "mean": 0.5680046523551197,
+      "std": 0.06605364922658254,
+      "ci95": 0.040940475947076775
+    },
+    "mean_difficulty": {
+      "n": 10,
+      "mean": 3.3600000000000003,
+      "std": 0.30258148581093913,
+      "ci95": 0.18754194790025566
+    },
+    "adaptation_rho": {
+      "n": 8,
+      "mean": 0.46669944902900884,
+      "std": 0.29053308824137386,
+      "ci95": 0.20132915851745414
+    },
+    "adjusted_slope": {
+      "n": 10,
+      "mean": 0.028709500932805276,
+      "std": 0.015458367851358162,
+      "ci95": 0.009581195658526937
+    },
+    "ppo_rate": {
+      "n": 10,
+      "mean": 1.0,
+      "std": 0.0,
+      "ci95": 0.0
+    },
+    "ppo_decisions": 100,
+    "heuristic_decisions": 0,
+    "total_decisions": 100,
+    "guardrail_counts": {
+      "G1": 0,
+      "G2": 0,
+      "G3": 0,
+      "G4": 0,
+      "G5": 0,
+      "G6": 0
+    },
+    "question_metrics": {
+      "n_questions": 100,
+      "mean_score": 0.5680046523551194,
+      "mean_difficulty": 3.36,
+      "std_score": 0.21682728171184532,
+      "std_difficulty": 0.5029207620781756,
+      "adaptation_rho": 0.34196518517180413,
+      "adaptation_p": 0.0005315000578902674,
+      "adjusted_slope": -0.00037212105580307836,
+      "has_action_source": true,
+      "total_decisions": 100,
+      "ppo_decisions": 100,
+      "heuristic_decisions": 0,
+      "ppo_rate": 1.0,
+      "guardrail_counts": {
+        "G1": 0,
+        "G2": 0,
+        "G3": 0,
+        "G4": 0,
+        "G5": 0,
+        "G6": 0
+      }
+    }
+  },
+  "Heuristic only": {
+    "n_sessions": 10,
+    "n_questions": 100,
+    "mean_score": {
+      "n": 10,
+      "mean": 0.5397506971842884,
+      "std": 0.09883467347365761,
+      "ci95": 0.061258365275253614
+    },
+    "mean_difficulty": {
+      "n": 10,
+      "mean": 2.29,
+      "std": 0.48407988321488155,
+      "ci95": 0.3000358200837582
+    },
+    "adaptation_rho": {
+      "n": 8,
+      "mean": -0.04045381907166358,
+      "std": 0.3584168469036899,
+      "ci95": 0.24837020327835777
+    },
+    "adjusted_slope": {
+      "n": 10,
+      "mean": 0.006494187652264649,
+      "std": 0.02549779433675003,
+      "ci95": 0.015803696661275797
+    },
+    "ppo_rate": {
+      "n": 10,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci95": 0.0
+    },
+    "ppo_decisions": 0,
+    "heuristic_decisions": 100,
+    "total_decisions": 100,
+    "guardrail_counts": {
+      "G1": 0,
+      "G2": 0,
+      "G3": 0,
+      "G4": 0,
+      "G5": 0,
+      "G6": 0
+    },
+    "question_metrics": {
+      "n_questions": 100,
+      "mean_score": 0.5397506971842885,
+      "mean_difficulty": 2.29,
+      "std_score": 0.2004146309813054,
+      "std_difficulty": 0.7823172003862641,
+      "adaptation_rho": 0.10358511310669974,
+      "adaptation_p": 0.3075781120081213,
+      "adjusted_slope": 0.00044820138761722793,
+      "has_action_source": true,
+      "total_decisions": 100,
+      "ppo_decisions": 0,
+      "heuristic_decisions": 100,
+      "ppo_rate": 0.0,
+      "guardrail_counts": {
+        "G1": 0,
+        "G2": 0,
+        "G3": 0,
+        "G4": 0,
+        "G5": 0,
+        "G6": 0
+      }
+    }
+  },
+  "Fixed difficulty": {
+    "n_sessions": 10,
+    "n_questions": 100,
+    "mean_score": {
+      "n": 10,
+      "mean": 0.4999999999999999,
+      "std": 0.07498361666734274,
+      "ci95": 0.046475327109690386
+    },
+    "mean_difficulty": {
+      "n": 10,
+      "mean": 3.0,
+      "std": 0.0,
+      "ci95": 0.0
+    },
+    "adaptation_rho": {
+      "n": 0,
+      "mean": NaN,
+      "std": NaN,
+      "ci95": NaN
+    },
+    "adjusted_slope": {
+      "n": 10,
+      "mean": -0.031786324617091556,
+      "std": 0.018916338112849315,
+      "ci95": 0.011724467831585194
+    },
+    "ppo_rate": {
+      "n": 10,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci95": 0.0
+    },
+    "ppo_decisions": 0,
+    "heuristic_decisions": 0,
+    "total_decisions": 100,
+    "guardrail_counts": {
+      "G1": 0,
+      "G2": 0,
+      "G3": 0,
+      "G4": 0,
+      "G5": 0,
+      "G6": 0
+    },
+    "question_metrics": {
+      "n_questions": 100,
+      "mean_score": 0.49999999999999994,
+      "mean_difficulty": 3.0,
+      "std_score": 0.17085642859406605,
+      "std_difficulty": 0.0,
+      "adaptation_rho": NaN,
+      "adaptation_p": NaN,
+      "adjusted_slope": 0.00013847766672317463,
+      "has_action_source": true,
+      "total_decisions": 100,
+      "ppo_decisions": 0,
+      "heuristic_decisions": 0,
+      "ppo_rate": 0.0,
+      "guardrail_counts": {
+        "G1": 0,
+        "G2": 0,
+        "G3": 0,
+        "G4": 0,
+        "G5": 0,
+        "G6": 0
+      }
+    }
+  },
+  "delta_full_vs_fixed": {
+    "adaptation_rho": NaN,
+    "adjusted_slope": 0.0793154585740069,
+    "mean_score": 0.11999999999999966,
+    "mean_difficulty": 1.4900000000000002,
+    "ppo_rate": 0.6199999999999999
+  }
+}
