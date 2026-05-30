@@ -1,0 +1,21 @@
+qid,question,answer,system_score,human_score
+1,Explain your logic to find the two indices in an array that sum up to a target value.,,,0.0500
+1,Explain your logic to find the two indices in an array that sum up to a target value.,"I usually start by sorting arrays because sorted data is clean to read, and then I print all values to verify input formatting before coding.",,0.2000
+1,Explain your logic to find the two indices in an array that sum up to a target value.,"One way is to check each pair and stop when the sum matches the target. That is correct but it is O(n squared), so it can be slow on large arrays.",,0.5500
+1,Explain your logic to find the two indices in an array that sum up to a target value.,I keep a dictionary of seen numbers and their positions while scanning left to right. For each value I compute target minus value and check if it was seen. I might need care with duplicates and whethe,,0.5500
+1,Explain your logic to find the two indices in an array that sum up to a target value.,"Use one pass with a hash table from number to index. At index i with value x, compute need = target - x and check whether need is already in the table. If yes, return that stored index and i. If no, s",,0.9000
+3,Describe the approach to reverse a singly linked list in-place.,I am not sure.,,0.0500
+3,Describe the approach to reverse a singly linked list in-place.,"Linked lists are useful in interviews because insertion is easier than arrays in some cases, and memory can be dynamic.",,0.2000
+3,Describe the approach to reverse a singly linked list in-place.,You can walk through nodes and point each node backward instead of forward. At the end the last node becomes the new head.,,0.5500
+3,Describe the approach to reverse a singly linked list in-place.,"Maintain three references: previous, current, and next_node. While current is not null, first save next_node = current.next, then redirect current.next to previous, move previous to current, and move ",,0.9000
+3,Describe the approach to reverse a singly linked list in-place.,"Start with prev = null and curr = head. Repeatedly detach curr from the forward chain by caching curr.next, then attach curr to the reversed prefix by setting curr.next = prev. Shift both pointers for",,0.9000
+10,Explain the BFS (Level Order) traversal logic for a binary tree.,,,0.0500
+10,Explain the BFS (Level Order) traversal logic for a binary tree.,Binary trees are recursive structures and I usually draw them before coding because recursion can be tricky in interviews.,,0.2000
+10,Explain the BFS (Level Order) traversal logic for a binary tree.,DFS preorder and inorder traversals are popular and can be implemented using recursion with base case checks.,,0.2000
+10,Explain the BFS (Level Order) traversal logic for a binary tree.,"Visit nodes level by level from top to bottom. You process the root first, then children, then grandchildren in that order.",,0.5500
+10,Explain the BFS (Level Order) traversal logic for a binary tree.,"Use a queue. Enqueue the root, then loop until the queue is empty: dequeue one node, record it, and enqueue its left child and right child when present. Because the queue is FIFO, nodes from shallower",,0.9000
+41,What is a pointer in C and how do you declare one?,I don't remember this one.,,0.0500
+41,What is a pointer in C and how do you declare one?,,,0.0500
+41,What is a pointer in C and how do you declare one?,"In C we have loops, arrays, and functions, and memory usage should be optimized for performance and embedded systems.",,0.2000
+41,What is a pointer in C and how do you declare one?,"A pointer stores an address rather than a direct value. You can declare one with syntax like int *p, and then assign it from the address of a variable.",,0.5500
+41,What is a pointer in C and how do you declare one?,"A pointer is a variable that holds a memory location of another object. For example, int *p declares a pointer to int. If int x = 7, then p = &x stores x's address, and *p reads or writes the value at",,0.9000

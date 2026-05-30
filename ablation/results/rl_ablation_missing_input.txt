@@ -1,0 +1,15 @@
+RL ablation run status: NOT RUN (missing required session report input)
+
+Date: 2026-04-17
+Script: scripts/ablation_rl.py
+Required input: one or more JSON files with top-level question_results array
+
+Scan performed:
+- orchestrator_logs/session_*/summary.json -> found, but only contains session_id/total_turns/overall_score
+- apps/backend/orchestrator_logs/session_*/summary.json -> found, same minimal format
+- data/reports/ -> empty
+- data/sessions/ -> empty
+
+Next required artifact to run RL ablation:
+- Any finalized session report JSON produced after guardrail source tracking fix, containing per-question fields:
+  score, difficulty, action_source, ppo_action
