@@ -1,0 +1,65 @@
+{
+  "PPO only": {
+    "sessions": 10,
+    "difficulty_smoothness": {
+      "n": 10,
+      "mean": 0.2555555555555556,
+      "std": 0.1892154040658489,
+      "ci95": 0.11727692246648475
+    },
+    "difficulty_volatility": {
+      "n": 10,
+      "mean": 0.40350150814625885,
+      "std": 0.16279912499888147,
+      "ci95": 0.10090394307146879
+    },
+    "score_correlation": {
+      "n": 9,
+      "mean": -0.11273154579916521,
+      "std": 0.37233994589193725,
+      "ci95": 0.24326209798273235
+    }
+  },
+  "Heuristic only": {
+    "sessions": 10,
+    "difficulty_smoothness": {
+      "n": 10,
+      "mean": 0.15555555555555553,
+      "std": 0.11944085553034887,
+      "ci95": 0.07403020923438412
+    },
+    "difficulty_volatility": {
+      "n": 10,
+      "mean": 0.5556581078246878,
+      "std": 0.38025277571866806,
+      "ci95": 0.23568311214294357
+    },
+    "score_correlation": {
+      "n": 8,
+      "mean": -0.3712571855290573,
+      "std": 0.27603449256745094,
+      "ci95": 0.19128214430511556
+    }
+  },
+  "Fixed difficulty": {
+    "sessions": 10,
+    "difficulty_smoothness": {
+      "n": 10,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci95": 0.0
+    },
+    "difficulty_volatility": {
+      "n": 10,
+      "mean": 0.0,
+      "std": 0.0,
+      "ci95": 0.0
+    },
+    "score_correlation": {
+      "n": 0,
+      "mean": NaN,
+      "std": NaN,
+      "ci95": NaN
+    }
+  }
+}

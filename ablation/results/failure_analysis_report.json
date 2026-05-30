@@ -1,0 +1,287 @@
+{
+  "PPO only": {
+    "sessions": 10,
+    "metrics": [
+      {
+        "session_id": "sim_00",
+        "mean_score": 0.5635307578463551,
+        "final_score": 0.575582983332781,
+        "mean_difficulty": 3.9,
+        "difficulty_volatility": 0.31622776601683794,
+        "largest_score_drop": -0.5863725331732211,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_01",
+        "mean_score": 0.7011815893644232,
+        "final_score": 0.39923770207469533,
+        "mean_difficulty": 3.4,
+        "difficulty_volatility": 0.5163977794943223,
+        "largest_score_drop": -0.5219280907206956,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_02",
+        "mean_score": 0.5109701367624953,
+        "final_score": 0.665846341434129,
+        "mean_difficulty": 3.7,
+        "difficulty_volatility": 0.48304589153964794,
+        "largest_score_drop": -0.2649954156151351,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_03",
+        "mean_score": 0.5216723314942296,
+        "final_score": 1.0,
+        "mean_difficulty": 3.4,
+        "difficulty_volatility": 0.5163977794943223,
+        "largest_score_drop": -0.46202048729346934,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_04",
+        "mean_score": 0.5314958395360885,
+        "final_score": 0.510603719777176,
+        "mean_difficulty": 3.2,
+        "difficulty_volatility": 0.4216370213557839,
+        "largest_score_drop": -0.26651157770976563,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_05",
+        "mean_score": 0.6506400554321949,
+        "final_score": 1.0,
+        "mean_difficulty": 3.5,
+        "difficulty_volatility": 0.5270462766947299,
+        "largest_score_drop": -0.6489666075836313,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_06",
+        "mean_score": 0.6183086079315523,
+        "final_score": 0.7105570235498979,
+        "mean_difficulty": 3.4,
+        "difficulty_volatility": 0.5163977794943223,
+        "largest_score_drop": -0.22783774288011904,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_07",
+        "mean_score": 0.54465469833042,
+        "final_score": 0.5348544063566574,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.6259020168314144,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_08",
+        "mean_score": 0.5148034867237958,
+        "final_score": 0.7726164637480277,
+        "mean_difficulty": 2.9,
+        "difficulty_volatility": 0.31622776601683794,
+        "largest_score_drop": -0.27839510889643204,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_09",
+        "mean_score": 0.5227890201296412,
+        "final_score": 0.6501305244281245,
+        "mean_difficulty": 3.2,
+        "difficulty_volatility": 0.4216370213557839,
+        "largest_score_drop": -0.7668343170103634,
+        "largest_difficulty_jump": 1.0
+      }
+    ]
+  },
+  "Heuristic only": {
+    "sessions": 10,
+    "metrics": [
+      {
+        "session_id": "sim_00",
+        "mean_score": 0.4072748902345687,
+        "final_score": 0.4017515696136774,
+        "mean_difficulty": 2.3,
+        "difficulty_volatility": 1.1595018087284057,
+        "largest_score_drop": -0.5042241378725376,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_01",
+        "mean_score": 0.6125158951209102,
+        "final_score": 0.2783680124911025,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.35841221408769103,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_02",
+        "mean_score": 0.5041808670005228,
+        "final_score": 0.3353513281015499,
+        "mean_difficulty": 1.8,
+        "difficulty_volatility": 0.4216370213557839,
+        "largest_score_drop": -0.3768481934756135,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_03",
+        "mean_score": 0.4677023729097104,
+        "final_score": 0.2256066275332838,
+        "mean_difficulty": 2.2,
+        "difficulty_volatility": 0.4216370213557839,
+        "largest_score_drop": -0.39684213394742435,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_04",
+        "mean_score": 0.6391082258726498,
+        "final_score": 0.7941343046130782,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.440942740207931,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_05",
+        "mean_score": 0.6914928237192859,
+        "final_score": 0.9428189416948975,
+        "mean_difficulty": 2.3,
+        "difficulty_volatility": 0.48304589153964794,
+        "largest_score_drop": -0.25436963889447584,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_06",
+        "mean_score": 0.5682993084692958,
+        "final_score": 0.7751798073472643,
+        "mean_difficulty": 2.5,
+        "difficulty_volatility": 0.5270462766947299,
+        "largest_score_drop": -0.3890415219118928,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_07",
+        "mean_score": 0.3993335146815851,
+        "final_score": 0.54491375021398,
+        "mean_difficulty": 2.2,
+        "difficulty_volatility": 0.7888106377466155,
+        "largest_score_drop": -0.17352750084101254,
+        "largest_difficulty_jump": 1.0
+      },
+      {
+        "session_id": "sim_08",
+        "mean_score": 0.6027357566403355,
+        "final_score": 0.3829901591842616,
+        "mean_difficulty": 1.4,
+        "difficulty_volatility": 0.966091783079296,
+        "largest_score_drop": -0.6170098408157384,
+        "largest_difficulty_jump": 2.0
+      },
+      {
+        "session_id": "sim_09",
+        "mean_score": 0.50486331719402,
+        "final_score": 0.7051503375411219,
+        "mean_difficulty": 2.2,
+        "difficulty_volatility": 0.7888106377466155,
+        "largest_score_drop": -0.3843083924564137,
+        "largest_difficulty_jump": 1.0
+      }
+    ]
+  },
+  "Fixed difficulty": {
+    "sessions": 10,
+    "metrics": [
+      {
+        "session_id": "sim_00",
+        "mean_score": 0.42131259672089205,
+        "final_score": 0.19964249130056966,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.3353826969195738,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_01",
+        "mean_score": 0.46788432600438873,
+        "final_score": 0.4122974281089239,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.16184034005045372,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_02",
+        "mean_score": 0.6429907452502291,
+        "final_score": 0.6955015267441287,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.32229907398912144,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_03",
+        "mean_score": 0.5117850104629003,
+        "final_score": 0.1927339310289295,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.3810856783148162,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_04",
+        "mean_score": 0.44519273672463544,
+        "final_score": 0.15039903557368145,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.27366930721195737,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_05",
+        "mean_score": 0.46958980589943977,
+        "final_score": 0.45503750740460897,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.25683195484344745,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_06",
+        "mean_score": 0.4719814461762608,
+        "final_score": 0.268068148468946,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.4491890332402346,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_07",
+        "mean_score": 0.5341446097859615,
+        "final_score": 0.5237761954931672,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.35112897902980095,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_08",
+        "mean_score": 0.4272865827381215,
+        "final_score": 0.22455311796176242,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.18764328550290738,
+        "largest_difficulty_jump": 0.0
+      },
+      {
+        "session_id": "sim_09",
+        "mean_score": 0.6078321402371704,
+        "final_score": 0.5535692172132528,
+        "mean_difficulty": 3.0,
+        "difficulty_volatility": 0.0,
+        "largest_score_drop": -0.24984077692290196,
+        "largest_difficulty_jump": 0.0
+      }
+    ]
+  }
+}

@@ -225,7 +225,7 @@ Hints and follow-up questions remain available as auxiliary support through Qwen
 `launch.py` starts these services in order:
 
 1. Evaluator API: `http://localhost:5000`
-2. Qwen microservice (optional): `http://localhost:8001`
+2. Qwen microservice (optional, single-model): `http://localhost:8001`
 3. Backend API/WebSocket: `http://localhost:8000`
 4. Frontend dev server (optional): usually `http://localhost:5173`
 
@@ -303,13 +303,15 @@ From `Evaluator_final/Evaluator/evaluate.py`:
 
 ## API Endpoints (Qwen Service)
 
-From `qwen_integration/main.py`:
+From `services/qwen/app.py`:
 
 - `GET /health`
 - `POST /hint`
 - `POST /followup`
 - `POST /partial_eval`
 - `POST /report`
+
+The Qwen service is intentionally kept as a single model tier so the runtime stays simpler to explain, easier to validate, and easier to keep consistent across prompts.
 
 ## Setup
 
@@ -415,6 +417,8 @@ npm run dev
 - RL artifacts and training logs under `rl_agent/rl_runs/`
 
 ## Research Artifacts
+
+**Human evaluation pipeline:** see `ablation/HUMAN_EVAL_README.md` for an interactive rater harness, synthetic-proxy generator for testing, averaging scripts, and analysis commands used to produce the figures in `ablation/results/`.
 
 Draft manuscripts:
 
