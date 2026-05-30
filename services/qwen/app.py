@@ -1,7 +1,7 @@
 """
 PrepAIred — Qwen Microservice  (port 8001)
 ==========================================
-Four LLM roles, two model tiers, streaming where it matters.
+Auxiliary LLM support for hints, follow-ups, partial evaluation, and reports.
 
 Endpoints:
   POST /hint           → Qwen 1.5B, streaming SSE
@@ -9,7 +9,7 @@ Endpoints:
   POST /partial_eval   → Qwen 7B, JSON (ambiguity gate)
   POST /report         → Qwen 7B, streaming SSE
 
-Both models are loaded ONCE at startup and kept warm.
+Both models are loaded ONCE at startup and kept warm when available.
 Never call this service synchronously from the main backend —
 always use async / background tasks.
 

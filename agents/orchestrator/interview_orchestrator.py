@@ -72,7 +72,7 @@ except ImportError:
 
 # ── Action maps ──────────────────────────────────────────────────────────
 _ACTION_IDX_TO_NAME: Dict[int, str] = {
-    0: "Easier", 1: "Same", 2: "Harder", 3: "Hint", 4: "Follow-up"
+    0: "Easier", 1: "Same", 2: "Harder"
 }
 _ACTION_NAME_TO_IDX: Dict[str, int] = {v: k for k, v in _ACTION_IDX_TO_NAME.items()}
 
@@ -675,7 +675,7 @@ class InterviewOrchestrator:
             return "verbal"
         if verbal_streak >= 2 and score >= 0.5:
             return "code"
-        if action_name in {"Hint", "Follow-up", "Easier"}:
+        if action_name == "Easier":
             return "verbal"
         if action_name == "Harder" and code_streak < 2:
             return "code"
@@ -912,7 +912,7 @@ class InterviewOrchestrator:
 
         # G4 — critically struggling candidate
         if perf < 0.30 and hes > 0.60:
-            return _ACTION_NAME_TO_IDX["Hint"]
+            return _ACTION_NAME_TO_IDX["Easier"]
 
         # G1 — low performance at mid difficulty
         if perf < 0.30 and 0.4 <= diff_norm <= 0.7:
@@ -920,17 +920,11 @@ class InterviewOrchestrator:
 
         # G2 — low confidence + high hesitation
         if conf < 0.30 and hes > 0.70 and perf < 0.80:
-            if hes > 0.85:
-                return _ACTION_NAME_TO_IDX["Hint"]
-            return _ACTION_NAME_TO_IDX["Same"]
+            return _ACTION_NAME_TO_IDX["Easier"] if hes > 0.85 else _ACTION_NAME_TO_IDX["Same"]
 
-        # G3 — cap follow-up overuse
-        if action_idx == _ACTION_NAME_TO_IDX["Follow-up"] and consec >= 2:
-            return _ACTION_NAME_TO_IDX["Same"]
-
-        # G5 — mid-performance candidate may benefit from follow-up
+        # G3/G5 collapsed into conservative same/easier behavior in the frozen design.
         if 0.40 < perf < 0.65 and avg_perf < 0.60 and consec < 2:
-            return _ACTION_NAME_TO_IDX["Follow-up"]
+            return _ACTION_NAME_TO_IDX["Same"]
 
         # G6 — strong candidate, push harder
         gap = perf - avg_perf
@@ -1009,8 +1003,6 @@ class InterviewOrchestrator:
                 action_name, reason = "Harder", "Strong answer — increasing difficulty"
             elif score < 0.4 and current_diff > 1:
                 action_name, reason = "Easier", "Needs support — decreasing difficulty"
-            elif score < 0.55:
-                action_name, reason = "Hint", "Low score — suggesting hint"
             else:
                 action_name, reason = "Same", "Maintaining difficulty"
             new_diff = (
@@ -1035,12 +1027,6 @@ class InterviewOrchestrator:
             min(5, current_diff + 1) if action_name == "Harder" else
             current_diff
         )
-
-        # Track consecutive_followups
-        if action_name == "Follow-up":
-            self._state["consecutive_followups"] = self._state.get("consecutive_followups", 0) + 1
-        else:
-            self._state["consecutive_followups"] = 0
 
         # Update next question type
         self._state["next_question_type"] = self._next_type_from_action(

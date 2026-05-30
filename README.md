@@ -143,7 +143,7 @@ PrepAIred/
 ### Core Control
 
 - **InterviewOrchestrator** coordinates session lifecycle and agent calls.
-- **Strategy agent** suggests next action: Easier / Same / Harder / Hint / Follow-up.
+- **Strategy agent** suggests next action: Easier / Same / Harder.
 - **Question selector** chooses next question by difficulty/topic constraints.
 
 ### Evaluation Layer
@@ -213,10 +213,12 @@ If you want static architecture images in GitHub preview, place images under `do
 
 - Algorithm: PPO (Stable-Baselines3)
 - State (6D): performance, rolling average, confidence, hesitation, time_norm, difficulty
-- Actions (5): Easier, Same, Harder, Hint, Follow-up
+- Actions (3): Easier, Same, Harder
 - Baseline phase: deterministic initial questions before RL control
 - Runtime safety: post-policy guardrails to prevent unstable actions
 - Trained artifacts: `rl/checkpoints/seed_123/ppo_final.zip`, `vecnormalize.pkl`
+
+Hints and follow-up questions remain available as auxiliary support through Qwen/orchestrator flows, but they are not part of the RL action space.
 
 ## Services and Ports
 

@@ -1,6 +1,6 @@
 """
 PR 2 test matrix — InterviewOrchestrator
-14 tests covering: baseline phases, RL phase, guardrails, follow-up injection,
+14 tests covering: baseline phases, RL phase, guardrails, auxiliary follow-up injection,
 skip, end idempotency, report storage, concurrency, code path, hint tracking.
 
 Run with:  pytest tests/test_orchestrator.py -v
@@ -136,11 +136,11 @@ async def test_rl_phase_harder():
     assert o._state["rl_last_action"] == "Harder"
 
 
-# ─── Test 4: RL phase — Hint action → no difficulty_update in response ───────
+# ─── Test 4: RL phase — Same action → explicit no-op difficulty update ───────
 
 @pytest.mark.asyncio
-async def test_rl_phase_hint():
-    """Hint action → difficulty unchanged, handle_voice_answer returns hint field."""
+async def test_rl_phase_same():
+    """Same action → difficulty unchanged, handle_voice_answer returns an explicit no-op update."""
     o = _orch(n=5)
     o._state["baseline_complete"] = True
     o._state["rl_enabled"] = True
@@ -149,7 +149,7 @@ async def test_rl_phase_hint():
     o._state["last_confidence_score"] = 0.4
 
     mock_strategy = MagicMock()
-    mock_strategy.suggest.return_value = (3, "RL: hint", "Hint")
+    mock_strategy.suggest.return_value = (3, "RL: stable", "Same")
     o._strategy = mock_strategy
 
     with patch.object(o, "_evaluate_verbal", return_value=_fake_eval_result(0.3)):
@@ -157,9 +157,13 @@ async def test_rl_phase_hint():
             with patch.object(o, "_get_hint", new_callable=AsyncMock, return_value="Try this hint"):
                 result = await o.handle_voice_answer("bad answer", "q0", attempts=1)
 
-    assert result["difficulty_update"] is None       # no diff update on Hint
-    assert result["hint"] == "Try this hint"
-    assert o._state["answers"][-1]["hint_given"] is True   # H2 fix
+    assert result["difficulty_update"] == {
+        "new_difficulty": 3,
+        "reason": "RL: stable",
+        "action": "Same",
+    }
+    assert result["hint"] is None
+    assert o._state["answers"][-1]["hint_given"] is False
 
 
 # ─── Test 5: guardrail G4 — critically struggling candidate ─────────────────
@@ -168,9 +172,9 @@ def test_guardrail_g4_stuck():
     """perf<0.30 AND hes>0.60 → G4 forces Hint regardless of PPO action."""
     o = _orch()
     o._state["consecutive_followups"] = 0
-    # PPO says Harder (idx=2), G4 should override to Hint (idx=3)
+    # PPO says Harder (idx=2), G4 should override to Easier (idx=0)
     result = o._apply_guardrails(2, perf=0.25, avg_perf=0.25, conf=0.3, hes=0.7, diff_norm=0.5)
-    assert result == 3  # Hint
+    assert result == 0  # Easier
 
 
 # ─── Test 6: guardrail G5 — mid-performance → Follow-up ────────────────────
@@ -179,19 +183,19 @@ def test_guardrail_g5_followup():
     """0.40 < perf < 0.65 AND avg < 0.60 AND consec < 2 → G5 forces Follow-up."""
     o = _orch()
     o._state["consecutive_followups"] = 0
-    # PPO says Same (idx=1), G5 should override to Follow-up (idx=4)
+    # PPO says Same (idx=1), G5 should keep the action conservative
     result = o._apply_guardrails(1, perf=0.5, avg_perf=0.5, conf=0.7, hes=0.3, diff_norm=0.6)
-    assert result == 4  # Follow-up
+    assert result == 1  # Same
 
 
-# ─── Test 7: guardrail G3 — cap consecutive follow-ups ──────────────────────
+# ─── Test 7: guardrail G3 — no longer produces follow-ups ────────────────────
 
 def test_guardrail_g3_cap():
-    """2 consecutive follow-ups → G3 forces Same."""
+    """Frozen 3-action policy keeps G3 conservative rather than emitting follow-ups."""
     o = _orch()
     o._state["consecutive_followups"] = 2
-    # PPO says Follow-up (idx=4), G3 caps to Same (idx=1)
-    result = o._apply_guardrails(4, perf=0.5, avg_perf=0.5, conf=0.7, hes=0.3, diff_norm=0.6)
+    # PPO says Same (idx=1), G3 remains Same in the simplified policy
+    result = o._apply_guardrails(1, perf=0.5, avg_perf=0.5, conf=0.7, hes=0.3, diff_norm=0.6)
     assert result == 1  # Same
 
 

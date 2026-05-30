@@ -7,7 +7,7 @@
 
 ## Abstract
 
-Preparing for technical software engineering interviews is a high-stakes, resource-intensive activity that typically requires access to experienced human interviewers. We present PrepAIred, an adaptive AI interview preparation system that combines a three-component automated answer evaluation pipeline with an RL-guided difficulty adaptation mechanism. The evaluator fuses semantic similarity (SBERT, w=0.15), knowledge concept coverage via FAISS (w=0.35), and deep reasoning assessment via a fine-tuned CrossEncoder (w=0.50) into a single calibrated score. Difficulty adaptation uses a PPO policy augmented with six domain-specific safety guardrails, enabling personalised session trajectories across 100 rubric-annotated questions spanning 13 CS topics. An ablation study across seven evaluator configurations on 20 curated answer samples demonstrates that each component contributes independently, with the full three-component system achieving Spearman ρ = [PLACEHOLDER: real rater result] vs. human ratings (Krippendorff α = [PLACEHOLDER] among raters). We release the system and evaluation harness to support reproducible research in automated CS education assessment.
+Preparing for technical software engineering interviews is a high-stakes, resource-intensive activity that typically requires access to experienced human interviewers. We present PrepAIred, an adaptive AI interview preparation system that combines a three-component automated answer evaluation pipeline with an RL-guided difficulty adaptation mechanism. The evaluator fuses semantic similarity (SBERT, w=0.15), knowledge concept coverage via FAISS (w=0.35), and deep reasoning assessment via a fine-tuned CrossEncoder (w=0.50) into a single calibrated score. Difficulty adaptation uses a PPO policy over a 3-action space (Easier, Same, Harder) with post-policy guardrails, enabling personalised session trajectories across 100 rubric-annotated questions spanning 13 CS topics. An ablation study across seven evaluator configurations on 20 curated answer samples demonstrates that each component contributes independently, with the full three-component system achieving Spearman ρ = [PLACEHOLDER: real rater result] vs. human ratings (Krippendorff α = [PLACEHOLDER] among raters). We release the system and evaluation harness to support reproducible research in automated CS education assessment.
 
 ---
 
@@ -23,7 +23,7 @@ We make the following contributions:
 
 2. **A component ablation study** across seven weight configurations demonstrating that each component captures a distinct signal, validated against human rater judgements.
 
-3. **A guardrail-augmented PPO adaptive difficulty system** that personalises question difficulty and type (verbal/code/follow-up) within a session, with traceable per-decision source attribution for transparency.
+3. **A guardrail-augmented PPO adaptive difficulty system** that personalises question difficulty within a session using a three-action policy (Easier/Same/Harder), with hints and follow-up questions provided only as auxiliary support and with traceable per-decision source attribution for transparency.
 
 4. **An open evaluation harness** (`human_eval_harness.py`) for inter-rater reliability measurement including Krippendorff's α, supporting future reproducible evaluations of automated CS assessment systems.
 
@@ -121,11 +121,11 @@ We model the difficulty adaptation problem as a finite-horizon MDP with episode 
 s = [performance, avg_performance, confidence, hesitation, time_norm, difficulty_norm]
 ```
 
-where confidence and hesitation are derived from speech prosody features (pause rate, filler words) extracted during transcription. The action space contains five discrete actions: {Easier, Same, Harder, Hint, Follow-up}.
+where confidence and hesitation are derived from speech prosody features (pause rate, filler words) extracted during transcription. The action space contains three discrete actions: {Easier, Same, Harder}. Hinting and follow-up questions remain available as auxiliary interventions, not policy actions.
 
 ### B. PPO Policy
 
-A PPO agent [CITE: Schulman 2017] with MLP policy (2 hidden layers, 64 units) is trained for 300,000 steps in a simulated interview environment (InterviewEnv) against a SimulatedCandidate model that generates synthetic performance trajectories. Training uses a hybrid reward combining oracle-match signal (w=0.60), performance-delta signal (w=0.30), and behaviour shaping (w=0.10).
+A PPO agent [CITE: Schulman 2017] with MLP policy (2 hidden layers, 64 units) is trained for 300,000 steps in a simulated interview environment (InterviewEnv) against a SimulatedCandidate model that generates synthetic performance trajectories. Training uses a compact reward combining score, improvement bonus, premature-escalation penalty, and repetition penalty.
 
 **Hyperparameters:** lr=3×10⁻⁴, n_steps=2048, batch_size=64, n_epochs=10, γ=0.99, λ=0.95, clip_range=0.2, seed=123. Observations are normalised with VecNormalize (clip=10).
 
@@ -137,14 +137,14 @@ Because the PPO policy is trained on a synthetic environment, we apply six post-
 
 | ID | Condition | Override Action | Purpose |
 |----|-----------|-----------------|---------|
-| G4 | perf < 0.30 AND hes > 0.60 | Hint | Critically struggling candidate |
+| G4 | perf < 0.30 AND hes > 0.60 | Easier | Critically struggling candidate |
 | G1 | perf < 0.30 AND diff ∈ [0.4, 0.7] | Easier | Low performance at mid difficulty |
-| G2 | conf < 0.30 AND hes > 0.70 AND perf < 0.80 | Same/Hint | Low confidence + high hesitation |
-| G3 | Follow-up action AND consecutive\_followups ≥ 2 | Same | Cap follow-up overuse |
-| G5 | 0.40 < perf < 0.65 AND avg_perf < 0.60 AND consec < 2 | Follow-up | Probe borderline conceptual gaps |
+| G2 | conf < 0.30 AND hes > 0.70 AND perf < 0.80 | Same/Easier | Low confidence + high hesitation |
+| G3 | mid-performance support condition | Same | Keep policy conservative |
+| G5 | 0.40 < perf < 0.65 AND avg_perf < 0.60 AND consec < 2 | Same | Probe borderline conceptual gaps without overcomplicating the policy |
 | G6 | perf ≥ 0.90 AND gap > 0.25 AND not nervous\_expert | Harder | Push strong candidates harder |
 
-Each decision is attributed to its source (ppo/G1–G6/heuristic) and stored in the session report, enabling post-hoc transparency and the RL ablation in Section VI-B.
+Each decision is attributed to its source (ppo/G1–G6/heuristic) and stored in the session report, enabling post-hoc transparency and the RL ablation in Section VI-B. Hints and follow-ups are generated only through auxiliary support flows, not the RL policy action space.
 
 ### D. Baseline Phase
 

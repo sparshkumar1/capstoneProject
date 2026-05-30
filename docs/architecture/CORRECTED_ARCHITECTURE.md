@@ -165,13 +165,10 @@ Strategy Agent (PPO-based RL)
 │  ├─ Time normalized
 │  └─ Current difficulty
 │
-├─ Actions (5):
+├─ Actions (3):
 │  ├─ Easier
 │  ├─ Same
-│  ├─ Harder
-│  ├─ Hint
-│  └─ Follow-up
-│
+│  └─ Harder
 └─ Output: Next action + difficulty adjustment
 ```
 **Role**: Adaptively adjust difficulty using trained PPO policy
@@ -179,14 +176,13 @@ Strategy Agent (PPO-based RL)
 **Correction**: Explicit decision layer (was embedded in original)
 **Why**: Makes RL strategy visible and testable
 
----
+> Note: Hint and follow-up generation are auxiliary support paths handled by Qwen and the orchestrator; they are not part of the RL action space in the frozen design.
 
 ### **Layer 8: Execution 💾**
 ```
 Code Executor (Sandbox)
 ├─ Runs code in isolated process
 ├─ Timeout protection (e.g., 5s)
-├─ Safe system call filtering
 ├─ Test case execution
 └─ Output validation
 ```

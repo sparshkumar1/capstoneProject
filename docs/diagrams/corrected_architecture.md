@@ -36,7 +36,7 @@ flowchart TD
     end
 
     subgraph Strategy["🤖 Adaptive Strategy"]
-        StrategyAgent["Strategy Agent<br/>(PPO-based RL)<br/>Actions: Easier/Same/<br/>Harder/Hint/Follow-up"]
+        StrategyAgent["Strategy Agent<br/>(PPO-based RL)<br/>Actions: Easier/Same/Harder<br/>Hints and follow-ups are auxiliary"]
     end
 
     subgraph Execution["💾 Execution"]

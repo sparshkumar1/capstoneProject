@@ -34,7 +34,7 @@ def _try_load_rl():
         return False
 
 
-ACTION_MAP = {0: "Easier", 1: "Same", 2: "Harder", 3: "Hint", 4: "Follow-up"}
+ACTION_MAP = {0: "Easier", 1: "Same", 2: "Harder"}
 
 BASELINE_DIFFICULTY_SCHEDULE = {
     0: 2,   # Q1 → easy (diff 2)
@@ -123,8 +123,6 @@ class HybridOrchestrator:
                 action_name = "Harder"
             elif score < 0.40 and current_difficulty > 1:
                 action_name = "Easier"
-            elif score < 0.55:
-                action_name = "Hint"
             else:
                 action_name = "Same"
 
