@@ -1,0 +1,221 @@
+--- PAGE 1 ---
+
+SUBMISSION CHECKLIST 
+Carefully review each item listed below before submitting your article. Article submissions that do not follow the guidelines 
+below will be returned to draft or immediately rejected. 
+1.   The manuscript should be prepared in a double column, 
+single-spaced format using a required IEEE Access template. 
+A Word or LaTex file and a PDF file are both required 
+upon submission. The content on each file must match 
+exactly. File sizes should not exceed 40MB. Download 
+IEEE Access Templates for Microsoft Word and LaTex. 
+2.   The manuscript should be prepared in a double column, 
+single-spaced format using a required IEEE Access 
+template. A Word or LaTex file and a PDF file are both 
+required upon submission. The content on each file 
+must match exactly. File sizes should not exceed 40MB. 
+Download IEEE Access Templates for please click here. 
+3.   Author lists should be carefully considered before 
+submission. For more information on what constitutes 
+an author, please click here. Contributors who do not 
+meet IEEE’s definition of authorship should be included 
+in the Acknowledgment section of the article. Omitting 
+an author who contributed to your article or including 
+a person who did not fulfill authorship requirements is 
+considered a breach of publishing ethics. Any change 
+to the author list after the article has been submitted 
+is considered rare and exceptional, and the decision 
+to allow such changes rests with the Editor. 
+4.   The submitting author is required to have an ORCID 
+ID associated with their account. The ORCID profile 
+must be publicly visible and populated. For more 
+information on ORCID, click here. The author 
+designated as the corresponding author in the 
+submission system will be the main point of contact 
+for the article and will be responsible for approving 
+the proof if the article is accepted for publication. 
+5.   All authors should be listed on both the source file 
+(Word of LaTex file) and the manuscript PDF file. When 
+submitting your files ensure the submission system 
+successfully extracts the full author list from your files. 
+6.   Short biographies are required for ALL authors on an 
+article submission. As indicated in the required IEEE Access 
+templates, biographies of all authors should be included 
+directly within the article below the references section. 
+7.   The article should be thoroughly reviewed for proper 
+grammar before being submitted. Articles with poor 
+grammar will be immediately rejected. If needed, IEEE 
+Access offers Paperpal Preflight to assist authors in checking 
+their manuscript for grammar issues prior to submission. 
+Check your manuscript on Paperpal Preflight by clicking here. 
+8.   All research works should be carefully referenced. 
+To learn more about avoiding plagiarism please click 
+here. Do not include references that are not relevant 
+to your work, and carefully check each reference for 
+accuracy and ensure that they have not been retracted, 
+as retracted references can undermine the validity of your work. Articles submitted with retracted references 
+will be returned to the author for removal, or may be 
+rejected if the validity of the research is affected. 
+9.   The article should not be submitted elsewhere at the same 
+time. More information about duplicate submission can be 
+found here. 
+10.   If applicable to your research, have any supplementary 
+material for review ready for the submission process. 
+11.   Authors must define abbreviations and acronyms the first 
+time they are used in the article, even if they have already 
+been defined in the abstract. Acronyms and abbreviations 
+can have multiple meanings so it is important that these 
+are clearly defined. 
+12.   You must select a minimum of 3 (and a maximum of 10) 
+manuscript keywords upon submission . Be sure the 
+keywords are as accurate as possible to ensure a relevant 
+Associate Editor is matched to manage the peer review of 
+your articlee . 
+13.   You will be required to select a manuscript type upon 
+submission. A list and description of manuscript types are 
+listed below. If you are unsure, please select “Research 
+Article”. *Please note that should your article be accepted, 
+the manuscript type will be published on the article. 
+14. If applicable, have a list of opposed reviewers ready. 
+15.   If your article has video (maximum file size is 100MB), 
+have it ready to upload with the submission since 
+all video must be peer reviewed with the article. 
+16.   If the article was previously rejected after peer review 
+with encouragement to update and resubmit, then a 
+complete “list of updates” must be included in a separate 
+document. The list of updates should have the following 
+regarding each comment: 1) reviewers’ concerns, 2) 
+authors’ response to the concerns, 3) actual changes 
+implemented.  Refer to the original rejection letter for 
+more information on requirements for resubmitting. 
+17. While IEEE Access does not have a page limit; we strongly 
+recommend keeping the page count under 20 pages for 
+ease of readability. Longer articles may result in longer 
+peer review times. Additional content can be added as 
+supplementary material. Authors who have a special 
+reason to submit a paper over 20 pages (not including 
+Supplementary Material or Appendices, or if the article 
+type is a Topical Review or Survey) must first make a pre-
+submission inquiry to seek permission from the EIC. 
+18.   In alignment with the IEEE Code of Ethics and with 
+respect to the wishes of the subject of the image, IEEE 
+will no longer accept submitted papers which include the 
+‘Lena image’. For more information please click here. 
+(Continued) 
+
+
+
+--- PAGE 2 ---
+
+MANUSCRIPT TYPES ACCEPTABLE FOR PEER REVIEW 
+All article types undergo the same rigorous peer review. 
+RESEARCH ARTICLE 
+This is a classic research article that has a hypothesis, 
+investigation, solution, model, physical experiment and/or 
+simulation and a result that is of value to the community within 
+that area of expertise. 
+TOPICAL REVIEW 
+This is a review of an emerging area within the journal’s scope 
+that performs a technical and critical review of other articles. 
+Calculations are performed and conclusions are drawn on the 
+strengths and weaknesses. The conclusion can also discuss future 
+challenges. An article that is descriptive, without a framework, 
+and instead expounds a particular topic should be this type. 
+THEORY 
+This is a scholarly article that uses mathematical methods to 
+develop new theoretical results of importance to the field. 
+SURVEY 
+A survey article analyzes, summarizes, systemizes, and presents 
+fresh conclusions from a large number of recently published 
+scholarly articles. A review article that has a well-defined 
+framework for selecting and excluding papers and draws an 
+overall conclusion from the body of those papers should be this 
+type. An example of this would be a Systematic Literature Review 
+(SLR). 
+PERSPECTIVE 
+This category of article is an in-depth viewpoint article intended 
+to bring together a big picture in a fast-evolving landscape of 
+technological development. It will typically be a topic where 
+there is community uncertainty and/or disagreement. Since IEEE 
+Access does not have a page limit, publishing perspective articles 
+will allow more technical discussion. This category of article will 
+typically be written by a leading authority in an area. 
+APPLIED RESEARCH 
+This article describes challenges and practical solutions for topics 
+within the journal’s scope. Quantitative results for validation of 
+the approach are expected. 
+NEGATIVE RESULT 
+This is a non-trivial theoretical or experimental negative or null 
+result that does not support a hypothesis. Provided that the 
+research question posed is meaningful and the study is rigorously 
+conducted, this type of article has value to the engineering 
+community. 
+METHODS 
+This article will report the development of new or improved 
+fabrication or manufacturing technique, or a new experimental, 
+measurement or mathematical technique. Applied research 
+articles focus on practical systems, while here the focus is on 
+methods. 
+TUT ORIAL 
+This is a pedagogical article to assist readers to learn and 
+familiarize themselves with a topic. The topic may be be an 
+emerging one that is not well understood in the community, or 
+a difficult traditional topic that can benefit from an up to date 
+exposition. The topic should not be one that is well understood 
+or well represented in textbooks. The article must add to the existing literature to benefit the readership. The objectives and 
+prerequisite background required by the reader should be clearly 
+identified in the introduction. The references should cite both 
+background material and advanced material for the reader to dig 
+deeper. 
+STANDARDS 
+This article summarizes and expounds new or revised IEEE 
+standards. This can also be a scholarly discussion paper for 
+new IEEE standards or a critique of existing IEEE standards with 
+recommendations. 
+COMMENT 
+This is an article that comments on another published article 
+within IEEE Access. A comment points out a technical error, 
+oversight, or presents an opposing position. It is a critique, 
+providing corrections, and performs analyses. IEEE Access does 
+not accept comment articles on articles published in other 
+journals. The maximum page limit for a comment article is 2 
+pages; anything longer will require EIC approval. 
+REPLY 
+A reply article is submitted by the authors of a published paper in 
+response to a Comment article. Please note that we only allow one 
+Comment and one Reply in response. We do not allow subsequent 
+Comments and Replies. 
+DEB ATE 
+There are topics within the scope of IEEE Access where there 
+is disagreement between experts. A debate paper will be a 
+scholarly technical research paper that makes the case for a 
+particular position. The EIC may invite an opposing debate paper 
+to create balance. A perspective article looks at the big picture, 
+whereas a debate paper is highly technical. 
+EXPOSITION 
+This is an expository scholarly article that does not produce a new 
+result but revisits a complicated or poorly understood result and 
+elucidates it with a fresh approach. It is a very technical article 
+that digs into theory and interpretation. As opposed to a tutorial 
+article, which is a “how” article, an exposition article is more of a 
+“why” article. 
+META-ANAL YSIS 
+A meta-analysis is a statistical analysis that combines the results 
+of multiple published scientific studies addressing the same 
+question. A meta-analysis concludes by identifying effects that are 
+statistically significant across the many studies. Such a paper not 
+only can provide an estimate of the unknown common truth, but 
+also has the potential to contrast results from different studies 
+and identify sources of disagreement among these results, 
+patterns among study results or other interesting results that may 
+come to light in the context of multiple studies. 
+UNSOLVED PROBLEM 
+This is a technical scholarly article that investigates a tough 
+problem that is not yet solved. The article is not able to solve it 
+either. The article’s analysis concludes with identifying a clear set 
+of open questions that the community needs to work on in order 
+to make further progress. Papers such as this are expected to add 
+clarity to complex issues and create a roadmap of questions for 
+researchers to follow. 
+
+

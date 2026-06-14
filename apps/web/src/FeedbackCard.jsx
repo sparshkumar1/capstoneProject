@@ -168,7 +168,7 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
             {errors.map((e, i) => (
               <div key={i} className={`fc-error-item ${e.severity === "major" ? "major" : "minor"}`}>
                 <div className="fc-error-top">
-                  <span className="fc-error-said">"{e.what_was_said}"</span>
+                  <span className="fc-error-said">&quot;{e.what_was_said}&quot;</span>
                   <span className={`badge ${e.severity === "major" ? "badge-danger" : "badge-warn"}`}>
                     {e.severity}
                   </span>
@@ -225,7 +225,7 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
       {transcript && (
         <div className="fc-transcript">
           <span className="fc-transcript-label">Your answer</span>
-          <p className="fc-transcript-text">"{transcript}"</p>
+          <p className="fc-transcript-text">&quot;{transcript}&quot;</p>
         </div>
       )}
 
@@ -233,6 +233,7 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
       <div className="fc-footer">
         <span className="fc-footer-hint">Review this feedback, then continue when ready.</span>
         <button
+          type="button"
           className="btn btn-primary btn-sm"
           onClick={onNext}
           disabled={!awaitingNext}

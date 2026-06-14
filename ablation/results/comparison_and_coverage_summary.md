@@ -14,6 +14,6 @@
 
 ## Coverage matrix
 
-Topics: Arrays, C_Programming, LinkedLists, Trees
+Topics: Unknown
 
 Labels: blank / off-topic / partial / good

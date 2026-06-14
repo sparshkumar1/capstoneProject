@@ -1,0 +1,82 @@
+{
+  "source": "ablation/results/ratings_averaged_real.csv",
+  "question_bank": "data/questions/qns.json",
+  "topics": [
+    {
+      "topic": "Arrays",
+      "questions": 1,
+      "ratings": 5,
+      "avg_difficulty": 0.4,
+      "avg_human_score": 0.7000000000000001,
+      "avg_system_score": 0.55145,
+      "avg_gap": -0.14855000000000007,
+      "questions_detail": [
+        {
+          "qid": "1",
+          "difficulty": 0.4,
+          "human_score": 0.7000000000000001,
+          "system_score": 0.55145,
+          "gap": -0.14855000000000007,
+          "question_text": "Explain your logic to find the two indices in an array that sum up to a target value."
+        }
+      ]
+    },
+    {
+      "topic": "C_Programming",
+      "questions": 1,
+      "ratings": 5,
+      "avg_difficulty": 0.2,
+      "avg_human_score": 0.3,
+      "avg_system_score": 0.6063,
+      "avg_gap": 0.30629999999999996,
+      "questions_detail": [
+        {
+          "qid": "41",
+          "difficulty": 0.2,
+          "human_score": 0.3,
+          "system_score": 0.6063,
+          "gap": 0.30629999999999996,
+          "question_text": "What is a pointer in C and how do you declare one?"
+        }
+      ]
+    },
+    {
+      "topic": "LinkedLists",
+      "questions": 1,
+      "ratings": 5,
+      "avg_difficulty": 0.6,
+      "avg_human_score": 0.4,
+      "avg_system_score": 0.54254,
+      "avg_gap": 0.14254,
+      "questions_detail": [
+        {
+          "qid": "3",
+          "difficulty": 0.6,
+          "human_score": 0.4,
+          "system_score": 0.54254,
+          "gap": 0.14254,
+          "question_text": "Describe the approach to reverse a singly linked list in-place."
+        }
+      ]
+    },
+    {
+      "topic": "Trees",
+      "questions": 1,
+      "ratings": 5,
+      "avg_difficulty": 0.6,
+      "avg_human_score": 0.3,
+      "avg_system_score": 0.5457,
+      "avg_gap": 0.24569999999999997,
+      "questions_detail": [
+        {
+          "qid": "10",
+          "difficulty": 0.6,
+          "human_score": 0.3,
+          "system_score": 0.5457,
+          "gap": 0.24569999999999997,
+          "question_text": "Explain the BFS (Level Order) traversal logic for a binary tree."
+        }
+      ]
+    }
+  ]
+}

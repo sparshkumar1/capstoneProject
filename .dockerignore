@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node
+apps/web/node_modules/
+apps/web/dist/
+
+# Git / docs metadata
+.git/
+.github/
+
+# Logs and generated artifacts
+logs/
+orchestrator_logs/
+training_logs/
+rl/rl_runs/
+rl/data/
+rl/logs/
+
+# Large model and artifact stores
+models/
+services/qwen/models/
+services/evaluator/models/
+ablation/results/*.npy
+ablation/results/*.pt
+ablation/results/*.bin
+artifacts/
+
+# OS/editor files
+.DS_Store
+desktop.ini

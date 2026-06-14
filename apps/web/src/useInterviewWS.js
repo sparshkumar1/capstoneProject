@@ -32,10 +32,12 @@ export function useInterviewWS(sessionId, handlers = {}) {
   useEffect(() => {
     if (!sessionId || sessionId === "demo-session") return;
 
+    let disposed = false;
     const socket = new WebSocket(`${WS_BASE}/ws/interview/${sessionId}`);
     ws.current = socket;
 
     socket.onopen = () => {
+      if (disposed) return;
       console.log("[WS] Connected:", sessionId);
       handlersRef.current.onOpen?.();
     };
@@ -60,16 +62,24 @@ export function useInterviewWS(sessionId, handlers = {}) {
     };
 
     socket.onerror = (e) => {
+      if (disposed) return;
       console.error("[WS] Error:", e);
       handlersRef.current.onError?.({ message: "WebSocket error" });
     };
 
     socket.onclose = () => {
+      if (disposed) return;
       console.log("[WS] Disconnected");
       handlersRef.current.onClose?.();
     };
 
-    return () => socket.close();
+    return () => {
+      disposed = true;
+      if (ws.current === socket) {
+        ws.current = null;
+      }
+      socket.close();
+    };
   }, [sessionId]);
 
   return { send };

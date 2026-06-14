@@ -20,6 +20,15 @@ apps/web/build/
 models/
 services/qwen/models/
 
+# Ablation results (regenerateable)
+ablation/results/*.npy
+ablation/results/*.pt
+ablation/results/*.bin
+ablation/results/ratings_synthetic_*
+
+# Large artifacts and backups
+artifacts/
+
 # Logs and generated artifacts
 *.log
 orchestrator_logs/

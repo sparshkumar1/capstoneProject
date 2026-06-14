@@ -7,7 +7,7 @@
 
 ## Abstract
 
-Preparing for technical software engineering interviews is a high-stakes, resource-intensive activity that typically requires access to experienced human interviewers. We present PrepAIred, an adaptive AI interview preparation system that combines a three-component automated answer evaluation pipeline with an RL-guided difficulty adaptation mechanism. The evaluator fuses semantic similarity (SBERT, w=0.15), knowledge concept coverage via FAISS (w=0.35), and deep reasoning assessment via a fine-tuned CrossEncoder (w=0.50) into a single calibrated score. Difficulty adaptation uses a PPO policy augmented with six domain-specific safety guardrails, enabling personalised session trajectories across 100 rubric-annotated questions spanning 13 CS topics. An ablation study across seven evaluator configurations on 20 curated answer samples demonstrates that each component contributes independently, with the full three-component system achieving Spearman ρ = 0.9612 vs. human ratings (Krippendorff α = 0.918 among raters; computed using rater1 + synthetic proxies). We release the system and evaluation harness to support reproducible research in automated CS education assessment.
+Preparing for technical software engineering interviews is a high-stakes, resource-intensive activity that typically requires access to experienced human interviewers. We present PrepAIred, an adaptive AI interview preparation system that combines a three-component automated answer evaluation pipeline with an RL-guided difficulty adaptation mechanism. The evaluator fuses semantic similarity (SBERT, w=0.15), knowledge concept coverage via FAISS (w=0.35), and deep reasoning assessment via a fine-tuned CrossEncoder (w=0.50) into a single calibrated score. Difficulty adaptation uses a PPO policy augmented with six domain-specific safety guardrails, enabling personalised session trajectories across 100 rubric-annotated questions spanning 13 CS topics. An ablation study across seven evaluator configurations on 20 curated answer samples demonstrates that each component contributes independently, with the full three-component system achieving Spearman ρ = 0.91517 vs. human ratings (paired_items = 20; Krippendorff α = 0.8255 among raters). We release the system and evaluation harness to support reproducible research in automated CS education assessment.
 
 ---
 
@@ -168,11 +168,11 @@ We evaluated seven weight configurations (Table II) against a curated dataset of
 | S2 only | 0.00 | 1.00 | 0.00 | 0.9534 | 0.9953 |
 | R only | 0.00 | 0.00 | 1.00 | 0.9690 | 0.0467 |
 | S1 + R | 0.23 | 0.00 | 0.77 | 0.9561 | 0.5273 |
-| S2 + R | 0.00 | 0.41 | 0.59 | 0.9612 | n/a |
+| S2 + R | 0.00 | 0.41 | 0.59 | 0.91517 | n/a |
 | S1 + S2 | 0.30 | 0.70 | 0.00 | 0.9476 | 0.3520 |
-| **Full (paper)** | **0.15** | **0.35** | **0.50** | **0.9612** | **—** |
+| **Full (paper)** | **0.15** | **0.35** | **0.50** | **0.91517** | **—** |
 
-Inter-rater agreement: Krippendorff α = 0.918 (computed using rater1 + synthetic proxies; target ≥ 0.67). Paired items: n=20.
+Inter-rater agreement: Krippendorff α = 0.8255 (computed from available raters; target ≥ 0.67). Paired items: n=20.
 
 **Figure 2: Evaluator comparison and coverage heatmaps — see `ablation/results/comparison_and_coverage.png`.**
 

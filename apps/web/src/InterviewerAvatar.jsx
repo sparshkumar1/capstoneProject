@@ -160,7 +160,7 @@ export default function InterviewerAvatar({ question, questionIndex, isThinking 
 
           <div className="bubble-text">
             {phase === "intro" && (
-              <span className="intro-text">Here's your next question...</span>
+                <span className="intro-text">Here&apos;s your next question...</span>
             )}
             {(phase === "typing" || phase === "done") && (
               <>

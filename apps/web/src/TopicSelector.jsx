@@ -137,7 +137,7 @@ export default function TopicSelector({ navigate }) {
                 <div className="config-label">Duration</div>
                 <div className="duration-grid">
                   {DURATIONS.map(d => (
-                    <button key={d.value}
+                    <button type="button" key={d.value}
                       className={`duration-btn ${duration === d.value ? "active" : ""}`}
                       onClick={() => setDuration(d.value)}
                     >
@@ -172,6 +172,7 @@ export default function TopicSelector({ navigate }) {
                 <div className="config-label">Interview mode</div>
                 <div style={{ display: "grid", gap: 8 }}>
                   <button
+                    type="button"
                     className={`duration-btn ${interviewMode === "standard" ? "active" : ""}`}
                     onClick={() => setInterviewMode("standard")}
                   >
@@ -179,6 +180,7 @@ export default function TopicSelector({ navigate }) {
                     <span>Adaptive from the start</span>
                   </button>
                   <button
+                    type="button"
                     className={`duration-btn ${interviewMode === "demo_rl" ? "active" : ""}`}
                     onClick={() => setInterviewMode("demo_rl")}
                   >
@@ -209,6 +211,7 @@ export default function TopicSelector({ navigate }) {
               {error && <div className="error-banner" style={{ marginBottom: 12 }}>⚠️ {error}</div>}
 
               <button
+                type="button"
                 className="btn btn-primary btn-lg"
                 style={{ width: "100%", justifyContent: "center", gap: 10 }}
                 onClick={handleStart}

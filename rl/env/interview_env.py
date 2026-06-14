@@ -1,6 +1,6 @@
 """
 interview_env.py — Merged environment
-6D state + 5 actions (includes Follow-up) + oracle-guided hybrid reward.
+6D state + 3 actions (Easier / Same / Harder) + oracle-guided hybrid reward.
 
 State (6D):
   [0] performance      - last answer score 0..1
@@ -10,12 +10,10 @@ State (6D):
   [4] time_norm        - normalised response time
   [5] difficulty       - current difficulty 0.0..1.0
 
-Actions (5):
+Actions (3):
   0 = Easier
   1 = Same
   2 = Harder
-  3 = Hint
-  4 = Follow-up  <- novel contribution (Graesser et al. 1995)
 
 Reward modes:
   oracle  : purely oracle-match signal
@@ -32,7 +30,10 @@ import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 
-from simulated_candidate import SimulatedCandidate
+try:
+    from simulated_candidate import SimulatedCandidate
+except ImportError:  # fallback when imported from the repo root
+    from rl.training.simulated_candidate import SimulatedCandidate
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -46,8 +47,6 @@ class InterviewEnv(gym.Env):
         0: "Easier",
         1: "Same",
         2: "Harder",
-        3: "Hint",
-        4: "Follow-up",
     }
 
     def __init__(
@@ -152,15 +151,14 @@ class InterviewEnv(gym.Env):
         self.observation_space = spaces.Box(
             low=0.0, high=1.0, shape=(6,), dtype=np.float32
         )
-        # 5 actions: Easier / Same / Harder / Hint / Follow-up
-        self.action_space = spaces.Discrete(5)
+        # 3 actions: Easier / Same / Harder
+        self.action_space = spaces.Discrete(3)
 
         self.sim_candidate = simulated_candidate or SimulatedCandidate()
         self.difficulty = 0.5
         self.scores = []
         self.last_obs = None
         self.prev_action = None
-        self.consecutive_followups = 0
 
         # CSV logging setup
         self.log_file = str(log_file)
@@ -186,16 +184,16 @@ class InterviewEnv(gym.Env):
     @staticmethod
     def oracle_action_from_obs(obs):
         """
-        Expert oracle — 6D state, 5 actions.
+        Expert oracle — 6D state, 3 actions.
 
         obs: [perf, avg_perf, conf, hes, time_norm, difficulty]
 
         Rule priority (earlier rules take precedence):
-          R1: perf < 0.30 and hes > 0.60              -> Hint        (stuck)
+          R1: perf < 0.30 and hes > 0.60              -> Easier      (stuck)
           R2: perf < 0.35                              -> Easier      (weak)
           R3: 0.80 < perf < 0.95 and hes > 0.65       -> Same        (nervous expert)
           R4: perf >= 0.95 and gap > 0.20              -> Harder      (rock star)
-          R5: 0.40 < perf < 0.65 and avg_perf < 0.60  -> Follow-up   (partial understanding)
+          R5: 0.40 < perf < 0.65 and avg_perf < 0.60  -> Same        (partial understanding)
           R6: gap > 0.25                               -> Harder      (strong gap)
           R7: else                                     -> Same        (default)
         """
@@ -203,7 +201,7 @@ class InterviewEnv(gym.Env):
         gap = perf - difficulty
 
         if perf < 0.30 and hes > 0.60:            # R1
-            return 3  # Hint
+            return 0  # Easier
         if perf < 0.35:                             # R2
             return 0  # Easier
         if 0.80 < perf < 0.95 and hes > 0.65:     # R3
@@ -211,7 +209,7 @@ class InterviewEnv(gym.Env):
         if perf >= 0.95 and gap > 0.20:            # R4
             return 2  # Harder (rock star)
         if 0.40 < perf < 0.65 and avg_perf < 0.60: # R5
-            return 4  # Follow-up (partial understanding)
+            return 1  # Same (partial understanding)
         if gap > 0.25:                              # R6
             return 2  # Harder
         return 1                                    # R7 Same
@@ -228,10 +226,10 @@ class InterviewEnv(gym.Env):
         action = int(proposed_action)
 
         # G4: Stuck candidate — HIGHEST PRIORITY (before G1)
-        # perf<0.30 AND hes>0.60: needs Hint, not just easier question.
+        # perf<0.30 AND hes>0.60: needs Easier, not a harder follow-up.
         # Must come before G1 which would fire first on the same low-perf state.
         if perf < 0.30 and hes > 0.60:
-            return 3, True, "g4_stuck_hint"
+            return 0, True, "g4_stuck_easier"
 
         # G1: overload — weak candidate at medium difficulty (not stuck)
         if (perf < 0.30
@@ -240,24 +238,18 @@ class InterviewEnv(gym.Env):
 
         # G2: anxiety stabiliser — low confidence + high hesitation + NOT high performer
         # High performers (perf >= 0.80) with anxiety still need Harder, not stabilisation.
-        # Lucky Guesser persona has high perf but low conf — should get Harder not Hint.
+        # Lucky Guesser persona has high perf but low conf — should get Harder.
         if conf < 0.30 and hes > 0.70 and perf < 0.80:
-            if hes > 0.85:
-                return 3, True, "g2_anxiety_stabilizer_hint"
             return 1, True, "g2_anxiety_stabilizer_same"
 
-        # G3: Follow-up overuse prevention
-        if action == 4 and self.consecutive_followups >= self.followup_overuse_limit:
-            return 1, True, "g3_followup_overuse"
-
-        # G5: Partial understanding — always Follow-up
-        # The Follow-up zone (0.40<perf<0.65, avg<0.60) sits adjacent to Easier,
+        # G5: Partial understanding — stay at Same
+        # The partial-understanding zone (0.40<perf<0.65, avg<0.60) sits adjacent to Easier,
         # causing PPO to produce unstable boundaries across seeds.
-        # Hard guardrail guarantees Follow-up fires when pedagogically correct.
+        # Guardrail keeps the policy stable while remaining in the 3-action space.
         if (0.40 < perf < 0.65
                 and avg_perf < 0.60
-                and self.consecutive_followups < self.followup_overuse_limit):
-            return 4, True, "g5_partial_followup"
+                ):
+            return 1, True, "g5_partial_same"
 
         # G6: Strong candidate with big gap -> always Harder
         # Handles Rock Star and Lucky Guesser personas.
@@ -298,7 +290,6 @@ class InterviewEnv(gym.Env):
         self.current_step = 0
         self.scores = []
         self.prev_action = None
-        self.consecutive_followups = 0
 
         if self._eval_initial_difficulty is not None:
             self.difficulty = float(self._eval_initial_difficulty)
@@ -320,7 +311,7 @@ class InterviewEnv(gym.Env):
 
         # Guardrails may redirect action
         action, forced_action, guardrail_id = self._apply_guardrails(prev_obs, pre_action)
-        hint_applied = (action == 3)
+        hint_applied = False
         current_difficulty = self.difficulty
 
         # Candidate answers
@@ -368,13 +359,13 @@ class InterviewEnv(gym.Env):
 
         persona_bias = self._persona_bias_correction()
 
-        # Critical states — covers all 5 canonical scenarios + Follow-up state
+        # Critical states — covers the 3 canonical difficulty shifts
         critical_state = (
-            (perf < 0.30 and hes > 0.60)                    # stuck -> Hint
+            (perf < 0.30 and hes > 0.60)                    # stuck -> Easier
             or (perf < 0.35)                                  # weak -> Easier
             or (0.80 < perf < 0.95 and hes > 0.65)           # nervous expert -> Same
             or (perf >= 0.95 and gap > 0.20)                  # rock star -> Harder
-            or (0.40 < perf < 0.65 and avg_perf < 0.60)      # partial -> Follow-up
+            or (0.40 < perf < 0.65 and avg_perf < 0.60)      # partial -> Same
         )
         if critical_state and action != oracle_action:
             critical_consistency = self.critical_mismatch_penalty
@@ -402,12 +393,7 @@ class InterviewEnv(gym.Env):
             self.difficulty = max(0.1, self.difficulty - 0.1)
         elif action == 2: # Harder
             self.difficulty = min(1.0, self.difficulty + 0.1)
-        # Hint and Follow-up do not change difficulty
-
-        # Track Follow-up streak
-        self.consecutive_followups = (
-            self.consecutive_followups + 1 if action == 4 else 0
-        )
+        # Same does not change difficulty
 
         obs = np.array(
             [perf, avg_perf, conf, hes, t_norm, self.difficulty],

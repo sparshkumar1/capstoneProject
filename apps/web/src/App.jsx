@@ -4,6 +4,7 @@ import TopicSelector from "./TopicSelector";
 import InterviewRoom from "./InterviewRoom";
 import Report from "./Report";
 import AdminDashboard from "./AdminDashboard";
+import Demo from "./Demo";
 import { ThemeContext, SessionContext } from "./contexts";
 import "./App.css";
 
@@ -37,11 +38,12 @@ export default function App() {
       <SessionContext.Provider value={{ session, setSession, candidate, setCandidate }}>
         <div className="app-root">
           {page === "login" && <Login navigate={navigate} />}
+          {page === "demo" && <Demo navigate={navigate} />}
           {page === "topics" && <TopicSelector navigate={navigate} />}
           {page === "interview" && <InterviewRoom navigate={navigate} />}
           {page === "report" && <Report navigate={navigate} />}
           {page === "admin" && <AdminDashboard navigate={navigate} />}
-          {!['login', 'topics', 'interview', 'report', 'admin'].includes(page) && <Login navigate={navigate} />}
+          {!['login', 'demo', 'topics', 'interview', 'report', 'admin'].includes(page) && <Login navigate={navigate} />}
         </div>
       </SessionContext.Provider>
     </ThemeContext.Provider>

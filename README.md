@@ -12,7 +12,9 @@ Adaptive AI interview preparation platform with multi-agent orchestration, reinf
 - [Agents and Main Modules](#agents-and-main-modules)
 - [RL Method (Brief)](#rl-method-brief)
 - [Services and Ports](#services-and-ports)
+- [Docker](#docker)
 - [Quick Demo](#quick-demo)
+- [Interactive Demo](#interactive-demo)
 - [API Endpoints (Backend)](#api-endpoints-backend)
 - [API Endpoints (Evaluator)](#api-endpoints-evaluator)
 - [API Endpoints (Qwen Service)](#api-endpoints-qwen-service)
@@ -21,6 +23,9 @@ Adaptive AI interview preparation platform with multi-agent orchestration, reinf
 - [Typical Interview Flow](#typical-interview-flow)
 - [Logging and Outputs](#logging-and-outputs)
 - [Research Artifacts](#research-artifacts)
+- [Model and Dataset Cards](#model-and-dataset-cards)
+- [Human Evaluation Workflow](#human-evaluation-workflow)
+- [Large Artifacts and Release Handling](#large-artifacts-and-release-handling)
 - [Contributing](#contributing)
 - [Citation](#citation)
 - [Known Improvement Areas](#known-improvement-areas)
@@ -55,88 +60,19 @@ The platform is designed around an orchestrator-centered multi-agent architectur
 
 ## Repository Structure
 
-```text
-PrepAIred/
-├─ README.md
-├─ launch.py
-├─ .env.example
-├─ pyproject.toml
-├─ requirements/
-│  ├─ base.txt
-│  ├─ backend.txt
-│  ├─ evaluator.txt
-│  ├─ qwen.txt
-│  ├─ rl.txt
-│  └─ dev.txt
-│
-├─ apps/
-│  ├─ backend/          ← FastAPI server (main.py + .env.example)
-│  └─ web/              ← React/Vite frontend
-│     ├─ package.json
-│     ├─ vite.config.js
-│     ├─ index.html
-│     └─ src/           ← All JSX/JS/CSS source files
-│
-├─ services/
-│  ├─ evaluator/        ← Standalone evaluator FastAPI service (port 5000)
-│  │  ├─ app.py
-│  │  ├─ assets/        ← FAISS index, pkl, qns.json, rubrics.json
-│  │  └─ models/        ← Fine-tuned sentence transformer models
-│  └─ qwen/             ← Qwen LLM microservice (port 8001)
-│     ├─ app.py
-│     └─ evaluate_upgraded.py
-│
-├─ agents/
-│  ├─ orchestrator/     ← InterviewOrchestrator (session lifecycle hub)
-│  ├─ strategy/         ← HybridOrchestrator (PPO + heuristic fallback)
-│  ├─ feedback/         ← FeedbackAgent (15-field structured feedback)
-│  ├─ validation/       ← ScoreValidator (post-hoc guardrails)
-│  ├─ timing/           ← QuestionTimer
-│  ├─ audio/            ← Audio pipeline (STT, confidence, hesitation)
-│  ├─ coding_executor/  ← Sandboxed code runner
-│  └─ question_selector/← QuestionSelector (difficulty/topic-aware)
-│
-├─ rl/
-│  ├─ env/              ← InterviewEnv (Gymnasium)
-│  ├─ training/         ← Training scripts
-│  ├─ checkpoints/      ← Trained PPO artifacts (ppo_final.zip, vecnormalize.pkl)
-│  ├─ logs/             ← Training logs
-│  └─ experiments/
-│
-├─ data/
-│  ├─ questions/        ← qns.json
-│  ├─ rubrics/          ← rubrics_final_clean.json
-│  ├─ sessions/
-│  ├─ reports/
-│  └─ vector_store/
-│
-├─ logs/
-│  ├─ services/         ← Service stdout logs (backend.log, evaluator.log, ...)
-│  └─ sessions/         ← Per-session turn logs
-│
-├─ tests/
-│  ├─ unit/             ← test_orchestrator.py (14 tests)
-│  ├─ integration/
-│  ├─ api/
-│  ├─ ws/
-│  └─ e2e/
-│
-├─ scripts/
-│  ├─ setup/
-│  ├─ dev/
-│  └─ release/
-│
-├─ docs/
-│  ├─ architecture/
-│  ├─ api/
-│  ├─ runbooks/
-│  └─ diagrams/
-│
-└─ research/
-   ├─ papers/           ← Draft manuscripts (3 papers)
-   ├─ capstone/         ← Capstone report + guidelines
-   └─ experiments/
-```
+The maintained source tree is documented in [docs/FOLDER_STRUCTURE_FINAL.md](docs/FOLDER_STRUCTURE_FINAL.md).
+
+In short, the active codebase is centered on:
+
+- `apps/backend/` for the FastAPI + WebSocket API
+- `apps/web/src/` for the React/Vite frontend
+- `agents/` for orchestration, strategy, validation, timing, audio, and code execution
+- `services/` for the evaluator and Qwen microservices
+- `rl/` for PPO training assets and checkpoints
+- `data/` for questions, rubrics, sessions, reports, and vector stores
+- `tests/` for unit and integration coverage
+- `docs/` for architecture, runbooks, diagrams, and paper drafts
+- `requirements/`, `launch.py`, `pyproject.toml`, and `.env.example` for setup and execution
 
 ## Architecture
 
@@ -275,9 +211,22 @@ curl http://localhost:8000/health
 curl http://localhost:5000/api/evaluator/current-question
 ```
 
+## Interactive Demo
+
+The frontend includes a small self-contained demo screen that shows the adaptive interview loop without needing to start a full session.
+
+From the login screen, choose **View interactive demo**. You can also open it from the top navigation once you are inside the app.
+
+The demo highlights:
+
+- one sample interview question,
+- a sample candidate answer,
+- a compact evaluator summary,
+- a difficulty slider showing the 3-action policy output.
+
 ## API Endpoints (Backend)
 
-From `frontend/main.py`:
+From `apps/backend/main.py`:
 
 - `GET /health`
 - `POST /api/login`
@@ -294,7 +243,7 @@ From `frontend/main.py`:
 
 ## API Endpoints (Evaluator)
 
-From `Evaluator_final/Evaluator/evaluate.py`:
+From `services/evaluator/app.py`:
 
 - `POST /api/evaluator/set-question`
 - `POST /api/evaluator/evaluate-answer`
@@ -312,6 +261,22 @@ From `services/qwen/app.py`:
 - `POST /report`
 
 The Qwen service is intentionally kept as a single model tier so the runtime stays simpler to explain, easier to validate, and easier to keep consistent across prompts.
+
+## Docker
+
+The repo includes a Docker-based stack for local development and review. The default Compose setup starts the evaluator, backend, and frontend without requiring the large Qwen weights.
+
+```powershell
+docker compose up --build
+```
+
+To enable the optional Qwen service, use the profile-based variant:
+
+```powershell
+docker compose --profile qwen up --build
+```
+
+For the full container layout and service responsibilities, see [docs/DOCKER.md](docs/DOCKER.md).
 
 ## Setup
 
@@ -417,6 +382,52 @@ npm run dev
 - RL artifacts and training logs under `rl_agent/rl_runs/`
 
 ## Research Artifacts
+
+The authoritative human-evaluation workflow is documented in [ablation/HUMAN_EVAL_README.md](ablation/HUMAN_EVAL_README.md).
+
+The generated per-topic summary tables live under [ablation/results/topic_analysis_summary.md](ablation/results/topic_analysis_summary.md) and are produced by [ablation/topic_analysis_tables.py](ablation/topic_analysis_tables.py).
+
+## Model and Dataset Cards
+
+- [docs/MODEL_CARD.md](docs/MODEL_CARD.md): high-level description of the adaptive interview system
+- [docs/DATASET_CARD.md](docs/DATASET_CARD.md): question bank and rating dataset description
+- [docs/HUMAN_RATER_PACK.md](docs/HUMAN_RATER_PACK.md): ready-to-send instructions for external raters
+
+## Human Evaluation Workflow
+
+Use these commands when teammates need to collect ratings, aggregate them, and regenerate the ablation figures.
+
+```powershell
+# 1) Collect one rater CSV at a time
+.\.venv\Scripts\Activate.ps1
+python ablation\web_rater.py --answers ablation\data\ablation_answers.json --out ablation\results\ratings_rater1.csv
+
+# 2) Repeat for additional raters
+python ablation\web_rater.py --answers ablation\data\ablation_answers.json --out ablation\results\ratings_rater2.csv
+python ablation\web_rater.py --answers ablation\data\ablation_answers.json --out ablation\results\ratings_rater3.csv
+
+# 3) Aggregate and re-run analysis
+python ablation\run_human_eval_pipeline.py --no-synthetic --ratings ablation\results\ratings_rater1.csv ablation\results\ratings_rater2.csv ablation\results\ratings_rater3.csv
+```
+
+For offline testing only, run the synthetic pipeline instead:
+
+```powershell
+python ablation\run_human_eval_pipeline.py --use-synthetic
+```
+
+For a teammate-ready handout, use [docs/HUMAN_RATER_PACK.md](docs/HUMAN_RATER_PACK.md) and keep one CSV per person.
+
+## Large Artifacts and Release Handling
+
+Large model weights, generated artifacts, and other bulky files should not be pushed directly into the main repo history. The repository includes a Git LFS migration guide at [docs/GIT_LFS_MIGRATION.md](docs/GIT_LFS_MIGRATION.md).
+
+Recommended approach:
+
+1. Track large patterns with Git LFS or keep them out of Git entirely.
+2. Mount or download model weights at runtime.
+3. Publish heavyweight artifacts in a separate release, dataset page, or object store.
+4. Keep the repository itself limited to source, configs, scripts, figures, and lightweight summaries.
 
 **Human evaluation pipeline:** see `ablation/HUMAN_EVAL_README.md` for an interactive rater harness, synthetic-proxy generator for testing, averaging scripts, and analysis commands used to produce the figures in `ablation/results/`.
 

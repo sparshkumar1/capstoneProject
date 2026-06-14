@@ -14,7 +14,7 @@ const SORT_OPTS = [
 ];
 
 export default function AdminDashboard({ navigate }) {
-  const { candidate } = useContext(SessionContext);
+  useContext(SessionContext);
   const [sessions, setSessions] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -78,7 +78,7 @@ export default function AdminDashboard({ navigate }) {
               Monitor all candidate sessions, scores, and behavioural patterns.
             </p>
           </div>
-          <button className="btn btn-ghost" onClick={() => navigate("login")}>
+          <button type="button" className="btn btn-ghost" onClick={() => navigate("login") }>
             ← Back to Login
           </button>
         </div>
@@ -98,7 +98,7 @@ export default function AdminDashboard({ navigate }) {
 
           <div className="pill-tabs" style={{ width: "auto" }}>
             {FILTERS.map(f => (
-              <button key={f}
+              <button type="button" key={f}
                 className={`pill-tab ${filter === f ? "active" : ""}`}
                 onClick={() => { setFilter(f); setPage(1); }}>
                 {{ all: "All", today: "Today", this_week: "This Week", this_month: "This Month" }[f]}
@@ -142,12 +142,12 @@ export default function AdminDashboard({ navigate }) {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="pagination fade-up">
-            <button className="btn btn-ghost btn-sm"
+            <button type="button" className="btn btn-ghost btn-sm"
               disabled={page === 1} onClick={() => setPage(p => p - 1)}>← Prev</button>
             <span style={{ fontSize: 13, color: "var(--text-2)" }}>
               Page {page} of {totalPages}
             </span>
-            <button className="btn btn-ghost btn-sm"
+            <button type="button" className="btn btn-ghost btn-sm"
               disabled={page === totalPages} onClick={() => setPage(p => p + 1)}>Next →</button>
           </div>
         )}
@@ -248,7 +248,7 @@ function SessionRow({ sess, onClick }) {
         </span>
       </div>
       <div className="td">
-        <button className="btn btn-ghost btn-sm" onClick={(e) => { e.stopPropagation(); }}>
+        <button type="button" className="btn btn-ghost btn-sm" onClick={(e) => { e.stopPropagation(); }}>
           View →
         </button>
       </div>
@@ -270,7 +270,7 @@ function SessionDrawer({ session, loading, onClose }) {
               {session.id}
             </div>
           </div>
-          <button className="btn btn-ghost btn-sm" onClick={onClose}>✕</button>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={onClose}>✕</button>
         </div>
 
         {loading ? (

@@ -20,7 +20,7 @@ import asyncio
 import uuid
 import re
 from collections import Counter
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 # ── Guarded sub-agent imports ────────────────────────────────────────────
@@ -337,7 +337,7 @@ class InterviewOrchestrator:
             "last_time_overrun": False,
             "consecutive_followups": 0,
             "status": "created",
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(UTC).isoformat(),
         }
 
     # ── Public API ────────────────────────────────────────────────────────
@@ -1110,7 +1110,7 @@ class InterviewOrchestrator:
             return self._cached_report
 
         self._state["status"] = "completed"
-        self._state["ended_at"] = datetime.utcnow().isoformat()
+        self._state["ended_at"] = datetime.now(UTC).isoformat()
         scores = self._state.get("scores", [])
         self._state["overall_score"] = round(sum(scores) / max(len(scores), 1), 3)
 

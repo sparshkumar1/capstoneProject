@@ -107,7 +107,7 @@ export default function Report({ navigate }) {
         {/* ── Tabs ─────────────────────────────────────────── */}
         <div className="pill-tabs report-tabs fade-up stagger-1">
           {tabs.map(t => (
-            <button key={t} className={`pill-tab ${activeTab === t ? "active" : ""}`}
+            <button type="button" key={t} className={`pill-tab ${activeTab === t ? "active" : ""}`}
               onClick={() => setActiveTab(t)}>
               {{ overview: "Overview", questions: "Questions", timeline: "Timeline", concepts: "Concepts", behaviour: "Behaviour" }[t]}
             </button>
@@ -122,10 +122,10 @@ export default function Report({ navigate }) {
 
         {/* ── Actions ──────────────────────────────────────── */}
         <div className="report-actions fade-up">
-          <button className="btn btn-primary btn-lg" onClick={() => navigate("topics")}>
+          <button type="button" className="btn btn-primary btn-lg" onClick={() => navigate("topics") }>
             🔁 Start New Interview
           </button>
-          <button className="btn btn-ghost btn-lg" onClick={() => navigate("admin")}>
+          <button type="button" className="btn btn-ghost btn-lg" onClick={() => navigate("admin") }>
             📊 View All Sessions
           </button>
         </div>
@@ -285,7 +285,7 @@ function QuestionsTab({ r }) {
                     <div className="q-detail-section">
                       <div className="q-detail-label">Your Answer</div>
                       <p style={{ fontStyle: "italic", color: "var(--text-2)", fontSize: 13, lineHeight: 1.6 }}>
-                        "{q.transcript}"
+                        &quot;{q.transcript}&quot;
                       </p>
                     </div>
                   )}
@@ -339,7 +339,7 @@ function QuestionsTab({ r }) {
                           }}>
                             <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 5 }}>
                               <span style={{ fontSize: 12, color: "var(--text-2)", fontStyle: "italic" }}>
-                                "{e.what_was_said}"
+                                &quot;{e.what_was_said}&quot;
                               </span>
                               <span className={`badge ${e.severity === "major" ? "badge-danger" : "badge-warn"}`}>
                                 {e.severity}

@@ -4,16 +4,22 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
+import csv
 from pathlib import Path
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
 
+
+ROOT = Path(__file__).resolve().parent
+REPO_ROOT = ROOT.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 from ablation_evaluator import load_answers
 from services.evaluator.app import evaluate, get_rubric
 
-
-ROOT = Path(__file__).resolve().parent
 RESULTS = ROOT / "results"
 RESULTS.mkdir(parents=True, exist_ok=True)
 
@@ -32,7 +38,22 @@ plt.rcParams.update(
 
 
 def build_score_rows() -> list[dict]:
-    answers = load_answers(ROOT / "data" / "ablation_answers.json")
+    source_candidates = [
+        ROOT / "data" / "ablation_answers.json",
+        ROOT / "results" / "ratings_proxy.csv",
+        ROOT / "results" / "ratings_averaged.csv",
+    ]
+    source_path = next((p for p in source_candidates if p.exists()), None)
+    if source_path is None:
+        raise SystemExit("No ablation answers source found.")
+
+    if source_path.suffix.lower() == ".csv":
+        answers = []
+        with source_path.open(newline="", encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                answers.append(row)
+    else:
+        answers = load_answers(source_path)
     rows: list[dict] = []
     for item in answers:
         rubric = get_rubric(str(item.get("qid", "")).strip())

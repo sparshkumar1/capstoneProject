@@ -7,7 +7,7 @@ import "./Login.css";
 const YEARS = ["1st Year", "2nd Year", "3rd Year", "4th Year", "Postgrad", "Fresher (Working)"];
 
 export default function Login({ navigate }) {
-  const { setCandidate, setSession } = useContext(SessionContext);
+  const { setCandidate } = useContext(SessionContext);
   const [form, setForm] = useState({
     name: "", email: "", college: "", year: "",
     admin: false,
@@ -83,15 +83,23 @@ export default function Login({ navigate }) {
               <div key={f} className="feature-chip">{f}</div>
             ))}
           </div>
+          <div className="login-actions">
+            <button type="button" className="btn btn-primary" onClick={() => navigate("demo")}>
+              View interactive demo
+            </button>
+            <button type="button" className="btn btn-ghost" onClick={() => navigate("topics")}>
+              Skip to interview setup
+            </button>
+          </div>
         </div>
 
         <div className="login-right fade-up stagger-2">
           <div className="card login-card">
             <div className="pill-tabs" style={{ marginBottom: 24 }}>
-              <button className={`pill-tab ${tab === "candidate" ? "active" : ""}`} onClick={() => setTab("candidate")}>
+              <button type="button" className={`pill-tab ${tab === "candidate" ? "active" : ""}`} onClick={() => setTab("candidate") }>
                 Candidate
               </button>
-              <button className={`pill-tab ${tab === "admin" ? "active" : ""}`} onClick={() => setTab("admin")}>
+              <button type="button" className={`pill-tab ${tab === "admin" ? "active" : ""}`} onClick={() => setTab("admin") }>
                 Admin
               </button>
             </div>
@@ -140,7 +148,7 @@ export default function Login({ navigate }) {
               </div>
             )}
 
-            <button className="btn btn-primary btn-lg"
+            <button type="button" className="btn btn-primary btn-lg"
               style={{ width: "100%", marginTop: 20, justifyContent: "center" }}
               onClick={handleSubmit} disabled={loading}
             >

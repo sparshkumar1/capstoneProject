@@ -18,8 +18,9 @@ export default function Topbar({ navigate, showNav = true }) {
       </span>
       {showNav && (
         <nav style={{ marginLeft: 40, display: "flex", gap: 8 }}>
-          <button className="btn btn-ghost btn-sm" onClick={() => navigate("topics")}>Topics</button>
-          <button className="btn btn-ghost btn-sm" onClick={() => navigate("admin")}>Admin</button>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => navigate("demo")}>Demo</button>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => navigate("topics")}>Topics</button>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => navigate("admin")}>Admin</button>
         </nav>
       )}
       <div className="topbar-right">

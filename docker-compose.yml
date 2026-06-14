@@ -1,0 +1,55 @@
+services:
+  evaluator:
+    build:
+      context: .
+      dockerfile: Dockerfile.evaluator
+    command: python services/evaluator/app.py
+    ports:
+      - "5000:5000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      EVALUATOR_MOCK_MODE: "0"
+    volumes:
+      - ./services/evaluator/assets:/app/services/evaluator/assets:ro
+      - ./services/evaluator/models:/app/services/evaluator/models:ro
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    command: uvicorn apps.backend.main:app --host 0.0.0.0 --port 8000
+    depends_on:
+      - evaluator
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONPATH: /app
+      PREPAIRED_EVALUATOR_URL: http://evaluator:5000
+      PREPAIRED_QWEN_URL: http://qwen:8001
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./orchestrator_logs:/app/orchestrator_logs
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+  qwen:
+    profiles: ["qwen"]
+    build:
+      context: .
+      dockerfile: Dockerfile.qwen
+    command: uvicorn services.qwen.app:app --host 0.0.0.0 --port 8001
+    ports:
+      - "8001:8001"
+    environment:
+      PYTHONUNBUFFERED: "1"
+    volumes:
+      - ./services/qwen/models:/app/services/qwen/models

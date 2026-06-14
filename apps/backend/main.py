@@ -19,7 +19,7 @@ import sys
 import tempfile
 import time
 import uuid
-from datetime import datetime, date
+from datetime import UTC, datetime, date
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -571,7 +571,7 @@ def _get_session_dict(session_id: str) -> dict:
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "pipeline_ready": PIPELINE_READY, "timestamp": datetime.utcnow().isoformat()}
+    return {"status": "ok", "pipeline_ready": PIPELINE_READY, "timestamp": datetime.now(UTC).isoformat()}
 
 
 @app.post("/api/login")
@@ -589,7 +589,7 @@ async def login(req: LoginRequest):
         "primary_lang": req.primary_lang,
         "experience": req.experience,
         "is_admin": req.admin,
-        "created_at": datetime.utcnow().isoformat(),
+        "created_at": datetime.now(UTC).isoformat(),
     }
     CANDIDATES[cid] = candidate
     return candidate
