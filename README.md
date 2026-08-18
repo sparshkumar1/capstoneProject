@@ -1,160 +1,161 @@
 # PrepAIred — A Personalized Adaptive Framework for Multimodal Technical Interview Assessment and Preparation
 
-[![Research Paper](https://img.shields.io/badge/Paper-IEEE%20Format-blue.svg)](docs/paper_draft_ieee.md)
+[![Research Manuscript](https://img.shields.io/badge/Manuscript-IEEE%20TLT%20Draft-blue.svg)](docs/paper_draft_ieee.md)
+[![Master Booklet](https://img.shields.io/badge/Manual-Master%20Booklet-purple.svg)](docs/PREPAIRED_COMPLETE_BOOKLET.md)
+[![Tester Guide](https://img.shields.io/badge/Reproduction-Friend%20Checklist-teal.svg)](docs/FRIEND_REPRODUCTION_CHECKLIST.md)
 [![Traceability](https://img.shields.io/badge/Results-100%25%20Traceable-success.svg)](docs/PAPER_RESULTS_TRACEABILITY.md)
 [![Tests](https://img.shields.io/badge/Tests-178%20Passed-brightgreen.svg)](docs/SYSTEM_TESTING.md)
 [![Reproducibility](https://img.shields.io/badge/Reproducibility-Verified-orange.svg)](docs/REPRODUCIBILITY.md)
+[![Release Tag: paper-v1.0](https://img.shields.io/badge/Release-paper--v1.0-blueviolet.svg)](docs/GITHUB_RELEASE_DESCRIPTION.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **PrepAIred** is an integrated, multimodal, closed-loop adaptive technical interview assessment platform for computer science education. It integrates speech prosody analysis, neural short-answer grading ($S_1+S_2+R$), isolated Docker C execution, and guardrail-augmented Proximal Policy Optimization (PPO) difficulty adaptation.
+> **PrepAIred** is an open-source, multimodal, closed-loop adaptive technical interview preparation platform. It combines speech prosody analysis, calibrated neural short-answer grading ($S_1+S_2+R$), containerized Docker C execution, and safety-guardrailed Proximal Policy Optimization (PPO) reinforcement learning for dynamic difficulty adaptation.
 
 ---
 
-## System Architecture
+## 🏛️ System Architecture
 
 ![Figure 1: PrepAIred System Architecture](research/results/figures/figure1_system_architecture.png)
 
+```
+Candidate (Audio/Code/Text)
+   │
+   ├──► [1] Audio & Prosody Analysis (Whisper STT, Pacing, Hesitation ht, Confidence ct)
+   │
+   ├──► [2] Calibrated Neural Evaluator (S1 SBERT + S2 FAISS + R CrossEncoder Entailment)
+   │          └─ Anti-Keyword Dampening: S2_eff = (S2 if R > 0.30 else 0.60 * S2)
+   │
+   ├──► [3] 6D Candidate State Vector: st = [s_avg, ct, ht, tau_t, st, dt] in [0, 1]^6
+   │
+   ├──► [4] Guardrailed PPO Difficulty Controller (PPO Policy + 6 Safety Guardrails)
+   │          └─ Action: Delta d in {-1 (Easier), 0 (Same), +1 (Harder)}
+   │
+   ├──► [5] 3-Tier Question Selector & Personalization (0.0% Question Repetition)
+   │
+   ├──► [6] Hardened Docker C Coding Sandbox (128MB RAM, 32 PIDs, 2.0s, --net=none)
+   │
+   └──► [7] Formative Feedback & Targeted Probing (Local Qwen GGUF / Structured Fallback)
+```
+
 ---
 
-## Key Research Findings (Pre-Registered $n=480$ Evaluations)
+## 🔬 Key Research Findings (Pre-Registered $n=480$ Evaluations)
 
-1. **Adaptive Difficulty Adaptation (EXP-1, $n=150$):** PPO with safety guardrails achieves statistically significant positive difficulty adaptation ($\rho = +0.1572 \pm 0.08$) relative to static fixed ($\rho = 0.0, p = 6.15 \times 10^{-4}$) and heuristic rule-based controllers ($\rho = -0.2572, p = 5.30 \times 10^{-8}$) in simulation.
-2. **Neural Answer Evaluation (EXP-2, $n=140$):** The multi-component scoring pipeline ($S_1+S_2+R$) achieves strong rank correlation ($\rho = 0.8358, p = 4.46 \times 10^{-6}, \text{MAE} = 0.2585$) with blinded human expert ratings on a 20-sample pilot benchmark (human inter-rater reliability Krippendorff's $\alpha = 0.8255$).
-3. **Formative Feedback Trade-Offs (EXP-3, $n=60$):** Generative `Qwen2.5-7B-Instruct` (Tesla T4 GPU) exhibits higher transcript lexical grounding ($0.2496$ vs. $0.0383, p = 2.56 \times 10^{-3}$), while deterministic structured recovery guarantees strictly superior rubric gap coverage ($100.0\%$ vs. $72.5\%, p = 9.11 \times 10^{-4}$) at sub-50ms latency.
-4. **Personalization & Deduplication (EXP-4, $n=60$):** 3-level deduplication completely eliminates question repetition ($0.0\%$ vs. $6.0\%, p < 0.001$), producing distinct trajectory divergence ($d = 14.21$) between candidate ability profiles in simulation.
-5. **System Behavioral Decoupling (EXP-5, $n=70$):** 100% clean subsystem isolation confirmed across 7 leave-one-out conditions without cascading crashes.
+1. **Adaptive Difficulty Adaptation (EXP-1, $n=150$):** `[RESEARCH RESULT]`
+   PPO with safety guardrails achieves statistically significant positive difficulty adaptation ($\rho = +0.1572 \pm 0.08$) relative to static fixed ($\rho = 0.0, p = 6.15 \times 10^{-4}$) and heuristic rule-based controllers ($\rho = -0.2572, p = 5.30 \times 10^{-8}$) in simulation.
+2. **Neural Answer Evaluation (EXP-2, $n=140$):** `[RESEARCH RESULT / HUMAN VALIDATED]`
+   The multi-component scoring pipeline ($S_1+S_2+R$) achieves strong rank correlation ($\rho = \mathbf{0.8358}, p = \mathbf{4.46 \times 10^{-6}}, \text{MAE} = 0.2585$) with blinded human expert ratings on a 20-sample benchmark (human inter-rater reliability Krippendorff's $\alpha = \mathbf{0.8255}$).
+3. **Formative Feedback Trade-Offs (EXP-3, $n=60$):** `[RESEARCH RESULT]`
+   Generative `Qwen2.5-7B-Instruct` (Tesla T4 GPU) exhibits higher transcript lexical grounding ($0.2496$ vs. $0.0383, p = 2.56 \times 10^{-3}$), while deterministic structured recovery guarantees strictly superior rubric gap coverage ($100.0\%$ vs. $72.5\%, p = 9.11 \times 10^{-4}$) at sub-50ms latency.
+4. **Personalization & Deduplication (EXP-4, $n=60$):** `[RESEARCH RESULT]`
+   3-level deduplication completely eliminates question repetition ($0.0\%$ vs. $6.0\%, p < 0.001$), producing distinct trajectory divergence ($d = 14.21$) between candidate ability profiles in simulation.
+5. **System Behavioral Decoupling (EXP-5, $n=70$):** `[RESEARCH RESULT]`
+   100% clean subsystem isolation confirmed across 7 leave-one-out conditions without cascading crashes.
 
-*Scientific Boundary: Candidate learning gains, anxiety reduction, and whole-system hiring efficacy represent future longitudinal classroom trials.*
+*Scientific Boundary: Candidate longitudinal learning gains and whole-system hiring efficacy represent documented future longitudinal trials. External third-party reproduction is pending (independent reproduction protocol provided in docs/FRIEND_REPRODUCTION_CHECKLIST.md).*
+
 
 ---
 
-## Dual Configuration Architecture
+## ⚡ Dual Configuration Architecture
 
 ```
 ================================================================================
 CONFIG A: RESEARCH SCIENTIFIC EVIDENCE (EXP-3)
 ================================================================================
 - Model: Qwen/Qwen2.5-7B-Instruct (bfloat16) on NVIDIA Tesla T4 GPU (CUDA 12.8)
-- Model Revision: a09a35458c702b33eeacc393d103063234e8bc28
 - Measured Latency: 9.78s per turn (Grounding = 0.2496, Gap Coverage = 72.5%)
-- Immutable Raw Data: research/results/raw/experiment_3_qwen_raw.json
+- Raw Artifacts: research/results/raw/experiment_3_qwen_raw.json
 - Scope: Frozen scientific evidence supporting the manuscript.
 ================================================================================
 
 ================================================================================
 CONFIG B: LIVE DEMO & CLASSROOM DEPLOYMENT (CPU-ONLY)
 ================================================================================
-- Model: Qwen/Qwen2.5-1.5B-Instruct-GGUF (Q4_K_M, 986 MB)
+- Model: Qwen/Qwen2.5-1.5B-Instruct-GGUF (Q4_K_M, 1.06 GB)
 - Runtime Engine: llama.cpp / llama-cpp-python (CPU-Only, 12 threads)
 - Measured Latency: ~1.8s - 2.9s per task (Mean = 2.195s, 18.79 tok/s)
 - Process RAM: ~1.36 GB RSS
 - Fallback System: Sub-50ms deterministic rubric-grounded recovery
-- License: Apache-2.0
+- Scope: High-speed local live demo without dedicated GPUs.
 ================================================================================
 ```
 
 ---
 
-## Quick Start — Local CPU Live Demo
+## 🚀 Quick Start — Reproduction & Local Demo
 
-### 1. Setup Environment & Install Dependencies
+### 1. Clone & Configure Environment
 ```bash
-# Clone repository
-git clone https://github.com/your-username/PrepAIred.git
-cd PrepAIred
+# Clone the repository
+git clone https://github.com/sparshkumar1/capstoneProject.git
+cd capstoneProject
 
-# Install backend dependencies
-pip install -r requirements.txt
-pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
+# Create and activate Python virtual environment
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1    # Windows PowerShell (or source .venv/bin/activate on Linux/macOS)
+
+# Install dependencies
+pip install --upgrade pip
+pip install -r requirements/base.txt -r requirements/evaluator.txt -r requirements/rl.txt
+pip install -e .
+
+# Install frontend dependencies
+npm --prefix apps/web install
 ```
 
-### 2. Download Quantized GGUF Model (986 MB)
+### 2. Run Automated Verification Suites
 ```bash
-python -c "
-from huggingface_hub import hf_hub_download
-from pathlib import Path
-out_dir = Path('models/gguf')
-out_dir.mkdir(parents=True, exist_ok=True)
-hf_hub_download(
-    repo_id='Qwen/Qwen2.5-1.5B-Instruct-GGUF',
-    filename='qwen2.5-1.5b-instruct-q4_k_m.gguf',
-    local_dir=str(out_dir)
-)
-print('Model ready for local CPU inference.')
-"
-```
+# Backend test suite (178 tests: 177 passed, 1 skipped CUDA)
+python -m pytest tests/ -v
 
-### 3. Launch Services
-```bash
-# Terminal 1: Qwen Microservice (Port 8001)
-python services/qwen/app.py
+# Frontend component suite (7 passed)
+npm --prefix apps/web test -- --run
 
-# Terminal 2: Evaluator Microservice (Port 5000)
-python services/evaluator/app.py
-
-# Terminal 3: FastAPI Backend (Port 8000)
-uvicorn apps.backend.main:app --reload --port 8000
-
-# Terminal 4: React Frontend (Port 5173)
-cd apps/web && npm install && npm run dev
-```
-
----
-
-## Research Reproduction
-
-To deterministically verify all 480 experimental evaluations and regenerate Figures 1–8:
-```bash
+# Deterministic Paper Reproduction Harness (480 / 480 verified)
 python scripts/reproduce_paper.py
 ```
 
-### Running Automated Test Suites
+### 3. Launch Local Demo Services
 ```bash
-# Backend unit and integration regression suite (178 tests)
-pytest tests/ -v
+# Terminal 1: Evaluator Microservice (Port 5000)
+python services/evaluator/app.py
 
-# Frontend component suite (7 tests)
-cd apps/web && npm test -- --run
+# Terminal 2: FastAPI Backend Server (Port 8000)
+uvicorn apps.backend.main:app --host 0.0.0.0 --port 8000 --reload
+
+# Terminal 3: React Web Client (Port 5173)
+npm --prefix apps/web run dev
 ```
+Open your browser at `http://localhost:5173` to start an interactive mock interview.
 
 ---
 
-## Repository Structure
+## 📚 Complete Project Documentation Index
 
-```
-PrepAIred/
-├── ablation/                  # Human evaluation benchmark & Krippendorff alpha analysis
-├── agents/                    # Multi-agent orchestrator, strategy, audio, timing, selector
-├── apps/
-│   ├── backend/               # FastAPI WebSocket & REST API backend
-│   └── web/                   # React 18 / Vite frontend client
-├── data/
-│   ├── questions/             # 125 curated technical interview questions (qns.json)
-│   └── rubrics/               # 125 fine-grained evaluation rubrics
-├── docs/                      # Authoritative research paper, booklet, audits, traceability
-│   ├── paper_draft_ieee.md    # Authoritative IEEE scientific manuscript
-│   ├── PREPAIRED_COMPLETE_BOOKLET.md # Master 34-part academic & viva defense guide
-│   ├── PAPER_RESULTS_TRACEABILITY.md # 100% dataflow traceability matrix
-│   ├── CLAIMS_CHECK.md        # Master claims evidence ledger (16 rows)
-│   ├── SYSTEM_TESTING.md      # Full test execution report
-│   ├── live_demo_verification.md # CPU live demo setup & benchmark guide
-│   └── REPRODUCIBILITY.md     # Master replication instructions
-├── experiments/               # Pre-registered experimental execution harnesses (EXP 1-5)
-├── models/                    # GGUF model storage (excluded from git)
-├── research/results/          # Machine-readable raw data, processed CSVs, tables, and figures
-├── rl/                        # Gymnasium environment, PPO training, and checkpoints
-├── scripts/                   # One-click paper replication harness (reproduce_paper.py)
-├── services/                  # Standalone Evaluator and Qwen microservices
-├── submission/                # Self-contained venue submission package (IEEE TLT)
-├── tests/                     # 178 unit & integration regression tests
-├── Dockerfile.sandbox         # Isolated C execution sandbox container
-├── docker-compose.yml         # Full multi-container orchestration
-└── README.md                  # Master repository documentation
-```
+- **Master Manual & Defense Guide:** [`docs/PREPAIRED_COMPLETE_BOOKLET.md`](docs/PREPAIRED_COMPLETE_BOOKLET.md) (Complete 31-section compendium)
+- **Independent Tester Checklist:** [`docs/FRIEND_REPRODUCTION_CHECKLIST.md`](docs/FRIEND_REPRODUCTION_CHECKLIST.md) (Step-by-step external tester protocol)
+- **IEEE Research Manuscript Draft:** [`docs/paper_draft_ieee.md`](docs/paper_draft_ieee.md) (29-section formal manuscript)
+- **Results Traceability Matrix:** [`docs/PAPER_RESULTS_TRACEABILITY.md`](docs/PAPER_RESULTS_TRACEABILITY.md) (100% dataflow verification)
+- **Claims Verification Matrix:** [`docs/CLAIMS_CHECK.md`](docs/CLAIMS_CHECK.md) (16-claim evidence ledger)
+- **System Testing Compendium:** [`docs/SYSTEM_TESTING.md`](docs/SYSTEM_TESTING.md) (Full test inventory)
+- **GitHub Release Notes:** [`docs/GITHUB_RELEASE_DESCRIPTION.md`](docs/GITHUB_RELEASE_DESCRIPTION.md) (`paper-v1.0`)
+- **Repository Tree Inventory:** [`docs/FINAL_REPOSITORY_TREE.md`](docs/FINAL_REPOSITORY_TREE.md)
 
 ---
 
-## Licenses
+## 🛡️ Hardened Coding Sandbox Policy
+
+Untrusted candidate C code executes in an isolated Docker container (`Dockerfile.sandbox`):
+- **Memory:** $128\text{ MB}$ limit (`--memory=128m --memory-swap=128m`)
+- **PIDs:** $32\text{ max}$ (`--pids-limit=32` to stop fork bombs)
+- **Timeout:** $2.0\text{ seconds}$ CPU wall time
+- **Network:** Completely disabled (`--net=none`)
+- **Filesystem:** Read-only root with transient memory tmpfs
+
+---
+
+## 📜 Licenses
 
 - **Platform Code:** MIT License ([LICENSE](LICENSE))
 - **Qwen2.5-1.5B-Instruct-GGUF:** Apache-2.0 License
@@ -163,7 +164,7 @@ PrepAIred/
 
 ---
 
-## Citation
+## 📖 Citation
 
 ```bibtex
 @article{kumar2026prepaired,
