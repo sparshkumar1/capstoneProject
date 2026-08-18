@@ -1,0 +1,12 @@
+experiment_id,item_checked,expected_or_protocol_value,raw_data_observed_value,discrepancy_type,severity,impact_and_resolution
+EXP-1,Fixed vs PPO median diff,0.0000,0.0000,None,None,Verified exact match
+EXP-1,Fixed vs Rule p-value,7.64e-7,7.6406e-7,None,None,Verified exact match
+EXP-1,Rule vs PPO p-value,5.30e-8,5.2989e-8,None,None,Verified exact match
+EXP-2,S1+S2 vs Full rho,0.8358,0.8358,None,None,Verified exact match; S1+S2 and Full have identical rank correlation
+EXP-2,Full vs S1+S2 MAE,Lower MAE for Full,0.2585 vs 0.1907,Scientific finding,Informational,Full pipeline has higher MAE than S1+S2 on 20-sample pilot benchmark; paper must not claim Full has lower error than S1+S2
+EXP-3,Qwen-7B Condition,Executed online generative LLM,Protocol condition not executed,Protocol omission,Moderate,Generative Qwen-7B condition was not executed; structured non-LLM evaluator recovery was executed instead
+EXP-3,Total evaluated samples,60 evaluations (3x20),40 evaluations (2x20),Sample count,Moderate,Direct consequence of omitting Qwen-7B online condition
+EXP-4,Trajectory Divergence CI,Non-zero bootstrap CI width,[14.2127 14.2127] (zero width),Methodological,Low,Zero variance across seeds caused by deterministic difficulty transitions in synthetic candidate simulator
+EXP-5,Timing score impact,Measurable score delta,0.0000 shift (null sensitivity),Simulation artifact,Informational,Synthetic response times did not exceed timeouts or trigger speed bonuses in simulator
+EXP-5,Feedback score impact,Measurable score delta,0.0000 shift (null sensitivity),Simulation artifact,Informational,Feedback is delivered post-turn with zero closed-loop retraining in single-pass simulator
+EXP-5,Coding score impact,Measurable score delta,0.0000 shift (null sensitivity),Simulation artifact,Informational,Coding turn omission does not alter verbal question scoring on non-coding turns

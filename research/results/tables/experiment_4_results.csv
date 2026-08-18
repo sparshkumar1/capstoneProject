@@ -1,0 +1,4 @@
+selection_mode,repetition_rate,weakness_remediation_rate
+random_non_adaptive,0.06,0.02
+topic_heuristic_baseline,0.06,0.01
+candidate_state_personalized,0.0,0.1667

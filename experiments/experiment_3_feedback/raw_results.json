@@ -1,0 +1,401 @@
+{
+  "experiment_id": "EXP-3",
+  "timestamp": "2026-08-16T07:56:21.183027",
+  "runtime_seconds": 125.72,
+  "provenance": {
+    "ratings_averaged_sha256": "7f23e503f83f041a6a355857a34035882180200b4735d8b45735d802161ae5a2",
+    "rubrics_sha256": "57a2ed5a088dc9597a0bd04cb6592c79c801550c50c2ca4149c2866d29d9c9cd"
+  },
+  "total_samples": 20,
+  "feedback_conditions": [
+    "generic_template",
+    "structured_evaluator_recovery"
+  ],
+  "sample_evaluations": [
+    {
+      "run_id": "EXP3_gen_pilot_1_qid1",
+      "item_id": "pilot_1_qid1",
+      "condition_id": "generic_template",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_1_qid1",
+      "item_id": "pilot_1_qid1",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 3
+    },
+    {
+      "run_id": "EXP3_gen_pilot_2_qid1",
+      "item_id": "pilot_2_qid1",
+      "condition_id": "generic_template",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_2_qid1",
+      "item_id": "pilot_2_qid1",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0,
+      "grounding_ratio": 0.0556,
+      "gap_coverage": 1.0,
+      "actionability_count": 5
+    },
+    {
+      "run_id": "EXP3_gen_pilot_3_qid1",
+      "item_id": "pilot_3_qid1",
+      "condition_id": "generic_template",
+      "score": 0.2986,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_3_qid1",
+      "item_id": "pilot_3_qid1",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.2986,
+      "grounding_ratio": 0.0625,
+      "gap_coverage": 1.0,
+      "actionability_count": 5
+    },
+    {
+      "run_id": "EXP3_gen_pilot_4_qid1",
+      "item_id": "pilot_4_qid1",
+      "condition_id": "generic_template",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_4_qid1",
+      "item_id": "pilot_4_qid1",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 5
+    },
+    {
+      "run_id": "EXP3_gen_pilot_5_qid1",
+      "item_id": "pilot_5_qid1",
+      "condition_id": "generic_template",
+      "score": 0.4435,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_5_qid1",
+      "item_id": "pilot_5_qid1",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.4435,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 3
+    },
+    {
+      "run_id": "EXP3_gen_pilot_6_qid3",
+      "item_id": "pilot_6_qid3",
+      "condition_id": "generic_template",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_6_qid3",
+      "item_id": "pilot_6_qid3",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0,
+      "grounding_ratio": 0.5,
+      "gap_coverage": 1.0,
+      "actionability_count": 5
+    },
+    {
+      "run_id": "EXP3_gen_pilot_7_qid3",
+      "item_id": "pilot_7_qid3",
+      "condition_id": "generic_template",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_7_qid3",
+      "item_id": "pilot_7_qid3",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 5
+    },
+    {
+      "run_id": "EXP3_gen_pilot_8_qid3",
+      "item_id": "pilot_8_qid3",
+      "condition_id": "generic_template",
+      "score": 0.1596,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_8_qid3",
+      "item_id": "pilot_8_qid3",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.1596,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 3
+    },
+    {
+      "run_id": "EXP3_gen_pilot_9_qid3",
+      "item_id": "pilot_9_qid3",
+      "condition_id": "generic_template",
+      "score": 0.0703,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_9_qid3",
+      "item_id": "pilot_9_qid3",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0703,
+      "grounding_ratio": 0.0714,
+      "gap_coverage": 1.0,
+      "actionability_count": 4
+    },
+    {
+      "run_id": "EXP3_gen_pilot_10_qid3",
+      "item_id": "pilot_10_qid3",
+      "condition_id": "generic_template",
+      "score": 0.2689,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_10_qid3",
+      "item_id": "pilot_10_qid3",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.2689,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 2
+    },
+    {
+      "run_id": "EXP3_gen_pilot_11_qid10",
+      "item_id": "pilot_11_qid10",
+      "condition_id": "generic_template",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_11_qid10",
+      "item_id": "pilot_11_qid10",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 3
+    },
+    {
+      "run_id": "EXP3_gen_pilot_12_qid10",
+      "item_id": "pilot_12_qid10",
+      "condition_id": "generic_template",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_12_qid10",
+      "item_id": "pilot_12_qid10",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0,
+      "grounding_ratio": 0.0769,
+      "gap_coverage": 1.0,
+      "actionability_count": 5
+    },
+    {
+      "run_id": "EXP3_gen_pilot_13_qid10",
+      "item_id": "pilot_13_qid10",
+      "condition_id": "generic_template",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_13_qid10",
+      "item_id": "pilot_13_qid10",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 5
+    },
+    {
+      "run_id": "EXP3_gen_pilot_14_qid10",
+      "item_id": "pilot_14_qid10",
+      "condition_id": "generic_template",
+      "score": 0.1744,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_14_qid10",
+      "item_id": "pilot_14_qid10",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.1744,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 4
+    },
+    {
+      "run_id": "EXP3_gen_pilot_15_qid10",
+      "item_id": "pilot_15_qid10",
+      "condition_id": "generic_template",
+      "score": 0.2762,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_15_qid10",
+      "item_id": "pilot_15_qid10",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.2762,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 2
+    },
+    {
+      "run_id": "EXP3_gen_pilot_16_qid41",
+      "item_id": "pilot_16_qid41",
+      "condition_id": "generic_template",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_16_qid41",
+      "item_id": "pilot_16_qid41",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 5
+    },
+    {
+      "run_id": "EXP3_gen_pilot_17_qid41",
+      "item_id": "pilot_17_qid41",
+      "condition_id": "generic_template",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_17_qid41",
+      "item_id": "pilot_17_qid41",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 3
+    },
+    {
+      "run_id": "EXP3_gen_pilot_18_qid41",
+      "item_id": "pilot_18_qid41",
+      "condition_id": "generic_template",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_18_qid41",
+      "item_id": "pilot_18_qid41",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.0,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 5
+    },
+    {
+      "run_id": "EXP3_gen_pilot_19_qid41",
+      "item_id": "pilot_19_qid41",
+      "condition_id": "generic_template",
+      "score": 0.8103,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_19_qid41",
+      "item_id": "pilot_19_qid41",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.8103,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 3
+    },
+    {
+      "run_id": "EXP3_gen_pilot_20_qid41",
+      "item_id": "pilot_20_qid41",
+      "condition_id": "generic_template",
+      "score": 0.7998,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 0.0,
+      "actionability_count": 1
+    },
+    {
+      "run_id": "EXP3_struct_pilot_20_qid41",
+      "item_id": "pilot_20_qid41",
+      "condition_id": "structured_evaluator_recovery",
+      "score": 0.7998,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 3
+    }
+  ],
+  "aggregated_metrics": {
+    "generic_template": {
+      "mean_grounding_ratio": 0.0,
+      "grounding_ratio_ci_95": [
+        0.0,
+        0.0
+      ],
+      "mean_gap_coverage": 0.0,
+      "mean_actionability_count": 1.0
+    },
+    "structured_evaluator_recovery": {
+      "mean_grounding_ratio": 0.0383,
+      "grounding_ratio_ci_95": [
+        0.0059,
+        0.0919
+      ],
+      "mean_gap_coverage": 1.0,
+      "mean_actionability_count": 3.9
+    }
+  },
+  "statistical_comparisons": {
+    "structured_vs_generic_grounding_pvalue": 0.043114446783075355,
+    "cohens_d": 0.3508,
+    "median_difference": 0.0
+  }
+}

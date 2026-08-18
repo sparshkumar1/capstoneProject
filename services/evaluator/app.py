@@ -101,7 +101,10 @@ def concept_detection(candidate, rubric):
         return 0.0, []
 
     sent_emb       = embed(sentences)
-    concept_vectors = get_vectors_by_type(rubric["qid"], "concept")
+    qid = rubric.get("qid")
+    concept_vectors = get_vectors_by_type(qid, "concept") if qid else []
+    if len(concept_vectors) == 0 and rubric.get("expected_concepts"):
+        concept_vectors = embed(rubric["expected_concepts"])
 
     if len(concept_vectors) == 0:
         return 0.0, []
@@ -137,7 +140,10 @@ def semantic_score(candidate, rubric):
         return 0.0
 
     sent_emb        = embed(sentences)
-    semantic_vectors = get_vectors_by_type(rubric["qid"], "semantic")
+    qid = rubric.get("qid")
+    semantic_vectors = get_vectors_by_type(qid, "semantic") if qid else []
+    if len(semantic_vectors) == 0 and rubric.get("expected_concepts"):
+        semantic_vectors = embed(rubric["expected_concepts"])
 
     if len(semantic_vectors) == 0:
         return 0.0
@@ -152,14 +158,12 @@ def semantic_score(candidate, rubric):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def cross_encoder_verification(qn, candidate, rubric):
+    reference = qn + " " + str(rubric.get("answer", ""))
+    raw_score = float(cross_encoder.predict([(reference, candidate)])[0])
 
-    # FIX 1: rubric["answer"] — reference answer text for verification
-    reference = qn + " " + rubric["answer"]
-
-    raw_score = cross_encoder.predict([(reference, candidate)])[0]
-
-    # Fine-tuned model outputs [-1, 1] — rescale to [0, 1]
-    reasoning_score = (raw_score + 1) / 2
+    # Calibrate continuous regression output: baseline floor is ~0.20 for unrelated/noise pairs,
+    # 0.40-0.55 for partial/weak reasoning, and 0.70-0.95 for strong logical entailment.
+    reasoning_score = (raw_score - 0.20) / 0.70
     return max(0.0, min(1.0, reasoning_score))
 
 
@@ -177,7 +181,8 @@ def bonus_score(candidate, rubric):
     if not sentences:
         return 0.0
 
-    bonus_vectors = get_vectors_by_type(rubric["qid"], "bonus")
+    qid = rubric.get("qid")
+    bonus_vectors = get_vectors_by_type(qid, "bonus") if qid else []
     if len(bonus_vectors) == 0:
         return 0.0
 
@@ -200,7 +205,7 @@ def bonus_score(candidate, rubric):
 # Threshold 0.65 — prevents false positives on correct answers
 # ─────────────────────────────────────────────────────────────────────────────
 
-MISTAKE_THRESHOLD = 0.65
+MISTAKE_THRESHOLD = 0.55
 MISTAKE_WEIGHT    = 0.07
 PENALTY_CAP       = 0.30
 
@@ -220,7 +225,8 @@ def mistake_penalty(candidate, rubric, reasoning_score, s2_score):
 
     # ── 1. Semantic mistake detection ────────────────────────────────────────
     sent_emb        = embed(filtered)
-    mistake_vectors = get_vectors_by_type(rubric["qid"], "mistake")
+    qid = rubric.get("qid")
+    mistake_vectors = get_vectors_by_type(qid, "mistake") if qid else []
 
     if len(mistake_vectors) > 0:
         sims = _cosine_similarity(mistake_vectors, sent_emb)
@@ -257,7 +263,11 @@ def mandatory_check(candidate, rubric):
     if not sentences:
         return False
 
-    mandatory_vectors = get_vectors_by_type(rubric["qid"], "mandatory")
+    qid = rubric.get("qid")
+    mandatory_vectors = get_vectors_by_type(qid, "mandatory") if qid else []
+    if len(mandatory_vectors) == 0 and rubric.get("mandatory_concepts"):
+        mandatory_vectors = embed(rubric["mandatory_concepts"])
+
     if len(mandatory_vectors) == 0:
         return True   # no mandatory concepts defined — always passes
 
@@ -275,29 +285,85 @@ def mandatory_check(candidate, rubric):
 # FIX 6: effective_S2 threshold lowered to 0.30
 # ─────────────────────────────────────────────────────────────────────────────
 
+def _extract_concept_texts(rubric):
+    """Extract human-readable concept texts from rubric logic markers."""
+    lm = rubric.get("logic_markers_covered", {})
+    concepts = []
+    if isinstance(lm, dict):
+        for item in lm.get("concept_groups", []):
+            if isinstance(item, str):
+                concepts.append(item)
+            elif isinstance(item, list) and item:
+                concepts.append(item[0])
+    if not concepts:
+        for item in rubric.get("expected_concepts", []):
+            if isinstance(item, str):
+                concepts.append(item)
+    if not concepts:
+        for item in rubric.get("semantic_coverage", []):
+            if isinstance(item, str):
+                concepts.append(item)
+    return concepts
+
+
+def _detect_misconceptions(candidate, rubric):
+    """Identify specific asserted misconception texts from rubric."""
+    sentences = split_sentences(candidate)
+    if not sentences:
+        return []
+
+    negation_words = ["avoid", "avoids", "not", "without", "instead", "unlike", "no "]
+    filtered = [s for s in sentences if not any(neg in s.lower() for neg in negation_words)]
+    if not filtered:
+        filtered = sentences
+
+    sent_emb = embed(filtered)
+    qid = rubric.get("qid")
+    mistake_vectors = get_vectors_by_type(qid, "mistake") if qid else []
+    detected = []
+
+    mistake_texts = rubric.get("common_mistakes_addressed", []) or rubric.get("common_mistakes", [])
+    if len(mistake_vectors) > 0 and len(mistake_texts) >= len(mistake_vectors):
+        sims = _cosine_similarity(mistake_vectors, sent_emb)
+        for idx, row in enumerate(sims):
+            if np.max(row) > MISTAKE_THRESHOLD:
+                detected.append(mistake_texts[idx])
+    elif mistake_texts:
+        m_vecs = embed(mistake_texts)
+        sims = _cosine_similarity(m_vecs, sent_emb)
+        for idx, row in enumerate(sims):
+            if np.max(row) > MISTAKE_THRESHOLD:
+                detected.append(mistake_texts[idx])
+    return detected
+
+
 def evaluate(qn, candidate, rubric):
     _ensure_evaluator_assets_loaded()
 
-    S1 = semantic_score(candidate, rubric)
+    candidate_text = str(candidate).strip()
+    sentences = split_sentences(candidate_text)
 
-    S2, concept_details = concept_detection(candidate, rubric)
+    S1 = semantic_score(candidate_text, rubric)
+    S2, concept_details = concept_detection(candidate_text, rubric)
+    reasoning_score = cross_encoder_verification(qn, candidate_text, rubric)
 
-    reasoning_score = cross_encoder_verification(qn, candidate, rubric)
+    bonus = bonus_score(candidate_text, rubric)
+    penalty = mistake_penalty(candidate_text, rubric, reasoning_score, S2)
+    mandatory_pass = mandatory_check(candidate_text, rubric)
 
-    bonus   = bonus_score(candidate, rubric)
-    penalty = mistake_penalty(candidate, rubric, reasoning_score, S2)
+    # Attach concept texts to concept details
+    concept_texts = _extract_concept_texts(rubric)
+    for i, detail in enumerate(concept_details):
+        if i < len(concept_texts):
+            detail["concept_text"] = concept_texts[i]
+        else:
+            detail["concept_text"] = f"Concept {i + 1}"
 
-    # FIX 2: mandatory check result is now actually used
-    mandatory_pass = mandatory_check(candidate, rubric)
+    # Dampen S2 when reasoning is weak (prevents keyword stuffing)
+    effective_S2 = S2 if reasoning_score > 0.30 else S2 * 0.60
 
-    # FIX 6: effective_S2 threshold 0.30 (was 0.35 — was too high, hurt correct answers)
-    # Dampens S2 only when reasoning is genuinely weak — prevents wrong answers
-    # from scoring high purely because keywords match concept groups
-    effective_S2 = S2 if reasoning_score > 0.30 else S2 * 0.6
-
-    # FIX 4: R-heavy weights — simulation showed 79% grade accuracy vs 53% for old weights
     base_score = (
-        0.15 * S1           +
+        0.15 * S1 +
         0.35 * effective_S2 +
         0.50 * reasoning_score
     )
@@ -305,15 +371,15 @@ def evaluate(qn, candidate, rubric):
     final_score = base_score + bonus - penalty
     final_score = max(0.0, min(1.0, final_score))
 
-    # FIX 2: apply mandatory cap — was computed but never used before
+    # Apply mandatory cap if mandatory concept was missed
     if not mandatory_pass:
         scoring_policy = rubric.get("scoring_policy", {})
-        mandatory_cap  = scoring_policy.get("mandatory_cap", 0.60)
-        final_score    = min(final_score, mandatory_cap)
+        mandatory_cap = scoring_policy.get("mandatory_cap", 0.60)
+        final_score = min(final_score, mandatory_cap)
 
     final_score = round(final_score, 4)
 
-    # FIX 5: Excellent boundary 0.75 (was 0.80 — QuickSort best answer 0.78 was wrongly graded Good)
+    # Grade determination
     if final_score >= 0.75:
         grade = "Excellent"
     elif final_score >= 0.60:
@@ -323,16 +389,62 @@ def evaluate(qn, candidate, rubric):
     else:
         grade = "Poor"
 
+    # Concept breakdown
+    correct_claims = [d["concept_text"] for d in concept_details if d.get("covered")]
+    missing_concepts = [d["concept_text"] for d in concept_details if not d.get("covered")]
+    incorrect_claims = _detect_misconceptions(candidate_text, rubric)
+
+    # Weakest gap & strong points
+    if missing_concepts:
+        weakest_gap = missing_concepts[0]
+    elif incorrect_claims:
+        weakest_gap = f"Misconception: {incorrect_claims[0]}"
+    elif not mandatory_pass:
+        weakest_gap = "Omitted mandatory requirement specified in rubric"
+    elif reasoning_score < 0.50:
+        weakest_gap = "Reasoning depth and mechanistic explanation"
+    else:
+        weakest_gap = "None — comprehensive answer"
+
+    strong_points = correct_claims[:3] if correct_claims else ["General topic familiarity"]
+
+    # Separate diagnostic metrics (NEVER added as positive bonus to technical score)
+    depth = round(min(1.0, (len(sentences) / 4.0) * 0.35 + S2 * 0.65), 3)
+
+    filler_words = ["umm", "uhh", "uh", "maybe", "like", "sort of", "i guess"]
+    filler_count = sum(1 for w in filler_words if w in candidate_text.lower())
+    communication = round(max(0.2, min(1.0, 1.0 - filler_count * 0.15 + (0.1 if len(sentences) >= 2 else 0.0))), 3)
+
+    eval_confidence = round(0.85 + 0.10 * (1.0 if len(sentences) >= 2 else 0.5), 3)
+
     return {
-        "S1_semantic"    : round(S1, 3),
-        "S2_structural"  : round(S2, 3),
+        "question_text": qn,
+        "candidate_answer": candidate_text,
+        "expected_concepts": concept_texts,
+        "candidate_claims": sentences,
+        "correct_claims": correct_claims,
+        "incorrect_claims": incorrect_claims,
+        "missing_concepts": missing_concepts,
+        "weakest_gap": weakest_gap,
+        "strong_points": strong_points,
+        "reasoning_quality": round(reasoning_score, 3),
+        "technical_correctness": final_score,
+        "concept_coverage": round(S2, 3),
+        "relevance": round(S1, 3),
+        "depth": depth,
+        "communication": communication,
+        "evaluation_confidence": eval_confidence,
+        "S1_semantic": round(S1, 3),
+        "S2_structural": round(S2, 3),
         "reasoning_score": round(reasoning_score, 3),
-        "bonus"          : round(bonus, 3),
-        "penalty"        : round(penalty, 3),
-        "mandatory_pass" : mandatory_pass,
-        "final_score"    : final_score,
-        "grade"          : grade,
+        "bonus": round(bonus, 3),
+        "penalty": round(penalty, 3),
+        "mandatory_pass": mandatory_pass,
+        "final_score": final_score,
+        "question_score": final_score,
+        "grade": grade,
         "concept_details": concept_details,
+        "decision_source": "evaluator_cross_encoder",
     }
 
 
@@ -796,407 +908,3 @@ if __name__ == "__main__":
         print("  GET  /api/evaluator/last-result - Get last evaluation")
         print("  GET  /api/evaluator/current-question - Get current question")
         app.run(debug=True, port=5000)
-
-# from sentence_transformers import SentenceTransformer, CrossEncoder
-# from sklearn.metrics.pairwise import cosine_similarity
-
-
-# # -------------------------------------
-# # MODELS
-# # -------------------------------------
-
-# embedder = SentenceTransformer("all-MiniLM-L6-v2")
-# cross_encoder = CrossEncoder(r"D:\A_Capstone_Evaluator\Evaluator_final\Evaluator\1_best_model_zip")
-
-# # -------------------------------------
-# # LOAD VECTOR STORE
-# # -------------------------------------
-
-# index = faiss.read_index("logic_vectors.faiss")
-
-# with open("logic_metadata.pkl","rb") as f:
-#     vector_meta = pickle.load(f)
-
-
-# # -------------------------------------
-# # UTILITIES
-# # -------------------------------------
-
-# def split_sentences(text):
-#     return [s.strip() for s in re.split(r'(?<=[.!?])\s+', text) if s.strip()]
-
-
-# def embed(text_list):
-#     emb = embedder.encode(text_list).astype("float32")
-#     faiss.normalize_L2(emb)
-#     return emb
-
-
-# # -------------------------------------
-# # GET RUBRIC VECTORS FROM STORE
-# # -------------------------------------
-
-# def get_vectors_by_type(qid, vtype):
-
-#     vectors = []
-
-#     for i,meta in enumerate(vector_meta):
-#         if meta["qid"] == qid and meta["type"] == vtype:
-#             vectors.append(index.reconstruct(i))
-
-#     return np.array(vectors)
-
-
-# # -------------------------------------
-# # CONCEPT DETECTION
-# # -------------------------------------
-
-# def concept_detection(candidate, rubric):
-
-#     sentences = split_sentences(candidate)
-
-#     sent_emb = embed(sentences)
-
-#     concept_vectors = get_vectors_by_type(rubric["qid"],"concept")
-
-#     sims = cosine_similarity(sent_emb, concept_vectors)
-
-#     best_scores = np.max(sims, axis=0)
-
-#     groups_covered = sum(best_scores > 0.28)
-
-#     S2 = groups_covered / len(best_scores)
-
-#     details = []
-
-#     for i,score in enumerate(best_scores):
-
-#         best_sentence = sentences[np.argmax(sims[:,i])]
-
-#         details.append({
-#             "concept_index": i,
-#             "matched_sentence": best_sentence,
-#             "score": round(float(score),3),
-#             "covered": score > 0.36
-#         })
-
-#     return S2, details
-
-
-# # -------------------------------------
-# # SEMANTIC SCORE
-# # -------------------------------------
-
-
-# def semantic_score(candidate, rubric):
-
-#     sentences = split_sentences(candidate)
-
-#     sent_emb = embed(sentences)
-
-#     semantic_vectors = get_vectors_by_type(rubric["qid"],"semantic")
-
-#     sims = cosine_similarity(sent_emb, semantic_vectors)
-
-#     return float(np.mean(np.max(sims, axis=0)))
-
-
-# # -------------------------------------
-# # CROSS ENCODER
-# # -------------------------------------
-
-# # def cross_encoder_verification(candidate, rubric):
-
-# #     # Split logic context into individual reasoning steps
-# #     logic_sentences = [
-# #         s.strip() for s in re.split(r'(?<=[.!?])\s+', rubric["answer"])
-# #         if s.strip()
-# #     ]
-
-# #     # Build pairs: (logic_sentence, candidate_answer)
-# #     pairs = [(logic_sentence, candidate) for logic_sentence in logic_sentences]
-
-# #     # Cross encoder inference
-# #     raw_scores = cross_encoder.predict(pairs)
-
-# #     # Average reasoning relevance across all logic steps
-# #     raw_score = float(np.mean(raw_scores))
-
-# #     # Temperature scaling
-# #     T = 1.9
-# #     scaled = (raw_score - 0.5) / T
-
-# #     # Sigmoid normalization
-# #     reasoning_score = 1 / (1 + math.exp(-scaled))
-
-# #     return reasoning_score
-
-
-# def cross_encoder_verification(qn,candidate,rubric):
-   
-#     reference = qn+ " " + rubric["answer"]
-#     #reference = rubric["answer"]
-
-#     raw_score = cross_encoder.predict([(reference, candidate)])[0]
-
-#     # Fine-tuned model outputs in [-1, 1] range due to label normalization
-#     # Rescale directly to [0, 1] instead of sigmoid
-#     reasoning_score = (raw_score + 1) / 2
-
-#     # Clip to valid range
-#     reasoning_score = max(0.0, min(1.0, reasoning_score))
-
-#     return reasoning_score
-
-# # -------------------------------------
-# # BONUS SCORE
-# # -------------------------------------
-
-# def bonus_score(candidate, rubric):
-
-#     sentences = split_sentences(candidate)
-
-#     sent_emb = embed(sentences)
-
-#     bonus_vectors = get_vectors_by_type(rubric["qid"],"bonus")
-
-#     if len(bonus_vectors) == 0:
-#         return 0
-
-#     sims = cosine_similarity(bonus_vectors, sent_emb)
-
-#     count = sum(np.max(sims, axis=1) > 0.50)
-
-#     return count * 0.03
-
-
-# # -------------------------------------
-# # MISTAKE PENALTY
-# # -------------------------------------
-# # def mistake_penalty(candidate, rubric):
-
-# #     sentences = split_sentences(candidate)
-
-# #     # Filter out sentences containing negation words
-# #     negation_words = ["avoid", "avoids", "not", "without", "instead", "unlike", "no "]
-    
-# #     filtered_sentences = [
-# #         s for s in sentences
-# #         if not any(neg in s.lower() for neg in negation_words)
-# #     ]
-
-# #     if len(filtered_sentences) == 0:
-# #         return 0
-
-# #     sent_emb = embed(filtered_sentences)
-# #     mistake_vectors = get_vectors_by_type(rubric["qid"], "mistake")
-
-# #     if len(mistake_vectors) == 0:
-# #         return 0
-
-# #     sims = cosine_similarity(mistake_vectors, sent_emb)
-# #     count = sum(np.max(sims, axis=1) > 0.50)
-# #     return count * 0.08
-
-# import numpy as np
-# from sklearn.metrics.pairwise import cosine_similarity
-
-# def mistake_penalty(candidate, rubric, reasoning_score, s2_score):
-
-#     penalty = 0.0
-
-#     sentences = split_sentences(candidate)
-#     if len(sentences) == 0:
-#         return 0.0
-
-#     # ── Negation filter ──────────────────────────────────────────
-#     negation_words = ["avoid", "avoids", "not", "without", "instead", "unlike", "no "]
-#     filtered = [s for s in sentences
-#                 if not any(neg in s.lower() for neg in negation_words)]
-#     if not filtered:
-#         filtered = sentences
-
-#     # ── 1. Semantic mistake detection (threshold 0.65) ───────────
-#     sent_emb        = embed(filtered)
-#     mistake_vectors = get_vectors_by_type(rubric["qid"], "mistake")
-
-#     if len(mistake_vectors) > 0:
-#         sims = cosine_similarity(mistake_vectors, sent_emb)
-#         for row in sims:
-#             if np.max(row) > 0.65:
-#                 penalty += 0.07
-
-#     # ── 2. Reasoning-based penalty (only very wrong answers) ──────
-#     # Both R and S2 must be low to avoid penalising hesitant-correct answers
-#     if reasoning_score <= 0.25 and s2_score <= 0.25:
-#         penalty += 0.20
-#     elif reasoning_score < 0.30 and s2_score < 0.50:
-#         # Wrong answer that also lacks concept coverage
-#         penalty += 0.05
-
-#     # ── 3. Confidence penalty (only when content is also weak) ────
-#     # Do NOT penalise hesitation when S2 is high (content is correct)
-#     low_conf_words = ["maybe", "not sure", "probably", "guess"]
-#     has_low_conf   = any(w in candidate.lower() for w in low_conf_words)
-
-#     if has_low_conf and s2_score < 0.50 and reasoning_score < 0.40:
-#         # Only penalise confidence when content is also weak
-#         penalty += 0.03
-
-#     # ── Cap ───────────────────────────────────────────────────────
-#     return min(penalty, 0.30)
-
-
-
-
-
-
-# # -------------------------------------
-# # MANDATORY CHECK
-# # -------------------------------------
-
-# def mandatory_check(candidate, rubric):
-
-#     sentences = split_sentences(candidate)
-
-#     sent_emb = embed(sentences)
-
-#     mandatory_vectors = get_vectors_by_type(rubric["qid"],"mandatory")
-
-#     if len(mandatory_vectors) == 0:
-#         return True
-
-#     sims = cosine_similarity(mandatory_vectors, sent_emb)
-
-#     presence = np.max(sims, axis=1)
-
-#     return bool(all(p > 0.40 for p in presence))
-
-
-# # -------------------------------------
-# # FINAL EVALUATION
-# # -------------------------------------
-
-# def evaluate(qn,candidate, rubric):
-
-#     S1 = semantic_score(candidate, rubric)
-
-#     S2, concept_details = concept_detection(candidate, rubric)
-
-#     reasoning_score = cross_encoder_verification(qn,candidate, rubric)
-
-#     bonus = bonus_score(candidate, rubric)
-#     penalty = mistake_penalty(candidate, rubric,reasoning_score,S2)
-
-#     mandatory_pass = mandatory_check(candidate, rubric)
-
-
-#     # base_score = (
-#     #     0.24*S1 +
-#     #     0.43*S2 +
-#     #     0.33*reasoning_score
-#     # )
-#     # base_score = (
-#     #     0.15*S1 +
-#     #     0.35*S2 +
-#     #     0.50*reasoning_score
-#     # )
-#     # If reasoning is weak, S2 cannot fully compensate
-#     effective_S2 = S2 if reasoning_score > 0.35 else S2 * 0.6
-
-#     base_score = (
-#         0.24 * S1 +
-#         0.43 * effective_S2 +
-#         0.33 * reasoning_score
-#     )
-   
-
-#     final_score = base_score + bonus - penalty
-
-#     final_score = max(0,min(final_score,1))
-
-#     final_score = round(final_score,4)
- 
-#     if final_score >= 0.8:
-#         grade="Excellent"
-#     elif final_score >= 0.6:
-#         grade="Good"
-#     elif final_score >= 0.4:
-#         grade="Average"
-#     else:
-#         grade="Poor"
-
-#     return {
-#         "S1_semantic":round(S1,3),
-#         "S2_structural":round(S2,3),
-#         "reasoning_score":round(reasoning_score,3),
-#         "bonus":bonus,
-#         "penalty":penalty,
-#         "final_score":final_score,
-#         "grade":grade,
-#         "concept_details":concept_details
-#     }
-
-
-# # -------------------------------------
-# # LOAD DATA
-# # -------------------------------------
-
-# with open("qns.json") as f:
-#     questions=json.load(f)
-
-# with open("rubrics.json") as f:
-#     rubrics=json.load(f)
-
-
-# def get_rubric(qid):
-
-#     for r in rubrics:
-#         if r["qid"]==qid:
-#             return r
-
-#     return None
-
-
-# # -------------------------------------
-# # INTERVIEW LOOP
-# # -------------------------------------
-
-# j=10
-# i=0
-
-# while j<16:
-
-#     while i<=6:
-
-#         question=questions[j]
-
-#         qid=question["qid"]
-
-#         print("\n============================")
-#         print("Question:")
-#         qn=question["question_text"]
-#         print(question["question_text"])
-#         print("============================")
-
-#         rubric=get_rubric(qid)
-
-#         candidate=input("\nYour Answer (type 'finish' to stop):\n")
-
-#         if candidate.lower()=="finish":
-#             print("\nInterview ended.")
-#             break
-
-#         result=evaluate(qn,candidate,rubric)
-
-#         print("\nEvaluation Result")
-#         print("---------------------")
-
-#         for k,v in result.items():
-#             print(k,":",v)
-
-#         i+=1
-
-#     i=0
-#     j+=1
-

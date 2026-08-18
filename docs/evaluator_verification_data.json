@@ -1,0 +1,153 @@
+[
+  {
+    "case_id": "case1_correct",
+    "case_name": "1. Correct Answer",
+    "answer": "The logic is to do a single pass iteration through the array. For each element, we calculate the complement by subtracting the current value from the target. We check if the complement exists in a hash map. If found, we return the stored index and current index. If not found, we store the current value and index in the hash map. This gives O(N) time complexity.",
+    "final_score": 0.9215,
+    "grade": "Excellent",
+    "S1_semantic": 0.463,
+    "S2_structural": 1.0,
+    "reasoning_score": 0.884,
+    "mandatory_pass": true,
+    "missing_concepts": [],
+    "incorrect_claims": [],
+    "weakest_gap": "None \u2014 comprehensive answer",
+    "decision_source": "evaluator_cross_encoder"
+  },
+  {
+    "case_id": "case2_partial",
+    "case_name": "2. Partially Correct Answer",
+    "answer": "We can use a hash map to store numbers. We iterate through the list and check for the difference between target and the number.",
+    "final_score": 0.0,
+    "grade": "Poor",
+    "S1_semantic": 0.303,
+    "S2_structural": 0.25,
+    "reasoning_score": 0.0,
+    "mandatory_pass": false,
+    "missing_concepts": [
+      "Concept 1",
+      "Concept 2",
+      "Concept 4"
+    ],
+    "incorrect_claims": [],
+    "weakest_gap": "Concept 1",
+    "decision_source": "evaluator_cross_encoder"
+  },
+  {
+    "case_id": "case3_wrong",
+    "case_name": "3. Wrong Answer",
+    "answer": "We should build a relational SQL database with B-Trees and query with SELECT * FROM table WHERE sum = target.",
+    "final_score": 0.0,
+    "grade": "Poor",
+    "S1_semantic": 0.143,
+    "S2_structural": 0.0,
+    "reasoning_score": 0.032,
+    "mandatory_pass": false,
+    "missing_concepts": [
+      "Concept 1",
+      "Concept 2",
+      "Concept 3",
+      "Concept 4"
+    ],
+    "incorrect_claims": [],
+    "weakest_gap": "Concept 1",
+    "decision_source": "evaluator_cross_encoder"
+  },
+  {
+    "case_id": "case4_confident_wrong",
+    "case_name": "4. Confident Wrong Answer",
+    "answer": "Without any doubt, the only way is to use nested loops to check every pair in O(N^2) time, and we should return the values instead of indices because indices are never needed.",
+    "final_score": 0.0,
+    "grade": "Poor",
+    "S1_semantic": 0.237,
+    "S2_structural": 0.0,
+    "reasoning_score": 0.0,
+    "mandatory_pass": false,
+    "missing_concepts": [
+      "Concept 1",
+      "Concept 2",
+      "Concept 3",
+      "Concept 4"
+    ],
+    "incorrect_claims": [],
+    "weakest_gap": "Concept 1",
+    "decision_source": "evaluator_cross_encoder"
+  },
+  {
+    "case_id": "case5_keyword_stuffed",
+    "case_name": "5. Keyword-Stuffed Answer",
+    "answer": "Two-sum hash map complement calculation single pass iteration value-to-index mapping O(n) time complexity indices array.",
+    "final_score": 0.2354,
+    "grade": "Poor",
+    "S1_semantic": 0.38,
+    "S2_structural": 0.5,
+    "reasoning_score": 0.147,
+    "mandatory_pass": false,
+    "missing_concepts": [
+      "Concept 2",
+      "Concept 4"
+    ],
+    "incorrect_claims": [],
+    "weakest_gap": "Concept 2",
+    "decision_source": "evaluator_cross_encoder"
+  },
+  {
+    "case_id": "case6_off_topic",
+    "case_name": "6. Off-Topic Answer",
+    "answer": "Photosynthesis in green plants converts carbon dioxide and water into glucose using sunlight energy absorbed by chlorophyll.",
+    "final_score": 0.0,
+    "grade": "Poor",
+    "S1_semantic": 0.005,
+    "S2_structural": 0.0,
+    "reasoning_score": 0.0,
+    "mandatory_pass": false,
+    "missing_concepts": [
+      "Concept 1",
+      "Concept 2",
+      "Concept 3",
+      "Concept 4"
+    ],
+    "incorrect_claims": [],
+    "weakest_gap": "Concept 1",
+    "decision_source": "evaluator_cross_encoder"
+  },
+  {
+    "case_id": "case7_missing_mandatory",
+    "case_name": "7. Missing Mandatory Concept",
+    "answer": "We iterate through the array once and check if numbers are even or odd to find the sum.",
+    "final_score": 0.0,
+    "grade": "Poor",
+    "S1_semantic": 0.234,
+    "S2_structural": 0.0,
+    "reasoning_score": 0.042,
+    "mandatory_pass": false,
+    "missing_concepts": [
+      "Concept 1",
+      "Concept 2",
+      "Concept 3",
+      "Concept 4"
+    ],
+    "incorrect_claims": [],
+    "weakest_gap": "Concept 1",
+    "decision_source": "evaluator_cross_encoder"
+  },
+  {
+    "case_id": "case8_correct_terms_wrong_reasoning",
+    "case_name": "8. Correct Terminology with Incorrect Reasoning",
+    "answer": "We insert all elements into the hash map before checking, and we look up the sum instead of the complement to return the values.",
+    "final_score": 0.0,
+    "grade": "Poor",
+    "S1_semantic": 0.455,
+    "S2_structural": 0.25,
+    "reasoning_score": 0.0,
+    "mandatory_pass": false,
+    "missing_concepts": [
+      "Concept 1",
+      "Concept 2",
+      "Concept 3"
+    ],
+    "incorrect_claims": [],
+    "weakest_gap": "Concept 1",
+    "decision_source": "evaluator_cross_encoder"
+  }
+]

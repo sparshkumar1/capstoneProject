@@ -1,0 +1,757 @@
+{
+  "session_id": "test_e2e_20260817_204726",
+  "candidate": {
+    "id": "cand_001",
+    "name": "Alex Mercer",
+    "role": "Systems Software Engineer",
+    "target_difficulty": 0.5
+  },
+  "turn_1": {
+    "question": {
+      "id": "1",
+      "text": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "type": "verbal",
+      "difficulty": 2,
+      "difficulty_float": 0.4,
+      "topic": "arrays",
+      "category": "dsa",
+      "time_limit_sec": 75,
+      "bloom_level": "L3",
+      "expected_concepts": [
+        "hash map for storing values",
+        "complement calculation (target - current)",
+        "single pass iteration",
+        "store value-to-index mapping",
+        "Two-sum uses complement lookup",
+        "Hashing enables constant-time checks",
+        "Return indices not values",
+        "hash map enables O(1) complement lookup replacing inner loop",
+        "insert element into map AFTER checking complement \u2014 ensures you do not match element with itself"
+      ],
+      "mandatory_concepts": [
+        "hash map for storing values",
+        "complement calculation (target - current)"
+      ],
+      "common_mistakes": [
+        "Using nested loops only",
+        "Returning values instead of indices",
+        "Not handling duplicate values correctly",
+        "inserts before checking complement \u2014 matches element with itself",
+        "stores value instead of index in hash map \u2014 cannot return correct indices",
+        "uses nested loops instead of hashing \u2014 O(n\u00b2) not O(n)"
+      ],
+      "reference_answer": "The logic is to iterate through the array and for each element check whether the complement (target minus current value) has already been seen using a hash map.",
+      "possible_followups": [
+        "O(n) time complexity with O(n) space trade-off",
+        "insert element into map AFTER checking complement to handle edge cases like target=2*element",
+        "handles duplicate elements correctly by checking before inserting",
+        "index stored in map not value (avoid overwriting)",
+        "explains why O(n\u00b2) brute force uses no extra space vs this approach",
+        "extends to two-sum on sorted array using two-pointer in O(1) space",
+        "handles case where same element cannot be used twice"
+      ],
+      "rubric": {
+        "qid": "1",
+        "topic": "Arrays",
+        "type": "logic_approach",
+        "logic_context": "The logic is to iterate through the array and for each element check whether the complement (target minus current value) has already been seen using a hash map.",
+        "logic_markers": {
+          "mandatory": [
+            "hash map for storing values",
+            "complement calculation (target - current)"
+          ],
+          "concept_groups": [
+            [
+              "single pass iteration",
+              "one loop traversal",
+              "iterate once through array"
+            ],
+            [
+              "store value-to-index mapping",
+              "check complement existence"
+            ]
+          ],
+          "advanced_bonus": [
+            "O(n) time complexity with O(n) space trade-off",
+            "insert element into map AFTER checking complement to handle edge cases like target=2*element",
+            "handles duplicate elements correctly by checking before inserting",
+            "index stored in map not value (avoid overwriting)",
+            "explains why O(n\u00b2) brute force uses no extra space vs this approach",
+            "extends to two-sum on sorted array using two-pointer in O(1) space",
+            "handles case where same element cannot be used twice"
+          ]
+        },
+        "semantic_targets": [
+          "Two-sum uses complement lookup",
+          "Hashing enables constant-time checks",
+          "Return indices not values",
+          "hash map enables O(1) complement lookup replacing inner loop",
+          "insert element into map AFTER checking complement \u2014 ensures you do not match element with itself"
+        ],
+        "common_mistakes": [
+          "Using nested loops only",
+          "Returning values instead of indices",
+          "Not handling duplicate values correctly",
+          "inserts before checking complement \u2014 matches element with itself",
+          "stores value instead of index in hash map \u2014 cannot return correct indices",
+          "uses nested loops instead of hashing \u2014 O(n\u00b2) not O(n)"
+        ],
+        "evaluation_rubric": {
+          "focus": "Efficient logic using hashing"
+        },
+        "scoring_policy": {
+          "mandatory_required_for_full_score": true,
+          "mandatory_cap": 0.65
+        }
+      },
+      "constraints": "",
+      "code_template": ""
+    },
+    "answer": "The logic is to iterate through the array once and check for the complement target minus current value using a hash map to achieve O(N) time complexity.",
+    "feedback": {
+      "final_score": 0.5925,
+      "grade": "Average",
+      "score_breakdown": {
+        "semantic_similarity": 0.306,
+        "concept_coverage": 0.75,
+        "reasoning_quality": 0.508,
+        "confidence_signal": 0.5,
+        "overall": 0.593
+      },
+      "what_candidate_said": "The logic is to iterate through the array once and check for the complement target minus current value using a hash map to achieve O(N) time complexit",
+      "what_was_correct": [
+        "single pass iteration through the array with constant-time hash map lookup at each step",
+        "map stores value-to-index mapping; complement existence is checked before inserting current value",
+        "Concept 4"
+      ],
+      "what_was_incorrect": [],
+      "what_was_incomplete": [
+        "Concept 3"
+      ],
+      "missing_concepts": [
+        "Concept 3"
+      ],
+      "how_to_answer": "Review standard optimal algorithm for arrays.",
+      "stronger_answer_guide": "Explain invariants, step-by-step logic, and complexity trade-offs clearly.",
+      "how_to_improve": [
+        "Cover missing concept: Concept 3"
+      ],
+      "actionable_improvements": [
+        "Cover missing concept: Concept 3"
+      ],
+      "strong_points": [
+        "single pass iteration through the array with constant-time hash map lookup at each step",
+        "map stores value-to-index mapping; complement existence is checked before inserting current value",
+        "Concept 4"
+      ],
+      "communication_tips": [
+        "Answer too short (27 words). Aim for 80\u2013120 words minimum for theory questions.",
+        "No filler words detected \u2014 clean, confident delivery."
+      ],
+      "covered_concepts": [
+        "single pass iteration through the array with constant-time hash map lookup at each step",
+        "map stores value-to-index mapping; complement existence is checked before inserting current value",
+        "Concept 4"
+      ],
+      "trend": "stable",
+      "trend_note": "Turn 1 \u2014 not enough history yet for trend analysis",
+      "justification": "Grade Average (59%) on arrays. Semantic 31% | Concept coverage 75% | Reasoning 51% | Confidence 50%. Strength: single pass iteration through the array with constant-time hash map lookup at each step. Missing: Concept 3. Strong concept coverage. Answer too brief (27 words) to demonstrate depth.",
+      "narrative_feedback": "Grade Average (59%) on arrays. Semantic 31% | Concept coverage 75% | Reasoning 51% | Confidence 50%. Strength: single pass iteration through the array with constant-time hash map lookup at each step. Missing: Concept 3. Strong concept coverage. Answer too brief (27 words) to demonstrate depth.",
+      "transcript": "The logic is to iterate through the array once and check for the complement target minus current value using a hash map to achieve O(N) time complexity.",
+      "decision_source": "evaluator_cross_encoder",
+      "llm_status": "llm_unavailable",
+      "vague_points": [
+        "Cover missing concept: Concept 3"
+      ],
+      "raw_evaluator_score": 0.5925,
+      "timing_modifier": 0.0,
+      "timing_score": 1.0,
+      "time_ratio": 0.0,
+      "time_taken_sec": 0.0,
+      "allowed_time_sec": 300.0
+    },
+    "difficulty_update": {
+      "new_difficulty": 3,
+      "reason": "PPO: Harder \u2014 score=0.59, avg=0.59",
+      "action": "Same"
+    }
+  },
+  "turn_2": {
+    "question": {
+      "id": "53",
+      "text": "What is a memory leak and how do you prevent it in C?",
+      "type": "verbal",
+      "difficulty": 3,
+      "difficulty_float": 0.6,
+      "topic": "memorymanagement",
+      "category": "c",
+      "time_limit_sec": 75,
+      "bloom_level": "L2",
+      "expected_concepts": [
+        "dynamically allocated memory not freed",
+        "memory remains occupied unnecessarily",
+        "malloc/calloc without corresponding free",
+        "memory no longer accessible but not released",
+        "Memory leaks waste system resources",
+        "Calling free() prevents memory leaks",
+        "Leaked memory is lost until program terminates",
+        "memory leak = allocated memory no longer reachable but not freed"
+      ],
+      "mandatory_concepts": [
+        "dynamically allocated memory not freed",
+        "memory remains occupied unnecessarily"
+      ],
+      "common_mistakes": [
+        "Confusing memory leak with dangling pointer",
+        "Saying OS automatically prevents all leaks",
+        "Thinking leaks only matter in short programs",
+        "frees in success path but not error path \u2014 leak on error exit",
+        "assumes OS reclaims memory during run \u2014 it does only at process termination"
+      ],
+      "reference_answer": "A memory leak occurs when dynamically allocated memory (using malloc/calloc) is not released using free() after use, causing that memory to remain occupied and unavailable for reuse.",
+      "possible_followups": [
+        "Valgrind detects leaks by tracking all allocations and checking freeing at exit",
+        "leaks in long-running programs cause gradual memory exhaustion",
+        "set pointer to NULL after free \u2014 does not prevent leak but prevents double free",
+        "RAII pattern (common in C++) avoids leaks by tying lifetime to scope",
+        "every malloc/calloc must have a corresponding free on all code paths"
+      ],
+      "rubric": {
+        "qid": "53",
+        "topic": "Memory Management",
+        "type": "theory",
+        "logic_context": "A memory leak occurs when dynamically allocated memory (using malloc/calloc) is not released using free() after use, causing that memory to remain occupied and unavailable for reuse.",
+        "logic_markers": {
+          "mandatory": [
+            "dynamically allocated memory not freed",
+            "memory remains occupied unnecessarily"
+          ],
+          "concept_groups": [
+            [
+              "malloc/calloc without corresponding free",
+              "heap memory accumulation"
+            ],
+            [
+              "memory no longer accessible but not released",
+              "leads to resource exhaustion"
+            ]
+          ],
+          "advanced_bonus": [
+            "Valgrind detects leaks by tracking all allocations and checking freeing at exit",
+            "leaks in long-running programs cause gradual memory exhaustion",
+            "set pointer to NULL after free \u2014 does not prevent leak but prevents double free",
+            "RAII pattern (common in C++) avoids leaks by tying lifetime to scope",
+            "every malloc/calloc must have a corresponding free on all code paths"
+          ]
+        },
+        "semantic_targets": [
+          "Memory leaks waste system resources",
+          "Calling free() prevents memory leaks",
+          "Leaked memory is lost until program terminates",
+          "memory leak = allocated memory no longer reachable but not freed"
+        ],
+        "common_mistakes": [
+          "Confusing memory leak with dangling pointer",
+          "Saying OS automatically prevents all leaks",
+          "Thinking leaks only matter in short programs",
+          "frees in success path but not error path \u2014 leak on error exit",
+          "assumes OS reclaims memory during run \u2014 it does only at process termination"
+        ],
+        "evaluation_rubric": {
+          "focus": "Understanding cause and prevention of leaks"
+        },
+        "scoring_policy": {
+          "mandatory_required_for_full_score": true,
+          "mandatory_cap": 0.65
+        }
+      },
+      "constraints": "",
+      "code_template": ""
+    },
+    "answer": "A memory leak in C occurs when dynamic memory allocated with malloc is not freed with free before all pointers to it are lost.",
+    "feedback": {
+      "final_score": 0.4793,
+      "grade": "Average",
+      "score_breakdown": {
+        "semantic_similarity": 0.643,
+        "concept_coverage": 1.0,
+        "reasoning_quality": 0.346,
+        "confidence_signal": 0.5,
+        "overall": 0.479
+      },
+      "what_candidate_said": "A memory leak in C occurs when dynamic memory allocated with malloc is not freed with free before all pointers to it are lost.",
+      "what_was_correct": [
+        "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+        "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes",
+        "Concept 3",
+        "Concept 4",
+        "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it"
+      ],
+      "what_was_incorrect": [
+        "A memory leak is unreleased allocated memory \u2014 a dangling pointer is a reference to already-released memory; these are opposite problems and must not be confused"
+      ],
+      "what_was_incomplete": [],
+      "missing_concepts": [],
+      "how_to_answer": "Review standard optimal algorithm for memorymanagement.",
+      "stronger_answer_guide": "Explain invariants, step-by-step logic, and complexity trade-offs clearly.",
+      "how_to_improve": [],
+      "actionable_improvements": [],
+      "strong_points": [
+        "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+        "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes",
+        "Concept 3",
+        "Concept 4",
+        "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it"
+      ],
+      "communication_tips": [
+        "Answer too short (24 words). Aim for 80\u2013120 words minimum for theory questions.",
+        "No filler words detected \u2014 clean, confident delivery."
+      ],
+      "covered_concepts": [
+        "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+        "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes",
+        "Concept 3",
+        "Concept 4",
+        "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+        "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes"
+      ],
+      "trend": "stable",
+      "trend_note": "Turn 2 \u2014 not enough history yet for trend analysis",
+      "justification": "Grade Average (48%) on memorymanagement. Semantic 64% | Concept coverage 100% | Reasoning 35% | Confidence 50%. Strength: the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it. Strong concept coverage. Answer too brief (24 words) to demonstrate depth.",
+      "narrative_feedback": "Grade Average (48%) on memorymanagement. Semantic 64% | Concept coverage 100% | Reasoning 35% | Confidence 50%. Strength: the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it. Strong concept coverage. Answer too brief (24 words) to demonstrate depth.",
+      "transcript": "A memory leak in C occurs when dynamic memory allocated with malloc is not freed with free before all pointers to it are lost.",
+      "decision_source": "evaluator_cross_encoder",
+      "llm_status": "llm_unavailable",
+      "vague_points": [],
+      "raw_evaluator_score": 0.4793,
+      "timing_modifier": 0.0,
+      "timing_score": 1.0,
+      "time_ratio": 0.0,
+      "time_taken_sec": 0.0,
+      "allowed_time_sec": 300.0
+    }
+  },
+  "coding_submission": {
+    "status": "wrong_answer",
+    "passed": false,
+    "coding_score": 0.0,
+    "tests_total": 1,
+    "tests_passed": 0,
+    "public_tests_passed": 0,
+    "public_tests_total": 1,
+    "hidden_tests_passed": 0,
+    "hidden_tests_total": 0,
+    "mandatory_tests_passed": 0,
+    "mandatory_tests_total": 0,
+    "pass_rate": 0.0,
+    "failed_test_ids": [
+      "tc_1"
+    ],
+    "test_results": [
+      {
+        "test_id": "tc_1",
+        "passed": false,
+        "status": "wrong_answer",
+        "is_hidden": false,
+        "is_mandatory": false,
+        "exit_code": 0,
+        "execution_time_ms": 547.0,
+        "stdout": "Two sum C validation test passed\n",
+        "stderr": "",
+        "expected": ""
+      }
+    ],
+    "compiler_output": "",
+    "execution_time_ms": 547.0,
+    "policy_reasons": []
+  },
+  "report": {
+    "id": "8b9d0a60-3172-4f72-80dc-4e7f1930ba8a",
+    "session_id": "test_e2e_20260817_204726",
+    "candidate_id": "cand_001",
+    "session_date": "2026-08-17T15:17:37.787201+00:00",
+    "duration_minutes": 15,
+    "total_questions": 3,
+    "overall_score": 0.357,
+    "raw_technical_score": 0.357,
+    "c_score": 0.0,
+    "dsa_score": 0.0,
+    "strengths": [
+      "Concept 4",
+      "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+      "single pass iteration through the array with constant-time hash map lookup at each step",
+      "map stores value-to-index mapping; complement existence is checked before inserting current value",
+      "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes",
+      "Concept 3"
+    ],
+    "missing_concepts": [
+      "Concept 3",
+      "Boundary conditions",
+      "Error handling"
+    ],
+    "covered_concepts": [
+      "Concept 4",
+      "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+      "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes",
+      "single pass iteration through the array with constant-time hash map lookup at each step",
+      "map stores value-to-index mapping; complement existence is checked before inserting current value",
+      "Concept 3"
+    ],
+    "topic_scores": {},
+    "difficulty_history": [
+      3,
+      2
+    ],
+    "score_history": [
+      0.5925,
+      0.4793,
+      0.0
+    ],
+    "raw_score_history": [
+      0.5925,
+      0.4793,
+      0.0
+    ],
+    "question_results": [
+      {
+        "question_text": "Explain your logic to find the two indices in an array that sum up to a target value.",
+        "topic": "arrays",
+        "type": "verbal",
+        "difficulty": 2,
+        "raw_score": 0.5925,
+        "score": 0.5925,
+        "timing_score": 1.0,
+        "timing_modifier": 0.0,
+        "transcript": "The logic is to iterate through the array once and check for the complement target minus current value using a hash map to achieve O(N) time complexity.",
+        "code_submitted": "",
+        "feedback_full": {
+          "final_score": 0.5925,
+          "grade": "Average",
+          "score_breakdown": {
+            "semantic_similarity": 0.306,
+            "concept_coverage": 0.75,
+            "reasoning_quality": 0.508,
+            "confidence_signal": 0.5,
+            "overall": 0.593
+          },
+          "what_candidate_said": "The logic is to iterate through the array once and check for the complement target minus current value using a hash map to achieve O(N) time complexit",
+          "what_was_correct": [
+            "single pass iteration through the array with constant-time hash map lookup at each step",
+            "map stores value-to-index mapping; complement existence is checked before inserting current value",
+            "Concept 4"
+          ],
+          "what_was_incorrect": [],
+          "what_was_incomplete": [
+            "Concept 3"
+          ],
+          "missing_concepts": [
+            "Concept 3"
+          ],
+          "how_to_answer": "Review standard optimal algorithm for arrays.",
+          "stronger_answer_guide": "Explain invariants, step-by-step logic, and complexity trade-offs clearly.",
+          "how_to_improve": [
+            "Cover missing concept: Concept 3"
+          ],
+          "actionable_improvements": [
+            "Cover missing concept: Concept 3"
+          ],
+          "strong_points": [
+            "single pass iteration through the array with constant-time hash map lookup at each step",
+            "map stores value-to-index mapping; complement existence is checked before inserting current value",
+            "Concept 4"
+          ],
+          "communication_tips": [
+            "Answer too short (27 words). Aim for 80\u2013120 words minimum for theory questions.",
+            "No filler words detected \u2014 clean, confident delivery."
+          ],
+          "covered_concepts": [
+            "single pass iteration through the array with constant-time hash map lookup at each step",
+            "map stores value-to-index mapping; complement existence is checked before inserting current value",
+            "Concept 4"
+          ],
+          "trend": "stable",
+          "trend_note": "Turn 1 \u2014 not enough history yet for trend analysis",
+          "justification": "Grade Average (59%) on arrays. Semantic 31% | Concept coverage 75% | Reasoning 51% | Confidence 50%. Strength: single pass iteration through the array with constant-time hash map lookup at each step. Missing: Concept 3. Strong concept coverage. Answer too brief (27 words) to demonstrate depth.",
+          "narrative_feedback": "Grade Average (59%) on arrays. Semantic 31% | Concept coverage 75% | Reasoning 51% | Confidence 50%. Strength: single pass iteration through the array with constant-time hash map lookup at each step. Missing: Concept 3. Strong concept coverage. Answer too brief (27 words) to demonstrate depth.",
+          "transcript": "The logic is to iterate through the array once and check for the complement target minus current value using a hash map to achieve O(N) time complexity.",
+          "decision_source": "evaluator_cross_encoder",
+          "llm_status": "llm_unavailable",
+          "vague_points": [
+            "Cover missing concept: Concept 3"
+          ],
+          "raw_evaluator_score": 0.5925,
+          "timing_modifier": 0.0,
+          "timing_score": 1.0,
+          "time_ratio": 0.0,
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 300.0
+        },
+        "feedback": "Grade Average (59%) on arrays. Semantic 31% | Concept coverage 75% | Reasoning 51% | Confidence 50%. Strength: single pass iteration through the array with constant-time hash map lookup at each step. Missing: Concept 3. Strong concept coverage. Answer too brief (27 words) to demonstrate depth.",
+        "grade": "Average",
+        "score_breakdown": {
+          "semantic_similarity": 0.306,
+          "concept_coverage": 0.75,
+          "reasoning_quality": 0.508,
+          "confidence_signal": 0.5,
+          "overall": 0.593
+        },
+        "strong_points": [
+          "single pass iteration through the array with constant-time hash map lookup at each step",
+          "map stores value-to-index mapping; complement existence is checked before inserting current value",
+          "Concept 4"
+        ],
+        "incorrect_or_incomplete": [],
+        "missing_concepts": [
+          "Concept 3"
+        ],
+        "covered_concepts": [
+          "single pass iteration through the array with constant-time hash map lookup at each step",
+          "map stores value-to-index mapping; complement existence is checked before inserting current value",
+          "Concept 4"
+        ],
+        "how_to_improve": [
+          "Cover missing concept: Concept 3"
+        ],
+        "communication_tips": [
+          "Answer too short (27 words). Aim for 80\u2013120 words minimum for theory questions.",
+          "No filler words detected \u2014 clean, confident delivery."
+        ],
+        "trend": "stable",
+        "trend_note": "Turn 1 \u2014 not enough history yet for trend analysis"
+      },
+      {
+        "question_text": "What is a memory leak and how do you prevent it in C?",
+        "topic": "memorymanagement",
+        "type": "verbal",
+        "difficulty": 3,
+        "raw_score": 0.4793,
+        "score": 0.4793,
+        "timing_score": 1.0,
+        "timing_modifier": 0.0,
+        "transcript": "A memory leak in C occurs when dynamic memory allocated with malloc is not freed with free before all pointers to it are lost.",
+        "code_submitted": "",
+        "feedback_full": {
+          "final_score": 0.4793,
+          "grade": "Average",
+          "score_breakdown": {
+            "semantic_similarity": 0.643,
+            "concept_coverage": 1.0,
+            "reasoning_quality": 0.346,
+            "confidence_signal": 0.5,
+            "overall": 0.479
+          },
+          "what_candidate_said": "A memory leak in C occurs when dynamic memory allocated with malloc is not freed with free before all pointers to it are lost.",
+          "what_was_correct": [
+            "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+            "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes",
+            "Concept 3",
+            "Concept 4",
+            "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it"
+          ],
+          "what_was_incorrect": [
+            "A memory leak is unreleased allocated memory \u2014 a dangling pointer is a reference to already-released memory; these are opposite problems and must not be confused"
+          ],
+          "what_was_incomplete": [],
+          "missing_concepts": [],
+          "how_to_answer": "Review standard optimal algorithm for memorymanagement.",
+          "stronger_answer_guide": "Explain invariants, step-by-step logic, and complexity trade-offs clearly.",
+          "how_to_improve": [],
+          "actionable_improvements": [],
+          "strong_points": [
+            "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+            "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes",
+            "Concept 3",
+            "Concept 4",
+            "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it"
+          ],
+          "communication_tips": [
+            "Answer too short (24 words). Aim for 80\u2013120 words minimum for theory questions.",
+            "No filler words detected \u2014 clean, confident delivery."
+          ],
+          "covered_concepts": [
+            "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+            "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes",
+            "Concept 3",
+            "Concept 4",
+            "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+            "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes"
+          ],
+          "trend": "stable",
+          "trend_note": "Turn 2 \u2014 not enough history yet for trend analysis",
+          "justification": "Grade Average (48%) on memorymanagement. Semantic 64% | Concept coverage 100% | Reasoning 35% | Confidence 50%. Strength: the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it. Strong concept coverage. Answer too brief (24 words) to demonstrate depth.",
+          "narrative_feedback": "Grade Average (48%) on memorymanagement. Semantic 64% | Concept coverage 100% | Reasoning 35% | Confidence 50%. Strength: the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it. Strong concept coverage. Answer too brief (24 words) to demonstrate depth.",
+          "transcript": "A memory leak in C occurs when dynamic memory allocated with malloc is not freed with free before all pointers to it are lost.",
+          "decision_source": "evaluator_cross_encoder",
+          "llm_status": "llm_unavailable",
+          "vague_points": [],
+          "raw_evaluator_score": 0.4793,
+          "timing_modifier": 0.0,
+          "timing_score": 1.0,
+          "time_ratio": 0.0,
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 300.0
+        },
+        "feedback": "Grade Average (48%) on memorymanagement. Semantic 64% | Concept coverage 100% | Reasoning 35% | Confidence 50%. Strength: the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it. Strong concept coverage. Answer too brief (24 words) to demonstrate depth.",
+        "grade": "Average",
+        "score_breakdown": {
+          "semantic_similarity": 0.643,
+          "concept_coverage": 1.0,
+          "reasoning_quality": 0.346,
+          "confidence_signal": 0.5,
+          "overall": 0.479
+        },
+        "strong_points": [
+          "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+          "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes",
+          "Concept 3",
+          "Concept 4",
+          "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it"
+        ],
+        "incorrect_or_incomplete": [],
+        "missing_concepts": [],
+        "covered_concepts": [
+          "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+          "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes",
+          "Concept 3",
+          "Concept 4",
+          "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it",
+          "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes"
+        ],
+        "how_to_improve": [],
+        "communication_tips": [
+          "Answer too short (24 words). Aim for 80\u2013120 words minimum for theory questions.",
+          "No filler words detected \u2014 clean, confident delivery."
+        ],
+        "trend": "stable",
+        "trend_note": "Turn 2 \u2014 not enough history yet for trend analysis"
+      },
+      {
+        "question_text": "What is a memory leak and how do you prevent it in C?",
+        "topic": "memorymanagement",
+        "type": "verbal",
+        "difficulty": 3,
+        "raw_score": 0.0,
+        "score": 0.0,
+        "timing_score": 0.85,
+        "timing_modifier": 0.0,
+        "transcript": "",
+        "code_submitted": "\n#include <stdio.h>\nint main() {\n    printf(\"Two sum C validation test passed\\n\");\n    return 0;\n}\n",
+        "feedback_full": {
+          "final_score": 0.0,
+          "justification": "Passed 0/1 tests. Check edge cases and boundary conditions.",
+          "strong_points": [],
+          "vague_points": [
+            "Review edge cases",
+            "Check boundary conditions"
+          ],
+          "missing_concepts": [
+            "Boundary conditions",
+            "Error handling"
+          ],
+          "decision_source": "sandbox_evaluator",
+          "validation_trace": [],
+          "tests_passed": 0,
+          "tests_total": 1,
+          "passed": false,
+          "status": "failed",
+          "pass_rate": 0.0,
+          "raw_evaluator_score": 0.0,
+          "timing_modifier": 0.0,
+          "timing_score": 0.85,
+          "time_ratio": 1.0,
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 180.0
+        },
+        "feedback": "Passed 0/1 tests. Check edge cases and boundary conditions.",
+        "grade": "",
+        "score_breakdown": {},
+        "strong_points": [],
+        "incorrect_or_incomplete": [],
+        "missing_concepts": [
+          "Boundary conditions",
+          "Error handling"
+        ],
+        "covered_concepts": [],
+        "how_to_improve": [],
+        "communication_tips": [],
+        "trend": "stable",
+        "trend_note": ""
+      }
+    ],
+    "all_concepts": {
+      "single pass iteration through the array with constant-time hash map lookup at each step": 0.75,
+      "map stores value-to-index mapping; complement existence is checked before inserting current value": 0.75,
+      "Concept 4": 0.7999999999999999,
+      "the leak occurs when malloc/calloc allocates memory and the pointer is overwritten or goes out of scope without calling free \u2014 heap memory accumulates with no way to reclaim it": 0.7999999999999999,
+      "leaked memory is inaccessible to the program (no pointer) yet still allocated \u2014 it leads to progressive resource exhaustion and eventual allocation failure in long-running processes": 0.7999999999999999,
+      "Concept 3": 0.75,
+      "Boundary conditions": 0.35,
+      "Error handling": 0.35
+    },
+    "recommendations": [
+      "Review and practice: Concept 3",
+      "Review and practice: Boundary conditions",
+      "Review and practice: Error handling"
+    ],
+    "trend_summary": "stable",
+    "component_breakdown": {
+      "technical_score": 0.357,
+      "concept_score": 0.875,
+      "reasoning_score": 0.357,
+      "communication_score": 0.212,
+      "timing_score": 0.95,
+      "coding_score": null,
+      "final_overall": 0.357
+    },
+    "timing_analysis": {
+      "avg_timing_score": 0.95,
+      "net_timing_modifier": 0.0,
+      "response_timing": [
+        {
+          "question_id": "1",
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 300.0,
+          "time_ratio": 0.0,
+          "time_norm": 0.0,
+          "is_overrun": false,
+          "timing_score": 1.0,
+          "timing_modifier": 0.0,
+          "raw_evaluator_score": 0.5925,
+          "final_score": 0.5925
+        },
+        {
+          "question_id": "53",
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 300.0,
+          "time_ratio": 0.0,
+          "time_norm": 0.0,
+          "is_overrun": false,
+          "timing_score": 1.0,
+          "timing_modifier": 0.0,
+          "raw_evaluator_score": 0.4793,
+          "final_score": 0.4793
+        },
+        {
+          "question_id": "53",
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 180.0,
+          "time_ratio": 1.0,
+          "time_norm": 0.0,
+          "is_overrun": false,
+          "timing_score": 0.85,
+          "timing_modifier": 0.0,
+          "raw_evaluator_score": 0.0,
+          "final_score": 0.0
+        }
+      ]
+    },
+    "behaviour": {
+      "avg_confidence": 0.5,
+      "hesitation_rate": 0.15,
+      "clarity_score": 0.212,
+      "completeness": 1.0,
+      "code_quality": 0.0,
+      "hints_used": 0
+    }
+  }
+}

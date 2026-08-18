@@ -1,0 +1,8 @@
+config_id,config_name,w_s1,w_s2,w_r,spearman_rho,p_value,mae,rmse
+s1_only,Surface Semantic Similarity Only (S1 Only),1.0,0.0,0.0,0.762,9.4247e-05,0.1901,0.2721
+s2_only,Concept Coverage Only (S2 Only),0.0,1.0,0.0,0.7462,0.00015824,0.2028,0.2659
+r_only,Reasoning Entailment Only (R Only),0.0,0.0,1.0,0.3961,0.083833,0.337,0.4453
+s1_plus_r,Surface + Reasoning (S1 + R),0.23,0.0,0.77,0.7651,8.5054e-05,0.2898,0.3957
+s2_plus_r,Concept + Reasoning (S2 + R),0.0,0.41,0.59,0.7651,8.4909e-05,0.2761,0.3559
+s1_plus_s2,Surface + Concept (S1 + S2),0.3,0.7,0.0,0.8358,4.4568e-06,0.1907,0.2563
+full_pipeline,Full Multi-Component Pipeline (Paper),0.15,0.35,0.5,0.8358,4.4568e-06,0.2585,0.3376

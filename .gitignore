@@ -3,10 +3,12 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .mypy_cache/
+.ruff_cache/
 .ipynb_checkpoints/
 .venv/
 venv/
 rl/venv/
+scratch/
 
 # Frontend artifacts
 frontend/node_modules/
@@ -15,12 +17,15 @@ frontend/build/
 apps/web/node_modules/
 apps/web/dist/
 apps/web/build/
+coverage/
 
-# Local model artifacts
+# Local model weights and huggingface caches
 models/
 services/qwen/models/
+hf_cache/
+.cache/
 
-# Ablation results (regenerateable)
+# Ablation & intermediate binary artifacts
 ablation/results/*.npy
 ablation/results/*.pt
 ablation/results/*.bin
@@ -29,7 +34,7 @@ ablation/results/ratings_synthetic_*
 # Large artifacts and backups
 artifacts/
 
-# Logs and generated artifacts
+# Logs and generated runtime artifacts
 *.log
 orchestrator_logs/
 training_logs/
@@ -42,3 +47,24 @@ rl/logs/
 # OS files
 desktop.ini
 .DS_Store
+Thumbs.db
+
+# Secrets and local environment files
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.crt
+
+# Explicitly track .env.example
+!.env.example
+
+# Temporary audio artifacts
+*.wav.tmp
+*.webm.tmp
+audio_*.webm
+audio_*.wav
+
+# Model binaries
+*.gguf

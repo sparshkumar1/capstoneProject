@@ -122,30 +122,23 @@ class FeedbackAgent:
 
         # ── Concept details ───────────────────────────────────────────
         concept_details: list[dict] = raw.get("concept_details", [])
-        rubric_groups: list = []
-        if eval_result.get("raw"):
-            # concept_groups may be in rubric embedded in raw
-            rubric_groups = raw.get("concept_groups", [])
+        covered_concepts: list[str] = list(eval_result.get("covered_concepts") or eval_result.get("correct_claims") or [])
+        missing_concepts: list[str] = list(eval_result.get("missing_concepts") or eval_result.get("what_was_incomplete") or [])
+        incorrect_claims: list[str] = list(eval_result.get("incorrect_claims") or eval_result.get("what_was_incorrect") or [])
 
-        covered_concepts: list[str] = []
-        missed_concepts: list[str] = []
-        for cd in concept_details:
-            label = str(cd.get("concept") or cd.get("label") or "concept")
-            if cd.get("covered"):
-                covered_concepts.append(label)
-            else:
-                missed_concepts.append(label)
 
-        # Fallback from eval_result missing_concepts
-        missing_concepts = list(eval_result.get("missing_concepts") or missed_concepts or [])
+        if not covered_concepts or not missing_concepts:
+            for cd in concept_details:
+                label = str(cd.get("concept") or cd.get("concept_text") or cd.get("label") or "concept")
+                if cd.get("covered"):
+                    covered_concepts.append(label)
+                else:
+                    missing_concepts.append(label)
 
-        # ── Build all sections ────────────────────────────────────────
-        strong_points         = self._strong_points(eval_result, transcript, s1, s2, r)
-        incorrect_items       = self._detect_incorrect(transcript, question, concept_details)
-        how_to_improve        = self._improvement_tips(transcript, question, s1, s2, r, missing_concepts)
-        communication_tips    = self._comm_tips(word_count, filler_count, hesitation_rate, uncertainty, conf)
-        trend, trend_note     = self._trend(score, session_history or [], turn_number)
-        grade                 = raw.get("grade") or self._grade(score)
+        # ── Audio & Communication Tips ────────────────────────────────
+        communication_tips = self._comm_tips(word_count, filler_count, hesitation_rate, uncertainty, conf)
+        trend, trend_note  = self._trend(score, session_history or [], turn_number)
+        grade              = raw.get("grade") or eval_result.get("grade") or self._grade(score)
 
         score_breakdown = {
             "semantic_similarity": round(s1, 3),
@@ -155,33 +148,72 @@ class FeedbackAgent:
             "overall":             round(score, 3),
         }
 
-        justification = self._justification(
-            score, grade, s1, s2, r, conf, word_count,
-            strong_points, missing_concepts, question,
+        # ── Query Qwen Feedback Microservice ──────────────────────────
+        qwen_res = await self._query_qwen_feedback(
+            transcript=transcript,
+            question=question,
+            eval_result=eval_result,
+            candidate_state={"confidence": conf, "hesitation": hesitation_rate, "turn": turn_number},
+            history=session_history or [],
         )
 
-        # Try to enrich justification via Qwen narrative (non-blocking)
-        qwen_narrative = await self._qwen_feedback(transcript, question, score, missing_concepts)
-        if qwen_narrative:
-            justification = qwen_narrative
+        if qwen_res:
+            return {
+                "final_score":              round(score, 4),
+                "grade":                    grade,
+                "score_breakdown":          score_breakdown,
+                "what_candidate_said":      qwen_res.get("what_candidate_said", transcript[:150]),
+                "what_was_correct":         qwen_res.get("what_was_correct", covered_concepts[:5]),
+                "what_was_incorrect":       qwen_res.get("what_was_incorrect", incorrect_claims[:4]),
+                "what_was_incomplete":      qwen_res.get("what_was_incomplete", missing_concepts[:4]),
+                "missing_concepts":         qwen_res.get("missing_concepts", missing_concepts[:6]),
+                "how_to_answer":            qwen_res.get("how_to_answer", ""),
+                "stronger_answer_guide":    qwen_res.get("stronger_answer_guide", ""),
+                "how_to_improve":           qwen_res.get("actionable_improvements", []),
+                "actionable_improvements":  qwen_res.get("actionable_improvements", []),
+                "strong_points":            qwen_res.get("what_was_correct", covered_concepts[:5]),
+                "communication_tips":       communication_tips[:4],
+                "covered_concepts":         covered_concepts[:6],
+                "trend":                    trend,
+                "trend_note":               trend_note,
+                "justification":            qwen_res.get("narrative_feedback", ""),
+                "narrative_feedback":       qwen_res.get("narrative_feedback", ""),
+                "transcript":               transcript or "",
+                "decision_source":          qwen_res.get("decision_source", "qwen_feedback"),
+                "llm_status":               "available",
+                "vague_points":             qwen_res.get("actionable_improvements", [])[:3],
+            }
+
+        # ── Explicit LLM Unavailable State (Preserves Evaluator Evidence) ──
+        deterministic_justification = self._justification(
+            score, grade, s1, s2, r, conf, word_count,
+            covered_concepts, missing_concepts, question,
+        )
 
         return {
-            "final_score":              round(score, 3),
+            "final_score":              round(score, 4),
             "grade":                    grade,
             "score_breakdown":          score_breakdown,
-            "strong_points":            strong_points[:5],
-            "incorrect_or_incomplete":  incorrect_items[:4],
+            "what_candidate_said":      transcript[:150] if transcript else "No answer provided",
+            "what_was_correct":         covered_concepts[:5],
+            "what_was_incorrect":       incorrect_claims[:4],
+            "what_was_incomplete":      missing_concepts[:4],
             "missing_concepts":         missing_concepts[:6],
-            "how_to_improve":           how_to_improve[:5],
+            "how_to_answer":            f"Review standard optimal algorithm for {question.get('topic', 'topic')}.",
+            "stronger_answer_guide":    "Explain invariants, step-by-step logic, and complexity trade-offs clearly.",
+            "how_to_improve":           [f"Cover missing concept: {m}" for m in missing_concepts[:3]],
+            "actionable_improvements":  [f"Cover missing concept: {m}" for m in missing_concepts[:3]],
+            "strong_points":            covered_concepts[:5] if covered_concepts else ["Attempted question"],
             "communication_tips":       communication_tips[:4],
             "covered_concepts":         covered_concepts[:6],
             "trend":                    trend,
             "trend_note":               trend_note,
-            "justification":            justification,
+            "justification":            deterministic_justification,
+            "narrative_feedback":       deterministic_justification,
             "transcript":               transcript or "",
-            "decision_source":          eval_result.get("decision_source", "evaluator"),
-            # backward-compat
-            "vague_points":             how_to_improve[:3],
+            "decision_source":          eval_result.get("decision_source", "evaluator_structured"),
+            "llm_status":               "llm_unavailable",
+            "vague_points":             [f"Cover missing concept: {m}" for m in missing_concepts[:3]],
         }
 
     def generate_code_feedback(
@@ -265,7 +297,10 @@ class FeedbackAgent:
         if "// " not in code and "/* " not in code:
             comm_tips.append("No comments detected — add comments for complex logic and edge case handling")
 
-        trend, trend_note = self._trend(score, session_history or [], turn_number)
+        if not passed and ("sandbox daemon" in stderr.lower() or "sandbox_error" in stderr.lower() or "docker daemon" in stderr.lower() or "unreachable" in stderr.lower()):
+            status = "sandbox_error"
+        else:
+            status = "accepted" if passed else ("compilation_error" if "error:" in stderr.lower() or "expected" in stderr.lower() else "wrong_answer")
 
         justification = (
             f"Code grade {grade} ({score:.0%}). "
@@ -274,6 +309,7 @@ class FeedbackAgent:
         )
 
         return {
+            "status":                  status,
             "final_score":             round(score, 3),
             "grade":                   grade,
             "score_breakdown":         {"functional_correctness": round(score, 3), "tests_passed": tests_passed, "tests_total": tests_total},
@@ -287,7 +323,7 @@ class FeedbackAgent:
             "trend_note":              trend_note,
             "justification":           justification,
             "transcript":              "",
-            "decision_source":         "sandbox_evaluator",
+            "decision_source":         "sandbox_evaluator" if status != "sandbox_error" else "sandbox_error",
             "vague_points":            tips[:3],
         }
 
@@ -454,30 +490,44 @@ class FeedbackAgent:
             parts.append(f"Answer too brief ({word_count} words) to demonstrate depth.")
         return " ".join(parts)
 
-    async def _qwen_feedback(self, transcript: str, question: dict, score: float, missing: list) -> Optional[str]:
-        """Call Qwen /report for a 1-paragraph narrative. Non-blocking; returns None on any failure."""
+    async def _query_qwen_feedback(
+        self,
+        transcript: str,
+        question: dict,
+        eval_result: dict,
+        candidate_state: dict,
+        history: list,
+    ) -> Optional[dict]:
+        """Query Qwen microservice /api/qwen/feedback for grounded rich feedback with retry."""
         if not _HTTPX:
             return None
-        if self._qwen_ok is False:
-            return None
-        try:
-            payload = {
-                "transcript": (transcript or "")[:600],
-                "question":   (question.get("text") or "")[:200],
-                "score":      round(score, 3),
-                "missing":    missing[:4],
-            }
-            async with httpx.AsyncClient(timeout=QWEN_TIMEOUT) as client:
-                r = await client.post(f"{self.qwen_url}/report", json=payload)
-                if r.status_code == 200:
-                    self._qwen_ok = True
-                    data = r.json()
-                    return data.get("text") or data.get("narrative") or None
-                self._qwen_ok = False
-                return None
-        except Exception:
-            self._qwen_ok = False
-            return None
+
+        payload = {
+            "question_text": str(question.get("text", "") or question.get("question_text", "")),
+            "topic": str(question.get("topic", "general")),
+            "candidate_answer": str(transcript or ""),
+            "structured_evaluation": eval_result,
+            "candidate_state": candidate_state or {},
+            "history": [{"score": float(s)} for s in history[-3:] if isinstance(s, (int, float))],
+        }
+
+        # Attempt call with 1 immediate retry on connection/timeout error
+        for attempt in range(2):
+            try:
+                async with httpx.AsyncClient(timeout=QWEN_TIMEOUT) as client:
+                    # Try structured endpoint, fallback to /feedback
+                    for ep in ("/api/qwen/feedback", "/feedback"):
+                        r = await client.post(f"{self.qwen_url}{ep}", json=payload)
+                        if r.status_code == 200:
+                            self._qwen_ok = True
+                            data = r.json()
+                            if isinstance(data, dict) and "what_candidate_said" in data:
+                                return data
+            except Exception:
+                await asyncio.sleep(0.1)
+
+        self._qwen_ok = False
+        return None
 
 
 # Module-level singleton — import and reuse across requests

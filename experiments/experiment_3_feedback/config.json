@@ -1,0 +1,34 @@
+{
+  "experiment_id": "EXP-3",
+  "name": "Formative Feedback Grounding & Actionability Comparison",
+  "research_question": "Does candidate-specific structured feedback differ measurably from generic feedback in transcript grounding, misconception diagnosis, and actionable remediation?",
+  "hypothesis": "Candidate-specific structured feedback achieves significantly higher verbatim transcript grounding, higher coverage of rubric gaps, and zero hallucinated claims compared to static generic feedback templates.",
+  "feedback_conditions": [
+    {
+      "id": "generic_template",
+      "name": "Generic Static Template Baseline",
+      "description": "Standard boilerplate feedback selected solely by score bracket without candidate transcript or rubric concept grounding."
+    },
+    {
+      "id": "structured_evaluator_recovery",
+      "name": "Evaluator-Structured Non-LLM Feedback",
+      "description": "Deterministic structured feedback directly constructed from Stage 1 evaluator outputs without LLM generative formatting."
+    }
+  ],
+  "evaluation_dataset": {
+    "path": "ablation/results/ratings_averaged.csv",
+    "total_evaluation_turns": 20
+  },
+  "metrics": [
+    "transcript_lexical_overlap_ratio",
+    "rubric_missing_concept_coverage",
+    "actionable_directives_count",
+    "hallucination_proxy_rate"
+  ],
+  "statistical_plan": {
+    "test_type": "paired_wilcoxon_signed_rank",
+    "alpha": 0.05,
+    "effect_size": "cohens_d"
+  },
+  "execution_command": "python experiments/experiment_3_feedback/runner.py --config experiments/experiment_3_feedback/config.json"
+}

@@ -1,0 +1,28 @@
+# Dockerfile.sandbox — Real Isolated C Compilation and Execution Sandbox
+# PrepAIred Technical Interview System
+FROM alpine:3.19
+
+# Install GCC, standard C libraries, Make, and Bash
+RUN apk update && \
+    apk add --no-cache \
+        gcc \
+        musl-dev \
+        libc-dev \
+        make \
+        bash \
+        coreutils
+
+# Create unprivileged sandbox user (UID 1001, GID 1001)
+RUN addgroup -g 1001 -S sandbox && \
+    adduser -u 1001 -S sandbox -G sandbox
+
+# Prepare workspace directory with non-root ownership
+RUN mkdir -p /workspace && \
+    chown -R sandbox:sandbox /workspace && \
+    chmod 777 /workspace
+
+USER sandbox
+WORKDIR /workspace
+
+# Default command: show compiler version
+CMD ["gcc", "--version"]

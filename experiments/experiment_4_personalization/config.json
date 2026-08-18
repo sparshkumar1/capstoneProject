@@ -1,0 +1,42 @@
+{
+  "experiment_id": "EXP-4",
+  "name": "Candidate-State Personalization & Trajectory Divergence",
+  "research_question": "Does candidate-state-driven personalization produce measurably different and more targeted interview trajectories than non-adaptive questioning?",
+  "hypothesis": "Personalization actively diverges question difficulty and topic remediation based on measured candidate state, avoiding topic starvation and question repetition, while non-adaptive random selection fails to remediate weaknesses.",
+  "selection_modes": [
+    {
+      "id": "random_non_adaptive",
+      "name": "Uniform Random Non-Adaptive Selection",
+      "description": "Selects questions uniformly at random from the 125-question bank without tracking candidate state, weaknesses, or difficulty targets."
+    },
+    {
+      "id": "topic_heuristic_baseline",
+      "name": "Baseline Topic-Count Question Selector",
+      "description": "Selects questions using topic-frequency balancing and nearest difficulty match without candidate state adaptation."
+    },
+    {
+      "id": "candidate_state_personalized",
+      "name": "Production Candidate-State Adaptive Selector",
+      "description": "Production selector utilizing 3-level deduplication (ID, text, Jaccard overlap >= 0.75), difficulty <= 2 Easy-start guarantee, weakness remediation, and strength advancement."
+    }
+  ],
+  "candidate_profiles": [
+    {"id": "strong_candidate", "skill": 0.85, "description": "High mastery candidate answering accurately across all topics."},
+    {"id": "weak_candidate", "skill": 0.25, "description": "Beginner candidate struggling on core pointer and recursion concepts."}
+  ],
+  "evaluation_seeds": [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010],
+  "session_length": 15,
+  "metrics": [
+    "trajectory_euclidean_divergence",
+    "question_repetition_rate",
+    "weakness_remediation_rate",
+    "topic_coverage_entropy",
+    "first_question_difficulty"
+  ],
+  "statistical_plan": {
+    "test_type": "two_sample_ttest_and_kolmogorov_smirnov",
+    "alpha": 0.05,
+    "effect_size": "cohens_d"
+  },
+  "execution_command": "python experiments/experiment_4_personalization/runner.py --config experiments/experiment_4_personalization/config.json"
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Experiment3OutputSchema",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "timestamp",
+    "total_samples",
+    "feedback_conditions",
+    "sample_evaluations",
+    "aggregated_metrics",
+    "statistical_comparisons"
+  ],
+  "properties": {
+    "experiment_id": {"type": "string", "const": "EXP-3"},
+    "timestamp": {"type": "string"},
+    "total_samples": {"type": "integer"},
+    "feedback_conditions": {"type": "array", "items": {"type": "string"}},
+    "sample_evaluations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item_id",
+          "condition_id",
+          "grounding_ratio",
+          "gap_coverage",
+          "actionability_count"
+        ]
+      }
+    },
+    "aggregated_metrics": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "mean_grounding_ratio": {"type": "number"},
+          "mean_gap_coverage": {"type": "number"},
+          "mean_actionability_count": {"type": "number"}
+        }
+      }
+    },
+    "statistical_comparisons": {
+      "type": "object"
+    }
+  }
+}

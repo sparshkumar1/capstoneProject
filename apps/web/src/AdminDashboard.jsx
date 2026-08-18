@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { SessionContext } from "./contexts";
 import Topbar from "./Topbar";
 import ScoreRing from "./ScoreRing";
-import { api } from "./servicesApi";
+import { api } from "./api";
 import "./AdminDashboard.css";
 
 const FILTERS = ["all", "today", "this_week", "this_month"];
@@ -18,6 +18,7 @@ export default function AdminDashboard({ navigate }) {
   const [sessions, setSessions] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
   const [sort, setSort] = useState("date_desc");
   const [search, setSearch] = useState("");
@@ -26,15 +27,22 @@ export default function AdminDashboard({ navigate }) {
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 10;
 
-  useEffect(() => {
+  const fetchDashboardData = () => {
     setLoading(true);
+    setError(null);
     Promise.all([
-      api.getAllSessions({ filter, sort }).catch(() => ({ sessions: MOCK_SESSIONS })),
-      api.getAdminStats().catch(() => MOCK_STATS),
+      api.getAllSessions({ filter, sort }),
+      api.getAdminStats(),
     ]).then(([sData, sStats]) => {
-      setSessions(sData.sessions || sData || MOCK_SESSIONS);
-      setStats(sStats || MOCK_STATS);
+      setSessions(Array.isArray(sData?.sessions) ? sData.sessions : Array.isArray(sData) ? sData : []);
+      setStats(sStats || null);
+    }).catch(err => {
+      setError(err.message || "Failed to load admin session data from server.");
     }).finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
   }, [filter, sort]);
 
   const openDetail = async (sess) => {
@@ -85,6 +93,28 @@ export default function AdminDashboard({ navigate }) {
 
         {/* Stats strip */}
         {stats && <StatsStrip stats={stats} />}
+
+        {/* Error notification */}
+        {error && (
+          <div className="card admin-error-banner fade-up" style={{
+            padding: "16px 20px",
+            marginBottom: 20,
+            background: "rgba(255, 79, 106, 0.1)",
+            border: "1px solid rgba(255, 79, 106, 0.3)",
+            borderRadius: 12,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 20 }}>⚠️</span>
+              <span style={{ color: "var(--danger)", fontSize: 13 }}>{error}</span>
+            </div>
+            <button type="button" className="btn btn-sm btn-primary" onClick={fetchDashboardData}>
+              🔄 Retry
+            </button>
+          </div>
+        )}
 
         {/* Controls */}
         <div className="admin-controls fade-up stagger-2">
@@ -436,34 +466,3 @@ function SessionDrawer({ session, loading, onClose }) {
     </>
   );
 }
-
-// Mock data
-const MOCK_SESSIONS = Array.from({ length: 18 }, (_, i) => ({
-  id: `sess-${1000 + i}`,
-  candidate_name: ["Arjun Mehta", "Priya Sharma", "Rahul Iyer", "Sneha Patel", "Kiran Kumar",
-    "Aditya Raj", "Divya Nair", "Vikram Singh", "Ananya Das", "Rohan Gupta"][i % 10],
-  candidate_email: `candidate${i}@college.edu`,
-  college: ["IIT Madras", "NIT Trichy", "VIT Chennai", "Anna University", "IIT Bombay"][i % 5],
-  year: ["2nd Year", "3rd Year", "4th Year"][i % 3],
-  overall_score: 0.4 + Math.random() * 0.55,
-  c_score: 0.45 + Math.random() * 0.5,
-  dsa_score: 0.35 + Math.random() * 0.6,
-  topics: ["pointers", "linked_list", "dynamic_programming", "graphs", "memory_management"].slice(0, 2 + (i % 3)),
-  final_difficulty: 2 + (i % 4),
-  duration_minutes: [15, 20, 25, 30][i % 4],
-  total_questions: 3 + (i % 4),
-  status: ["completed", "completed", "completed", "in_progress", "abandoned"][i % 5],
-  created_at: new Date(Date.now() - i * 86400000 * 0.7).toISOString(),
-  strengths: ["Strong pointer arithmetic", "Good recursion understanding"],
-  missing_concepts: ["Struct padding", "Graph cycle detection"],
-  behaviour: { avg_confidence: 0.6 + Math.random() * 0.35, clarity_score: 0.65 + Math.random() * 0.3, completeness: 0.55 + Math.random() * 0.4 },
-}));
-
-const MOCK_STATS = {
-  total_sessions: 247,
-  avg_score: 0.64,
-  active_today: 12,
-  unique_candidates: 183,
-  avg_duration_min: 22,
-  pass_rate: 0.61,
-};

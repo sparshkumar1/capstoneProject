@@ -1,0 +1,207 @@
+{
+  "EXP-1": {
+    "status": "VERIFIED",
+    "episodes": 150,
+    "controllers": {
+      "fixed_difficulty": {
+        "mean_score": 0.4441,
+        "mean_rho": 0.0,
+        "mean_slope": 0.0,
+        "mean_osc": 0.0,
+        "total_gr": 0
+      },
+      "ppo_adaptive": {
+        "mean_score": 0.5123,
+        "mean_rho": 0.1572,
+        "mean_slope": -0.0074,
+        "mean_osc": 3.08,
+        "total_gr": 0
+      },
+      "rule_based_heuristic": {
+        "mean_score": 0.5797,
+        "mean_rho": -0.2572,
+        "mean_slope": -0.005,
+        "mean_osc": 0.0,
+        "total_gr": 0
+      }
+    },
+    "statistical_tests": {
+      "fixed_vs_rule": {
+        "raw_p": 3.82031530600872e-07,
+        "holm_p": 7.64063061201744e-07,
+        "cohens_d": -1.02876521568349
+      },
+      "fixed_vs_ppo": {
+        "raw_p": 0.0006149764606262814,
+        "holm_p": 0.0006149764606262814,
+        "cohens_d": 0.5559554276303378
+      },
+      "rule_vs_ppo": {
+        "raw_p": 1.7663154748169465e-08,
+        "holm_p": 5.2989464244508396e-08,
+        "cohens_d": 1.4651638874061035
+      }
+    }
+  },
+  "EXP-2": {
+    "status": "VERIFIED",
+    "items": 20,
+    "recomputed_configs": [
+      {
+        "config_id": "s1_only",
+        "spearman_rho": 0.762,
+        "p_value": 9.4247e-05,
+        "mae": 0.1901,
+        "rmse": 0.2721
+      },
+      {
+        "config_id": "s2_only",
+        "spearman_rho": 0.7462,
+        "p_value": 0.00015824,
+        "mae": 0.2028,
+        "rmse": 0.2659
+      },
+      {
+        "config_id": "r_only",
+        "spearman_rho": 0.3961,
+        "p_value": 0.083833,
+        "mae": 0.337,
+        "rmse": 0.4453
+      },
+      {
+        "config_id": "s1_plus_r",
+        "spearman_rho": 0.7651,
+        "p_value": 8.5054e-05,
+        "mae": 0.2898,
+        "rmse": 0.3957
+      },
+      {
+        "config_id": "s2_plus_r",
+        "spearman_rho": 0.7651,
+        "p_value": 8.4909e-05,
+        "mae": 0.2761,
+        "rmse": 0.3559
+      },
+      {
+        "config_id": "s1_plus_s2",
+        "spearman_rho": 0.8358,
+        "p_value": 4.4568e-06,
+        "mae": 0.1907,
+        "rmse": 0.2563
+      },
+      {
+        "config_id": "full_pipeline",
+        "spearman_rho": 0.8358,
+        "p_value": 4.4568e-06,
+        "mae": 0.2585,
+        "rmse": 0.3376
+      }
+    ],
+    "s1_s2_vs_full": {
+      "rho_diff": 0.0,
+      "mae_diff": 0.0678,
+      "rmse_diff": 0.0813
+    }
+  },
+  "EXP-3": {
+    "status": "VERIFIED_WITH_PROTOCOL_NOTE",
+    "conditions_in_raw": [
+      "generic_template",
+      "structured_evaluator_recovery"
+    ],
+    "qwen_7b_executed": false,
+    "protocol_deviation_note": "Qwen-7B LLM online generation was not executed; structured non-LLM evaluator recovery was executed as the deterministic alternative.",
+    "condition_metrics": {
+      "generic_template": {
+        "N": 20,
+        "mean_grounding": 0.0,
+        "mean_gap": 0.0,
+        "mean_act": 1.0
+      },
+      "structured_evaluator_recovery": {
+        "N": 20,
+        "mean_grounding": 0.0383,
+        "mean_gap": 1.0,
+        "mean_act": 3.9
+      }
+    },
+    "statistical_test": {
+      "p_value": 0.043114446783075355,
+      "cohens_d": 0.3508069366243733
+    }
+  },
+  "EXP-4": {
+    "status": "VERIFIED",
+    "total_runs": 60,
+    "mode_metrics": {
+      "candidate_state_personalized": {
+        "runs": 20,
+        "repetition_rate": 0.0,
+        "remediation_rate": 0.1667
+      },
+      "random_non_adaptive": {
+        "runs": 20,
+        "repetition_rate": 0.06,
+        "remediation_rate": 0.02
+      },
+      "topic_heuristic_baseline": {
+        "runs": 20,
+        "repetition_rate": 0.06,
+        "remediation_rate": 0.01
+      }
+    },
+    "euclidean_divergence": {
+      "mean": 14.2127,
+      "std": 0.0,
+      "zero_variance_explanation": "Deterministic difficulty response steps under synthetic candidate profiles yielded identical trajectories across all 10 seeds."
+    }
+  },
+  "EXP-5": {
+    "status": "VERIFIED",
+    "total_sessions": 70,
+    "condition_metrics": {
+      "full_system": {
+        "mean_score": 0.5067,
+        "mean_rho": 0.0206,
+        "mean_followups": 0.5,
+        "mean_timing_mod": 0.0
+      },
+      "minus_rl_adaptation": {
+        "mean_score": 0.5022,
+        "mean_rho": 0.0,
+        "mean_followups": 0.6,
+        "mean_timing_mod": 0.0
+      },
+      "minus_followup_probing": {
+        "mean_score": 0.5067,
+        "mean_rho": 0.0206,
+        "mean_followups": 0.0,
+        "mean_timing_mod": 0.0
+      },
+      "minus_formative_feedback": {
+        "mean_score": 0.5067,
+        "mean_rho": 0.0206,
+        "mean_followups": 0.5,
+        "mean_timing_mod": 0.0
+      },
+      "minus_timing_modulation": {
+        "mean_score": 0.5067,
+        "mean_rho": 0.0206,
+        "mean_followups": 0.5,
+        "mean_timing_mod": 0.0
+      },
+      "minus_speech_prosody": {
+        "mean_score": 0.5022,
+        "mean_rho": 0.0,
+        "mean_followups": 0.6,
+        "mean_timing_mod": 0.0
+      },
+      "minus_coding_contribution": {
+        "mean_score": 0.5067,
+        "mean_rho": 0.0206,
+        "mean_followups": 0.5,
+        "mean_timing_mod": 0.0
+      }
+    }
+  }
+}

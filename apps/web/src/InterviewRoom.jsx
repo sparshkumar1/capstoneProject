@@ -6,7 +6,7 @@ import DifficultyTracker from "./DifficultyTracker";
 import FeedbackCard from "./FeedbackCard";
 import { useInterviewWS } from "./useInterviewWS";
 import { useVoiceRecorder } from "./useVoiceRecorder";
-import { api } from "./servicesApi";
+import { api } from "./api";
 import InterviewerAvatar from "./InterviewerAvatar";
 import "./InterviewRoom.css";
 
@@ -486,7 +486,7 @@ export default function InterviewRoom({ navigate }) {
                     <span className="badge badge-neutral">{audioAnalysis.label || "—"}</span>
                   </div>
                   <div style={{ fontSize: 12, color: "var(--text-2)", display: "flex", flexDirection: "column", gap: 3 }}>
-                    <span>Speaking rate: {audioAnalysis?.transcription?.true_speaking_rate ?? 0} wps</span>
+                    <span>Speaking rate: {audioAnalysis?.transcription?.true_speaking_rate ?? 0} WPM</span>
                     <span>Pauses: {audioAnalysis?.transcription?.pause_count ?? 0}</span>
                     {audioAnalysis?.linguistic?.filler_count > 0 && (
                       <span style={{ color: "var(--warn)" }}>

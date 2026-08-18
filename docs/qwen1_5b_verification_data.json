@@ -1,0 +1,12 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "snapshot_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "hardware": "Local CPU (12 threads)",
+  "load_time_sec": 6.78,
+  "ram_usage_gb": 0.47,
+  "followup_latency_sec": 154.75,
+  "feedback_latency_sec": 193.44,
+  "followup_output": "Sure, I understand that you're using a hash map to solve the problem of finding two numbers in an array that add up to a given target value. However, could you explain how you calculate the",
+  "feedback_output": "1. **Actionable Feedback:** Ensure the candidate mentions both offset handling and TLB (Translation Lookaside Buffer) caching in their explanation of paging. This is crucial for efficient translation between virtual and physical addresses.\n\n2. **Actionable Feedback:** Clarify that paging involves more than just translating; it",
+  "status": "PASS"
+}

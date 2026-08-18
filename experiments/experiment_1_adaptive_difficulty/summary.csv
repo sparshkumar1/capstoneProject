@@ -1,0 +1,4 @@
+controller_id,mean_score,score_std,mean_adaptation_rho,adaptation_rho_std,mean_slope,slope_std,mean_oscillations,total_guardrail_overrides
+fixed_difficulty,0.4441,0.3941,0.0,0.0,0.0,0.0,0.0,0
+rule_based_heuristic,0.5797,0.3009,-0.2572,0.25,-0.005,0.0646,0.0,0
+ppo_adaptive,0.5123,0.3489,0.1572,0.2828,-0.0074,0.0227,3.08,0

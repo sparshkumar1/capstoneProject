@@ -1,0 +1,14 @@
+# PrepAIred Audio & WhisperX Pipeline Dependencies (CPU Default)
+# Install PyTorch CPU first: pip install torch torchaudio torchvision --index-url https://download.pytorch.org/whl/cpu
+
+soundfile>=0.12.1
+imageio-ffmpeg>=0.5.1
+praat-parselmouth>=0.4.3
+faster-whisper>=1.0.0
+whisperx>=3.1.0
+pyannote.audio>=3.1.0
+ctranslate2>=4.0.0
+transformers>=4.40.0,<5.0.0
+tokenizers>=0.19.0,<1.0.0
+nltk>=3.8.0
+scipy>=1.11.0

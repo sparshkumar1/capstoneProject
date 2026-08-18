@@ -1,2 +1,2 @@
-from .question_selector import QuestionSelector
-__all__ = ["QuestionSelector"]
+"""Question selector module."""
+__all__ = []

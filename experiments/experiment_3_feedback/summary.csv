@@ -1,0 +1,3 @@
+condition_id,mean_grounding_ratio,grounding_ratio_ci_95,mean_gap_coverage,mean_actionability_count
+generic_template,0.0,"[0.0, 0.0]",0.0,1.0
+structured_evaluator_recovery,0.0383,"[0.0059, 0.0919]",1.0,3.9

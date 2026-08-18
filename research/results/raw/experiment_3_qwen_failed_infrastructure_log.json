@@ -1,0 +1,17 @@
+{
+  "experiment_id": "EXP-3",
+  "condition": "qwen_7b_grounded_feedback",
+  "model_name": "Qwen/Qwen2.5-7B-Instruct",
+  "model_path": "models/qwen_7b/models--Qwen--Qwen2.5-7B-Instruct",
+  "timestamp": "2026-08-16T14:06:19.463504",
+  "status": "FAILED_INFRASTRUCTURE_DEPENDENCY",
+  "error_classification": "MISSING_MODEL_SHARDS_ON_DISK",
+  "error_details": {
+    "exception_type": "FileNotFoundError",
+    "missing_file": "models/qwen_7b/models--Qwen--Qwen2.5-7B-Instruct/snapshots/a09a35458c702b33eeacc393d103063234e8bc28/model-00001-of-00004.safetensors",
+    "disk_state": "Incomplete blob download present in models/qwen_7b/.../blobs/ (a1333e62...incomplete, 2.65 GB); full 15GB 7B sharded weights not present on disk in CPU environment."
+  },
+  "benchmark_items_targeted": 20,
+  "completed_evaluations": 0,
+  "fabrication_policy": "STRICT_NO_FABRICATION (mock or substitute model outputs are strictly prohibited by protocol)"
+}

@@ -1,0 +1,43 @@
+{
+  "experiment_id": "EXP-2",
+  "name": "Multi-Component Neural Evaluator Component Ablation Study",
+  "research_question": "Which components of the structured evaluator contribute to agreement with human ratings, and does the full multi-component evaluator provide measurable benefit over its individual components?",
+  "hypothesis": "Each component (S1 semantic similarity, S2 concept coverage, R CrossEncoder reasoning) contributes distinct, complementary signals, with the full multi-component combination providing calibrated scores closely aligned with human ratings while preventing keyword gaming.",
+  "dataset": {
+    "path": "ablation/data/ablation_answers.json",
+    "human_ratings_path": "ablation/results/ratings_averaged.csv",
+    "total_answers": 20,
+    "classification": "pilot_validation_study",
+    "quality_tiers": ["blank", "off_topic", "partial", "good"],
+    "topics": ["two_sum", "reverse_linked_list", "merge_sort", "memory_management"],
+    "human_raters_count": 3,
+    "inter_rater_alpha": 0.8255
+  },
+  "optional_expansion_protocol": {
+    "target_answers": 100,
+    "topics_covered": 13,
+    "status": "FUTURE_EXPANSION_PROTOCOL_DESIGNED"
+  },
+  "configurations": [
+    {"id": "s1_only", "name": "Surface Semantic Similarity Only (S1 Only)", "w_s1": 1.00, "w_s2": 0.00, "w_r": 0.00},
+    {"id": "s2_only", "name": "Concept Coverage Only (S2 Only)", "w_s1": 0.00, "w_s2": 1.00, "w_r": 0.00},
+    {"id": "r_only", "name": "Reasoning Entailment Only (R Only)", "w_s1": 0.00, "w_s2": 0.00, "w_r": 1.00},
+    {"id": "s1_plus_r", "name": "Surface + Reasoning (S1 + R)", "w_s1": 0.23, "w_s2": 0.00, "w_r": 0.77},
+    {"id": "s2_plus_r", "name": "Concept + Reasoning (S2 + R)", "w_s1": 0.00, "w_s2": 0.41, "w_r": 0.59},
+    {"id": "s1_plus_s2", "name": "Surface + Concept (S1 + S2)", "w_s1": 0.30, "w_s2": 0.70, "w_r": 0.00},
+    {"id": "full_pipeline", "name": "Full Multi-Component Pipeline (Paper)", "w_s1": 0.15, "w_s2": 0.35, "w_r": 0.50}
+  ],
+  "metrics": [
+    "spearman_rho",
+    "p_value",
+    "mean_absolute_error",
+    "root_mean_squared_error",
+    "rank_order_invariance_pass_rate"
+  ],
+  "statistical_plan": {
+    "correlation_test": "spearman_rank",
+    "difference_test": "fishers_z_transformation",
+    "alpha": 0.05
+  },
+  "execution_command": "python experiments/experiment_2_evaluation/runner.py --config experiments/experiment_2_evaluation/config.json"
+}

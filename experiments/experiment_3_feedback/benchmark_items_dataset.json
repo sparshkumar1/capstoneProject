@@ -1,0 +1,1172 @@
+[
+  {
+    "item_id": "pilot_1_qid1",
+    "qid": "1",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "answer": "",
+    "human_score": 0.0527,
+    "rubric": {
+      "qid": "1",
+      "topic": "Arrays",
+      "type": "logic_approach",
+      "logic_context": "The logic is to iterate through the array and for each element check whether the complement (target minus current value) has already been seen using a hash map.",
+      "logic_markers": {
+        "mandatory": [
+          "hash map for storing values",
+          "complement calculation (target - current)"
+        ],
+        "concept_groups": [
+          [
+            "single pass iteration",
+            "one loop traversal",
+            "iterate once through array"
+          ],
+          [
+            "store value-to-index mapping",
+            "check complement existence"
+          ]
+        ],
+        "advanced_bonus": [
+          "O(n) time complexity with O(n) space trade-off",
+          "insert element into map AFTER checking complement to handle edge cases like target=2*element",
+          "handles duplicate elements correctly by checking before inserting",
+          "index stored in map not value (avoid overwriting)",
+          "explains why O(n\u00b2) brute force uses no extra space vs this approach",
+          "extends to two-sum on sorted array using two-pointer in O(1) space",
+          "handles case where same element cannot be used twice"
+        ]
+      },
+      "semantic_targets": [
+        "Two-sum uses complement lookup",
+        "Hashing enables constant-time checks",
+        "Return indices not values",
+        "hash map enables O(1) complement lookup replacing inner loop",
+        "insert element into map AFTER checking complement \u2014 ensures you do not match element with itself"
+      ],
+      "common_mistakes": [
+        "Using nested loops only",
+        "Returning values instead of indices",
+        "Not handling duplicate values correctly",
+        "inserts before checking complement \u2014 matches element with itself",
+        "stores value instead of index in hash map \u2014 cannot return correct indices",
+        "uses nested loops instead of hashing \u2014 O(n\u00b2) not O(n)"
+      ],
+      "evaluation_rubric": {
+        "focus": "Efficient logic using hashing"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_2_qid1",
+    "qid": "1",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "answer": "I usually start by sorting arrays because sorted data is clean to read, and then I print all values to verify input formatting before coding.",
+    "human_score": 0.1811,
+    "rubric": {
+      "qid": "1",
+      "topic": "Arrays",
+      "type": "logic_approach",
+      "logic_context": "The logic is to iterate through the array and for each element check whether the complement (target minus current value) has already been seen using a hash map.",
+      "logic_markers": {
+        "mandatory": [
+          "hash map for storing values",
+          "complement calculation (target - current)"
+        ],
+        "concept_groups": [
+          [
+            "single pass iteration",
+            "one loop traversal",
+            "iterate once through array"
+          ],
+          [
+            "store value-to-index mapping",
+            "check complement existence"
+          ]
+        ],
+        "advanced_bonus": [
+          "O(n) time complexity with O(n) space trade-off",
+          "insert element into map AFTER checking complement to handle edge cases like target=2*element",
+          "handles duplicate elements correctly by checking before inserting",
+          "index stored in map not value (avoid overwriting)",
+          "explains why O(n\u00b2) brute force uses no extra space vs this approach",
+          "extends to two-sum on sorted array using two-pointer in O(1) space",
+          "handles case where same element cannot be used twice"
+        ]
+      },
+      "semantic_targets": [
+        "Two-sum uses complement lookup",
+        "Hashing enables constant-time checks",
+        "Return indices not values",
+        "hash map enables O(1) complement lookup replacing inner loop",
+        "insert element into map AFTER checking complement \u2014 ensures you do not match element with itself"
+      ],
+      "common_mistakes": [
+        "Using nested loops only",
+        "Returning values instead of indices",
+        "Not handling duplicate values correctly",
+        "inserts before checking complement \u2014 matches element with itself",
+        "stores value instead of index in hash map \u2014 cannot return correct indices",
+        "uses nested loops instead of hashing \u2014 O(n\u00b2) not O(n)"
+      ],
+      "evaluation_rubric": {
+        "focus": "Efficient logic using hashing"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_3_qid1",
+    "qid": "1",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "answer": "One way is to check each pair and stop when the sum matches the target. That is correct but it is O(n squared), so it can be slow on large arrays.",
+    "human_score": 0.5455,
+    "rubric": {
+      "qid": "1",
+      "topic": "Arrays",
+      "type": "logic_approach",
+      "logic_context": "The logic is to iterate through the array and for each element check whether the complement (target minus current value) has already been seen using a hash map.",
+      "logic_markers": {
+        "mandatory": [
+          "hash map for storing values",
+          "complement calculation (target - current)"
+        ],
+        "concept_groups": [
+          [
+            "single pass iteration",
+            "one loop traversal",
+            "iterate once through array"
+          ],
+          [
+            "store value-to-index mapping",
+            "check complement existence"
+          ]
+        ],
+        "advanced_bonus": [
+          "O(n) time complexity with O(n) space trade-off",
+          "insert element into map AFTER checking complement to handle edge cases like target=2*element",
+          "handles duplicate elements correctly by checking before inserting",
+          "index stored in map not value (avoid overwriting)",
+          "explains why O(n\u00b2) brute force uses no extra space vs this approach",
+          "extends to two-sum on sorted array using two-pointer in O(1) space",
+          "handles case where same element cannot be used twice"
+        ]
+      },
+      "semantic_targets": [
+        "Two-sum uses complement lookup",
+        "Hashing enables constant-time checks",
+        "Return indices not values",
+        "hash map enables O(1) complement lookup replacing inner loop",
+        "insert element into map AFTER checking complement \u2014 ensures you do not match element with itself"
+      ],
+      "common_mistakes": [
+        "Using nested loops only",
+        "Returning values instead of indices",
+        "Not handling duplicate values correctly",
+        "inserts before checking complement \u2014 matches element with itself",
+        "stores value instead of index in hash map \u2014 cannot return correct indices",
+        "uses nested loops instead of hashing \u2014 O(n\u00b2) not O(n)"
+      ],
+      "evaluation_rubric": {
+        "focus": "Efficient logic using hashing"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_4_qid1",
+    "qid": "1",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "answer": "I keep a dictionary of seen numbers and their positions while scanning left to right. For each value I compute target minus value and check if it was seen. I might need care with duplicates and whethe",
+    "human_score": 0.5476,
+    "rubric": {
+      "qid": "1",
+      "topic": "Arrays",
+      "type": "logic_approach",
+      "logic_context": "The logic is to iterate through the array and for each element check whether the complement (target minus current value) has already been seen using a hash map.",
+      "logic_markers": {
+        "mandatory": [
+          "hash map for storing values",
+          "complement calculation (target - current)"
+        ],
+        "concept_groups": [
+          [
+            "single pass iteration",
+            "one loop traversal",
+            "iterate once through array"
+          ],
+          [
+            "store value-to-index mapping",
+            "check complement existence"
+          ]
+        ],
+        "advanced_bonus": [
+          "O(n) time complexity with O(n) space trade-off",
+          "insert element into map AFTER checking complement to handle edge cases like target=2*element",
+          "handles duplicate elements correctly by checking before inserting",
+          "index stored in map not value (avoid overwriting)",
+          "explains why O(n\u00b2) brute force uses no extra space vs this approach",
+          "extends to two-sum on sorted array using two-pointer in O(1) space",
+          "handles case where same element cannot be used twice"
+        ]
+      },
+      "semantic_targets": [
+        "Two-sum uses complement lookup",
+        "Hashing enables constant-time checks",
+        "Return indices not values",
+        "hash map enables O(1) complement lookup replacing inner loop",
+        "insert element into map AFTER checking complement \u2014 ensures you do not match element with itself"
+      ],
+      "common_mistakes": [
+        "Using nested loops only",
+        "Returning values instead of indices",
+        "Not handling duplicate values correctly",
+        "inserts before checking complement \u2014 matches element with itself",
+        "stores value instead of index in hash map \u2014 cannot return correct indices",
+        "uses nested loops instead of hashing \u2014 O(n\u00b2) not O(n)"
+      ],
+      "evaluation_rubric": {
+        "focus": "Efficient logic using hashing"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_5_qid1",
+    "qid": "1",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "answer": "Use one pass with a hash table from number to index. At index i with value x, compute need = target - x and check whether need is already in the table. If yes, return that stored index and i. If no, s",
+    "human_score": 0.9124,
+    "rubric": {
+      "qid": "1",
+      "topic": "Arrays",
+      "type": "logic_approach",
+      "logic_context": "The logic is to iterate through the array and for each element check whether the complement (target minus current value) has already been seen using a hash map.",
+      "logic_markers": {
+        "mandatory": [
+          "hash map for storing values",
+          "complement calculation (target - current)"
+        ],
+        "concept_groups": [
+          [
+            "single pass iteration",
+            "one loop traversal",
+            "iterate once through array"
+          ],
+          [
+            "store value-to-index mapping",
+            "check complement existence"
+          ]
+        ],
+        "advanced_bonus": [
+          "O(n) time complexity with O(n) space trade-off",
+          "insert element into map AFTER checking complement to handle edge cases like target=2*element",
+          "handles duplicate elements correctly by checking before inserting",
+          "index stored in map not value (avoid overwriting)",
+          "explains why O(n\u00b2) brute force uses no extra space vs this approach",
+          "extends to two-sum on sorted array using two-pointer in O(1) space",
+          "handles case where same element cannot be used twice"
+        ]
+      },
+      "semantic_targets": [
+        "Two-sum uses complement lookup",
+        "Hashing enables constant-time checks",
+        "Return indices not values",
+        "hash map enables O(1) complement lookup replacing inner loop",
+        "insert element into map AFTER checking complement \u2014 ensures you do not match element with itself"
+      ],
+      "common_mistakes": [
+        "Using nested loops only",
+        "Returning values instead of indices",
+        "Not handling duplicate values correctly",
+        "inserts before checking complement \u2014 matches element with itself",
+        "stores value instead of index in hash map \u2014 cannot return correct indices",
+        "uses nested loops instead of hashing \u2014 O(n\u00b2) not O(n)"
+      ],
+      "evaluation_rubric": {
+        "focus": "Efficient logic using hashing"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_6_qid3",
+    "qid": "3",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "answer": "I am not sure.",
+    "human_score": 0.0535,
+    "rubric": {
+      "qid": "3",
+      "topic": "LinkedLists",
+      "type": "logic_approach",
+      "logic_context": "The list is reversed by iterating once and changing each node's next pointer to point to the previous node using three pointers: previous, current, and next.",
+      "logic_markers": {
+        "mandatory": [
+          "reverse next pointers",
+          "three pointers (prev, curr, next)"
+        ],
+        "concept_groups": [
+          [
+            "store next node before changing pointer",
+            "move pointers forward"
+          ],
+          [
+            "initialize prev as null",
+            "return new head"
+          ]
+        ],
+        "advanced_bonus": [
+          "saving next node before overwriting pointer is essential \u2014 losing it breaks traversal",
+          "prev initialized to NULL because the original head becomes the new tail",
+          "final return is prev not curr \u2014 curr is NULL when loop ends",
+          "recursive approach is elegant but uses O(n) call stack space",
+          "in-place means O(1) extra space \u2014 no new nodes created",
+          "handles single-node list and empty list correctly"
+        ]
+      },
+      "semantic_targets": [
+        "Pointers are reversed in-place",
+        "No new nodes are created",
+        "Original head becomes tail",
+        "three pointers are the minimum needed: previous (target), current (working), next (save)",
+        "loop invariant: after k iterations, first k nodes are reversed and prev points to the kth node"
+      ],
+      "common_mistakes": [
+        "Losing the next node reference",
+        "Creating a new linked list",
+        "Not returning correct new head",
+        "forgets to save next pointer before overwriting curr->next \u2014 loses rest of list",
+        "returns curr instead of prev at the end \u2014 curr is NULL after the loop",
+        "initializes prev to head instead of NULL \u2014 creates a cycle in the reversed list"
+      ],
+      "evaluation_rubric": {
+        "focus": "Pointer manipulation correctness"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_7_qid3",
+    "qid": "3",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "answer": "Linked lists are useful in interviews because insertion is easier than arrays in some cases, and memory can be dynamic.",
+    "human_score": 0.1766,
+    "rubric": {
+      "qid": "3",
+      "topic": "LinkedLists",
+      "type": "logic_approach",
+      "logic_context": "The list is reversed by iterating once and changing each node's next pointer to point to the previous node using three pointers: previous, current, and next.",
+      "logic_markers": {
+        "mandatory": [
+          "reverse next pointers",
+          "three pointers (prev, curr, next)"
+        ],
+        "concept_groups": [
+          [
+            "store next node before changing pointer",
+            "move pointers forward"
+          ],
+          [
+            "initialize prev as null",
+            "return new head"
+          ]
+        ],
+        "advanced_bonus": [
+          "saving next node before overwriting pointer is essential \u2014 losing it breaks traversal",
+          "prev initialized to NULL because the original head becomes the new tail",
+          "final return is prev not curr \u2014 curr is NULL when loop ends",
+          "recursive approach is elegant but uses O(n) call stack space",
+          "in-place means O(1) extra space \u2014 no new nodes created",
+          "handles single-node list and empty list correctly"
+        ]
+      },
+      "semantic_targets": [
+        "Pointers are reversed in-place",
+        "No new nodes are created",
+        "Original head becomes tail",
+        "three pointers are the minimum needed: previous (target), current (working), next (save)",
+        "loop invariant: after k iterations, first k nodes are reversed and prev points to the kth node"
+      ],
+      "common_mistakes": [
+        "Losing the next node reference",
+        "Creating a new linked list",
+        "Not returning correct new head",
+        "forgets to save next pointer before overwriting curr->next \u2014 loses rest of list",
+        "returns curr instead of prev at the end \u2014 curr is NULL after the loop",
+        "initializes prev to head instead of NULL \u2014 creates a cycle in the reversed list"
+      ],
+      "evaluation_rubric": {
+        "focus": "Pointer manipulation correctness"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_8_qid3",
+    "qid": "3",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "answer": "You can walk through nodes and point each node backward instead of forward. At the end the last node becomes the new head.",
+    "human_score": 0.545,
+    "rubric": {
+      "qid": "3",
+      "topic": "LinkedLists",
+      "type": "logic_approach",
+      "logic_context": "The list is reversed by iterating once and changing each node's next pointer to point to the previous node using three pointers: previous, current, and next.",
+      "logic_markers": {
+        "mandatory": [
+          "reverse next pointers",
+          "three pointers (prev, curr, next)"
+        ],
+        "concept_groups": [
+          [
+            "store next node before changing pointer",
+            "move pointers forward"
+          ],
+          [
+            "initialize prev as null",
+            "return new head"
+          ]
+        ],
+        "advanced_bonus": [
+          "saving next node before overwriting pointer is essential \u2014 losing it breaks traversal",
+          "prev initialized to NULL because the original head becomes the new tail",
+          "final return is prev not curr \u2014 curr is NULL when loop ends",
+          "recursive approach is elegant but uses O(n) call stack space",
+          "in-place means O(1) extra space \u2014 no new nodes created",
+          "handles single-node list and empty list correctly"
+        ]
+      },
+      "semantic_targets": [
+        "Pointers are reversed in-place",
+        "No new nodes are created",
+        "Original head becomes tail",
+        "three pointers are the minimum needed: previous (target), current (working), next (save)",
+        "loop invariant: after k iterations, first k nodes are reversed and prev points to the kth node"
+      ],
+      "common_mistakes": [
+        "Losing the next node reference",
+        "Creating a new linked list",
+        "Not returning correct new head",
+        "forgets to save next pointer before overwriting curr->next \u2014 loses rest of list",
+        "returns curr instead of prev at the end \u2014 curr is NULL after the loop",
+        "initializes prev to head instead of NULL \u2014 creates a cycle in the reversed list"
+      ],
+      "evaluation_rubric": {
+        "focus": "Pointer manipulation correctness"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_9_qid3",
+    "qid": "3",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "answer": "Maintain three references: previous, current, and next_node. While current is not null, first save next_node = current.next, then redirect current.next to previous, move previous to current, and move ",
+    "human_score": 0.9169,
+    "rubric": {
+      "qid": "3",
+      "topic": "LinkedLists",
+      "type": "logic_approach",
+      "logic_context": "The list is reversed by iterating once and changing each node's next pointer to point to the previous node using three pointers: previous, current, and next.",
+      "logic_markers": {
+        "mandatory": [
+          "reverse next pointers",
+          "three pointers (prev, curr, next)"
+        ],
+        "concept_groups": [
+          [
+            "store next node before changing pointer",
+            "move pointers forward"
+          ],
+          [
+            "initialize prev as null",
+            "return new head"
+          ]
+        ],
+        "advanced_bonus": [
+          "saving next node before overwriting pointer is essential \u2014 losing it breaks traversal",
+          "prev initialized to NULL because the original head becomes the new tail",
+          "final return is prev not curr \u2014 curr is NULL when loop ends",
+          "recursive approach is elegant but uses O(n) call stack space",
+          "in-place means O(1) extra space \u2014 no new nodes created",
+          "handles single-node list and empty list correctly"
+        ]
+      },
+      "semantic_targets": [
+        "Pointers are reversed in-place",
+        "No new nodes are created",
+        "Original head becomes tail",
+        "three pointers are the minimum needed: previous (target), current (working), next (save)",
+        "loop invariant: after k iterations, first k nodes are reversed and prev points to the kth node"
+      ],
+      "common_mistakes": [
+        "Losing the next node reference",
+        "Creating a new linked list",
+        "Not returning correct new head",
+        "forgets to save next pointer before overwriting curr->next \u2014 loses rest of list",
+        "returns curr instead of prev at the end \u2014 curr is NULL after the loop",
+        "initializes prev to head instead of NULL \u2014 creates a cycle in the reversed list"
+      ],
+      "evaluation_rubric": {
+        "focus": "Pointer manipulation correctness"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_10_qid3",
+    "qid": "3",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "answer": "Start with prev = null and curr = head. Repeatedly detach curr from the forward chain by caching curr.next, then attach curr to the reversed prefix by setting curr.next = prev. Shift both pointers for",
+    "human_score": 0.8658,
+    "rubric": {
+      "qid": "3",
+      "topic": "LinkedLists",
+      "type": "logic_approach",
+      "logic_context": "The list is reversed by iterating once and changing each node's next pointer to point to the previous node using three pointers: previous, current, and next.",
+      "logic_markers": {
+        "mandatory": [
+          "reverse next pointers",
+          "three pointers (prev, curr, next)"
+        ],
+        "concept_groups": [
+          [
+            "store next node before changing pointer",
+            "move pointers forward"
+          ],
+          [
+            "initialize prev as null",
+            "return new head"
+          ]
+        ],
+        "advanced_bonus": [
+          "saving next node before overwriting pointer is essential \u2014 losing it breaks traversal",
+          "prev initialized to NULL because the original head becomes the new tail",
+          "final return is prev not curr \u2014 curr is NULL when loop ends",
+          "recursive approach is elegant but uses O(n) call stack space",
+          "in-place means O(1) extra space \u2014 no new nodes created",
+          "handles single-node list and empty list correctly"
+        ]
+      },
+      "semantic_targets": [
+        "Pointers are reversed in-place",
+        "No new nodes are created",
+        "Original head becomes tail",
+        "three pointers are the minimum needed: previous (target), current (working), next (save)",
+        "loop invariant: after k iterations, first k nodes are reversed and prev points to the kth node"
+      ],
+      "common_mistakes": [
+        "Losing the next node reference",
+        "Creating a new linked list",
+        "Not returning correct new head",
+        "forgets to save next pointer before overwriting curr->next \u2014 loses rest of list",
+        "returns curr instead of prev at the end \u2014 curr is NULL after the loop",
+        "initializes prev to head instead of NULL \u2014 creates a cycle in the reversed list"
+      ],
+      "evaluation_rubric": {
+        "focus": "Pointer manipulation correctness"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_11_qid10",
+    "qid": "10",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "answer": "",
+    "human_score": 0.043,
+    "rubric": {
+      "qid": "10",
+      "topic": "Trees",
+      "type": "logic_approach",
+      "logic_context": "BFS traversal processes a binary tree level by level using a queue to ensure nodes are visited in breadth-first order (all nodes at depth d before any node at depth d+1).",
+      "logic_markers": {
+        "mandatory": [
+          "queue for level-by-level traversal",
+          "enqueue children of current node"
+        ],
+        "concept_groups": [
+          [
+            "dequeue node and process",
+            "enqueue left then right child"
+          ],
+          [
+            "FIFO order ensures level order",
+            "continue until queue is empty"
+          ]
+        ],
+        "advanced_bonus": [
+          "queue FIFO property ensures level-order \u2014 stack would give DFS instead",
+          "level separation tracked by recording queue size before processing each level",
+          "O(n) time and O(w) space where w is maximum width of tree",
+          "worst-case space is O(n/2) for complete binary tree at last level",
+          "null nodes should not be enqueued \u2014 check before pushing children",
+          "can be extended to zigzag level order by alternating direction per level"
+        ]
+      },
+      "semantic_targets": [
+        "Queue enables breadth-first traversal",
+        "Nodes are visited level by level",
+        "FIFO property maintains correct order",
+        "queue FIFO guarantees all nodes at depth d are processed before depth d+1",
+        "level separation can be tracked by queue size at start of each level iteration"
+      ],
+      "common_mistakes": [
+        "Confusing BFS with DFS",
+        "Not handling null nodes properly",
+        "uses stack instead of queue \u2014 gets DFS traversal not BFS",
+        "enqueues null children \u2014 null pointer dereference when dequeuing",
+        "confuses BFS with in-order/pre-order traversal of trees"
+      ],
+      "evaluation_rubric": {
+        "focus": "Traversal order understanding"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_12_qid10",
+    "qid": "10",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "answer": "Binary trees are recursive structures and I usually draw them before coding because recursion can be tricky in interviews.",
+    "human_score": 0.2035,
+    "rubric": {
+      "qid": "10",
+      "topic": "Trees",
+      "type": "logic_approach",
+      "logic_context": "BFS traversal processes a binary tree level by level using a queue to ensure nodes are visited in breadth-first order (all nodes at depth d before any node at depth d+1).",
+      "logic_markers": {
+        "mandatory": [
+          "queue for level-by-level traversal",
+          "enqueue children of current node"
+        ],
+        "concept_groups": [
+          [
+            "dequeue node and process",
+            "enqueue left then right child"
+          ],
+          [
+            "FIFO order ensures level order",
+            "continue until queue is empty"
+          ]
+        ],
+        "advanced_bonus": [
+          "queue FIFO property ensures level-order \u2014 stack would give DFS instead",
+          "level separation tracked by recording queue size before processing each level",
+          "O(n) time and O(w) space where w is maximum width of tree",
+          "worst-case space is O(n/2) for complete binary tree at last level",
+          "null nodes should not be enqueued \u2014 check before pushing children",
+          "can be extended to zigzag level order by alternating direction per level"
+        ]
+      },
+      "semantic_targets": [
+        "Queue enables breadth-first traversal",
+        "Nodes are visited level by level",
+        "FIFO property maintains correct order",
+        "queue FIFO guarantees all nodes at depth d are processed before depth d+1",
+        "level separation can be tracked by queue size at start of each level iteration"
+      ],
+      "common_mistakes": [
+        "Confusing BFS with DFS",
+        "Not handling null nodes properly",
+        "uses stack instead of queue \u2014 gets DFS traversal not BFS",
+        "enqueues null children \u2014 null pointer dereference when dequeuing",
+        "confuses BFS with in-order/pre-order traversal of trees"
+      ],
+      "evaluation_rubric": {
+        "focus": "Traversal order understanding"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_13_qid10",
+    "qid": "10",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "answer": "DFS preorder and inorder traversals are popular and can be implemented using recursion with base case checks.",
+    "human_score": 0.2005,
+    "rubric": {
+      "qid": "10",
+      "topic": "Trees",
+      "type": "logic_approach",
+      "logic_context": "BFS traversal processes a binary tree level by level using a queue to ensure nodes are visited in breadth-first order (all nodes at depth d before any node at depth d+1).",
+      "logic_markers": {
+        "mandatory": [
+          "queue for level-by-level traversal",
+          "enqueue children of current node"
+        ],
+        "concept_groups": [
+          [
+            "dequeue node and process",
+            "enqueue left then right child"
+          ],
+          [
+            "FIFO order ensures level order",
+            "continue until queue is empty"
+          ]
+        ],
+        "advanced_bonus": [
+          "queue FIFO property ensures level-order \u2014 stack would give DFS instead",
+          "level separation tracked by recording queue size before processing each level",
+          "O(n) time and O(w) space where w is maximum width of tree",
+          "worst-case space is O(n/2) for complete binary tree at last level",
+          "null nodes should not be enqueued \u2014 check before pushing children",
+          "can be extended to zigzag level order by alternating direction per level"
+        ]
+      },
+      "semantic_targets": [
+        "Queue enables breadth-first traversal",
+        "Nodes are visited level by level",
+        "FIFO property maintains correct order",
+        "queue FIFO guarantees all nodes at depth d are processed before depth d+1",
+        "level separation can be tracked by queue size at start of each level iteration"
+      ],
+      "common_mistakes": [
+        "Confusing BFS with DFS",
+        "Not handling null nodes properly",
+        "uses stack instead of queue \u2014 gets DFS traversal not BFS",
+        "enqueues null children \u2014 null pointer dereference when dequeuing",
+        "confuses BFS with in-order/pre-order traversal of trees"
+      ],
+      "evaluation_rubric": {
+        "focus": "Traversal order understanding"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_14_qid10",
+    "qid": "10",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "answer": "Visit nodes level by level from top to bottom. You process the root first, then children, then grandchildren in that order.",
+    "human_score": 0.5615,
+    "rubric": {
+      "qid": "10",
+      "topic": "Trees",
+      "type": "logic_approach",
+      "logic_context": "BFS traversal processes a binary tree level by level using a queue to ensure nodes are visited in breadth-first order (all nodes at depth d before any node at depth d+1).",
+      "logic_markers": {
+        "mandatory": [
+          "queue for level-by-level traversal",
+          "enqueue children of current node"
+        ],
+        "concept_groups": [
+          [
+            "dequeue node and process",
+            "enqueue left then right child"
+          ],
+          [
+            "FIFO order ensures level order",
+            "continue until queue is empty"
+          ]
+        ],
+        "advanced_bonus": [
+          "queue FIFO property ensures level-order \u2014 stack would give DFS instead",
+          "level separation tracked by recording queue size before processing each level",
+          "O(n) time and O(w) space where w is maximum width of tree",
+          "worst-case space is O(n/2) for complete binary tree at last level",
+          "null nodes should not be enqueued \u2014 check before pushing children",
+          "can be extended to zigzag level order by alternating direction per level"
+        ]
+      },
+      "semantic_targets": [
+        "Queue enables breadth-first traversal",
+        "Nodes are visited level by level",
+        "FIFO property maintains correct order",
+        "queue FIFO guarantees all nodes at depth d are processed before depth d+1",
+        "level separation can be tracked by queue size at start of each level iteration"
+      ],
+      "common_mistakes": [
+        "Confusing BFS with DFS",
+        "Not handling null nodes properly",
+        "uses stack instead of queue \u2014 gets DFS traversal not BFS",
+        "enqueues null children \u2014 null pointer dereference when dequeuing",
+        "confuses BFS with in-order/pre-order traversal of trees"
+      ],
+      "evaluation_rubric": {
+        "focus": "Traversal order understanding"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_15_qid10",
+    "qid": "10",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "answer": "Use a queue. Enqueue the root, then loop until the queue is empty: dequeue one node, record it, and enqueue its left child and right child when present. Because the queue is FIFO, nodes from shallower",
+    "human_score": 0.8639,
+    "rubric": {
+      "qid": "10",
+      "topic": "Trees",
+      "type": "logic_approach",
+      "logic_context": "BFS traversal processes a binary tree level by level using a queue to ensure nodes are visited in breadth-first order (all nodes at depth d before any node at depth d+1).",
+      "logic_markers": {
+        "mandatory": [
+          "queue for level-by-level traversal",
+          "enqueue children of current node"
+        ],
+        "concept_groups": [
+          [
+            "dequeue node and process",
+            "enqueue left then right child"
+          ],
+          [
+            "FIFO order ensures level order",
+            "continue until queue is empty"
+          ]
+        ],
+        "advanced_bonus": [
+          "queue FIFO property ensures level-order \u2014 stack would give DFS instead",
+          "level separation tracked by recording queue size before processing each level",
+          "O(n) time and O(w) space where w is maximum width of tree",
+          "worst-case space is O(n/2) for complete binary tree at last level",
+          "null nodes should not be enqueued \u2014 check before pushing children",
+          "can be extended to zigzag level order by alternating direction per level"
+        ]
+      },
+      "semantic_targets": [
+        "Queue enables breadth-first traversal",
+        "Nodes are visited level by level",
+        "FIFO property maintains correct order",
+        "queue FIFO guarantees all nodes at depth d are processed before depth d+1",
+        "level separation can be tracked by queue size at start of each level iteration"
+      ],
+      "common_mistakes": [
+        "Confusing BFS with DFS",
+        "Not handling null nodes properly",
+        "uses stack instead of queue \u2014 gets DFS traversal not BFS",
+        "enqueues null children \u2014 null pointer dereference when dequeuing",
+        "confuses BFS with in-order/pre-order traversal of trees"
+      ],
+      "evaluation_rubric": {
+        "focus": "Traversal order understanding"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.65
+      }
+    }
+  },
+  {
+    "item_id": "pilot_16_qid41",
+    "qid": "41",
+    "question": "What is a pointer in C and how do you declare one?",
+    "answer": "I don't remember this one.",
+    "human_score": 0.0595,
+    "rubric": {
+      "qid": "41",
+      "topic": "C_Programming",
+      "type": "general_tech",
+      "logic_context": "A pointer is a variable that stores the memory address of another variable. It is declared using the asterisk (*) operator and provides indirect access to data.",
+      "logic_markers": {
+        "mandatory": [
+          "stores memory address of another variable",
+          "declared using asterisk (*)"
+        ],
+        "concept_groups": [
+          [
+            "address-of operator (&)",
+            "dereferencing operator (*)"
+          ],
+          [
+            "indirect access to data",
+            "pointer variable declaration"
+          ]
+        ],
+        "advanced_bonus": [
+          "pointer arithmetic: incrementing by 1 moves by sizeof(type) bytes",
+          "void* pointer can hold any address but must be cast before dereferencing",
+          "pointer to pointer (**) enables modifying a pointer from a function",
+          "NULL pointer should be checked before dereferencing",
+          "array name decays to pointer to first element in most expressions"
+        ]
+      },
+      "semantic_targets": [
+        "Pointers refer to memory locations not values",
+        "Pointers enable indirect access and modification",
+        "& gets address, * dereferences",
+        "pointer stores address not value \u2014 dereference with * to access the value"
+      ],
+      "common_mistakes": [
+        "Confusing pointer with the value it points to",
+        "Incorrect declaration syntax (int *p vs int* p)",
+        "Not initializing pointers before use",
+        "declares pointer without initializing \u2014 undefined behavior on dereference",
+        "confuses * in declaration (pointer type) with * in expression (dereference)"
+      ],
+      "evaluation_rubric": {
+        "focus": "Basic pointer understanding"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.75
+      }
+    }
+  },
+  {
+    "item_id": "pilot_17_qid41",
+    "qid": "41",
+    "question": "What is a pointer in C and how do you declare one?",
+    "answer": "",
+    "human_score": 0.0537,
+    "rubric": {
+      "qid": "41",
+      "topic": "C_Programming",
+      "type": "general_tech",
+      "logic_context": "A pointer is a variable that stores the memory address of another variable. It is declared using the asterisk (*) operator and provides indirect access to data.",
+      "logic_markers": {
+        "mandatory": [
+          "stores memory address of another variable",
+          "declared using asterisk (*)"
+        ],
+        "concept_groups": [
+          [
+            "address-of operator (&)",
+            "dereferencing operator (*)"
+          ],
+          [
+            "indirect access to data",
+            "pointer variable declaration"
+          ]
+        ],
+        "advanced_bonus": [
+          "pointer arithmetic: incrementing by 1 moves by sizeof(type) bytes",
+          "void* pointer can hold any address but must be cast before dereferencing",
+          "pointer to pointer (**) enables modifying a pointer from a function",
+          "NULL pointer should be checked before dereferencing",
+          "array name decays to pointer to first element in most expressions"
+        ]
+      },
+      "semantic_targets": [
+        "Pointers refer to memory locations not values",
+        "Pointers enable indirect access and modification",
+        "& gets address, * dereferences",
+        "pointer stores address not value \u2014 dereference with * to access the value"
+      ],
+      "common_mistakes": [
+        "Confusing pointer with the value it points to",
+        "Incorrect declaration syntax (int *p vs int* p)",
+        "Not initializing pointers before use",
+        "declares pointer without initializing \u2014 undefined behavior on dereference",
+        "confuses * in declaration (pointer type) with * in expression (dereference)"
+      ],
+      "evaluation_rubric": {
+        "focus": "Basic pointer understanding"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.75
+      }
+    }
+  },
+  {
+    "item_id": "pilot_18_qid41",
+    "qid": "41",
+    "question": "What is a pointer in C and how do you declare one?",
+    "answer": "In C we have loops, arrays, and functions, and memory usage should be optimized for performance and embedded systems.",
+    "human_score": 0.2159,
+    "rubric": {
+      "qid": "41",
+      "topic": "C_Programming",
+      "type": "general_tech",
+      "logic_context": "A pointer is a variable that stores the memory address of another variable. It is declared using the asterisk (*) operator and provides indirect access to data.",
+      "logic_markers": {
+        "mandatory": [
+          "stores memory address of another variable",
+          "declared using asterisk (*)"
+        ],
+        "concept_groups": [
+          [
+            "address-of operator (&)",
+            "dereferencing operator (*)"
+          ],
+          [
+            "indirect access to data",
+            "pointer variable declaration"
+          ]
+        ],
+        "advanced_bonus": [
+          "pointer arithmetic: incrementing by 1 moves by sizeof(type) bytes",
+          "void* pointer can hold any address but must be cast before dereferencing",
+          "pointer to pointer (**) enables modifying a pointer from a function",
+          "NULL pointer should be checked before dereferencing",
+          "array name decays to pointer to first element in most expressions"
+        ]
+      },
+      "semantic_targets": [
+        "Pointers refer to memory locations not values",
+        "Pointers enable indirect access and modification",
+        "& gets address, * dereferences",
+        "pointer stores address not value \u2014 dereference with * to access the value"
+      ],
+      "common_mistakes": [
+        "Confusing pointer with the value it points to",
+        "Incorrect declaration syntax (int *p vs int* p)",
+        "Not initializing pointers before use",
+        "declares pointer without initializing \u2014 undefined behavior on dereference",
+        "confuses * in declaration (pointer type) with * in expression (dereference)"
+      ],
+      "evaluation_rubric": {
+        "focus": "Basic pointer understanding"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.75
+      }
+    }
+  },
+  {
+    "item_id": "pilot_19_qid41",
+    "qid": "41",
+    "question": "What is a pointer in C and how do you declare one?",
+    "answer": "A pointer stores an address rather than a direct value. You can declare one with syntax like int *p, and then assign it from the address of a variable.",
+    "human_score": 0.5353,
+    "rubric": {
+      "qid": "41",
+      "topic": "C_Programming",
+      "type": "general_tech",
+      "logic_context": "A pointer is a variable that stores the memory address of another variable. It is declared using the asterisk (*) operator and provides indirect access to data.",
+      "logic_markers": {
+        "mandatory": [
+          "stores memory address of another variable",
+          "declared using asterisk (*)"
+        ],
+        "concept_groups": [
+          [
+            "address-of operator (&)",
+            "dereferencing operator (*)"
+          ],
+          [
+            "indirect access to data",
+            "pointer variable declaration"
+          ]
+        ],
+        "advanced_bonus": [
+          "pointer arithmetic: incrementing by 1 moves by sizeof(type) bytes",
+          "void* pointer can hold any address but must be cast before dereferencing",
+          "pointer to pointer (**) enables modifying a pointer from a function",
+          "NULL pointer should be checked before dereferencing",
+          "array name decays to pointer to first element in most expressions"
+        ]
+      },
+      "semantic_targets": [
+        "Pointers refer to memory locations not values",
+        "Pointers enable indirect access and modification",
+        "& gets address, * dereferences",
+        "pointer stores address not value \u2014 dereference with * to access the value"
+      ],
+      "common_mistakes": [
+        "Confusing pointer with the value it points to",
+        "Incorrect declaration syntax (int *p vs int* p)",
+        "Not initializing pointers before use",
+        "declares pointer without initializing \u2014 undefined behavior on dereference",
+        "confuses * in declaration (pointer type) with * in expression (dereference)"
+      ],
+      "evaluation_rubric": {
+        "focus": "Basic pointer understanding"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.75
+      }
+    }
+  },
+  {
+    "item_id": "pilot_20_qid41",
+    "qid": "41",
+    "question": "What is a pointer in C and how do you declare one?",
+    "answer": "A pointer is a variable that holds a memory location of another object. For example, int *p declares a pointer to int. If int x = 7, then p = &x stores x's address, and *p reads or writes the value at",
+    "human_score": 0.8921,
+    "rubric": {
+      "qid": "41",
+      "topic": "C_Programming",
+      "type": "general_tech",
+      "logic_context": "A pointer is a variable that stores the memory address of another variable. It is declared using the asterisk (*) operator and provides indirect access to data.",
+      "logic_markers": {
+        "mandatory": [
+          "stores memory address of another variable",
+          "declared using asterisk (*)"
+        ],
+        "concept_groups": [
+          [
+            "address-of operator (&)",
+            "dereferencing operator (*)"
+          ],
+          [
+            "indirect access to data",
+            "pointer variable declaration"
+          ]
+        ],
+        "advanced_bonus": [
+          "pointer arithmetic: incrementing by 1 moves by sizeof(type) bytes",
+          "void* pointer can hold any address but must be cast before dereferencing",
+          "pointer to pointer (**) enables modifying a pointer from a function",
+          "NULL pointer should be checked before dereferencing",
+          "array name decays to pointer to first element in most expressions"
+        ]
+      },
+      "semantic_targets": [
+        "Pointers refer to memory locations not values",
+        "Pointers enable indirect access and modification",
+        "& gets address, * dereferences",
+        "pointer stores address not value \u2014 dereference with * to access the value"
+      ],
+      "common_mistakes": [
+        "Confusing pointer with the value it points to",
+        "Incorrect declaration syntax (int *p vs int* p)",
+        "Not initializing pointers before use",
+        "declares pointer without initializing \u2014 undefined behavior on dereference",
+        "confuses * in declaration (pointer type) with * in expression (dereference)"
+      ],
+      "evaluation_rubric": {
+        "focus": "Basic pointer understanding"
+      },
+      "scoring_policy": {
+        "mandatory_required_for_full_score": true,
+        "mandatory_cap": 0.75
+      }
+    }
+  }
+]

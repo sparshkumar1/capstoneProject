@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Experiment4OutputSchema",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "timestamp",
+    "selection_modes",
+    "candidate_profiles",
+    "trajectory_runs",
+    "aggregated_metrics",
+    "statistical_comparisons"
+  ],
+  "properties": {
+    "experiment_id": {"type": "string", "const": "EXP-4"},
+    "timestamp": {"type": "string"},
+    "selection_modes": {"type": "array", "items": {"type": "string"}},
+    "candidate_profiles": {"type": "array", "items": {"type": "string"}},
+    "trajectory_runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "mode_id",
+          "profile_id",
+          "seed",
+          "difficulty_trajectory",
+          "topics_selected",
+          "duplicates_count",
+          "remediation_count"
+        ]
+      }
+    },
+    "aggregated_metrics": {
+      "type": "object",
+      "properties": {
+        "strong_vs_weak_divergence_euclidean": {"type": "number"},
+        "repetition_rate_by_mode": {"type": "object"},
+        "remediation_rate_by_mode": {"type": "object"}
+      }
+    },
+    "statistical_comparisons": {
+      "type": "object"
+    }
+  }
+}

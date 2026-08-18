@@ -1,0 +1,828 @@
+{
+  "experiment_id": "EXP-5",
+  "timestamp": "2026-08-16T08:01:43.660638",
+  "runtime_seconds": 20.21,
+  "provenance": {
+    "ppo_checkpoint_sha256": "2ab8d514ca748abd0ac650d4a0b1676093530b21a16b1586c764b6db8ac54575",
+    "vecnormalize_sha256": "1481ca2c11cb1c2f9ae055c5350fc168359900daea2da3897a6b63f4dfc29df2"
+  },
+  "ablation_conditions": [
+    "full_system",
+    "minus_rl_adaptation",
+    "minus_followup_probing",
+    "minus_formative_feedback",
+    "minus_timing_modulation",
+    "minus_speech_prosody",
+    "minus_coding_contribution"
+  ],
+  "total_sessions_executed": 70,
+  "raw_ablation_sessions": [
+    {
+      "run_id": "EXP5_full_system_3001",
+      "condition_id": "full_system",
+      "seed": 3001,
+      "mean_score": 0.4999,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_full_system_3002",
+      "condition_id": "full_system",
+      "seed": 3002,
+      "mean_score": 0.5159,
+      "score_variance": 0.0004,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_full_system_3003",
+      "condition_id": "full_system",
+      "seed": 3003,
+      "mean_score": 0.5209,
+      "score_variance": 0.0066,
+      "adaptation_rho": 0.172,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_full_system_3004",
+      "condition_id": "full_system",
+      "seed": 3004,
+      "mean_score": 0.4907,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 2,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_full_system_3005",
+      "condition_id": "full_system",
+      "seed": 3005,
+      "mean_score": 0.5107,
+      "score_variance": 0.0062,
+      "adaptation_rho": 0.0344,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_full_system_3006",
+      "condition_id": "full_system",
+      "seed": 3006,
+      "mean_score": 0.5013,
+      "score_variance": 0.0012,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_full_system_3007",
+      "condition_id": "full_system",
+      "seed": 3007,
+      "mean_score": 0.518,
+      "score_variance": 0.0013,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_full_system_3008",
+      "condition_id": "full_system",
+      "seed": 3008,
+      "mean_score": 0.5076,
+      "score_variance": 0.0006,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_full_system_3009",
+      "condition_id": "full_system",
+      "seed": 3009,
+      "mean_score": 0.5067,
+      "score_variance": 0.0007,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_full_system_3010",
+      "condition_id": "full_system",
+      "seed": 3010,
+      "mean_score": 0.4951,
+      "score_variance": 0.0005,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_rl_adaptation_3001",
+      "condition_id": "minus_rl_adaptation",
+      "seed": 3001,
+      "mean_score": 0.4999,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_rl_adaptation_3002",
+      "condition_id": "minus_rl_adaptation",
+      "seed": 3002,
+      "mean_score": 0.5159,
+      "score_variance": 0.0004,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_rl_adaptation_3003",
+      "condition_id": "minus_rl_adaptation",
+      "seed": 3003,
+      "mean_score": 0.4988,
+      "score_variance": 0.0013,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_rl_adaptation_3004",
+      "condition_id": "minus_rl_adaptation",
+      "seed": 3004,
+      "mean_score": 0.4907,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 2,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_rl_adaptation_3005",
+      "condition_id": "minus_rl_adaptation",
+      "seed": 3005,
+      "mean_score": 0.4885,
+      "score_variance": 0.0015,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 2,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_rl_adaptation_3006",
+      "condition_id": "minus_rl_adaptation",
+      "seed": 3006,
+      "mean_score": 0.5013,
+      "score_variance": 0.0012,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_rl_adaptation_3007",
+      "condition_id": "minus_rl_adaptation",
+      "seed": 3007,
+      "mean_score": 0.518,
+      "score_variance": 0.0013,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_rl_adaptation_3008",
+      "condition_id": "minus_rl_adaptation",
+      "seed": 3008,
+      "mean_score": 0.5076,
+      "score_variance": 0.0006,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_rl_adaptation_3009",
+      "condition_id": "minus_rl_adaptation",
+      "seed": 3009,
+      "mean_score": 0.5067,
+      "score_variance": 0.0007,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_rl_adaptation_3010",
+      "condition_id": "minus_rl_adaptation",
+      "seed": 3010,
+      "mean_score": 0.4951,
+      "score_variance": 0.0005,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_followup_probing_3001",
+      "condition_id": "minus_followup_probing",
+      "seed": 3001,
+      "mean_score": 0.4999,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_followup_probing_3002",
+      "condition_id": "minus_followup_probing",
+      "seed": 3002,
+      "mean_score": 0.5159,
+      "score_variance": 0.0004,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_followup_probing_3003",
+      "condition_id": "minus_followup_probing",
+      "seed": 3003,
+      "mean_score": 0.5209,
+      "score_variance": 0.0066,
+      "adaptation_rho": 0.172,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_followup_probing_3004",
+      "condition_id": "minus_followup_probing",
+      "seed": 3004,
+      "mean_score": 0.4907,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_followup_probing_3005",
+      "condition_id": "minus_followup_probing",
+      "seed": 3005,
+      "mean_score": 0.5107,
+      "score_variance": 0.0062,
+      "adaptation_rho": 0.0344,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_followup_probing_3006",
+      "condition_id": "minus_followup_probing",
+      "seed": 3006,
+      "mean_score": 0.5013,
+      "score_variance": 0.0012,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_followup_probing_3007",
+      "condition_id": "minus_followup_probing",
+      "seed": 3007,
+      "mean_score": 0.518,
+      "score_variance": 0.0013,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_followup_probing_3008",
+      "condition_id": "minus_followup_probing",
+      "seed": 3008,
+      "mean_score": 0.5076,
+      "score_variance": 0.0006,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_followup_probing_3009",
+      "condition_id": "minus_followup_probing",
+      "seed": 3009,
+      "mean_score": 0.5067,
+      "score_variance": 0.0007,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_followup_probing_3010",
+      "condition_id": "minus_followup_probing",
+      "seed": 3010,
+      "mean_score": 0.4951,
+      "score_variance": 0.0005,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_formative_feedback_3001",
+      "condition_id": "minus_formative_feedback",
+      "seed": 3001,
+      "mean_score": 0.4999,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_formative_feedback_3002",
+      "condition_id": "minus_formative_feedback",
+      "seed": 3002,
+      "mean_score": 0.5159,
+      "score_variance": 0.0004,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_formative_feedback_3003",
+      "condition_id": "minus_formative_feedback",
+      "seed": 3003,
+      "mean_score": 0.5209,
+      "score_variance": 0.0066,
+      "adaptation_rho": 0.172,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_formative_feedback_3004",
+      "condition_id": "minus_formative_feedback",
+      "seed": 3004,
+      "mean_score": 0.4907,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 2,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_formative_feedback_3005",
+      "condition_id": "minus_formative_feedback",
+      "seed": 3005,
+      "mean_score": 0.5107,
+      "score_variance": 0.0062,
+      "adaptation_rho": 0.0344,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_formative_feedback_3006",
+      "condition_id": "minus_formative_feedback",
+      "seed": 3006,
+      "mean_score": 0.5013,
+      "score_variance": 0.0012,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_formative_feedback_3007",
+      "condition_id": "minus_formative_feedback",
+      "seed": 3007,
+      "mean_score": 0.518,
+      "score_variance": 0.0013,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_formative_feedback_3008",
+      "condition_id": "minus_formative_feedback",
+      "seed": 3008,
+      "mean_score": 0.5076,
+      "score_variance": 0.0006,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_formative_feedback_3009",
+      "condition_id": "minus_formative_feedback",
+      "seed": 3009,
+      "mean_score": 0.5067,
+      "score_variance": 0.0007,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_formative_feedback_3010",
+      "condition_id": "minus_formative_feedback",
+      "seed": 3010,
+      "mean_score": 0.4951,
+      "score_variance": 0.0005,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_timing_modulation_3001",
+      "condition_id": "minus_timing_modulation",
+      "seed": 3001,
+      "mean_score": 0.4999,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_timing_modulation_3002",
+      "condition_id": "minus_timing_modulation",
+      "seed": 3002,
+      "mean_score": 0.5159,
+      "score_variance": 0.0004,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_timing_modulation_3003",
+      "condition_id": "minus_timing_modulation",
+      "seed": 3003,
+      "mean_score": 0.5209,
+      "score_variance": 0.0066,
+      "adaptation_rho": 0.172,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_timing_modulation_3004",
+      "condition_id": "minus_timing_modulation",
+      "seed": 3004,
+      "mean_score": 0.4907,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 2,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_timing_modulation_3005",
+      "condition_id": "minus_timing_modulation",
+      "seed": 3005,
+      "mean_score": 0.5107,
+      "score_variance": 0.0062,
+      "adaptation_rho": 0.0344,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_timing_modulation_3006",
+      "condition_id": "minus_timing_modulation",
+      "seed": 3006,
+      "mean_score": 0.5013,
+      "score_variance": 0.0012,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_timing_modulation_3007",
+      "condition_id": "minus_timing_modulation",
+      "seed": 3007,
+      "mean_score": 0.518,
+      "score_variance": 0.0013,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_timing_modulation_3008",
+      "condition_id": "minus_timing_modulation",
+      "seed": 3008,
+      "mean_score": 0.5076,
+      "score_variance": 0.0006,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_timing_modulation_3009",
+      "condition_id": "minus_timing_modulation",
+      "seed": 3009,
+      "mean_score": 0.5067,
+      "score_variance": 0.0007,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_timing_modulation_3010",
+      "condition_id": "minus_timing_modulation",
+      "seed": 3010,
+      "mean_score": 0.4951,
+      "score_variance": 0.0005,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_speech_prosody_3001",
+      "condition_id": "minus_speech_prosody",
+      "seed": 3001,
+      "mean_score": 0.4999,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_speech_prosody_3002",
+      "condition_id": "minus_speech_prosody",
+      "seed": 3002,
+      "mean_score": 0.5159,
+      "score_variance": 0.0004,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_speech_prosody_3003",
+      "condition_id": "minus_speech_prosody",
+      "seed": 3003,
+      "mean_score": 0.4988,
+      "score_variance": 0.0013,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_speech_prosody_3004",
+      "condition_id": "minus_speech_prosody",
+      "seed": 3004,
+      "mean_score": 0.4907,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 2,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_speech_prosody_3005",
+      "condition_id": "minus_speech_prosody",
+      "seed": 3005,
+      "mean_score": 0.4885,
+      "score_variance": 0.0015,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 2,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_speech_prosody_3006",
+      "condition_id": "minus_speech_prosody",
+      "seed": 3006,
+      "mean_score": 0.5013,
+      "score_variance": 0.0012,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_speech_prosody_3007",
+      "condition_id": "minus_speech_prosody",
+      "seed": 3007,
+      "mean_score": 0.518,
+      "score_variance": 0.0013,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_speech_prosody_3008",
+      "condition_id": "minus_speech_prosody",
+      "seed": 3008,
+      "mean_score": 0.5076,
+      "score_variance": 0.0006,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_speech_prosody_3009",
+      "condition_id": "minus_speech_prosody",
+      "seed": 3009,
+      "mean_score": 0.5067,
+      "score_variance": 0.0007,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_speech_prosody_3010",
+      "condition_id": "minus_speech_prosody",
+      "seed": 3010,
+      "mean_score": 0.4951,
+      "score_variance": 0.0005,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_coding_contribution_3001",
+      "condition_id": "minus_coding_contribution",
+      "seed": 3001,
+      "mean_score": 0.4999,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_coding_contribution_3002",
+      "condition_id": "minus_coding_contribution",
+      "seed": 3002,
+      "mean_score": 0.5159,
+      "score_variance": 0.0004,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_coding_contribution_3003",
+      "condition_id": "minus_coding_contribution",
+      "seed": 3003,
+      "mean_score": 0.5209,
+      "score_variance": 0.0066,
+      "adaptation_rho": 0.172,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_coding_contribution_3004",
+      "condition_id": "minus_coding_contribution",
+      "seed": 3004,
+      "mean_score": 0.4907,
+      "score_variance": 0.0009,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 2,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_coding_contribution_3005",
+      "condition_id": "minus_coding_contribution",
+      "seed": 3005,
+      "mean_score": 0.5107,
+      "score_variance": 0.0062,
+      "adaptation_rho": 0.0344,
+      "followups_triggered": 1,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_coding_contribution_3006",
+      "condition_id": "minus_coding_contribution",
+      "seed": 3006,
+      "mean_score": 0.5013,
+      "score_variance": 0.0012,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_coding_contribution_3007",
+      "condition_id": "minus_coding_contribution",
+      "seed": 3007,
+      "mean_score": 0.518,
+      "score_variance": 0.0013,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_coding_contribution_3008",
+      "condition_id": "minus_coding_contribution",
+      "seed": 3008,
+      "mean_score": 0.5076,
+      "score_variance": 0.0006,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_coding_contribution_3009",
+      "condition_id": "minus_coding_contribution",
+      "seed": 3009,
+      "mean_score": 0.5067,
+      "score_variance": 0.0007,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    },
+    {
+      "run_id": "EXP5_minus_coding_contribution_3010",
+      "condition_id": "minus_coding_contribution",
+      "seed": 3010,
+      "mean_score": 0.4951,
+      "score_variance": 0.0005,
+      "adaptation_rho": 0.0,
+      "followups_triggered": 0,
+      "avg_timing_modifier": 0.0
+    }
+  ],
+  "aggregated_metrics": {
+    "full_system": {
+      "mean_score": 0.5067,
+      "score_ci_95": [
+        0.5009,
+        0.5125
+      ],
+      "mean_score_variance": 0.0019,
+      "mean_adaptation_rho": 0.0206,
+      "adaptation_rho_ci_95": [
+        0.0,
+        0.055
+      ],
+      "mean_followups_count": 0.5,
+      "mean_avg_timing_modifier": 0.0
+    },
+    "minus_rl_adaptation": {
+      "mean_score": 0.5022,
+      "score_ci_95": [
+        0.4967,
+        0.5081
+      ],
+      "mean_score_variance": 0.0009,
+      "mean_adaptation_rho": 0.0,
+      "adaptation_rho_ci_95": [
+        0.0,
+        0.0
+      ],
+      "mean_followups_count": 0.6,
+      "mean_avg_timing_modifier": 0.0
+    },
+    "minus_followup_probing": {
+      "mean_score": 0.5067,
+      "score_ci_95": [
+        0.5009,
+        0.5125
+      ],
+      "mean_score_variance": 0.0019,
+      "mean_adaptation_rho": 0.0206,
+      "adaptation_rho_ci_95": [
+        0.0,
+        0.055
+      ],
+      "mean_followups_count": 0.0,
+      "mean_avg_timing_modifier": 0.0
+    },
+    "minus_formative_feedback": {
+      "mean_score": 0.5067,
+      "score_ci_95": [
+        0.5009,
+        0.5125
+      ],
+      "mean_score_variance": 0.0019,
+      "mean_adaptation_rho": 0.0206,
+      "adaptation_rho_ci_95": [
+        0.0,
+        0.055
+      ],
+      "mean_followups_count": 0.5,
+      "mean_avg_timing_modifier": 0.0
+    },
+    "minus_timing_modulation": {
+      "mean_score": 0.5067,
+      "score_ci_95": [
+        0.5009,
+        0.5125
+      ],
+      "mean_score_variance": 0.0019,
+      "mean_adaptation_rho": 0.0206,
+      "adaptation_rho_ci_95": [
+        0.0,
+        0.055
+      ],
+      "mean_followups_count": 0.5,
+      "mean_avg_timing_modifier": 0.0
+    },
+    "minus_speech_prosody": {
+      "mean_score": 0.5022,
+      "score_ci_95": [
+        0.4967,
+        0.5081
+      ],
+      "mean_score_variance": 0.0009,
+      "mean_adaptation_rho": 0.0,
+      "adaptation_rho_ci_95": [
+        0.0,
+        0.0
+      ],
+      "mean_followups_count": 0.6,
+      "mean_avg_timing_modifier": 0.0
+    },
+    "minus_coding_contribution": {
+      "mean_score": 0.5067,
+      "score_ci_95": [
+        0.5009,
+        0.5125
+      ],
+      "mean_score_variance": 0.0019,
+      "mean_adaptation_rho": 0.0206,
+      "adaptation_rho_ci_95": [
+        0.0,
+        0.055
+      ],
+      "mean_followups_count": 0.5,
+      "mean_avg_timing_modifier": 0.0
+    }
+  }
+}

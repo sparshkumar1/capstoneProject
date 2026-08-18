@@ -15,6 +15,7 @@ import asyncio
 import json
 import os
 import pickle
+import re
 import sys
 import tempfile
 import time
@@ -23,9 +24,10 @@ from datetime import UTC, datetime, date
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
+
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
@@ -84,35 +86,17 @@ _evaluator_eval = None
 _evaluator_get_rubric = None
 
 try:
-    from services.qwen.evaluate_upgraded import evaluate as _qwen_evaluate
-    from services.qwen.evaluate_upgraded import get_rubric as _qwen_get_rubric
-    _evaluator_eval = _qwen_evaluate
-    _evaluator_get_rubric = _qwen_get_rubric
+    from services.evaluator.app import evaluate as _prod_evaluate
+    from services.evaluator.app import get_rubric as _prod_get_rubric
+    _evaluator_eval = _prod_evaluate
+    _evaluator_get_rubric = _prod_get_rubric
     EVALUATOR_READY = True
-    EVALUATOR_SOURCE = "qwen_upgraded"
-    print("[INFO] Qwen integration ACTIVE - microservice on port 8001 required")
+    EVALUATOR_SOURCE = "services_evaluator"
+    print("[INFO] Authoritative production evaluator loaded from services.evaluator.app")
 except Exception as exc:
-    print(f"[WARN] Could not load Qwen evaluator: {exc}")
-    try:
-        from services.evaluator.app import evaluate as _final_evaluate
-        from services.evaluator.app import get_rubric as _final_get_rubric
-        _evaluator_eval = _final_evaluate
-        _evaluator_get_rubric = _final_get_rubric
-        EVALUATOR_READY = True
-        EVALUATOR_SOURCE = "evaluator_final"
-    except Exception as final_exc:
-        print(f"[WARN] Could not load Evaluator_final evaluator: {final_exc}")
-        try:
-            from Evaluator.evaluate import evaluate as _legacy_evaluate
-            from Evaluator.evaluate import get_rubric as _legacy_get_rubric
-            _evaluator_eval = _legacy_evaluate
-            _evaluator_get_rubric = _legacy_get_rubric
-            EVALUATOR_READY = True
-            EVALUATOR_SOURCE = "evaluator_legacy"
-        except Exception as legacy_exc:
-            print(f"[WARN] Could not load legacy evaluator: {legacy_exc}")
-            EVALUATOR_READY = False
-            EVALUATOR_SOURCE = "mock"
+    print(f"[ERROR] Could not load production evaluator from services.evaluator.app: {exc}")
+    EVALUATOR_READY = False
+    EVALUATOR_SOURCE = "mock"
 
 PIPELINE_READY = LOGGING_READY or ORCHESTRATOR_READY or EVALUATOR_READY
 if not PIPELINE_READY:
@@ -125,70 +109,59 @@ def _run_integrated_evaluator(transcript: str, question: dict) -> Optional[dict]
     if not EVALUATOR_READY or _evaluator_eval is None or _evaluator_get_rubric is None:
         return None
 
-    qid = str(question.get("id", "")).strip()
+    qid = str(question.get("id", "") or question.get("qid", "")).strip()
     rubric = _evaluator_get_rubric(qid)
     if not rubric:
         return None
 
-    q_text = str(question.get("text", ""))
-    if EVALUATOR_SOURCE == "qwen_upgraded":
-        raw = _evaluator_eval(transcript, qid, rubric)
-    else:
-        try:
-            raw = _evaluator_eval(q_text, transcript, rubric)
-        except TypeError:
-            raw = _evaluator_eval(transcript, rubric)
+    q_text = str(question.get("text", "") or question.get("question_text", ""))
+    raw = _evaluator_eval(q_text, transcript, rubric)
+    if not raw:
+        return None
 
-    score = float(raw.get("final_score", 0.5))
-    grade = str(raw.get("grade", ""))
+    score = float(raw.get("final_score", 0.0))
+    grade = str(raw.get("grade", "Poor"))
     s1 = float(raw.get("S1_semantic", score))
     s2 = float(raw.get("S2_structural", score))
-    r  = float(raw.get("reasoning_score", score))
+    r = float(raw.get("reasoning_score", score))
 
-    concept_details = raw.get("concept_details", [])
-    covered_concepts = []
-    missing_concepts = []
-    for cd in concept_details:
-        if isinstance(cd, dict):
-            label = str(cd.get("concept") or cd.get("label") or f"concept_{cd.get('concept_index', '?')}")
-            if cd.get("covered"):
-                covered_concepts.append(label)
-            else:
-                missing_concepts.append(label)
+    covered_concepts = list(raw.get("correct_claims", []))
+    missing_concepts = list(raw.get("missing_concepts", []))
+    incorrect_claims = list(raw.get("incorrect_claims", []))
+    strong_points = list(raw.get("strong_points", []))
 
-    strong_points = []
-    if grade in ("A", "B"):
-        strong_points.append(f"Grade {grade} — strong overall performance")
-    if s1 >= 0.65:
-        strong_points.append(f"High semantic relevance ({s1:.0%}) — answer addressed the topic well")
-    if s2 >= 0.60:
-        strong_points.append(f"Good concept coverage ({s2:.0%}) — key ideas present")
-    if r >= 0.65:
-        strong_points.append("Reasoning quality is sound")
-    if covered_concepts:
-        strong_points.append(f"Covered: {', '.join(covered_concepts[:3])}")
-
-    # Apply score validation rules (mandatory caps, mistake penalties)
+    # Apply score validation rules if validator ready
     if VALIDATOR_READY and _SCORE_VALIDATOR is not None:
         evidence = {
             "mandatory_pass": bool(raw.get("mandatory_pass", True)),
-            "mistake_penalty": float(raw.get("mistake_penalty", 0.0)),
+            "mistake_penalty": float(raw.get("penalty", 0.0)),
         }
         validation = _SCORE_VALIDATOR.validate(score, evidence, is_coding=False)
-        score = float(validation["validated_score"])
+        score = float(validation.get("validated_score", score))
         raw["validation_trace"] = validation.get("validation_trace", [])
 
     return {
-        "final_score": round(score, 3),
-        "justification": (
-            f"Grade {grade or '?'} ({score:.0%}). "
-            f"Semantic {s1:.0%} | Concept coverage {s2:.0%} | Reasoning {r:.0%}."
-        ),
-        "strong_points": strong_points[:5],
-        "vague_points": [] if score >= 0.6 else ["Improve concept depth and reasoning clarity"],
-        "missing_concepts": missing_concepts[:6],
-        "covered_concepts": covered_concepts[:6],
-        "decision_source": EVALUATOR_SOURCE,
+        "final_score": round(score, 4),
+        "question_score": round(score, 4),
+        "technical_correctness": round(score, 4),
+        "grade": grade,
+        "S1_semantic": s1,
+        "S2_structural": s2,
+        "reasoning_score": r,
+        "reasoning_quality": r,
+        "concept_coverage": s2,
+        "relevance": s1,
+        "depth": raw.get("depth", 0.5),
+        "communication": raw.get("communication", 0.8),
+        "evaluation_confidence": raw.get("evaluation_confidence", 0.9),
+        "mandatory_pass": raw.get("mandatory_pass", True),
+        "covered_concepts": covered_concepts,
+        "missing_concepts": missing_concepts,
+        "incorrect_claims": incorrect_claims,
+        "weakest_gap": raw.get("weakest_gap", "None"),
+        "strong_points": strong_points,
+        "concept_details": raw.get("concept_details", []),
+        "decision_source": raw.get("decision_source", EVALUATOR_SOURCE),
         "raw": raw,
     }
 
@@ -365,13 +338,46 @@ def _difficulty_to_level(value: Any) -> int:
     return max(1, min(5, int(round(v))))
 
 
+def _lexical_token_overlap(t1: str, t2: str) -> float:
+    """Calculate lexical/token Jaccard overlap between two question texts."""
+    words1 = set(re.findall(r"\w+", (t1 or "").lower()))
+    words2 = set(re.findall(r"\w+", (t2 or "").lower()))
+    if not words1 or not words2:
+        return 0.0
+    return len(words1 & words2) / len(words1 | words2)
+
+# Backward-compatible alias for existing imports/callers
+_text_similarity = _lexical_token_overlap
+
+
+
 def _load_question_bank_from_qns() -> Optional[Dict[str, List[dict]]]:
-    root = Path(__file__).resolve().parent.parent
+    root = Path(__file__).resolve().parent.parent.parent
     candidates = [
+        root / "data" / "questions" / "qns.json",
+        root / "services" / "evaluator" / "assets" / "qns.json",
         root / "qns.json",
-        root / "Evaluator_final" / "Evaluator" / "qns.json",
-        root / "Evaluator" / "qns.json",
     ]
+
+    rubric_candidates = [
+        root / "data" / "rubrics" / "rubrics_final_clean.json",
+        root / "services" / "evaluator" / "assets" / "rubrics.json",
+    ]
+
+    rubrics_by_qid: Dict[str, dict] = {}
+    for rpath in rubric_candidates:
+        if rpath.exists():
+            try:
+                with rpath.open("r", encoding="utf-8") as rf:
+                    rlist = json.load(rf)
+                    if isinstance(rlist, list):
+                        for r in rlist:
+                            if isinstance(r, dict) and "qid" in r:
+                                rubrics_by_qid[str(r["qid"])] = r
+                if rubrics_by_qid:
+                    break
+            except Exception as rexc:
+                print(f"[WARN] Failed loading rubrics from {rpath}: {rexc}")
 
     for path in candidates:
         if not path.exists():
@@ -389,22 +395,58 @@ def _load_question_bank_from_qns() -> Optional[Dict[str, List[dict]]]:
                 topic_raw = str(row.get("topic", "general"))
                 topic_key = _normalize_topic_key(topic_raw) or "general"
                 qid = str(row.get("qid", "")) or str(uuid.uuid4())
-                q_text = row.get("question_text") or row.get("text") or ""
+                q_text = (row.get("question_text") or row.get("text") or "").strip()
                 q_type = str(row.get("type", "theory")).lower()
+
+                # Get matching rubric
+                rubric = rubrics_by_qid.get(qid, {})
+                lm = rubric.get("logic_markers", {}) or rubric.get("logic_markers_covered", {})
+                mandatory = list(lm.get("mandatory", [])) if isinstance(lm, dict) else []
+                concept_groups = list(lm.get("concept_groups", [])) if isinstance(lm, dict) else []
+                semantic_targets = list(rubric.get("semantic_targets", []) or rubric.get("semantic_coverage", []))
+                common_mistakes = list(rubric.get("common_mistakes", []) or rubric.get("common_mistakes_addressed", []))
+                bonus = list(lm.get("advanced_bonus", [])) if isinstance(lm, dict) else []
+                ref_ans = str(rubric.get("logic_context") or rubric.get("answer") or "")
+
+                expected_concepts = list(mandatory)
+                for grp in concept_groups:
+                    if isinstance(grp, list) and grp:
+                        expected_concepts.append(grp[0])
+                    elif isinstance(grp, str):
+                        expected_concepts.append(grp)
+                for st in semantic_targets:
+                    if st not in expected_concepts:
+                        expected_concepts.append(st)
+
+                category = "c" if "c" in topic_key or topic_key in {
+                    "pointers", "memorymanagement", "storageclasses", "functions", "cvariables",
+                    "cprogramming", "preprocessor", "linkage", "enum", "structsunions", "bitmanipulation", "advancedc"
+                } else "dsa"
 
                 question = {
                     "id": qid,
                     "text": q_text,
                     "type": "code" if "coding" in q_type or "code" in q_type else "verbal",
                     "difficulty": _difficulty_to_level(row.get("difficulty", 3)),
+                    "difficulty_float": float(row.get("difficulty", 0.6)),
                     "topic": topic_key,
+                    "category": category,
+                    "time_limit_sec": int(row.get("time_limit_sec", 75)),
+                    "bloom_level": str(row.get("bloom_level") or row.get("blooms_level") or "L3"),
+                    "expected_concepts": expected_concepts,
+                    "mandatory_concepts": mandatory,
+                    "common_mistakes": common_mistakes,
+                    "reference_answer": ref_ans,
+                    "possible_followups": bonus,
+                    "rubric": rubric,
                     "constraints": row.get("constraints", ""),
                     "code_template": row.get("code_template") or row.get("starter_code") or "",
                 }
                 grouped.setdefault(topic_key, []).append(question)
 
             if grouped:
-                print(f"[INFO] Loaded question bank from {path} ({sum(len(v) for v in grouped.values())} questions)")
+                total_loaded = sum(len(v) for v in grouped.values())
+                print(f"[INFO] Loaded question bank from {path} ({total_loaded} questions, {len(rubrics_by_qid)} rubrics)")
                 return grouped
         except Exception as exc:
             print(f"[WARN] Failed loading question bank from {path}: {exc}")
@@ -416,28 +458,52 @@ _loaded_bank = _load_question_bank_from_qns()
 if _loaded_bank:
     QUESTION_BANK = _loaded_bank
 
-def select_questions(c_topics: list, dsa_topics: list, num: int, difficulty: int = 2) -> list:
-    """Pick realistic mixed questions across selected topics with balanced verbal/code variety."""
+def select_questions(
+    c_topics: list,
+    dsa_topics: list,
+    num: int,
+    difficulty: int = 2,
+    exclude_ids: Optional[set] = None,
+    candidate_state: Optional[dict] = None,
+) -> list:
+    """
+    Personalized question selection with 3-level duplicate prevention and baseline Easy/Easy-Medium start.
+    """
+    seen_ids = set(exclude_ids or [])
+    seen_texts = set()
+    if candidate_state:
+        for prev_qid in candidate_state.get("question_history", []):
+            seen_ids.add(str(prev_qid))
+
     pool = []
-    all_topics = c_topics + dsa_topics
-    for topic in all_topics:
-        topic_key = _normalize_topic_key(topic)
-        for bank_topic, bank_qs in QUESTION_BANK.items():
-            if topic_key == bank_topic or topic_key in bank_topic or bank_topic in topic_key:
-                pool.extend(bank_qs)
+    all_topics = [t for t in (c_topics + dsa_topics) if t]
+    if all_topics:
+        for topic in all_topics:
+            topic_key = _normalize_topic_key(topic)
+            for bank_topic, bank_qs in QUESTION_BANK.items():
+                if topic_key == bank_topic or topic_key in bank_topic or bank_topic in topic_key:
+                    pool.extend(bank_qs)
 
     if not pool:
         for qs in QUESTION_BANK.values():
             pool.extend(qs)
 
+    # Level 1: Deduplicate by ID
     unique_pool = []
-    seen = set()
     for q in pool:
-        qid = q.get("id")
-        if qid in seen:
+        qid = str(q.get("id", ""))
+        if qid in seen_ids:
             continue
-        seen.add(qid)
+        # Level 2: Deduplicate by normalized text
+        norm_text = re.sub(r"\s+", " ", q.get("text", "").strip().lower())
+        if norm_text in seen_texts:
+            continue
+        seen_texts.add(norm_text)
         unique_pool.append(q)
+
+    # Personalization scoring weights
+    weaknesses = set(candidate_state.get("weaknesses", [])) if candidate_state else set()
+    strengths = set(candidate_state.get("strengths", [])) if candidate_state else set()
 
     type_buckets = {"verbal": [], "code": []}
     for q in unique_pool:
@@ -452,22 +518,60 @@ def select_questions(c_topics: list, dsa_topics: list, num: int, difficulty: int
     next_type = "verbal"
 
     while len(result) < num and (type_buckets["verbal"] or type_buckets["code"]):
+        # First question MUST be Easy / Easy-Medium (difficulty <= 2)
+        target_diff = 2 if len(result) == 0 else difficulty
+
         preferred = next_type if type_buckets[next_type] else ("code" if type_buckets["code"] else "verbal")
         candidates = type_buckets[preferred]
         if not candidates:
-            break
+            # Fall back to other bucket
+            alt = "code" if preferred == "verbal" else "verbal"
+            candidates = type_buckets.get(alt, [])
+            if not candidates:
+                break
+            preferred = alt
 
         pick_idx = 0
         best_score = None
         for i, q in enumerate(candidates):
+            q_text = q.get("text", "")
+            # Level 3: Lexical/token overlap deduplication (Jaccard threshold >= 0.75) against session history
+            lexical_conflict = False
+            for prev_selected in result:
+                sim = _lexical_token_overlap(q_text, prev_selected.get("text", ""))
+                if sim >= 0.75:
+                    lexical_conflict = True
+                    break
+            if lexical_conflict:
+                continue
+
+
+            q_diff = q.get("difficulty", 3)
+            diff_penalty = abs(q_diff - target_diff)
+            # Enforce Easy/Easy-Medium constraint for question 1
+            if len(result) == 0 and q_diff > 2:
+                diff_penalty += 5.0
+
             topic = q.get("topic", "")
-            diversity_penalty = topic_counts.get(topic, 0) * 0.25
-            score = abs(q.get("difficulty", 3) - difficulty) + diversity_penalty
+            diversity_penalty = topic_counts.get(topic, 0) * 0.40
+
+            # Personalization adaptation
+            adaptation_bonus = 0.0
+            if topic in weaknesses and target_diff <= 2:
+                adaptation_bonus -= 0.30  # prioritize foundational remediation
+            elif topic in strengths and target_diff >= 4:
+                adaptation_bonus -= 0.30  # prioritize advanced depth probe
+
+            score = diff_penalty + diversity_penalty + adaptation_bonus
             if best_score is None or score < best_score:
                 best_score = score
                 pick_idx = i
 
+        if best_score is None or not candidates:
+            break
+
         q = candidates.pop(pick_idx)
+        seen_ids.add(str(q.get("id", "")))
         result.append(q)
         topic = q.get("topic", "")
         topic_counts[topic] = topic_counts.get(topic, 0) + 1
@@ -476,21 +580,6 @@ def select_questions(c_topics: list, dsa_topics: list, num: int, difficulty: int
     return result[:num]
 
 
-def _build_transcription_proxy(transcript_text: str) -> dict:
-    words = transcript_text.split()
-    estimated_speech_time = max(len(words) / 2.8, 1.0)
-    return {
-        "transcript": transcript_text,
-        "words": [],
-        "pauses": [],
-        "pause_count": 0,
-        "total_pause_time": 0.0,
-        "total_speech_time": round(estimated_speech_time, 3),
-        "true_speaking_rate": round(len(words) / max(estimated_speech_time, 1.0), 2),
-        "transcription_confidence": 1.0 if transcript_text.strip() else 0.0,
-        "alignment_source": "stt_text_proxy",
-    }
-
 
 def _analyze_audio_confidence(audio_path: str, transcript_text: str = "", session_id: str = "") -> Optional[dict]:
     if not _ensure_audio_analysis_imports():
@@ -498,14 +587,14 @@ def _analyze_audio_confidence(audio_path: str, transcript_text: str = "", sessio
 
     try:
         prosodic = extract_prosodic_features(audio_path)
+        transcription = transcribe_and_align(audio_path) if transcribe_and_align else {}
 
-        if transcript_text.strip():
-            transcription = _build_transcription_proxy(transcript_text)
-        else:
-            transcription = transcribe_and_align(audio_path)
+        # Use authoritative server transcript for linguistic analysis
+        effective_transcript = (transcription.get("transcript") or transcript_text or "").strip()
 
-        linguistic = analyze_linguistic_confidence(transcription.get("transcript", ""))
+        linguistic = analyze_linguistic_confidence(effective_transcript)
         final_score = audio_confidence_score(prosodic, transcription, linguistic)
+
         breakdown = audio_score_breakdown(prosodic, transcription, linguistic)
         hesitation = score_hesitation(prosodic, transcription) if score_hesitation else None
 
@@ -660,11 +749,20 @@ async def get_report(session_id: str):
 
 
 @app.post("/api/transcribe")
-async def transcribe_audio(audio: UploadFile = File(...), session_id: str = Form(""), transcript: str = Form("")):
-    """Transcribe audio using Whisper."""
-    fd, tmp_name = tempfile.mkstemp(prefix="audio_", suffix=".webm")
+async def transcribe_audio(
+    audio: UploadFile = File(...),
+    session_id: str = Form(""),
+    browser_preview: str = Form("", alias="transcript"),
+):
+    """
+    Authoritative Speech-to-Text endpoint.
+    Processes the raw uploaded candidate audio through the server-side STT/acoustic pipeline.
+    Browser speech recognition text is preserved strictly as a non-authoritative preview.
+    """
+    suffix = Path(audio.filename or "audio.wav").suffix or ".wav"
+    fd, tmp_name = tempfile.mkstemp(prefix="audio_", suffix=suffix)
     tmp_path = Path(tmp_name)
-    transcript = (transcript or "").strip()
+    browser_preview = (browser_preview or "").strip()
 
     try:
         try:
@@ -675,22 +773,32 @@ async def transcribe_audio(audio: UploadFile = File(...), session_id: str = Form
         audio_bytes = await audio.read()
         tmp_path.write_bytes(audio_bytes)
 
-        if transcript:
-            pass
+        server_transcript = ""
+        transcription_meta = {}
+
+        # 1. Authoritative server STT pipeline from raw audio
+        if _ensure_audio_analysis_imports() and transcribe_and_align is not None:
+            transcription_meta = transcribe_and_align(str(tmp_path))
+            server_transcript = (transcription_meta.get("transcript", "") or "").strip()
         elif LOGGING_READY:
-            from logging_agent.stt_processor import STTProcessor
-            stt = STTProcessor()
-            transcript = (stt.transcribe(str(tmp_path)) or "").strip()
-        elif _ensure_audio_analysis_imports():
-            transcription = transcribe_and_align(str(tmp_path))
-            transcript = (transcription.get("transcript", "") or "").strip()
+            try:
+                from logging_agent.stt_processor import STTProcessor
+                stt = STTProcessor()
+                server_transcript = (stt.transcribe(str(tmp_path)) or "").strip()
+            except Exception:
+                pass
 
-        if not transcript:
-            await asyncio.sleep(0.5)
+        # Strict STT validation: Never promote browser preview to authoritative evaluation transcript
+        if server_transcript:
+            stt_status = "success"
+            transcript_source = transcription_meta.get("alignment_source", "whisperx")
+            audio_analysis = _analyze_audio_confidence(str(tmp_path), server_transcript, session_id)
+        else:
+            stt_status = "stt_unavailable"
+            transcript_source = "unavailable"
+            audio_analysis = None
 
-        audio_analysis = _analyze_audio_confidence(str(tmp_path), transcript, session_id)
-
-        # Store latest audio analysis in session for FeedbackAgent
+        # Store latest audio analysis in session for FeedbackAgent & Orchestrator
         if session_id and session_id in SESSIONS and audio_analysis and not audio_analysis.get("error"):
             orch_obj = SESSIONS[session_id]
             if hasattr(orch_obj, "ingest_audio_analysis"):
@@ -702,14 +810,34 @@ async def transcribe_audio(audio: UploadFile = File(...), session_id: str = Form
                     orch_obj["last_confidence_score"] = float(conf)
 
         return {
-            "transcript": transcript,
+            "transcript": server_transcript,
+            "browser_preview_transcript": browser_preview,
+            "stt_status": stt_status,
+            "transcript_source": transcript_source,
+            "alignment_source": transcription_meta.get("alignment_source", "unavailable"),
+            "words": transcription_meta.get("words", []),
+            "pauses": transcription_meta.get("pauses", []),
+            "total_pause_time": transcription_meta.get("total_pause_time", 0.0),
+            "total_speech_time": transcription_meta.get("total_speech_time", 0.0),
+            "true_speaking_rate": transcription_meta.get("true_speaking_rate", 0.0),
             "session_id": session_id,
             "audio_analysis_ready": AUDIO_ANALYSIS_READY,
             "audio_analysis": audio_analysis,
         }
+
+
     except Exception as e:
         return {
             "transcript": f"[STT error: {e}]",
+            "browser_preview_transcript": browser_preview,
+            "stt_status": "error",
+            "transcript_source": "unavailable",
+            "alignment_source": "unavailable",
+            "words": [],
+            "pauses": [],
+            "total_pause_time": 0.0,
+            "total_speech_time": 0.0,
+            "true_speaking_rate": 0.0,
             "session_id": session_id,
             "audio_analysis_ready": AUDIO_ANALYSIS_READY,
             "audio_analysis": None,
@@ -720,21 +848,20 @@ async def transcribe_audio(audio: UploadFile = File(...), session_id: str = Form
 
 @app.post("/api/run_code")
 async def run_code(req: RunCodeRequest):
-    """Run C code in Docker sandbox."""
-    if LOGGING_READY:
-        try:
-            from logging_agent.sandbox_runner import SandboxRunner
-            runner = SandboxRunner()
-            result = runner.run_c_code(req.code, [], [])
-            return result
-        except Exception as e:
-            return {"error": str(e), "stdout": "", "stderr": "", "passed": False}
-    else:
-        # Dev mode: fake output
-        await asyncio.sleep(0.8)
-        if "printf" in req.code:
-            return {"stdout": "42\n", "stderr": "", "passed": True, "execution_time_ms": 12}
-        return {"stdout": "", "stderr": "gcc: error: (dev mode — Docker not running)", "passed": False, "execution_time_ms": 0}
+    """Run C code in authoritative Docker sandbox."""
+    from agents.coding_executor.coding_executor import evaluate_c_submission
+
+    test_cases = []
+    # If session and question are active, try to fetch question test cases
+    if req.session_id and req.session_id in SESSIONS:
+        sess = SESSIONS[req.session_id]
+        curr_q = getattr(sess, "_current_question", None)
+        if isinstance(curr_q, dict) and curr_q.get("test_cases"):
+            test_cases = curr_q["test_cases"]
+
+    result = evaluate_c_submission(req.code, test_cases=test_cases)
+    return result
+
 
 
 # ── Admin routes ─────────────────────────────────────────────────────────
@@ -765,12 +892,12 @@ async def admin_sessions(filter: str = "all", sort: str = "date_desc"):
             "behaviour": s.get("behaviour"),
         }
         sessions_list.append(entry)
-    
+
     # Sort
     reverse = "desc" in sort
     key = "created_at" if "date" in sort else "overall_score"
     sessions_list.sort(key=lambda x: (x.get(key) or ""), reverse=reverse)
-    
+
     return {"sessions": sessions_list, "total": len(sessions_list)}
 
 
@@ -784,7 +911,7 @@ async def admin_stats():
     unique_cands = len(set(s.get("candidate_id") for s in all_s))
     durations = [s.get("duration_minutes", 0) for s in all_s]
     pass_rate = sum(1 for sc in scores if sc >= 0.6) / max(len(scores), 1)
-    
+
     return {
         "total_sessions": total,
         "avg_score": sum(scores) / max(len(scores), 1),

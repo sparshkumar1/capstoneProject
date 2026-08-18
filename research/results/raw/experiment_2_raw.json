@@ -1,0 +1,513 @@
+{
+  "experiment_id": "EXP-2",
+  "timestamp": "2026-08-16T08:02:46.603682",
+  "runtime_seconds": 26.13,
+  "classification": "pilot_evaluation_benchmark",
+  "provenance": {
+    "ratings_averaged_sha256": "7f23e503f83f041a6a355857a34035882180200b4735d8b45735d802161ae5a2",
+    "rubrics_sha256": "57a2ed5a088dc9597a0bd04cb6592c79c801550c50c2ca4149c2866d29d9c9cd"
+  },
+  "paired_items_used": 20,
+  "human_inter_rater_alpha": 0.8255,
+  "results": [
+    {
+      "config_id": "s1_only",
+      "config_name": "Surface Semantic Similarity Only (S1 Only)",
+      "w_s1": 1.0,
+      "w_s2": 0.0,
+      "w_r": 0.0,
+      "spearman_rho": 0.762,
+      "p_value": 9.4247e-05,
+      "mae": 0.1901,
+      "rmse": 0.2721
+    },
+    {
+      "config_id": "s2_only",
+      "config_name": "Concept Coverage Only (S2 Only)",
+      "w_s1": 0.0,
+      "w_s2": 1.0,
+      "w_r": 0.0,
+      "spearman_rho": 0.7462,
+      "p_value": 0.00015824,
+      "mae": 0.2028,
+      "rmse": 0.2659
+    },
+    {
+      "config_id": "r_only",
+      "config_name": "Reasoning Entailment Only (R Only)",
+      "w_s1": 0.0,
+      "w_s2": 0.0,
+      "w_r": 1.0,
+      "spearman_rho": 0.3961,
+      "p_value": 0.083833,
+      "mae": 0.337,
+      "rmse": 0.4453
+    },
+    {
+      "config_id": "s1_plus_r",
+      "config_name": "Surface + Reasoning (S1 + R)",
+      "w_s1": 0.23,
+      "w_s2": 0.0,
+      "w_r": 0.77,
+      "spearman_rho": 0.7651,
+      "p_value": 8.5054e-05,
+      "mae": 0.2898,
+      "rmse": 0.3957
+    },
+    {
+      "config_id": "s2_plus_r",
+      "config_name": "Concept + Reasoning (S2 + R)",
+      "w_s1": 0.0,
+      "w_s2": 0.41,
+      "w_r": 0.59,
+      "spearman_rho": 0.7651,
+      "p_value": 8.4909e-05,
+      "mae": 0.2761,
+      "rmse": 0.3559
+    },
+    {
+      "config_id": "s1_plus_s2",
+      "config_name": "Surface + Concept (S1 + S2)",
+      "w_s1": 0.3,
+      "w_s2": 0.7,
+      "w_r": 0.0,
+      "spearman_rho": 0.8358,
+      "p_value": 4.4568e-06,
+      "mae": 0.1907,
+      "rmse": 0.2563
+    },
+    {
+      "config_id": "full_pipeline",
+      "config_name": "Full Multi-Component Pipeline (Paper)",
+      "w_s1": 0.15,
+      "w_s2": 0.35,
+      "w_r": 0.5,
+      "spearman_rho": 0.8358,
+      "p_value": 4.4568e-06,
+      "mae": 0.2585,
+      "rmse": 0.3376
+    }
+  ],
+  "raw_evaluations": [
+    {
+      "item_id": "pilot_1_qid1",
+      "qid": "1",
+      "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "answer": "",
+      "human_score": 0.0527,
+      "component_subscores": {
+        "S1": 0.0,
+        "S2": 0.0,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.0,
+        "s2_only": 0.0,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0,
+        "s2_plus_r": 0.0,
+        "s1_plus_s2": 0.0,
+        "full_pipeline": 0.0
+      }
+    },
+    {
+      "item_id": "pilot_2_qid1",
+      "qid": "1",
+      "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "answer": "I usually start by sorting arrays because sorted data is clean to read, and then I print all values to verify input formatting before coding.",
+      "human_score": 0.1811,
+      "component_subscores": {
+        "S1": 0.1506,
+        "S2": 0.0,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.1506,
+        "s2_only": 0.0,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0346,
+        "s2_plus_r": 0.0,
+        "s1_plus_s2": 0.0452,
+        "full_pipeline": 0.0226
+      }
+    },
+    {
+      "item_id": "pilot_3_qid1",
+      "qid": "1",
+      "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "answer": "One way is to check each pair and stop when the sum matches the target. That is correct but it is O(n squared), so it can be slow on large arrays.",
+      "human_score": 0.5455,
+      "component_subscores": {
+        "S1": 0.3206,
+        "S2": 0.0,
+        "R": 0.441
+      },
+      "scores_by_config": {
+        "s1_only": 0.3206,
+        "s2_only": 0.0,
+        "r_only": 0.441,
+        "s1_plus_r": 0.4133,
+        "s2_plus_r": 0.2602,
+        "s1_plus_s2": 0.0962,
+        "full_pipeline": 0.2686
+      }
+    },
+    {
+      "item_id": "pilot_4_qid1",
+      "qid": "1",
+      "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "answer": "I keep a dictionary of seen numbers and their positions while scanning left to right. For each value I compute target minus value and check if it was seen. I might need care with duplicates and whethe",
+      "human_score": 0.5476,
+      "component_subscores": {
+        "S1": 0.2105,
+        "S2": 0.0,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.2105,
+        "s2_only": 0.0,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0484,
+        "s2_plus_r": 0.0,
+        "s1_plus_s2": 0.0632,
+        "full_pipeline": 0.0316
+      }
+    },
+    {
+      "item_id": "pilot_5_qid1",
+      "qid": "1",
+      "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "answer": "Use one pass with a hash table from number to index. At index i with value x, compute need = target - x and check whether need is already in the table. If yes, return that stored index and i. If no, s",
+      "human_score": 0.9124,
+      "component_subscores": {
+        "S1": 0.3723,
+        "S2": 0.75,
+        "R": 0.3904
+      },
+      "scores_by_config": {
+        "s1_only": 0.3723,
+        "s2_only": 0.75,
+        "r_only": 0.3904,
+        "s1_plus_r": 0.3862,
+        "s2_plus_r": 0.5378,
+        "s1_plus_s2": 0.6367,
+        "full_pipeline": 0.5135
+      }
+    },
+    {
+      "item_id": "pilot_6_qid3",
+      "qid": "3",
+      "question": "Describe the approach to reverse a singly linked list in-place.",
+      "answer": "I am not sure.",
+      "human_score": 0.0535,
+      "component_subscores": {
+        "S1": 0.1113,
+        "S2": 0.0,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.1113,
+        "s2_only": 0.0,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0256,
+        "s2_plus_r": 0.0,
+        "s1_plus_s2": 0.0334,
+        "full_pipeline": 0.0167
+      }
+    },
+    {
+      "item_id": "pilot_7_qid3",
+      "qid": "3",
+      "question": "Describe the approach to reverse a singly linked list in-place.",
+      "answer": "Linked lists are useful in interviews because insertion is easier than arrays in some cases, and memory can be dynamic.",
+      "human_score": 0.1766,
+      "component_subscores": {
+        "S1": 0.0979,
+        "S2": 0.0,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.0979,
+        "s2_only": 0.0,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0225,
+        "s2_plus_r": 0.0,
+        "s1_plus_s2": 0.0294,
+        "full_pipeline": 0.0147
+      }
+    },
+    {
+      "item_id": "pilot_8_qid3",
+      "qid": "3",
+      "question": "Describe the approach to reverse a singly linked list in-place.",
+      "answer": "You can walk through nodes and point each node backward instead of forward. At the end the last node becomes the new head.",
+      "human_score": 0.545,
+      "component_subscores": {
+        "S1": 0.4809,
+        "S2": 0.75,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.4809,
+        "s2_only": 0.45,
+        "r_only": 0.0,
+        "s1_plus_r": 0.1106,
+        "s2_plus_r": 0.1845,
+        "s1_plus_s2": 0.4593,
+        "full_pipeline": 0.2296
+      }
+    },
+    {
+      "item_id": "pilot_9_qid3",
+      "qid": "3",
+      "question": "Describe the approach to reverse a singly linked list in-place.",
+      "answer": "Maintain three references: previous, current, and next_node. While current is not null, first save next_node = current.next, then redirect current.next to previous, move previous to current, and move ",
+      "human_score": 0.9169,
+      "component_subscores": {
+        "S1": 0.2351,
+        "S2": 0.5,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.2351,
+        "s2_only": 0.3,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0541,
+        "s2_plus_r": 0.123,
+        "s1_plus_s2": 0.2805,
+        "full_pipeline": 0.1403
+      }
+    },
+    {
+      "item_id": "pilot_10_qid3",
+      "qid": "3",
+      "question": "Describe the approach to reverse a singly linked list in-place.",
+      "answer": "Start with prev = null and curr = head. Repeatedly detach curr from the forward chain by caching curr.next, then attach curr to the reversed prefix by setting curr.next = prev. Shift both pointers for",
+      "human_score": 0.8658,
+      "component_subscores": {
+        "S1": 0.3927,
+        "S2": 1.0,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.3927,
+        "s2_only": 0.6,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0903,
+        "s2_plus_r": 0.246,
+        "s1_plus_s2": 0.5378,
+        "full_pipeline": 0.2689
+      }
+    },
+    {
+      "item_id": "pilot_11_qid10",
+      "qid": "10",
+      "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+      "answer": "",
+      "human_score": 0.043,
+      "component_subscores": {
+        "S1": 0.0,
+        "S2": 0.0,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.0,
+        "s2_only": 0.0,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0,
+        "s2_plus_r": 0.0,
+        "s1_plus_s2": 0.0,
+        "full_pipeline": 0.0
+      }
+    },
+    {
+      "item_id": "pilot_12_qid10",
+      "qid": "10",
+      "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+      "answer": "Binary trees are recursive structures and I usually draw them before coding because recursion can be tricky in interviews.",
+      "human_score": 0.2035,
+      "component_subscores": {
+        "S1": 0.2342,
+        "S2": 0.0,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.2342,
+        "s2_only": 0.0,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0539,
+        "s2_plus_r": 0.0,
+        "s1_plus_s2": 0.0703,
+        "full_pipeline": 0.0351
+      }
+    },
+    {
+      "item_id": "pilot_13_qid10",
+      "qid": "10",
+      "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+      "answer": "DFS preorder and inorder traversals are popular and can be implemented using recursion with base case checks.",
+      "human_score": 0.2005,
+      "component_subscores": {
+        "S1": 0.2719,
+        "S2": 0.25,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.2719,
+        "s2_only": 0.15,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0625,
+        "s2_plus_r": 0.0615,
+        "s1_plus_s2": 0.1866,
+        "full_pipeline": 0.0933
+      }
+    },
+    {
+      "item_id": "pilot_14_qid10",
+      "qid": "10",
+      "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+      "answer": "Visit nodes level by level from top to bottom. You process the root first, then children, then grandchildren in that order.",
+      "human_score": 0.5615,
+      "component_subscores": {
+        "S1": 0.4626,
+        "S2": 0.5,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.4626,
+        "s2_only": 0.3,
+        "r_only": 0.0,
+        "s1_plus_r": 0.1064,
+        "s2_plus_r": 0.123,
+        "s1_plus_s2": 0.3488,
+        "full_pipeline": 0.1744
+      }
+    },
+    {
+      "item_id": "pilot_15_qid10",
+      "qid": "10",
+      "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+      "answer": "Use a queue. Enqueue the root, then loop until the queue is empty: dequeue one node, record it, and enqueue its left child and right child when present. Because the queue is FIFO, nodes from shallower",
+      "human_score": 0.8639,
+      "component_subscores": {
+        "S1": 0.4412,
+        "S2": 1.0,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.4412,
+        "s2_only": 0.6,
+        "r_only": 0.0,
+        "s1_plus_r": 0.1015,
+        "s2_plus_r": 0.246,
+        "s1_plus_s2": 0.5523,
+        "full_pipeline": 0.2762
+      }
+    },
+    {
+      "item_id": "pilot_16_qid41",
+      "qid": "41",
+      "question": "What is a pointer in C and how do you declare one?",
+      "answer": "I don't remember this one.",
+      "human_score": 0.0595,
+      "component_subscores": {
+        "S1": 0.0778,
+        "S2": 0.0,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.0778,
+        "s2_only": 0.0,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0179,
+        "s2_plus_r": 0.0,
+        "s1_plus_s2": 0.0233,
+        "full_pipeline": 0.0117
+      }
+    },
+    {
+      "item_id": "pilot_17_qid41",
+      "qid": "41",
+      "question": "What is a pointer in C and how do you declare one?",
+      "answer": "",
+      "human_score": 0.0537,
+      "component_subscores": {
+        "S1": 0.0,
+        "S2": 0.0,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.0,
+        "s2_only": 0.0,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0,
+        "s2_plus_r": 0.0,
+        "s1_plus_s2": 0.0,
+        "full_pipeline": 0.0
+      }
+    },
+    {
+      "item_id": "pilot_18_qid41",
+      "qid": "41",
+      "question": "What is a pointer in C and how do you declare one?",
+      "answer": "In C we have loops, arrays, and functions, and memory usage should be optimized for performance and embedded systems.",
+      "human_score": 0.2159,
+      "component_subscores": {
+        "S1": 0.3117,
+        "S2": 0.25,
+        "R": 0.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.3117,
+        "s2_only": 0.15,
+        "r_only": 0.0,
+        "s1_plus_r": 0.0717,
+        "s2_plus_r": 0.0615,
+        "s1_plus_s2": 0.1985,
+        "full_pipeline": 0.0992
+      }
+    },
+    {
+      "item_id": "pilot_19_qid41",
+      "qid": "41",
+      "question": "What is a pointer in C and how do you declare one?",
+      "answer": "A pointer stores an address rather than a direct value. You can declare one with syntax like int *p, and then assign it from the address of a variable.",
+      "human_score": 0.5353,
+      "component_subscores": {
+        "S1": 0.6521,
+        "S2": 0.75,
+        "R": 1.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.6521,
+        "s2_only": 0.75,
+        "r_only": 1.0,
+        "s1_plus_r": 0.92,
+        "s2_plus_r": 0.8975,
+        "s1_plus_s2": 0.7206,
+        "full_pipeline": 0.8603
+      }
+    },
+    {
+      "item_id": "pilot_20_qid41",
+      "qid": "41",
+      "question": "What is a pointer in C and how do you declare one?",
+      "answer": "A pointer is a variable that holds a memory location of another object. For example, int *p declares a pointer to int. If int x = 7, then p = &x stores x's address, and *p reads or writes the value at",
+      "human_score": 0.8921,
+      "component_subscores": {
+        "S1": 0.5823,
+        "S2": 0.75,
+        "R": 1.0
+      },
+      "scores_by_config": {
+        "s1_only": 0.5823,
+        "s2_only": 0.75,
+        "r_only": 1.0,
+        "s1_plus_r": 0.9039,
+        "s2_plus_r": 0.8975,
+        "s1_plus_s2": 0.6997,
+        "full_pipeline": 0.8498
+      }
+    }
+  ]
+}

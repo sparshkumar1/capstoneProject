@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Experiment5OutputSchema",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "timestamp",
+    "ablation_conditions",
+    "raw_ablation_sessions",
+    "aggregated_metrics"
+  ],
+  "properties": {
+    "experiment_id": {"type": "string", "const": "EXP-5"},
+    "timestamp": {"type": "string"},
+    "ablation_conditions": {"type": "array", "items": {"type": "string"}},
+    "raw_ablation_sessions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "condition_id",
+          "seed",
+          "mean_score",
+          "score_variance",
+          "adaptation_rho",
+          "followups_triggered",
+          "avg_timing_modifier"
+        ]
+      }
+    },
+    "aggregated_metrics": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "mean_score": {"type": "number"},
+          "score_variance": {"type": "number"},
+          "adaptation_rho": {"type": "number"},
+          "followups_count": {"type": "number"},
+          "avg_timing_modifier": {"type": "number"}
+        }
+      }
+    }
+  }
+}

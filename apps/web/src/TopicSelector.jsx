@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { SessionContext } from "./contexts";
 import Topbar from "./Topbar";
-import { api } from "./servicesApi";
+import { api } from "./api";
 import "./TopicSelector.css";
 
 const C_TOPICS = [

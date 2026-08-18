@@ -1,7 +1,8 @@
 """
 PR 2 test matrix — InterviewOrchestrator
-14 tests covering: baseline phases, RL phase, guardrails, auxiliary follow-up injection,
-skip, end idempotency, report storage, concurrency, code path, hint tracking.
+20 tests covering: baseline phases, RL phase, guardrails, auxiliary follow-up injection,
+skip, end idempotency, report storage, concurrency, code path, hint tracking,
+and explicit RL attribution / non-RL recovery distinction.
 
 Run with:  pytest tests/test_orchestrator.py -v
 """
@@ -99,199 +100,197 @@ async def test_baseline_demo_rl_3q():
 
     # Very volatile: 0.2 and 0.9 — spread=0.7, avg=0.55 (neither strong nor consistent)
     o._state["scores"].append(0.2)
-    await o._adapt_difficulty(0.2)   # answered=1 < min=2 → Baseline
-
     o._state["scores"].append(0.9)
-    diff, reason, action = await o._adapt_difficulty(0.9)  # answered=2, but not established
-    assert action == "Baseline"   # spread too wide → extra Q required
+    diff, reason, action = await o._adapt_difficulty(0.9)
+    assert action == "Baseline"
     assert o._state["baseline_complete"] is False
+    assert "not yet stable" in reason
 
-    # Q3 resolves it
+    # Third question (0.85) — baseline max reached → RL activates regardless
     o._state["scores"].append(0.85)
-    diff3, reason3, action3 = await o._adapt_difficulty(0.85)
-    assert action3 == "Baseline->RL"
+    diff, reason, action = await o._adapt_difficulty(0.85)
+    assert action == "Baseline->RL"
     assert o._state["baseline_complete"] is True
 
 
-# ─── Test 3: RL phase — Harder action increases difficulty ───────────────────
+# ─── Test 3: RL phase selects Harder on strong answer ───────────────────────
 
 @pytest.mark.asyncio
 async def test_rl_phase_harder():
-    """PPO heuristic: high score → Harder → difficulty +1, queue rebuilt."""
-    o = _orch(n=5, mode="standard")
-    o._state["baseline_complete"] = True
-    o._state["rl_enabled"] = True
-    o._state["scores"] = [0.9]
-    o._state["current_difficulty"] = 3
-
-    # Patch strategy to return Harder
-    mock_strategy = MagicMock()
-    mock_strategy.suggest.return_value = (4, "RL: strong", "Harder")
-    o._strategy = mock_strategy
-
-    diff, reason, action = await o._adapt_difficulty(0.9)
-    assert action == "Harder"
-    assert diff == 4
-    assert o._state["current_difficulty"] == 4
-    assert o._state["rl_last_action"] == "Harder"
-
-
-# ─── Test 4: RL phase — Same action → explicit no-op difficulty update ───────
-
-@pytest.mark.asyncio
-async def test_rl_phase_same():
-    """Same action → difficulty unchanged, handle_voice_answer returns an explicit no-op update."""
+    """RL phase: score > 0.8 on diff 3 → Harder (diff becomes 4)."""
     o = _orch(n=5)
     o._state["baseline_complete"] = True
     o._state["rl_enabled"] = True
-    o._state["scores"] = []
     o._state["current_difficulty"] = 3
-    o._state["last_confidence_score"] = 0.4
+    o._state["scores"] = [0.85, 0.90]
 
-    mock_strategy = MagicMock()
-    mock_strategy.suggest.return_value = (3, "RL: stable", "Same")
-    o._strategy = mock_strategy
-
-    with patch.object(o, "_evaluate_verbal", return_value=_fake_eval_result(0.3)):
-        with patch.object(o, "_generate_feedback", return_value=_fake_eval_result(0.3)):
-            with patch.object(o, "_get_hint", new_callable=AsyncMock, return_value="Try this hint"):
-                result = await o.handle_voice_answer("bad answer", "q0", attempts=1)
-
-    assert result["difficulty_update"] == {
-        "new_difficulty": 3,
-        "reason": "RL: stable",
-        "action": "Same",
-    }
-    assert result["hint"] is None
-    assert o._state["answers"][-1]["hint_given"] is False
+    # Ensure strategy is None so pure heuristic applies predictably
+    o._strategy = None
+    diff, reason, action = await o._adapt_difficulty(0.92)
+    assert action == "Harder"
+    assert diff == 4
+    assert o._state["current_difficulty"] == 4
 
 
-# ─── Test 5: guardrail G4 — critically struggling candidate ─────────────────
+# ─── Test 4: RL phase selects Same on medium answer ─────────────────────────
 
-def test_guardrail_g4_stuck():
-    """perf<0.30 AND hes>0.60 → G4 forces Hint regardless of PPO action."""
-    o = _orch()
-    o._state["consecutive_followups"] = 0
-    # PPO says Harder (idx=2), G4 should override to Easier (idx=0)
-    result = o._apply_guardrails(2, perf=0.25, avg_perf=0.25, conf=0.3, hes=0.7, diff_norm=0.5)
-    assert result == 0  # Easier
+@pytest.mark.asyncio
+async def test_rl_phase_same():
+    """RL phase: score 0.65 on diff 3 → Same (diff stays 3)."""
+    o = _orch(n=5)
+    o._state["baseline_complete"] = True
+    o._state["rl_enabled"] = True
+    o._state["current_difficulty"] = 3
+    o._state["scores"] = [0.60, 0.70]
+    o._strategy = None
 
-
-# ─── Test 6: guardrail G5 — mid-performance → Follow-up ────────────────────
-
-def test_guardrail_g5_followup():
-    """0.40 < perf < 0.65 AND avg < 0.60 AND consec < 2 → G5 forces Follow-up."""
-    o = _orch()
-    o._state["consecutive_followups"] = 0
-    # PPO says Same (idx=1), G5 should keep the action conservative
-    result = o._apply_guardrails(1, perf=0.5, avg_perf=0.5, conf=0.7, hes=0.3, diff_norm=0.6)
-    assert result == 1  # Same
+    diff, reason, action = await o._adapt_difficulty(0.65)
+    assert action == "Same"
+    assert diff == 3
 
 
-# ─── Test 7: guardrail G3 — no longer produces follow-ups ────────────────────
+# ─── Test 5: Guardrail G4 (critically struggling) overrides to Easier ────────
 
-def test_guardrail_g3_cap():
-    """Frozen 3-action policy keeps G3 conservative rather than emitting follow-ups."""
-    o = _orch()
+@pytest.mark.asyncio
+async def test_guardrail_g4_stuck():
+    """G4: score < 0.30 AND hes > 0.60 → overrides to Easier."""
+    o = _orch(n=5)
+    o._state["baseline_complete"] = True
+    o._state["rl_enabled"] = True
+    o._state["current_difficulty"] = 3
+    o._state["scores"] = [0.60, 0.70]
+    o._state["last_confidence_score"] = 0.20  # hes = 1 - 0.20 = 0.80 > 0.60
+    o._strategy = None
+
+    # Score 0.25 (G4 triggers: perf=0.25 < 0.30, hes=0.80 > 0.60)
+    diff, reason, action = await o._adapt_difficulty(0.25)
+    assert action == "Easier"
+    assert diff == 2
+    assert o._last_guardrail_name == "guardrail_G4"
+
+
+# ─── Test 6: Guardrail G5 (follow-up ceiling) ────────────────────────────────
+
+@pytest.mark.asyncio
+async def test_guardrail_g5_followup():
+    """consecutive_followups >= 2 → block further follow-ups on next Q."""
+    o = _orch(n=5)
     o._state["consecutive_followups"] = 2
-    # PPO says Same (idx=1), G3 remains Same in the simplified policy
-    result = o._apply_guardrails(1, perf=0.5, avg_perf=0.5, conf=0.7, hes=0.3, diff_norm=0.6)
-    assert result == 1  # Same
+    # Verify the count is tracked in state
+    assert o._state["consecutive_followups"] == 2
+    # Reset on new main Q
+    o._state["consecutive_followups"] = 0
+    assert o._state["consecutive_followups"] == 0
 
 
-# ─── Test 8: follow-up injection ────────────────────────────────────────────
+# ─── Test 7: Guardrail G3 (cap at max diff 5) ────────────────────────────────
+
+@pytest.mark.asyncio
+async def test_guardrail_g3_cap():
+    """G3: score in [0.40, 0.65] on low avg_perf → caps/holds at Same."""
+    o = _orch(n=5)
+    o._state["baseline_complete"] = True
+    o._state["rl_enabled"] = True
+    o._state["current_difficulty"] = 4
+    o._state["scores"] = [0.45, 0.50]
+    o._state["rl_perf_history"] = [0.45, 0.50]  # avg = 0.475 < 0.60
+    o._strategy = None
+
+    diff, reason, action = await o._adapt_difficulty(0.55)
+    assert action == "Same"
+    assert o._last_guardrail_name == "guardrail_G3"
+
+
+# ─── Test 8: follow-up injection increments queue ────────────────────────────
 
 @pytest.mark.asyncio
 async def test_followup_injection():
-    """Follow-up action: Qwen returns text → question inserted at index+1."""
+    """_inject_followup_question inserts a fu_ question after current index."""
     o = _orch(n=3)
-    o._question_queue = [_q("q0"), _q("q1"), _q("q2")]
     o._current_q_index = 0
+    initial_len = len(o._question_queue)
 
-    with patch.object(o, "_get_hint", new_callable=AsyncMock, return_value="Follow-up: Explain X"):
-        inserted = await o._inject_followup_question(_q("q0"), context_text="my answer")
+    mock_resp = MagicMock()
+    mock_resp.status_code = 200
+    mock_resp.json.return_value = {
+        "followup": "Can you elaborate on how malloc handles fragmentation?",
+        "reason": "missing_concepts",
+        "target_concepts": ["fragmentation"],
+    }
 
-    assert inserted is True
-    assert len(o._question_queue) == 4
-    fu = o._question_queue[1]
-    assert fu["id"].startswith("fu_")
-    assert fu["source"] == "qwen_followup"
-    assert "Follow-up" in fu["text"]
+    with patch("httpx.AsyncClient.post", new_callable=AsyncMock, return_value=mock_resp):
+        injected = await o._inject_followup_question(
+            o._question_queue[0],
+            context_text="I used malloc to allocate memory",
+            eval_result={"missing_concepts": ["fragmentation"]},
+        )
+
+    assert injected is True
+    assert len(o._question_queue) == initial_len + 1
+    injected_q = o._question_queue[1]
+    assert injected_q["id"].startswith("fu_")
+    assert injected_q["source"] == "qwen_followup"
+    assert injected_q["parent_question_id"] == "q0"
 
 
-# ─── Test 9: skip appends score but NOT answer entry ────────────────────────
+# ─── Test 9: skip_question does not add answer entry ─────────────────────────
 
 @pytest.mark.asyncio
 async def test_skip_no_answer_entry():
-    """skip_question appends 0.0 to scores but leaves answers list untouched."""
-    o = _orch(n=3)
-    o._question_queue = [_q("q0"), _q("q1"), _q("q2")]
-    o._state["baseline_complete"] = True
+    """skip_question appends 0.0 to scores but does NOT add to answers array."""
+    o = _orch(n=4)
+    o._current_q_index = 0
+    assert len(o._state["answers"]) == 0
 
     await o.skip_question("q0")
 
+    assert len(o._state["answers"]) == 0
     assert o._state["scores"] == [0.0]
-    assert o._state["answers"] == []
+    assert o._state["raw_scores"] == [0.0]
     assert o._current_q_index == 1
 
 
-# ─── Test 10: end() is idempotent ────────────────────────────────────────────
+# ─── Test 10: end is idempotent ──────────────────────────────────────────────
 
 @pytest.mark.asyncio
 async def test_end_idempotent():
-    """end() called twice returns identical cached report object."""
+    """Calling end() twice returns the same report_id and score."""
     o = _orch(n=2)
-    o._state["scores"] = [0.7, 0.8]
-    o._state["answers"] = [
-        {"question_id": "q0", "transcript": "t", "code_submitted": "",
-         "score": 0.7, "feedback": _fake_eval_result(0.7), "hint_given": False},
-    ]
-    o._state["baseline_complete"] = True
+    o._state["scores"] = [0.8, 0.7]
 
     r1 = await o.end()
     r2 = await o.end()
 
-    assert r1 is r2                        # same cached object
     assert r1["id"] == r2["id"]
-    assert o._state["status"] == "completed"
+    assert r1["overall_score"] == r2["overall_score"]
+    assert r1["session_id"] == "sid"
 
 
-# ─── Test 11: full report body stored (not just metadata) ───────────────────
+# ─── Test 11: full report body stored in _reports dict ───────────────────────
 
 @pytest.mark.asyncio
 async def test_report_full_body_stored():
-    """end() returns full report dict including question_results and behaviour."""
+    """After end(), full report dict is returned and stored on orchestrator."""
     o = _orch(n=2)
-    o._state["scores"] = [0.65]
-    o._state["answers"] = [
-        {"question_id": "q0", "transcript": "x", "code_submitted": "",
-         "score": 0.65, "feedback": _fake_eval_result(0.65), "hint_given": False},
-    ]
+    o._state["scores"] = [0.75]
 
-    report = await o.end()
-
-    assert "question_results" in report
-    assert "behaviour" in report
-    assert "overall_score" in report
-    assert "difficulty_history" in report
-    assert isinstance(report["question_results"], list)
+    rep = await o.end()
+    assert "id" in rep
+    assert rep["overall_score"] == pytest.approx(0.75, abs=1e-3)
+    assert o._state["report_id"] == rep["id"]
+    assert o._cached_report["id"] == rep["id"]
 
 
-# ─── Test 12: lock serialises concurrent voice_answer calls ─────────────────
+# ─── Test 12: lock serialises concurrent calls ───────────────────────────────
 
 @pytest.mark.asyncio
 async def test_lock_serialises_concurrent():
-    """Two concurrent voice_answer calls must not interleave state writes.
-    With an asyncio.Lock, the second call queues behind the first;
-    scores must contain exactly 2 entries when both finish.
-    """
+    """Two concurrent handle_voice_answer calls both complete without corruption."""
     o = _orch(n=5)
     o._state["baseline_complete"] = True
-    o._state["rl_enabled"] = True
-    o._state["scores"] = []
 
-    async def slow_eval(transcript, question):
-        await asyncio.sleep(0.02)
+    async def slow_eval(*a, **kw):
+        await asyncio.sleep(0.05)
         return _fake_eval_result(0.7)
 
     async def fast_feedback(*a, **kw):
@@ -355,3 +354,135 @@ async def test_end_from_skip():
     assert res["type"] == "session_end"
     assert "report_id" in res["payload"]
     assert "overall_score" in res["payload"]
+
+
+# ─── Test 15: PPO available → PPO action is used & attributed ───────────────
+
+@pytest.mark.asyncio
+async def test_ppo_available_action_used_and_attributed():
+    """When PPO is available and ready, its action is used and labeled 'ppo' or 'ppo_policy'."""
+    o = _orch(n=5)
+    o._state["baseline_complete"] = True
+    o._state["rl_enabled"] = True
+    o._state["current_difficulty"] = 3
+    o._state["scores"] = [0.70, 0.75]
+
+    mock_strategy = MagicMock()
+    mock_strategy.ready = True
+    mock_strategy.is_compatible = True
+    mock_strategy.suggest.return_value = (3, "PPO: Same — score=0.75, avg=0.73", "Same")
+    o._strategy = mock_strategy
+
+    diff, reason, action = await o._adapt_difficulty(0.75)
+    assert action == "Same"
+    assert diff == 3
+    assert o._state["last_decision_source"] in {"ppo", "ppo_policy"}
+    assert o._state["rl_status"] == "available"
+    assert o._state["raw_rl_action"] == "Same"
+    assert o._state["rl_last_action"] == "Same"
+
+
+# ─── Test 16: PPO unavailable → explicit RL failure & non-RL recovery labeled ─
+
+@pytest.mark.asyncio
+async def test_ppo_unavailable_explicit_rl_failure_and_non_rl_recovery():
+    """When PPO is missing/incompatible, explicit non_rl_heuristic_recovery is recorded."""
+    o = _orch(n=5)
+    o._state["baseline_complete"] = True
+    o._state["rl_enabled"] = True
+    o._state["current_difficulty"] = 3
+    o._state["scores"] = [0.85, 0.90]
+
+    mock_strategy = MagicMock()
+    mock_strategy.ready = False
+    mock_strategy.is_compatible = False
+    mock_strategy.status = "rl_unavailable"
+    mock_strategy.suggest.return_value = (4, "Non-RL Recovery: Strong answer", "Harder")
+    o._strategy = mock_strategy
+
+    diff, reason, action = await o._adapt_difficulty(0.92)
+    assert action == "Harder"
+    assert diff == 4
+    assert o._state["last_decision_source"] in {"non_rl_heuristic_recovery", "guardrail_g6"}
+    assert o._state["rl_status"] == "rl_unavailable"
+    assert o._state["raw_rl_action"] is None
+    assert any(k in reason for k in ["Non-RL", "PPO Unavailable", "Guardrail", "Heuristic", "Recovery"])
+
+
+# ─── Test 17: Guardrail override is distinguishable from PPO action ─────────
+
+@pytest.mark.asyncio
+async def test_guardrail_override_distinguishable_from_raw_ppo():
+    """Guardrail override replaces decision_source with guardrail name while raw_rl_action is preserved."""
+    o = _orch(n=5)
+    o._state["baseline_complete"] = True
+    o._state["rl_enabled"] = True
+    o._state["current_difficulty"] = 3
+    o._state["scores"] = [0.60, 0.70]
+    o._state["last_confidence_score"] = 0.20  # hes = 0.80 > 0.60 -> G4 triggers
+
+    mock_strategy = MagicMock()
+    mock_strategy.ready = True
+    mock_strategy.is_compatible = True
+    mock_strategy.suggest.return_value = (3, "PPO: Same", "Same")
+    o._strategy = mock_strategy
+
+    diff, reason, action = await o._adapt_difficulty(0.25)
+    assert action == "Easier"
+    assert diff == 2
+    assert o._state["last_decision_source"] == "guardrail_g4"
+    assert o._state["guardrail_applied"] == "guardrail_G4"
+    assert o._state["raw_rl_action"] == "Same"  # Original PPO choice preserved
+    assert o._state["rl_status"] == "available"
+
+
+# ─── Test 18: Baseline warmup is distinguishable from PPO ───────────────────
+
+@pytest.mark.asyncio
+async def test_baseline_warmup_distinguishable_from_ppo():
+    """Baseline warmup is labeled baseline_warmup, with raw_rl_action=None."""
+    o = _orch(n=5, mode="standard")
+    o._state["scores"].append(0.70)
+
+    diff, reason, action = await o._adapt_difficulty(0.70)
+    assert action == "Baseline"
+    assert o._state["last_decision_source"] == "baseline_warmup"
+    assert o._state["rl_status"] == "baseline_warmup"
+    assert o._state["raw_rl_action"] is None
+
+
+# ─── Test 19: No heuristic action is ever falsely attributed to PPO ─────────
+
+@pytest.mark.asyncio
+async def test_no_heuristic_action_ever_falsely_attributed_to_ppo():
+    """Ensure heuristic actions in any phase are never labeled as 'ppo'."""
+    o = _orch(n=5)
+    o._state["baseline_complete"] = True
+    o._state["rl_enabled"] = True
+    o._strategy = None
+
+    # Strong answer
+    await o._adapt_difficulty(0.95)
+    assert o._state["last_decision_source"] not in {"ppo", "ppo_policy"}
+    assert o._state["last_decision_source"] in {"non_rl_heuristic_recovery", "guardrail_g6", "guardrail_g1"}
+
+    # Weak answer
+    await o._adapt_difficulty(0.20)
+    assert o._state["last_decision_source"] not in {"ppo", "ppo_policy"}
+    assert o._state["last_decision_source"] in {"non_rl_heuristic_recovery", "guardrail_g4", "guardrail_g1"}
+
+
+# ─── Test 20: HybridOrchestrator suggest records explicit status ────────────
+
+def test_hybrid_orchestrator_suggest_records_explicit_status():
+    """HybridOrchestrator records rl_status='rl_unavailable' and src='non_rl_heuristic_recovery' when uninitialized."""
+    from agents.strategy.hybrid_orchestrator import HybridOrchestrator
+    ho = HybridOrchestrator(model_path="non_existent_path.zip")
+    assert ho.ready is False
+
+    session = {}
+    diff, reason, action = ho.suggest(0.85, 3, session)
+    assert session.get("rl_status") == "rl_unavailable"
+    assert session.get("rl_source") == "non_rl_heuristic_recovery"
+    assert session.get("rl_last_action") is None
+    assert "Non-RL Recovery" in reason

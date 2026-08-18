@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { SessionContext } from "./contexts";
 import ThemeToggle from "./ThemeToggle";
-import { api } from "./servicesApi";
+import { api } from "./api";
 import "./Login.css";
 
 const YEARS = ["1st Year", "2nd Year", "3rd Year", "4th Year", "Postgrad", "Fresher (Working)"];

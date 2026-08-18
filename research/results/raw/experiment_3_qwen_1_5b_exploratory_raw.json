@@ -1,0 +1,39 @@
+{
+  "experiment_id": "EXP-3-EXPLORATORY",
+  "classification": "EXPLORATORY / SUPPLEMENTARY (NOT a replacement for EXP-3 Qwen-7B)",
+  "model_name": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "timestamp": "2026-08-16T16:33:54.000000",
+  "download_status": "DOWNLOAD_COMPLETED_AND_VERIFIED",
+  "model_files_verified": {
+    "model.safetensors": "2,944.44 MB",
+    "config.json": "0.66 KB",
+    "tokenizer.json": "6.71 MB",
+    "vocab.json": "2.65 MB",
+    "merges.txt": "1.59 MB",
+    "total_size": "2.95 GB"
+  },
+  "hardware_environment": {
+    "cpu_cores": 12,
+    "system_ram_total_gb": 15.68,
+    "system_ram_available_gb": 7.10,
+    "cuda_available": false,
+    "gpu_name": "None",
+    "vram_gb": 0.00,
+    "disk_free_gb": 66.86
+  },
+  "smoke_test_result": {
+    "status": "SUCCESS",
+    "model_load_time_seconds": 7.91,
+    "process_rss_gb": 0.47,
+    "generation_latency_seconds": 111.32,
+    "generated_output": "Your approach to reversing the linked list is clear and well-structured, but consider adding comments or a brief explanation in your code to enhance readability."
+  },
+  "exploratory_benchmark_status": "STOPPED_CPU_LATENCY_THRESHOLD",
+  "execution_details": {
+    "single_turn_cpu_latency_seconds": 111.32,
+    "batch_estimated_runtime_minutes": 45.0,
+    "policy_action": "Stopped batch evaluation per Section 7 protocol rules (if model is too slow on CPU, stop and record hardware limitation without switching models or fabricating proxy outputs)."
+  },
+  "scientific_restriction": "This exploratory evaluation is supplementary and is NOT a replacement for the preregistered EXP-3 Qwen-7B condition. The preregistered Qwen-7B condition remains INCOMPLETE (hardware throughput limitation)."
+}

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 // Dynamic import of Monaco from CDN (loaded in index.html)
 const STARTER_C = `#include <stdio.h>
@@ -14,15 +14,25 @@ export default function MonacoEditor({ value, onChange, readOnly = false, height
   const containerRef = useRef(null);
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
+  const [isMonacoReady, setIsMonacoReady] = useState(Boolean(window.monaco));
+  const [useFallback, setUseFallback] = useState(false);
 
   useEffect(() => {
-    // Monaco is loaded via AMD from CDN (see index.html)
+    let timer = null;
+    let interval = null;
+
     const initEditor = () => {
       if (!window.monaco || !containerRef.current) return;
       monacoRef.current = window.monaco;
+      setIsMonacoReady(true);
+      setUseFallback(false);
 
-      // Register C language tokens (basic)
-      window.monaco.languages.register({ id: "c" });
+      // Register C language tokens
+      try {
+        window.monaco.languages.register({ id: "c" });
+      } catch {
+        // Ignore if already registered
+      }
 
       const editor = window.monaco.editor.create(containerRef.current, {
         value: value ?? STARTER_C,
@@ -86,18 +96,30 @@ export default function MonacoEditor({ value, onChange, readOnly = false, height
       editorRef.current = editor;
     };
 
-    // Wait for Monaco AMD loader
+    // Check if Monaco is already loaded
     if (window.monaco) {
       initEditor();
     } else {
       window.__onMonacoReady = initEditor;
-      const interval = setInterval(() => {
-        if (window.monaco) { clearInterval(interval); initEditor(); }
+      interval = setInterval(() => {
+        if (window.monaco) {
+          clearInterval(interval);
+          initEditor();
+        }
       }, 100);
-      return () => clearInterval(interval);
+
+      // Fallback timeout after 2.5 seconds if CDN is blocked / offline
+      timer = setTimeout(() => {
+        if (!window.monaco) {
+          clearInterval(interval);
+          setUseFallback(true);
+        }
+      }, 2500);
     }
 
     return () => {
+      if (interval) clearInterval(interval);
+      if (timer) clearTimeout(timer);
       editorRef.current?.dispose();
     };
   }, []);
@@ -122,6 +144,49 @@ export default function MonacoEditor({ value, onChange, readOnly = false, height
       }
     }
   }, [value]);
+
+  if (useFallback) {
+    return (
+      <div className="monaco-fallback-container" style={{ width: "100%", height, display: "flex", flexDirection: "column" }}>
+        <div className="fallback-editor-banner" style={{
+          fontSize: 11,
+          padding: "6px 12px",
+          background: "rgba(255, 184, 79, 0.12)",
+          borderBottom: "1px solid rgba(255, 184, 79, 0.3)",
+          color: "var(--warn)",
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+        }}>
+          <span>⚠️</span>
+          <span>Advanced editor unavailable. Basic code editor is active.</span>
+        </div>
+        <textarea
+          className="fallback-code-editor"
+          value={value ?? STARTER_C}
+          onChange={(e) => onChange?.(e.target.value)}
+          readOnly={readOnly}
+          spellCheck={false}
+          style={{
+            flex: 1,
+            width: "100%",
+            height: "100%",
+            minHeight: 220,
+            background: "var(--surface)",
+            color: "var(--text-1)",
+            fontFamily: "'JetBrains Mono', 'Courier New', monospace",
+            fontSize: 14,
+            lineHeight: 1.5,
+            padding: 14,
+            border: "none",
+            outline: "none",
+            resize: "none",
+            boxSizing: "border-box",
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} style={{ width: "100%", height, minHeight: 200 }} />

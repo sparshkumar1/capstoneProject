@@ -32,7 +32,8 @@ The RL agent uses the interview environment and reward shaping defined in the re
 
 ## Performance notes
 
-Reported paper figures are grounded in the ablation outputs under `ablation/results/`. The full evaluator configuration reported a Spearman correlation of 0.9152 in the saved summary.
+Authoritative performance evaluations and statistical findings are grounded in the pre-registered research results under `research/results/`, the scientific manuscript [`docs/paper_draft_ieee.md`](paper_draft_ieee.md), and the numerical traceability ledger [`docs/PAPER_RESULTS_TRACEABILITY.md`](PAPER_RESULTS_TRACEABILITY.md).
+
 
 ## Limitations
 

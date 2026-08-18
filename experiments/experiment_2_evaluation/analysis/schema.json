@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Experiment2OutputSchema",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "timestamp",
+    "paired_items_used",
+    "human_inter_rater_alpha",
+    "results",
+    "raw_evaluations"
+  ],
+  "properties": {
+    "experiment_id": {"type": "string", "const": "EXP-2"},
+    "timestamp": {"type": "string"},
+    "paired_items_used": {"type": "integer", "const": 20},
+    "human_inter_rater_alpha": {"type": "number"},
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "config_id",
+          "config_name",
+          "w_s1",
+          "w_s2",
+          "w_r",
+          "spearman_rho",
+          "p_value",
+          "mae",
+          "rmse"
+        ]
+      }
+    },
+    "raw_evaluations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item_id",
+          "topic",
+          "tier",
+          "human_score",
+          "scores_by_config"
+        ]
+      }
+    }
+  }
+}

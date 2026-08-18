@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { SessionContext } from "./contexts";
 import Topbar from "./Topbar";
 import ScoreRing from "./ScoreRing";
-import { api } from "./servicesApi";
+import { api } from "./api";
 import "./Report.css";
 
 // ── Grade / trend colours ─────────────────────────────────────────
@@ -32,19 +32,63 @@ export default function Report({ navigate }) {
   const { session, candidate } = useContext(SessionContext);
   const [report, setReport]   = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError]     = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
 
-  useEffect(() => {
+  const fetchReport = () => {
     const id = session?.report_id || session?.id;
-    if (!id) { setLoading(false); return; }
+    if (!id) {
+      setError("No session ID found. Please complete an interview session first.");
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    setError(null);
     api.getReport(id)
-      .then(setReport)
-      .catch(() => setReport(MOCK_REPORT))
+      .then(data => {
+        if (!data || Object.keys(data).length === 0) {
+          throw new Error("Report data is empty.");
+        }
+        setReport(data);
+      })
+      .catch(err => {
+        setError(err.message || "Failed to load session report from server. Please retry.");
+      })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchReport();
   }, [session]);
 
   if (loading) return <LoadingSkeleton />;
-  const r = report || MOCK_REPORT;
+
+  if (error || !report) {
+    return (
+      <div className="report-page page">
+        <Topbar navigate={navigate} />
+        <div className="report-content" style={{ maxWidth: 640, margin: "60px auto" }}>
+          <div className="card report-error-card" style={{ padding: "32px", textAlign: "center" }}>
+            <div style={{ fontSize: 36, marginBottom: 12 }}>⚠️</div>
+            <h2 style={{ fontFamily: "Syne", marginBottom: 8, color: "var(--danger)" }}>Report Unavailable</h2>
+            <p style={{ color: "var(--text-2)", marginBottom: 24, lineHeight: 1.5 }}>
+              {error || "Failed to load session report from server. Please retry."}
+            </p>
+            <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+              <button type="button" className="btn btn-primary" onClick={fetchReport}>
+                🔄 Retry Loading
+              </button>
+              <button type="button" className="btn btn-ghost" onClick={() => navigate?.("topics")}>
+                Start New Interview
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const r = report;
 
   const overallPct = Math.round((r.overall_score || 0) * 100);
   const verdict = overallPct >= 80
@@ -794,55 +838,3 @@ function LoadingSkeleton() {
     </div>
   );
 }
-
-// ── Mock data (offline dev) ───────────────────────────────────────
-const MOCK_REPORT = {
-  overall_score: 0.73,
-  c_score: 0.78, dsa_score: 0.68,
-  session_date: new Date().toISOString(),
-  duration_minutes: 20, total_questions: 5,
-  trend_summary: "improving",
-  strengths: ["Strong pointer arithmetic", "Correct malloc/free usage", "Good stack vs heap explanation"],
-  missing_concepts: ["Struct padding", "Double pointer patterns", "Floyd-Warshall vs Dijkstra"],
-  covered_concepts: ["pointer arithmetic", "malloc", "free", "stack", "heap"],
-  topic_scores: { pointers: 0.85, memory_management: 0.80, arrays_algo: 0.70, linked_list: 0.65, dynamic_programming: 0.55 },
-  score_history: [0.55, 0.65, 0.72, 0.80, 0.75],
-  difficulty_history: [2, 3, 3, 4, 5],
-  question_results: [
-    {
-      question_text: "Explain the difference between stack and heap memory in C.",
-      topic: "memory_management", type: "verbal", difficulty: 2, score: 0.88,
-      grade: "A", trend: "improving", trend_note: "Score improving: 0.55 → 0.88 (+0.33)",
-      transcript: "Stack is allocated at compile time and grows downward. Heap is dynamic and managed by malloc/free...",
-      feedback: "Excellent explanation with correct direction and lifecycle description. Missing mention of memory fragmentation.",
-      score_breakdown: { semantic_similarity: 0.85, concept_coverage: 0.90, reasoning_quality: 0.88, confidence_signal: 0.75 },
-      strong_points: ["Grade A — strong overall performance", "High semantic relevance (85%) — answer addressed the topic well", "Good concept coverage (90%) — key ideas present"],
-      incorrect_or_incomplete: [],
-      missing_concepts: ["fragmentation"],
-      covered_concepts: ["stack memory", "heap memory", "malloc", "free"],
-      how_to_improve: ["Always close with complexity: 'This runs in O(n) time and O(1) space because...'", "Mention memory fragmentation — a key limitation of heap allocation"],
-      communication_tips: ["Good answer length (87 words).", "No filler words detected — clean, confident delivery.", "Good vocal confidence (75%) — assertive delivery detected."],
-    },
-    {
-      question_text: "Write a C function to reverse a singly linked list in-place.",
-      topic: "linked_list", type: "code", difficulty: 3, score: 0.75,
-      grade: "B", trend: "stable", trend_note: "Score stable around 0.72 (current 0.75)",
-      code_submitted: "struct Node* reverse(struct Node* head) {\n    struct Node *prev=NULL, *curr=head, *next;\n    while(curr) { next=curr->next; curr->next=prev; prev=curr; curr=next; }\n    return prev;\n}",
-      feedback: "Correct iterative reversal. Clean pointer management. Could discuss recursive variant.",
-      score_breakdown: { semantic_similarity: 0.78, concept_coverage: 0.72, reasoning_quality: 0.70, confidence_signal: 0.0 },
-      strong_points: ["Passed 3/3 test cases", "NULL pointer check present — good defensive coding", "Memory freed after use — no obvious leak"],
-      incorrect_or_incomplete: [],
-      missing_concepts: ["recursive approach", "time complexity mention"],
-      covered_concepts: ["in-place reversal", "pointer manipulation"],
-      how_to_improve: ["Add comments explaining the three-pointer technique", "Mention time O(n) and space O(1) complexity"],
-      communication_tips: ["Code is 8 lines — concise"],
-    },
-  ],
-  all_concepts: { "pointer arithmetic": 0.9, "dynamic allocation": 0.85, "stack vs heap": 0.88, "struct padding": 0.3, "double pointers": 0.4, "linked list reversal": 0.75 },
-  recommendations: [
-    "Study struct alignment rules and use of __attribute__((packed))",
-    "Practice double-pointer patterns for linked list operations",
-    "Review all-pairs shortest path algorithms and their complexity trade-offs",
-  ],
-  behaviour: { avg_confidence: 0.72, hesitation_rate: 0.18, clarity_score: 0.73, completeness: 1.0, code_quality: 0.75, hints_used: 1 },
-};

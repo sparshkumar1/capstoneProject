@@ -7,7 +7,10 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(ROOT))          # so 'simulated_candidate' resolves
+REPO_ROOT = ROOT.parent.parent
+sys.path.insert(0, str(ROOT))                 # rl/training (simulated_candidate)
+sys.path.insert(0, str(ROOT.parent / "env"))  # rl/env (interview_env)
+sys.path.insert(0, str(REPO_ROOT))            # repo root
 
 import numpy as np
 from stable_baselines3 import PPO
@@ -16,13 +19,14 @@ from stable_baselines3.common.callbacks import EvalCallback
 
 from interview_env import InterviewEnv
 
-SAVE_DIR = ROOT / "rl_runs" / "seed_123"
-STEPS    = 300_000
+SAVE_DIR = ROOT.parent / "checkpoints" / "seed_123"
+STEPS    = 100_000
 SEED     = 123
 
 def make_env():
-    env = InterviewEnv(log_file=str(ROOT / "rl_runs" / "seed_123" / "retrain_log.csv"))
+    env = InterviewEnv(log_file=str(SAVE_DIR / "retrain_log.csv"))
     return env
+
 
 print(f"[retrain] Training PPO for {STEPS:,} steps (seed={SEED}) ...")
 

@@ -1,0 +1,66 @@
+{
+  "experiment_id": "EXP-1",
+  "name": "Adaptive Difficulty Controller Comparison",
+  "research_question": "Does adaptive difficulty produce different and potentially more appropriate interview trajectories than fixed difficulty, and does PPO provide measurable benefit beyond a deterministic rule-based controller?",
+  "hypothesis": "Adaptive controllers produce different and potentially more appropriate difficulty trajectories than fixed difficulty. PPO may or may not outperform the deterministic rule-based controller in simulation.",
+  "controllers": [
+    {
+      "id": "fixed_difficulty",
+      "name": "Fixed Difficulty (Level 3)",
+      "description": "Baseline controller maintaining fixed difficulty level 3 (mid) across all 15 questions."
+    },
+    {
+      "id": "rule_based_heuristic",
+      "name": "Deterministic Rule-Based Controller",
+      "description": "Deterministic pedagogical heuristic adjusting difficulty based on threshold boundaries (>0.80 Harder, <0.40 Easier) with G1-G6 guardrails."
+    },
+    {
+      "id": "ppo_adaptive",
+      "name": "PPO Policy + Guardrails",
+      "description": "Pre-trained PPO policy (seed 123) over 6D state space with post-policy G1-G6 safety guardrails."
+    }
+  ],
+  "model_checkpoints": {
+    "ppo_model_path": "rl/checkpoints/seed_123/ppo_final.zip",
+    "vecnormalize_path": "rl/checkpoints/seed_123/vecnormalize.pkl",
+    "checkpoint_sha256": "2ab8d514ca748abd0ac650d4a0b1676093530b21a16b1586c764b6db8ac54575"
+  },
+  "candidate_simulation": {
+    "personas": [
+      {"id": "normal", "skill": 0.50, "description": "Average candidate with nominal confidence and hesitation."},
+      {"id": "nervous_expert", "skill": 0.85, "description": "High skill candidate with elevated hesitation and lower verbal confidence."},
+      {"id": "lucky_guesser", "skill": 0.30, "description": "Low skill candidate with occasional high score spikes."},
+      {"id": "overconfident_fail", "skill": 0.20, "description": "Low skill candidate with inflated confidence and low hesitation."},
+      {"id": "struggling_junior", "skill": 0.25, "description": "Struggling beginner candidate under heavy cognitive load."}
+    ],
+    "evaluation_seeds": [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010],
+    "runs_per_persona": 10,
+    "episodes_per_controller": 50,
+    "total_episodes": 150,
+    "episode_length": 15
+  },
+  "metrics": [
+    "adaptation_rho",
+    "difficulty_slope",
+    "mean_score",
+    "score_variance",
+    "difficulty_instability_count",
+    "distance_to_target_challenge",
+    "guardrail_override_rate"
+  ],
+  "statistical_plan": {
+    "primary_test": "paired_wilcoxon_signed_rank",
+    "multiplicity_correction": "holm_bonferroni",
+    "planned_comparisons": [
+      "Fixed vs Rule-Based",
+      "Fixed vs PPO",
+      "Rule-Based vs PPO"
+    ],
+    "secondary_test": "paired_student_ttest_sensitivity",
+    "alpha": 0.05,
+    "effect_size": "cohens_d",
+    "ci_method": "bootstrap_bca",
+    "ci_resamples": 10000
+  },
+  "execution_command": "python experiments/experiment_1_adaptive_difficulty/runner.py --config experiments/experiment_1_adaptive_difficulty/config.json"
+}

@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "duration_sec": 3.0,
+  "sample_rate": 16000,
+  "transcript": "I iterate through the array and calculate the complement using a hash map",
+  "total_speech_time_sec": 2.43,
+  "pause_count": 1,
+  "total_pause_time_sec": 0.57,
+  "wpm": 0.0,
+  "hesitation_score": 0.26,
+  "confidence_score": 0.8088,
+  "candidate_state_features": {
+    "c_t": 0.8088,
+    "h_t": 0.26,
+    "tau_t": 0.0405
+  }
+}

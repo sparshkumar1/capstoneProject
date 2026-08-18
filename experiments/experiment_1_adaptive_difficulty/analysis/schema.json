@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Experiment1OutputSchema",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "timestamp",
+    "controllers",
+    "raw_episodes",
+    "aggregated_metrics",
+    "statistical_comparisons"
+  ],
+  "properties": {
+    "experiment_id": {"type": "string", "const": "EXP-1"},
+    "timestamp": {"type": "string"},
+    "controllers": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "raw_episodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "controller_id",
+          "persona",
+          "seed",
+          "trajectory_difficulty",
+          "trajectory_scores",
+          "adaptation_rho",
+          "slope",
+          "oscillations",
+          "guardrail_overrides"
+        ]
+      }
+    },
+    "aggregated_metrics": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "mean_score": {"type": "number"},
+          "score_std": {"type": "number"},
+          "mean_adaptation_rho": {"type": "number"},
+          "adaptation_rho_std": {"type": "number"},
+          "mean_slope": {"type": "number"},
+          "slope_std": {"type": "number"},
+          "mean_oscillations": {"type": "number"},
+          "guardrail_rate": {"type": "number"}
+        }
+      }
+    },
+    "statistical_comparisons": {
+      "type": "object",
+      "properties": {
+        "ppo_vs_fixed": {
+          "type": "object",
+          "properties": {
+            "adaptation_rho_pvalue": {"type": "number"},
+            "adaptation_rho_cohens_d": {"type": "number"},
+            "adaptation_rho_ci_95": {"type": "array", "items": {"type": "number"}}
+          }
+        },
+        "ppo_vs_rule_based": {
+          "type": "object",
+          "properties": {
+            "adaptation_rho_pvalue": {"type": "number"},
+            "adaptation_rho_cohens_d": {"type": "number"},
+            "adaptation_rho_ci_95": {"type": "array", "items": {"type": "number"}}
+          }
+        }
+      }
+    }
+  }
+}

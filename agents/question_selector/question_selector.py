@@ -1,14 +1,14 @@
-# import json
-# import random
-# from collections import defaultdict
+"""
+question_selector.py — Baseline Question Selector (RESEARCH / BASELINE ARTIFACT)
+================================================================================
+CLASSIFICATION: BASELINE / RESEARCH
+STATUS: Preserved for baseline experimental comparison and offline testing.
 
-
-# # -----------------------------------
-# # LOAD QUESTION BANK
-# # -----------------------------------
-
-# with open("qns.json", "r") as f:
-#     question_bank = json.load(f)
+Authoritative Production Selector: `apps.backend.main.select_questions`
+- Production pipeline uses multi-level deduplication (ID, exact text, Jaccard token overlap),
+  verbal/coding alternating buckets, personalization adjustments, and question-bank rubric indexing.
+- This module implements the simpler heuristic baseline (topic-count limiting + nearest difficulty).
+"""
 
 
 # # -----------------------------------
@@ -169,6 +169,7 @@ ROOT_DIR = os.path.dirname(MODULE_DIR)
 QUESTION_BANK_PATHS = [
     os.path.join(MODULE_DIR, "qns.json"),
     os.path.join(ROOT_DIR, "Evaluator", "qns.json"),
+    os.path.abspath(os.path.join(MODULE_DIR, "..", "..", "data", "questions", "qns.json")),
 ]
 
 for _candidate in QUESTION_BANK_PATHS:

@@ -39,9 +39,10 @@ def score_hesitation(prosodic: dict, transcription: dict) -> dict:
     long_pauses = sum(1 for p in pauses if p.get("duration", 0) > 1.5)
     long_score  = _clamp(long_pauses / 4.0)
 
-    # 4. Filler density
+    # 4. Filler density with strict word-boundary matching
+    import re
     token_count = max(len(transcript.split()), 1)
-    filler_hits = sum(1 for f in _FILLERS if f in transcript)
+    filler_hits = sum(1 for f in _FILLERS if re.search(r"\b" + re.escape(f) + r"\b", transcript))
     filler_density = _clamp(filler_hits / max(token_count / 15, 1))
 
     # 5. Pitch instability during speech (jitter proxy)

@@ -1,0 +1,576 @@
+{
+  "experiment_id": "EXP-3",
+  "condition": "qwen_7b_grounded_feedback",
+  "model_name": "Qwen/Qwen2.5-7B-Instruct",
+  "model_revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+  "timestamp": "2026-08-16T12:06:17.385554",
+  "hardware_environment": {
+    "gpu_name": "Tesla T4",
+    "vram_total_gb": 14.56,
+    "vram_used_gb": 14.19,
+    "cuda_version": "12.8",
+    "torch_version": "2.11.0+cu128",
+    "transformers_version": "5.13.1",
+    "python_version": "3.12.13"
+  },
+  "smoke_test_result": {
+    "status": "SUCCESS",
+    "load_time_seconds": 270.36,
+    "generation_latency_seconds": 4.55,
+    "output": "Your use of `prev`, `curr`, and `next` pointers to reverse the linked list is correct, but consider adding checks for edge cases like an empty list or a list with only one node to make your solution more robust."
+  },
+  "total_samples_targeted": 20,
+  "total_samples_completed": 20,
+  "aggregated_metrics": {
+    "mean_grounding_ratio": 0.2496,
+    "grounding_ci_95": [
+      0.1758,
+      0.3331
+    ],
+    "mean_gap_coverage": 0.725,
+    "mean_actionability_count": 3.7,
+    "mean_latency_seconds": 9.78
+  },
+  "evaluations": [
+    {
+      "run_id": "EXP3_qwen7b_pilot_01_qid1",
+      "item_id": "pilot_01_qid1",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.95,
+      "transcript": "Iterate through the array with a single loop. For each element, calculate the complement (target - current). Check if the complement exists in a hash map. If it does, return the current index and the index stored in the map. If not, insert the current value and its index into the map.",
+      "evaluator_evidence": {
+        "final_score": 0.95,
+        "covered_concepts": [
+          "single pass iteration",
+          "complement calculation (target - current)",
+          "hash map for storing values",
+          "store value-to-index mapping"
+        ],
+        "missing_concepts": [],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Edge Cases**: While your approach is efficient, it doesn't cover all edge cases, such as when there are duplicate elements or when the array is empty.\n2. **Error Handling**: There's no mention of how to handle scenarios where the complement is found but the indices should not be the same (e.g., the same element being used twice).\n\n### Actionable Steps to Improve:\n1. **Add Edge Case Handling**:\n   - **",
+      "runtime_seconds": 7.19,
+      "grounding_ratio": 0.1667,
+      "gap_coverage": 1.0,
+      "actionability_count": 5,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_02_qid1",
+      "item_id": "pilot_02_qid1",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.4,
+      "transcript": "Use two nested loops. The outer loop picks the first element and the inner loop checks all remaining elements to see if they sum to target. Time complexity is O(n^2).",
+      "evaluator_evidence": {
+        "final_score": 0.4,
+        "covered_concepts": [
+          "checks all remaining elements",
+          "nested loops"
+        ],
+        "missing_concepts": [
+          "hash map for storing values",
+          "complement calculation (target - current)",
+          "O(n) time complexity with O(n) space trade-off"
+        ],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Missing Concept: Hash Map for Storing Values**\n   - The candidate's approach uses a brute-force method with a time complexity of \\(O(n^2)\\). A more efficient solution involves using a hash map to store values as you iterate through the array, which can reduce the time complexity to \\(O(n)\\).\n\n2. **Missing Concept: Complement Calculation (Target - Current)**\n   - The candidate did not mention calculating the complement",
+      "runtime_seconds": 7.23,
+      "grounding_ratio": 0.1579,
+      "gap_coverage": 1.0,
+      "actionability_count": 4,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_03_qid1",
+      "item_id": "pilot_03_qid1",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.65,
+      "transcript": "Sort the array first in O(n log n). Then use two pointers at left and right ends. Move left rightward if sum is too small, move right leftward if sum is too large. But sorting loses original indices unless stored as pairs.",
+      "evaluator_evidence": {
+        "final_score": 0.65,
+        "covered_concepts": [
+          "two pointers at left and right ends",
+          "sorting array first",
+          "handles index tracking trade-off"
+        ],
+        "missing_concepts": [
+          "hash map for storing values",
+          "complement calculation (target - current)"
+        ],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Hash Map for Storing Values**: The candidate missed mentioning the use of a hash map to store values and their corresponding indices, which allows for a more efficient solution with a time complexity of O(n).\n2. **Complement Calculation**: The candidate did not mention calculating the complement (i.e., `target - current`), which is crucial for determining if the complement exists in the array.\n\n### Actionable Steps to Improve:\n1. **In",
+      "runtime_seconds": 7.25,
+      "grounding_ratio": 0.08,
+      "gap_coverage": 1.0,
+      "actionability_count": 4,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_04_qid1",
+      "item_id": "pilot_04_qid1",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.35,
+      "transcript": "Just use binary search on every element to find target minus element in O(n log n).",
+      "evaluator_evidence": {
+        "final_score": 0.35,
+        "covered_concepts": [
+          "target minus element"
+        ],
+        "missing_concepts": [
+          "binary search requires sorted array",
+          "hash map for storing values",
+          "complement calculation (target - current)"
+        ],
+        "incorrect_claims": [
+          "Binary search directly on unsorted array"
+        ]
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Binary Search Requirement**: Your approach assumes the array is sorted, which is not necessary for this problem. Binary search can only be applied if the array is sorted, but the problem does not specify that the input array is sorted.\n2. **Hash Map for Efficient Lookup**: Using a hash map allows for constant time lookups, making the solution more efficient. Your current approach has a time complexity of \\(O(n \\log n)\\) due to",
+      "runtime_seconds": 7.45,
+      "grounding_ratio": 0.3333,
+      "gap_coverage": 0.5,
+      "actionability_count": 2,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_05_qid1",
+      "item_id": "pilot_05_qid1",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.8,
+      "transcript": "Create a hash map. First insert every element and its index into the map. Then in a second loop, look up target - nums[i]. If found and index != i, return [i, map[target-nums[i]]].",
+      "evaluator_evidence": {
+        "final_score": 0.8,
+        "covered_concepts": [
+          "hash map for storing values",
+          "complement calculation (target - current)",
+          "handles self-match edge case"
+        ],
+        "missing_concepts": [
+          "single pass iteration optimization"
+        ],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Single Pass Iteration Optimization**: The candidate's solution uses two passes through the array, which is not the most efficient approach. A single pass can achieve the same result with better time complexity.\n2. **Handling Edge Cases**: While the candidate mentioned handling the self-match edge case, it's important to ensure all edge cases are covered, such as when there are duplicate elements or when no valid pair exists.\n\n### Actionable Steps to Improve:\n1",
+      "runtime_seconds": 7.32,
+      "grounding_ratio": 0.0,
+      "gap_coverage": 1.0,
+      "actionability_count": 4,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_06_qid3",
+      "item_id": "pilot_06_qid3",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.95,
+      "transcript": "Maintain three pointers: prev initialized to NULL, curr initialized to head, and next. In a while loop while curr is not NULL, store curr->next in next, point curr->next to prev, move prev to curr, and move curr to next. Finally return prev as the new head.",
+      "evaluator_evidence": {
+        "final_score": 0.95,
+        "covered_concepts": [
+          "prev initialized to NULL",
+          "curr initialized to head",
+          "store curr->next in temporary pointer",
+          "reverse pointer direction curr->next = prev",
+          "advance prev and curr",
+          "return prev as new head"
+        ],
+        "missing_concepts": [],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Explanation of Pointer Manipulations**: While the candidate provided the correct sequence of operations, there was no explanation of why each step is necessary or how it contributes to reversing the linked list.\n2. **Edge Cases**: The candidate did not mention any edge cases that might need handling, such as when the list is empty or contains only one node.\n\n### Actionable Steps to Improve:\n1. **Explain Each Step**:\n   - **Step",
+      "runtime_seconds": 7.64,
+      "grounding_ratio": 0.1111,
+      "gap_coverage": 1.0,
+      "actionability_count": 5,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_07_qid3",
+      "item_id": "pilot_07_qid3",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.15,
+      "transcript": "Just set head->next to NULL and iterate forward.",
+      "evaluator_evidence": {
+        "final_score": 0.15,
+        "covered_concepts": [
+          "iterate forward"
+        ],
+        "missing_concepts": [
+          "prev initialized to NULL",
+          "three-pointer tracking",
+          "temporary next storage",
+          "return prev as new head"
+        ],
+        "incorrect_claims": [
+          "Loses rest of linked list by setting head->next to NULL immediately"
+        ]
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Initialization of `prev` Pointer**: The candidate's answer is missing the initialization of the `prev` pointer to `NULL`. This is crucial for correctly reversing the links in the list.\n2. **Temporary Storage for Next Node**: The candidate did not mention using a temporary variable to store the next node before updating the current node's `next` pointer.\n\n### Actionable Steps to Improve:\n1. **Initialize the `prev` Pointer**:",
+      "runtime_seconds": 7.34,
+      "grounding_ratio": 0.2857,
+      "gap_coverage": 0.5,
+      "actionability_count": 3,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_08_qid3",
+      "item_id": "pilot_08_qid3",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.7,
+      "transcript": "Use recursion where reverseList(head) recursively reverses the sublist and attaches head at the end with head->next->next = head and head->next = NULL.",
+      "evaluator_evidence": {
+        "final_score": 0.7,
+        "covered_concepts": [
+          "head->next->next = head",
+          "head->next = NULL",
+          "base case handling"
+        ],
+        "missing_concepts": [
+          "iterative three-pointer manipulation (prev, curr, next) requested in prompt"
+        ],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Iterative Approach Missing**: The candidate's answer describes a recursive approach instead of the iterative method requested in the question. The iterative method uses three pointers (`prev`, `curr`, and `next`) to reverse the links between nodes.\n2. **Pointer Manipulation Details Skipped**: The candidate did not provide details on how to manipulate the pointers correctly during the iteration, which is crucial for reversing the linked list.\n\n### Actionable Steps to Improve:",
+      "runtime_seconds": 7.51,
+      "grounding_ratio": 0.0909,
+      "gap_coverage": 0.5,
+      "actionability_count": 2,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_09_qid3",
+      "item_id": "pilot_09_qid3",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.55,
+      "transcript": "Push all nodes onto a stack in O(n) space, then pop them one by one to re-link pointers in reverse order.",
+      "evaluator_evidence": {
+        "final_score": 0.55,
+        "covered_concepts": [
+          "stack for reversing order",
+          "O(n) auxiliary space"
+        ],
+        "missing_concepts": [
+          "in-place O(1) space iterative pointer reversal"
+        ],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **In-Place Iterative Reversal**: The candidate's approach uses a stack, which introduces O(n) auxiliary space. However, the question specifically asks for an iterative approach that reverses the linked list in place with O(1) additional space.\n2. **Pointer Manipulations**: The candidate did not provide details on how to manipulate the pointers during the iteration, which is crucial for understanding the in-place reversal process.\n\n### Actionable Steps",
+      "runtime_seconds": 7.58,
+      "grounding_ratio": 0.2143,
+      "gap_coverage": 0.5,
+      "actionability_count": 2,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_10_qid3",
+      "item_id": "pilot_10_qid3",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.3,
+      "transcript": "Two pointers p and q where q = p->next and p->next = NULL, but forget to save next node so the list is severed.",
+      "evaluator_evidence": {
+        "final_score": 0.3,
+        "covered_concepts": [
+          "pointer redirection"
+        ],
+        "missing_concepts": [
+          "three-pointer tracking (prev, curr, next)",
+          "preserving next before updating link"
+        ],
+        "incorrect_claims": [
+          "Severing list without temporary next pointer"
+        ]
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Three-Pointer Tracking**: The candidate missed using a third pointer to track the next node in the list. This is crucial for reversing the links without losing the reference to the rest of the list.\n2. **Preserving Next Node**: The candidate did not mention saving the next node before updating the current node's `next` pointer, which leads to severing the list.\n\n### Actionable Steps to Improve:\n1. **Implement Three-Pointer",
+      "runtime_seconds": 7.73,
+      "grounding_ratio": 0.2727,
+      "gap_coverage": 0.5,
+      "actionability_count": 4,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_11_qid10",
+      "item_id": "pilot_11_qid10",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.95,
+      "transcript": "Use a FIFO queue. Push the root node to the queue. While the queue is not empty, get the queue size to process level by level. Dequeue a node, record its value, and enqueue its left and right children if they exist.",
+      "evaluator_evidence": {
+        "final_score": 0.95,
+        "covered_concepts": [
+          "FIFO queue data structure",
+          "enqueue root initially",
+          "while queue is not empty",
+          "level size for level-by-level segmentation",
+          "enqueue left and right children"
+        ],
+        "missing_concepts": [],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Queue Initialization**: The candidate did not explicitly mention initializing the queue with the root node at the beginning of the explanation.\n2. **Edge Case Handling**: The candidate did not address what happens when a node has no children or when the tree is empty.\n\n### Actionable Steps to Improve:\n1. **Initialize the Queue**:\n   - Add a step to initialize the queue with the root node before starting the loop. For example: \"Initialize the",
+      "runtime_seconds": 8.1,
+      "grounding_ratio": 0.2727,
+      "gap_coverage": 1.0,
+      "actionability_count": 5,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_12_qid10",
+      "item_id": "pilot_12_qid10",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.2,
+      "transcript": "BFS visits root, then left subtree with recursion, then right subtree with recursion.",
+      "evaluator_evidence": {
+        "final_score": 0.2,
+        "covered_concepts": [
+          "visits nodes"
+        ],
+        "missing_concepts": [
+          "queue data structure",
+          "iterative level order traversal",
+          "FIFO ordering"
+        ],
+        "incorrect_claims": [
+          "Confused BFS with DFS / Pre-order traversal"
+        ]
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Queue Data Structure**: The candidate's answer did not mention the use of a queue, which is crucial for BFS traversal. BFS uses a queue to ensure that nodes are processed in a first-in-first-out (FIFO) manner.\n2. **Iterative Level Order Traversal**: The answer focused on recursive methods but did not explain the iterative approach, which is more aligned with the use of a queue.\n\n### Actionable Steps to Improve:\n1",
+      "runtime_seconds": 8.68,
+      "grounding_ratio": 0.125,
+      "gap_coverage": 1.0,
+      "actionability_count": 5,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_13_qid10",
+      "item_id": "pilot_13_qid10",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.25,
+      "transcript": "Use a stack to push nodes and pop them. First in last out gives you level order.",
+      "evaluator_evidence": {
+        "final_score": 0.25,
+        "covered_concepts": [
+          "push and pop nodes"
+        ],
+        "missing_concepts": [
+          "queue (FIFO) rather than stack (LIFO)",
+          "level order traversal requires FIFO"
+        ],
+        "incorrect_claims": [
+          "Stack produces DFS, not BFS"
+        ]
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Incorrect Data Structure Usage**: You mentioned using a stack for BFS, but BFS actually uses a queue. A stack follows LIFO (Last In, First Out), whereas a queue follows FIFO (First In, First Out).\n2. **Misunderstanding Level Order Traversal**: BFS, or level order traversal, involves visiting all nodes at the current level before moving to the next level. This is achieved with a queue, not a stack.\n\n###",
+      "runtime_seconds": 8.54,
+      "grounding_ratio": 0.6364,
+      "gap_coverage": 0.5,
+      "actionability_count": 2,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_14_qid10",
+      "item_id": "pilot_14_qid10",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.85,
+      "transcript": "Put root in queue. Pop from queue and add left and right child. Time complexity O(N), Space complexity O(W) where W is maximum tree width.",
+      "evaluator_evidence": {
+        "final_score": 0.85,
+        "covered_concepts": [
+          "queue data structure",
+          "enqueue root",
+          "enqueue children",
+          "O(N) time complexity",
+          "O(W) space complexity"
+        ],
+        "missing_concepts": [
+          "explicit level size segmentation for 2D level grouping"
+        ],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Explicit Level Size Segmentation**: The explanation does not mention explicitly tracking the number of nodes at each level, which is crucial for correctly segmenting levels in a 2D format.\n2. **Queue Operations for Level Traversal**: The description lacks detail on how to use the queue to process nodes level by level.\n\n### Actionable Steps to Improve:\n1. **Add Explicit Level Size Tracking**:\n   - **Explanation**: Mention that you need",
+      "runtime_seconds": 9.06,
+      "grounding_ratio": 0.1333,
+      "gap_coverage": 0.5,
+      "actionability_count": 5,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_15_qid10",
+      "item_id": "pilot_15_qid10",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.45,
+      "transcript": "BFS uses DFS internally with depth parameter to insert into list of lists.",
+      "evaluator_evidence": {
+        "final_score": 0.45,
+        "covered_concepts": [
+          "depth tracking",
+          "list of lists grouping"
+        ],
+        "missing_concepts": [
+          "queue data structure",
+          "standard iterative BFS algorithm"
+        ],
+        "incorrect_claims": [
+          "Claims BFS is implemented with DFS"
+        ]
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Queue Data Structure**: The candidate mentioned using a depth parameter but did not explain the use of a queue, which is crucial for BFS. BFS uses a queue to process nodes level by level.\n2. **Standard Iterative BFS Algorithm**: The explanation lacked the core algorithmic steps of BFS, such as initializing the queue and processing nodes in a level-order manner.\n\n### Actionable Steps to Improve:\n1. **Explain the Role of the Queue",
+      "runtime_seconds": 9.71,
+      "grounding_ratio": 0.4,
+      "gap_coverage": 1.0,
+      "actionability_count": 4,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_16_qid41",
+      "item_id": "pilot_16_qid41",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.95,
+      "transcript": "A pointer is a variable that stores the memory address of another variable. You declare it using the asterisk syntax (int *p = &x) and dereference it with *p to access or modify the value stored at that address.",
+      "evaluator_evidence": {
+        "final_score": 0.95,
+        "covered_concepts": [
+          "stores memory address of another variable",
+          "address-of operator (&)",
+          "dereference operator (*)",
+          "access/modify value at memory address"
+        ],
+        "missing_concepts": [],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Pointer Arithmetic**: Your explanation does not mention pointer arithmetic, which is a crucial aspect of working with pointers in C.\n2. **Safety Considerations**: While your answer covers the basic concept, it doesn't touch upon safety considerations when working with pointers, such as null checks and bounds checking.\n\n### Actionable Steps to Improve:\n1. **Include Pointer Arithmetic**:\n   - Add a brief explanation about how pointers can be incremented or decremented by",
+      "runtime_seconds": 11.13,
+      "grounding_ratio": 0.0625,
+      "gap_coverage": 1.0,
+      "actionability_count": 5,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_17_qid41",
+      "item_id": "pilot_17_qid41",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.3,
+      "transcript": "A pointer is an arrow that points to code. You dereference with the arrow -> operator only.",
+      "evaluator_evidence": {
+        "final_score": 0.3,
+        "covered_concepts": [
+          "points to data"
+        ],
+        "missing_concepts": [
+          "stores memory address",
+          "address-of operator (&)",
+          "unary asterisk dereference operator (*)"
+        ],
+        "incorrect_claims": [
+          "Pointers point to code only",
+          "Dereferencing only uses ->"
+        ]
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Incorrect Definition**: The candidate incorrectly described a pointer as \"an arrow that points to code.\" Pointers in C actually store memory addresses of data, not code.\n2. **Dereferencing Method**: The candidate used the `->` operator for dereferencing, which is incorrect. Dereferencing should be done using the unary asterisk (`*`) operator.\n\n### Actionable Steps to Improve:\n1. **Correct the Definition**:",
+      "runtime_seconds": 11.73,
+      "grounding_ratio": 0.7143,
+      "gap_coverage": 0.5,
+      "actionability_count": 3,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_18_qid41",
+      "item_id": "pilot_18_qid41",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.85,
+      "transcript": "It is an integer holding an address. *ptr gives value, &var gives address. NULL pointer check is important before dereferencing to prevent segmentation fault.",
+      "evaluator_evidence": {
+        "final_score": 0.85,
+        "covered_concepts": [
+          "stores memory address",
+          "*ptr gives value",
+          "&var gives address",
+          "NULL check prevents segfault"
+        ],
+        "missing_concepts": [
+          "type-specific pointer arithmetic semantics"
+        ],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Pointer Arithmetic Semantics**: The candidate did not mention that pointers can be used for type-specific arithmetic operations (e.g., `ptr += 1` moves the pointer to the next element of its type). This is an important aspect of pointer usage in C.\n2. **Dereferencing Specific Types**: The candidate only mentioned dereferencing with `*ptr`, but did not discuss how the type of the pointer affects the data being dere",
+      "runtime_seconds": 15.66,
+      "grounding_ratio": 0.25,
+      "gap_coverage": 0.5,
+      "actionability_count": 2,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_19_qid41",
+      "item_id": "pilot_19_qid41",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.2,
+      "transcript": "Pointers are references like in Java. You don't need to do anything to dereference, C does it automatically.",
+      "evaluator_evidence": {
+        "final_score": 0.2,
+        "covered_concepts": [
+          "concept of referencing"
+        ],
+        "missing_concepts": [
+          "stores memory address",
+          "explicit unary dereference operator (*)",
+          "address-of operator (&)"
+        ],
+        "incorrect_claims": [
+          "C does automatic dereferencing like Java references"
+        ]
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Misunderstanding of Pointers**: The candidate incorrectly equated pointers with references in Java, which is not accurate for C. In C, pointers are variables that store memory addresses.\n2. **Lack of Explanation on Dereferencing**: The candidate did not mention the explicit unary dereference operator (`*`) or the address-of operator (`&`), both of which are crucial in C.\n\n### Actionable Steps to Improve:\n1. **",
+      "runtime_seconds": 18.55,
+      "grounding_ratio": 0.4,
+      "gap_coverage": 0.5,
+      "actionability_count": 3,
+      "status": "COMPLETED",
+      "errors": null
+    },
+    {
+      "run_id": "EXP3_qwen7b_pilot_20_qid41",
+      "item_id": "pilot_20_qid41",
+      "condition_id": "qwen_7b_grounded_feedback",
+      "score": 0.9,
+      "transcript": "A pointer holds a memory location. Using *p reads the value at that location. Failing to initialize causes dangling pointers or undefined behavior.",
+      "evaluator_evidence": {
+        "final_score": 0.9,
+        "covered_concepts": [
+          "holds memory location",
+          "*p reads value at location",
+          "dangling pointer / undefined behavior warning"
+        ],
+        "missing_concepts": [
+          "address-of operator (&) initialization syntax"
+        ],
+        "incorrect_claims": []
+      },
+      "generated_feedback": "### Feedback Points:\n1. **Address-of Operator**: The candidate did not mention the `&` operator, which is used to get the memory address of a variable.\n2. **Initialization Syntax**: The candidate missed mentioning the proper syntax for initializing a pointer to avoid undefined behavior.\n\n### Actionable Steps to Improve:\n1. **Include the Address-of Operator**:\n   - Add a sentence explaining that the `&` operator is used to obtain the memory address of a variable.",
+      "runtime_seconds": 20.15,
+      "grounding_ratio": 0.2857,
+      "gap_coverage": 0.5,
+      "actionability_count": 5,
+      "status": "COMPLETED",
+      "errors": null
+    }
+  ],
+  "status": "COMPLETED"
+}

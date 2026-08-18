@@ -1,0 +1,8 @@
+condition,mean_score,score_ci_95,adaptation_rho,rho_ci_95,followups_count,timing_modifier
+full_system,0.5067,"[0.5009, 0.5125]",0.0206,"[0.0, 0.055]",0.5,0.0
+minus_rl_adaptation,0.5022,"[0.4967, 0.5081]",0.0,"[0.0, 0.0]",0.6,0.0
+minus_followup_probing,0.5067,"[0.5009, 0.5125]",0.0206,"[0.0, 0.055]",0.0,0.0
+minus_formative_feedback,0.5067,"[0.5009, 0.5125]",0.0206,"[0.0, 0.055]",0.5,0.0
+minus_timing_modulation,0.5067,"[0.5009, 0.5125]",0.0206,"[0.0, 0.055]",0.5,0.0
+minus_speech_prosody,0.5022,"[0.4967, 0.5081]",0.0,"[0.0, 0.0]",0.6,0.0
+minus_coding_contribution,0.5067,"[0.5009, 0.5125]",0.0206,"[0.0, 0.055]",0.5,0.0

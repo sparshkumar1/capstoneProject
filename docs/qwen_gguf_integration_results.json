@@ -1,0 +1,87 @@
+{
+  "status": "PASS",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct-GGUF (Q4_K_M)",
+  "runtime": "llama.cpp (CPU)",
+  "health": {
+    "status": "ok",
+    "service": "prepaired-qwen-microservice",
+    "version": "2.1.0",
+    "mock_mode": false,
+    "models_loaded": [
+      "qwen_1b"
+    ],
+    "model_types": {
+      "qwen_1b": "gguf"
+    },
+    "models_loading": {},
+    "model_errors": {},
+    "primary_demo_engine": "llama.cpp (CPU)"
+  },
+  "case_results": [
+    {
+      "case_id": "CASE_1_correct",
+      "name": "Case 1: Correct Candidate Answer",
+      "followup_latency_sec": 9.535,
+      "feedback_latency_sec": 24.837,
+      "followup_source": "qwen_1.5b_llm",
+      "feedback_source": "non_llm_structured_recovery",
+      "followup_output": "How does the time complexity of the two sum problem change if the array is sorted?",
+      "feedback_narrative": "Excellent work on this Arrays question. You demonstrated strong command with sound technical reasoning (92%)."
+    },
+    {
+      "case_id": "CASE_2_incorrect",
+      "name": "Case 2: Incorrect Answer",
+      "followup_latency_sec": 7.686,
+      "feedback_latency_sec": 21.806,
+      "followup_source": "qwen_1.5b_llm",
+      "feedback_source": "non_llm_structured_recovery",
+      "followup_output": "Can you explain the difference between static and dynamic memory allocation in C and how it relates to memory leaks?",
+      "feedback_narrative": "This response scored 5% (Grade: Poor). The proposed logic has conceptual gaps or misconceptions that should be reviewed."
+    },
+    {
+      "case_id": "CASE_3_partial",
+      "name": "Case 3: Partial Answer",
+      "followup_latency_sec": 7.875,
+      "feedback_latency_sec": 29.927,
+      "followup_source": "qwen_1.5b_llm",
+      "feedback_source": "non_llm_structured_recovery",
+      "followup_output": "Could you explain how the Translation Lookaside Buffer (TLB) helps in reducing the time spent on address translation?",
+      "feedback_narrative": "Good attempt (60%). You have the right high-level intuition for Operating Systems, but addressing Offset preservation will elevate your response."
+    },
+    {
+      "case_id": "CASE_4_missing_concept",
+      "name": "Case 4: Missing Mandatory Concept",
+      "followup_latency_sec": 8.975,
+      "feedback_latency_sec": 22.071,
+      "followup_source": "qwen_1.5b_llm",
+      "feedback_source": "qwen_1.5b_llm",
+      "followup_output": "Could you explain how to properly update the head pointer after reversing the linked list?",
+      "feedback_narrative": "The candidate provided a correct three-pointer iteration method but missed the crucial steps of updating the head pointer and ensuring the list ends with NULL. This understanding is crucial for reversing linked lists in-place. Further practice will help solidify the concept."
+    },
+    {
+      "case_id": "CASE_5_misconception",
+      "name": "Case 5: Explicit Misconception",
+      "followup_latency_sec": 8.969,
+      "feedback_latency_sec": 23.15,
+      "followup_source": "qwen_1.5b_llm",
+      "feedback_source": "non_llm_structured_recovery",
+      "followup_output": "Can you explain how the chunk header metadata is used to determine the exact size of the memory block to be freed?",
+      "feedback_narrative": "This response scored 20% (Grade: Poor). The proposed logic has conceptual gaps or misconceptions that should be reviewed."
+    },
+    {
+      "case_id": "CASE_6_coding",
+      "name": "Case 6: Coding-Related Answer",
+      "followup_latency_sec": 8.449,
+      "feedback_latency_sec": 19.361,
+      "followup_source": "qwen_1.5b_llm",
+      "feedback_source": "qwen_1.5b_llm",
+      "followup_output": "Can you explain how strncpy and snprintf differ in terms of their handling of the destination buffer size and null-termination, and why snprintf is generally preferred for string copying?",
+      "feedback_narrative": "The candidate correctly mentioned the use of bounded copy functions and the importance of null-termination. However, there was no mention of handling truncation return codes, which is a crucial aspect to consider in C string copying. The candidate's answer is good but could be improved by including the handling of truncation return codes."
+    }
+  ],
+  "fallback_verification": {
+    "decision_source": "non_llm_structured_recovery",
+    "llm_status": "llm_unavailable",
+    "verified": true
+  }
+}

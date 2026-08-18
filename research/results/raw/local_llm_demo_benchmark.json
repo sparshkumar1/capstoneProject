@@ -1,0 +1,119 @@
+{
+  "benchmark_id": "STAGE-22.2-CPU-LOCAL-LLM-BENCHMARK",
+  "date": "2026-08-17",
+  "hardware": {
+    "platform": "Windows 11",
+    "cpu_threads": 12,
+    "system_ram_gb": 15.68
+  },
+  "baseline_unquantized_transformers_cpu": {
+    "model": "Qwen2.5-1.5B-Instruct (bfloat16)",
+    "followup_latency_sec": 154.75,
+    "feedback_latency_sec": 193.44,
+    "verdict": "NOT SUITABLE FOR LIVE DEMO"
+  },
+  "quantized_llama_cpp_candidates": [
+    {
+      "model_label": "Qwen2.5-1.5B-Instruct-GGUF (Q4_K_M)",
+      "repo_id": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+      "filename": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "quantization": "Q4_K_M",
+      "runtime": "llama.cpp (CPU)",
+      "cpu_threads": 12,
+      "load_time_sec": 1.69,
+      "peak_ram_gb": 1.36,
+      "mean_latency_sec": 2.195,
+      "tokens_per_sec": 18.79,
+      "tasks": {
+        "TASK_A_follow_up": {
+          "name": "Task A: Candidate-Specific Follow-Up Probing",
+          "latency_sec": 1.801,
+          "completion_tokens": 21,
+          "tokens_per_sec": 11.66,
+          "output_text": "How does complement calculation and index storage help in finding the two indices that sum up to the target value?",
+          "grounded": true,
+          "quality_pass": true
+        },
+        "TASK_B_formative_feedback": {
+          "name": "Task B: Formative Remediation Feedback",
+          "latency_sec": 2.846,
+          "completion_tokens": 64,
+          "tokens_per_sec": 22.49,
+          "output_text": "1. **Clarify the concept of paging**: Explain that paging is a mechanism used in virtual memory systems to manage memory allocation and translation. It involves breaking down the virtual address space into smaller, manageable units called pages. Each page is mapped to a contiguous block of physical memory, allowing for efficient memory management.\n\n2.",
+          "grounded": false,
+          "quality_pass": false
+        },
+        "TASK_C_misconception_probe": {
+          "name": "Task C: Misconception / Gap Probing",
+          "latency_sec": 1.217,
+          "completion_tokens": 16,
+          "tokens_per_sec": 13.15,
+          "output_text": "Can you explain how the CPU translates virtual addresses to physical addresses using memory translation?",
+          "grounded": false,
+          "quality_pass": false
+        },
+        "TASK_D_technical_grounding": {
+          "name": "Task D: Technical Response with Grounded Feedback",
+          "latency_sec": 2.915,
+          "completion_tokens": 64,
+          "tokens_per_sec": 21.96,
+          "output_text": "Positive Reinforcement: The approach you described is a good start, but it's incomplete. The missing step is updating the head pointer to the new first node and terminating with NULL. This ensures the list is reversed correctly and efficiently. Directive: Ensure the final step involves updating the head pointer to the new first node and setting",
+          "grounded": true,
+          "quality_pass": true
+        }
+      },
+      "demo_verdict": "EXCELLENT"
+    },
+    {
+      "model_label": "SmolLM2-1.7B-Instruct-GGUF (Q4_K_M)",
+      "repo_id": "HuggingFaceTB/SmolLM2-1.7B-Instruct-GGUF",
+      "filename": "smollm2-1.7b-instruct-q4_k_m.gguf",
+      "quantization": "Q4_K_M",
+      "runtime": "llama.cpp (CPU)",
+      "cpu_threads": 12,
+      "load_time_sec": 1.02,
+      "peak_ram_gb": 1.91,
+      "mean_latency_sec": 4.675,
+      "tokens_per_sec": 9.31,
+      "tasks": {
+        "TASK_A_follow_up": {
+          "name": "Task A: Candidate-Specific Follow-Up Probing",
+          "latency_sec": 2.464,
+          "completion_tokens": 26,
+          "tokens_per_sec": 10.55,
+          "output_text": "\"How do you handle the case where the array has duplicate elements and the target sum is the same for multiple pairs of indices?\"",
+          "grounded": true,
+          "quality_pass": true
+        },
+        "TASK_B_formative_feedback": {
+          "name": "Task B: Formative Remediation Feedback",
+          "latency_sec": 6.471,
+          "completion_tokens": 64,
+          "tokens_per_sec": 9.89,
+          "output_text": "Concise, actionable feedback:\n\n* Virtual memory uses paging to translate virtual addresses to physical addresses by dividing the virtual address space into fixed-size blocks called pages.\n* Paging preserves the page offset, which is the number of bytes within the page, allowing for efficient translation of virtual addresses to physical addresses",
+          "grounded": true,
+          "quality_pass": true
+        },
+        "TASK_C_misconception_probe": {
+          "name": "Task C: Misconception / Gap Probing",
+          "latency_sec": 3.284,
+          "completion_tokens": 20,
+          "tokens_per_sec": 6.09,
+          "output_text": "Can you explain how the Memory Management Unit (MMU) translates virtual addresses to physical memory addresses?",
+          "grounded": true,
+          "quality_pass": true
+        },
+        "TASK_D_technical_grounding": {
+          "name": "Task D: Technical Response with Grounded Feedback",
+          "latency_sec": 6.479,
+          "completion_tokens": 64,
+          "tokens_per_sec": 9.88,
+          "output_text": "Positive reinforcement: \"Great start, you're on the right track by using pointers to traverse the linked list. For the missing termination step, you should update the head pointer to the new first node and then terminate the loop with NULL.\"\n\nDirective: \"To complete the reversal, after the loop ends, update",
+          "grounded": true,
+          "quality_pass": true
+        }
+      },
+      "demo_verdict": "EXCELLENT"
+    }
+  ]
+}

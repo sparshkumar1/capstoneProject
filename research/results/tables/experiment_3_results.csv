@@ -1,0 +1,4 @@
+feedback_condition,model_or_method,execution_status,total_samples,mean_grounding_ratio,grounding_ci_95,mean_gap_coverage,mean_actionability_count,mean_turn_latency_sec
+generic_template,Score-Tier Boilerplate Templates,COMPLETED,20,0.0,[0.0, 0.0],0.0,1.0,< 0.01
+structured_evaluator_recovery,Non-LLM Rubric Structured Evaluator,COMPLETED,20,0.0383,[0.0059, 0.0919],1.0,3.9,< 0.05
+qwen_7b_grounded_feedback,Qwen/Qwen2.5-7B-Instruct (bfloat16 Tesla T4 GPU),COMPLETED,20,0.2496,[0.1758, 0.3331],0.725,3.7,9.78

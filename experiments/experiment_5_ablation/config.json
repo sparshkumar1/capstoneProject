@@ -1,0 +1,58 @@
+{
+  "experiment_id": "EXP-5",
+  "name": "System-Wide Component Leave-One-Out Ablation",
+  "research_question": "Which implemented subsystems contribute measurable changes to the system's runtime behavior, candidate assessment accuracy, and pacing?",
+  "hypothesis": "Each separable subsystem provides a distinct, non-redundant contribution to candidate assessment, difficulty adaptation, or pacing control.",
+  "ablation_conditions": [
+    {
+      "id": "full_system",
+      "name": "Full Production System",
+      "description": "Complete multi-agent pipeline with PPO strategy, Stage 1 Evaluator, Follow-Up Agent, Formative Feedback, QuestionTimer, and Docker C Sandbox."
+    },
+    {
+      "id": "minus_rl_adaptation",
+      "name": "Full System minus RL Adaptation",
+      "description": "RL strategy disabled; difficulty locked at level 3 (mid)."
+    },
+    {
+      "id": "minus_followup_probing",
+      "name": "Full System minus Follow-Up Probing",
+      "description": "Auxiliary follow-up generation disabled; strictly one question per topic."
+    },
+    {
+      "id": "minus_formative_feedback",
+      "name": "Full System minus Formative Feedback",
+      "description": "Narrative and structured feedback disabled; score-only output."
+    },
+    {
+      "id": "minus_timing_modulation",
+      "name": "Full System minus Timing Modulation",
+      "description": "Additive timing modifier f_time forced to 0.000 unconditionally."
+    },
+    {
+      "id": "minus_speech_prosody",
+      "name": "Full System minus Speech Prosody",
+      "description": "Acoustic confidence and hesitation locked at neutral default 0.50."
+    },
+    {
+      "id": "minus_coding_contribution",
+      "name": "Full System minus Coding Contribution",
+      "description": "Coding sandbox executes in real Docker container, but coding pass rates are excluded from downstream candidate-state and difficulty adaptation updates."
+    }
+  ],
+  "simulation_evaluation": {
+    "num_sessions_per_condition": 10,
+    "session_length": 15,
+    "evaluation_seeds": [3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009, 3010],
+    "total_sessions": 70
+  },
+  "metrics": [
+    "session_score_mean",
+    "session_score_variance",
+    "difficulty_adaptation_rho",
+    "total_followups_triggered",
+    "average_timing_modifier",
+    "diagnostic_granularity_index"
+  ],
+  "execution_command": "python experiments/experiment_5_ablation/runner.py --config experiments/experiment_5_ablation/config.json"
+}
