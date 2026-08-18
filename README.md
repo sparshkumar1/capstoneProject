@@ -97,14 +97,24 @@ python -m venv .venv
 
 # Install dependencies
 pip install --upgrade pip
-pip install -r requirements/base.txt -r requirements/evaluator.txt -r requirements/rl.txt
+pip install -r requirements/base.txt -r requirements/evaluator.txt -r requirements/rl.txt -r requirements/qwen.txt
 pip install -e .
+
 
 # Install frontend dependencies
 npm --prefix apps/web install
 ```
 
-### 2. Run Automated Verification Suites
+### 2. (Optional) Local Qwen 1.5B LLM Setup
+```bash
+# Download quantized GGUF model weights (~1.06 GB)
+python scripts/download_qwen_model.py
+
+# Verify genuine local CPU inference via llama.cpp
+python scripts/verify_qwen_live.py
+```
+
+### 3. Run Automated Verification Suites
 ```bash
 # Backend test suite (178 tests: 177 passed, 1 skipped CUDA)
 python -m pytest tests/ -v
@@ -116,18 +126,24 @@ npm --prefix apps/web test -- --run
 python scripts/reproduce_paper.py
 ```
 
-### 3. Launch Local Demo Services
+### 4. Launch Local Demo Services (4-Terminal Setup)
 ```bash
-# Terminal 1: Evaluator Microservice (Port 5000)
+# Terminal 1: Qwen Microservice (Port 8001)
+python -m services.qwen.app
+
+# Terminal 2: Evaluator Microservice (Port 5000)
 python services/evaluator/app.py
 
-# Terminal 2: FastAPI Backend Server (Port 8000)
-uvicorn apps.backend.main:app --host 0.0.0.0 --port 8000 --reload
+# Terminal 3: FastAPI Backend Server (Port 8000)
+python -m uvicorn apps.backend.main:app --host 0.0.0.0 --port 8000 --reload
 
-# Terminal 3: React Web Client (Port 5173)
+# Terminal 4: React Web Client (Port 3000)
 npm --prefix apps/web run dev
 ```
-Open your browser at `http://localhost:5173` to start an interactive mock interview.
+Open your browser at `http://localhost:3000` to start an interactive mock interview.
+
+
+
 
 ---
 

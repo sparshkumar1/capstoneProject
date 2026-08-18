@@ -122,18 +122,24 @@ class FeedbackAgent:
 
         # ── Concept details ───────────────────────────────────────────
         concept_details: list[dict] = raw.get("concept_details", [])
-        covered_concepts: list[str] = list(eval_result.get("covered_concepts") or eval_result.get("correct_claims") or [])
-        missing_concepts: list[str] = list(eval_result.get("missing_concepts") or eval_result.get("what_was_incomplete") or [])
+        raw_covered: list[str] = list(eval_result.get("covered_concepts") or eval_result.get("correct_claims") or [])
+        raw_missing: list[str] = list(eval_result.get("missing_concepts") or eval_result.get("what_was_incomplete") or [])
         incorrect_claims: list[str] = list(eval_result.get("incorrect_claims") or eval_result.get("what_was_incorrect") or [])
 
+        topic_name = str(question.get("topic", "Core Logic")).replace("_", " ").title()
+        covered_concepts = [c for c in raw_covered if not str(c).strip().lower().startswith("concept ")]
+        missing_concepts = [m for m in raw_missing if not str(m).strip().lower().startswith("concept ")]
 
-        if not covered_concepts or not missing_concepts:
-            for cd in concept_details:
-                label = str(cd.get("concept") or cd.get("concept_text") or cd.get("label") or "concept")
+        if not covered_concepts and not missing_concepts:
+            for i, cd in enumerate(concept_details):
+                label = str(cd.get("concept_text") or cd.get("concept") or cd.get("label") or "").strip()
+                if not label or label.lower().startswith("concept "):
+                    label = f"{topic_name} key mechanism"
                 if cd.get("covered"):
                     covered_concepts.append(label)
                 else:
                     missing_concepts.append(label)
+
 
         # ── Audio & Communication Tips ────────────────────────────────
         communication_tips = self._comm_tips(word_count, filler_count, hesitation_rate, uncertainty, conf)

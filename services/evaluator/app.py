@@ -287,22 +287,30 @@ def mandatory_check(candidate, rubric):
 
 def _extract_concept_texts(rubric):
     """Extract human-readable concept texts from rubric logic markers."""
-    lm = rubric.get("logic_markers_covered", {})
+    lm = rubric.get("logic_markers") or rubric.get("logic_markers_covered") or {}
     concepts = []
     if isinstance(lm, dict):
         for item in lm.get("concept_groups", []):
-            if isinstance(item, str):
-                concepts.append(item)
-            elif isinstance(item, list) and item:
-                concepts.append(item[0])
+            if isinstance(item, str) and item.strip():
+                concepts.append(item.strip())
+            elif isinstance(item, (list, tuple)) and item:
+                c = str(item[0]).strip()
+                if c:
+                    concepts.append(c)
+        if not concepts and lm.get("mandatory"):
+            for item in lm.get("mandatory", []):
+                if isinstance(item, str) and item.strip():
+                    concepts.append(item.strip())
     if not concepts:
         for item in rubric.get("expected_concepts", []):
-            if isinstance(item, str):
-                concepts.append(item)
+            if isinstance(item, str) and item.strip():
+                concepts.append(item.strip())
     if not concepts:
-        for item in rubric.get("semantic_coverage", []):
-            if isinstance(item, str):
-                concepts.append(item)
+        for item in (rubric.get("semantic_targets", []) or rubric.get("semantic_coverage", [])):
+            if isinstance(item, str) and item.strip():
+                concepts.append(item.strip())
+    if not concepts and rubric.get("logic_context"):
+        concepts.append(str(rubric["logic_context"]).strip())
     return concepts
 
 
@@ -351,16 +359,21 @@ def evaluate(qn, candidate, rubric):
     penalty = mistake_penalty(candidate_text, rubric, reasoning_score, S2)
     mandatory_pass = mandatory_check(candidate_text, rubric)
 
-    # Attach concept texts to concept details
+    # Attach human-readable concept texts to concept details
     concept_texts = _extract_concept_texts(rubric)
+    topic = str(rubric.get("topic", "Core Logic")).strip()
+    alt_targets = rubric.get("semantic_targets", []) or rubric.get("common_mistakes", [])
     for i, detail in enumerate(concept_details):
         if i < len(concept_texts):
             detail["concept_text"] = concept_texts[i]
+        elif i < len(alt_targets):
+            detail["concept_text"] = alt_targets[i]
         else:
-            detail["concept_text"] = f"Concept {i + 1}"
+            detail["concept_text"] = f"{topic} core principle"
 
     # Dampen S2 when reasoning is weak (prevents keyword stuffing)
     effective_S2 = S2 if reasoning_score > 0.30 else S2 * 0.60
+
 
     base_score = (
         0.15 * S1 +
@@ -577,15 +590,28 @@ current_session = {
 }
 
 
+@app.route("/health", methods=["GET"])
+@app.route("/", methods=["GET"])
+def health():
+    """Health check endpoint for Evaluator microservice."""
+    return jsonify({
+        "status": "ok",
+        "service": "prepaired-evaluator-microservice",
+        "components": ["s1", "s2", "r"],
+        "timestamp": datetime.now().isoformat()
+    })
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # API ENDPOINT 1: SET CURRENT QUESTION (from intelligent selector)
 # ─────────────────────────────────────────────────────────────────────────────
 
 @app.route("/api/evaluator/set-question", methods=["POST"])
 def set_current_question():
+
     """
     Accept question and rubric from intelligent question selector
-    
+
     Input JSON:
     {
         "qid": "100",
@@ -595,24 +621,24 @@ def set_current_question():
         "blooms_level": "Apply",
         "session_id": "uuid"
     }
-    
+
     Returns: confirmation with session details
     """
     try:
         data = request.json
         qid = data.get("qid")
-        
+
         if not qid:
             return {"error": "Missing qid"}, 400
-        
+
         # Get rubric for this question
         rubric = get_rubric(qid)
         if not rubric:
             return {"error": f"No rubric found for qid={qid}"}, 404
-        
+
         # Store in session
         session_id = data.get("session_id") or str(uuid.uuid4())
-        
+
         current_session.update({
             "session_id": session_id,
             "question": data,
@@ -621,10 +647,10 @@ def set_current_question():
             "timestamp": datetime.now().isoformat(),
             "last_result": None
         })
-        
+
         # Save to JSON for persistence
         _save_session_to_json()
-        
+
         return {
             "status": "success",
             "message": f"Question {qid} loaded for evaluation",
@@ -634,7 +660,7 @@ def set_current_question():
             "difficulty": data.get("difficulty"),
             "blooms_level": data.get("blooms_level")
         }, 200
-        
+
     except Exception as e:
         return {"error": str(e), "status": "failed"}, 500
 
@@ -647,7 +673,7 @@ def set_current_question():
 def evaluate_answer():
     """
     Accept candidate answer transcript from audio agent and evaluate
-    
+
     FLOW:
     ────────────────────────────────────────────────────────────────
     1. Audio Agent sends: {"transcript": "candidate's answer", ...}
@@ -655,15 +681,15 @@ def evaluate_answer():
     3. We call: evaluate(qn, transcript, rubric)
     4. We return: Full evaluation with scores
     ────────────────────────────────────────────────────────────────
-    
+
     Input JSON:
     {
         "transcript": "The answer text from audio transcription",
         "session_id": "uuid"
     }
-    
+
     Returns: Full evaluation result with score, grade, and analysis
-    
+
     PARAMETER MAPPING FOR evaluate():
     ────────────────────────────────────────────────────────────────
       evaluate(qn, candidate, rubric)
@@ -678,17 +704,17 @@ def evaluate_answer():
         data = request.json
         transcript = data.get("transcript", "").strip()
         session_id = data.get("session_id")
-        
+
         if not transcript:
             return {"error": "Missing transcript"}, 400
-        
+
         if not session_id and not current_session["qid"]:
             return {"error": "No question loaded. Call set-question first."}, 400
-        
+
         # Verify question is loaded in current session
         if not current_session["qid"]:
             return {"error": "No question in current session"}, 400
-        
+
         # ─────────────────────────────────────────────────────────────
         # BUILD PARAMETERS FOR evaluate() FUNCTION
         # ─────────────────────────────────────────────────────────────
@@ -696,12 +722,12 @@ def evaluate_answer():
         qn = current_session["question"].get("question_text", "")      # Param 1: question text
         candidate = transcript                                          # Param 2: candidate answer
         rubric = current_session["rubric"]                              # Param 3: evaluation rubric
-        
+
         if not qn:
             return {"error": "Question text is empty"}, 400
         if not rubric:
             return {"error": "Rubric is missing"}, 400
-        
+
         # ─────────────────────────────────────────────────────────────
         # CALL EVALUATION PIPELINE
         # ─────────────────────────────────────────────────────────────
@@ -712,13 +738,13 @@ def evaluate_answer():
         #   4. Computes bonus and penalty
         #   5. Applies mandatory check and weighting
         #   6. Returns final score and grade
-        
+
         evaluation_result = evaluate(qn, candidate, rubric)
-        
+
         # ─────────────────────────────────────────────────────────────
         # ENRICH RESULT WITH METADATA
         # ─────────────────────────────────────────────────────────────
-        
+
         evaluation_result.update({
             "qid": qid,
             "session_id": current_session["session_id"],
@@ -729,15 +755,15 @@ def evaluate_answer():
             "difficulty": current_session["question"].get("difficulty"),
             "blooms_level": current_session["question"].get("blooms_level")
         })
-        
+
         current_session["last_result"] = evaluation_result
         _save_result_to_json(evaluation_result)
-        
+
         return {
             "status": "success",
             "evaluation": evaluation_result
         }, 200
-        
+
     except Exception as e:
         import traceback
         print(f"[EVALUATOR] Error in evaluate_answer: {e}")
@@ -753,12 +779,12 @@ def evaluate_answer():
 def get_last_result():
     """
     Get the evaluation result from last answered question
-    
+
     Returns: Last evaluation result or empty if no evaluation done yet
     """
     if not current_session["last_result"]:
         return {"error": "No evaluation result available"}, 404
-    
+
     return {
         "status": "success",
         "result": current_session["last_result"]
@@ -773,12 +799,12 @@ def get_last_result():
 def get_current_question():
     """
     Get the currently loaded question
-    
+
     Returns: Current question details
     """
     if not current_session["question"]:
         return {"error": "No question currently loaded"}, 404
-    
+
     return {
         "status": "success",
         "question": current_session["question"],
@@ -798,7 +824,7 @@ def _save_session_to_json():
         filename = out_dir / f"{current_session['session_id']}_session.json"
         import os
         os.makedirs(out_dir, exist_ok=True)
-        
+
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump({
                 "session_id": current_session["session_id"],
@@ -817,7 +843,7 @@ def _save_result_to_json(result):
         filename = out_dir / f"{current_session['session_id']}_result.json"
         import os
         os.makedirs(out_dir, exist_ok=True)
-        
+
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(result, f, indent=2, ensure_ascii=False)
     except Exception as e:
@@ -831,12 +857,12 @@ def _save_result_to_json(result):
 def load_and_prepare_question(qid, question_data, session_id=None):
     """
     Prepare question for evaluation (can be called programmatically)
-    
+
     Args:
         qid: Question ID
         question_data: Question object from selector
         session_id: Optional session ID
-    
+
     Returns:
         True if successful, False otherwise
     """
@@ -844,9 +870,9 @@ def load_and_prepare_question(qid, question_data, session_id=None):
     if not rubric:
         print(f"ERROR: No rubric found for qid={qid}")
         return False
-    
+
     session_id = session_id or str(uuid.uuid4())
-    
+
     current_session.update({
         "session_id": session_id,
         "question": question_data.__dict__ if hasattr(question_data, '__dict__') else question_data,
@@ -854,7 +880,7 @@ def load_and_prepare_question(qid, question_data, session_id=None):
         "qid": qid,
         "timestamp": datetime.now().isoformat()
     })
-    
+
     _save_session_to_json()
     return True
 
@@ -862,23 +888,23 @@ def load_and_prepare_question(qid, question_data, session_id=None):
 def evaluate_candidate_answer(transcript, session_id=None):
     """
     Evaluate candidate answer (can be called programmatically)
-    
+
     Args:
         transcript: Candidate's answer text
         session_id: Optional session ID
-    
+
     Returns:
         Evaluation result dictionary
     """
     if not current_session["qid"]:
         return {"error": "No question loaded"}
-    
+
     qid = current_session["qid"]
     qn = current_session["question"].get("question_text", "")
     rubric = current_session["rubric"]
-    
+
     result = evaluate(qn, transcript, rubric)
-    
+
     result.update({
         "qid": qid,
         "session_id": current_session["session_id"],
@@ -886,10 +912,10 @@ def evaluate_candidate_answer(transcript, session_id=None):
         "candidate_answer": transcript,
         "question_text": qn
     })
-    
+
     current_session["last_result"] = result
     _save_result_to_json(result)
-    
+
     return result
 
 

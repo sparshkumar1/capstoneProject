@@ -17,11 +17,10 @@ export default function InterviewRoom({ navigate }) {
   const sessionId = session?.id || "";
 
   const [question, setQuestion]           = useState(null);
-  const [questionIndex, setQuestionIndex] = useState(0);
-  const [totalQuestions]                  = useState(session?.num_questions || 5);
+  const [questionIndex, setQuestionIndex] = useState(1);
+  const [totalQuestions, setTotalQuestions] = useState(session?.num_questions || 15);
   const [feedback, setFeedback]           = useState(null);
   const [awaitingNext, setAwaitingNext]   = useState(false);
-  const [hint, setHint]                   = useState(null);
   const [difficulty, setDifficulty]       = useState(session?.start_difficulty || 3);
   const [diffHistory, setDiffHistory]     = useState([session?.start_difficulty || 3]);
   const [transcript, setTranscript]       = useState("");
@@ -39,7 +38,7 @@ export default function InterviewRoom({ navigate }) {
       ? "Baseline phase active — RL adaptation starts after 2 baseline questions."
       : ""
   );
-  const [timeLeft, setTimeLeft] = useState((session?.duration_minutes || 20) * 60);
+  const [timeLeft, setTimeLeft] = useState((session?.duration_minutes || 30) * 60);
   const [connected, setConnected]         = useState(false);
   const [showStartScreen, setShowStartScreen] = useState(true);
   const [startStep, setStartStep]         = useState(0);
@@ -68,15 +67,19 @@ export default function InterviewRoom({ navigate }) {
       setQuestion(payload);
       setFeedback(null);
       setAwaitingNext(false);
-      setHint(null);
       setTranscript("");
       setAudioAnalysis(null);
-      setFollowUpQueued(false);
+      setFollowUpQueued(payload.source === "qwen_followup");
+      if (payload.turn_index) {
+        setQuestionIndex(payload.turn_index);
+      }
+      if (payload.total_questions) {
+        setTotalQuestions(payload.total_questions);
+      }
       setCode(payload.code_template || "#include <stdio.h>\n\nint main() {\n    // Your solution here\n    return 0;\n}\n");
       setPhase("question");
       setStartStep(3);
-      setQuestionIndex(i => i + 1);
-      setTimeout(() => setShowStartScreen(false), 700);
+      setTimeout(() => setShowStartScreen(false), 500);
 
       // TTS read-aloud
       if ('speechSynthesis' in window) {
@@ -118,13 +121,12 @@ export default function InterviewRoom({ navigate }) {
         setStageHint(reason || "");
       }
     },
-    onHint: (payload) => setHint(payload),
     onCodeResult: (payload) => setCodeResult(payload),
     onEnd: (payload) => {
       setPhase("done");
       clearInterval(timerRef.current);
       if (payload?.report_id) setSession(s => ({ ...s, report_id: payload.report_id }));
-      setTimeout(() => navigate("report"), 2200);
+      setTimeout(() => navigate("report"), 1500);
     },
     onError: (err) => {
       if (evalTimeoutRef.current) { clearTimeout(evalTimeoutRef.current); evalTimeoutRef.current = null; }
@@ -133,6 +135,7 @@ export default function InterviewRoom({ navigate }) {
         setStageHint("Evaluation interrupted. Submit your answer again.");
       }
       console.error("[Interview error]", err);
+
     },
   });
 
@@ -195,13 +198,8 @@ export default function InterviewRoom({ navigate }) {
     }
   };
 
-  const handleRequestHint = () => {
-    window.speechSynthesis.cancel();
-    setTtsActive(false);
-    send("request_hint", { question_id: question?.id });
-  };
-
   const handleSkip = () => {
+
     window.speechSynthesis.cancel();
     setTtsActive(false);
     if (evalTimeoutRef.current) { clearTimeout(evalTimeoutRef.current); evalTimeoutRef.current = null; }
@@ -292,7 +290,7 @@ export default function InterviewRoom({ navigate }) {
           <div className="progress-bar" style={{ width: 200 }}>
             <div className="progress-fill" style={{ width: `${progress}%` }} />
           </div>
-          <span style={{ fontSize: 12, color: "var(--text-2)" }}>{questionIndex} / {totalQuestions}</span>
+          <span style={{ fontSize: 12, color: "var(--text-2)" }}>Question {questionIndex} of {totalQuestions}</span>
         </div>
 
         <div className="interview-topbar-right">
@@ -322,8 +320,9 @@ export default function InterviewRoom({ navigate }) {
             {question ? (
               <>
                 <div className="question-meta">
-                  <span className="badge badge-accent">Q{questionIndex}</span>
+                  <span className="badge badge-accent">Q{questionIndex} of {totalQuestions}</span>
                   <span className="badge badge-neutral">{question.topic}</span>
+
                   {followUpQueued && <span className="badge badge-accent" style={{ background: "rgba(0,229,200,0.14)", color: "var(--accent-2)" }}>Follow-up</span>}
                   {session?.interview_mode === "demo_rl" && !baselineDone && (
                     <span className="badge badge-warn">Baseline</span>
@@ -360,8 +359,7 @@ export default function InterviewRoom({ navigate }) {
 
                 {!ttsActive && phase !== "evaluating" && (
                   <div className="question-actions">
-                    <button className="btn btn-ghost btn-sm" onClick={handleRequestHint}>💡 Hint</button>
-                    <button className="btn btn-ghost btn-sm" onClick={handleSkip}>⏭ Skip</button>
+                    <button className="btn btn-ghost btn-sm" onClick={handleSkip}>⏭ Skip Question</button>
                   </div>
                 )}
                 {ttsActive && (
@@ -370,12 +368,6 @@ export default function InterviewRoom({ navigate }) {
                   </div>
                 )}
 
-                {hint && (
-                  <div className="hint-banner">
-                    <span>💡</span>
-                    <span>{hint.text}</span>
-                  </div>
-                )}
               </>
             ) : (
               <div className="waiting-state">

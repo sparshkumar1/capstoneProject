@@ -11,9 +11,20 @@ async function req(method, path, body) {
   const res = await fetch(`${BASE}${path}`, opts);
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(err.detail || "Request failed");
+    let errorMsg = "Request failed";
+    if (typeof err.detail === "string") {
+      errorMsg = err.detail;
+    } else if (Array.isArray(err.detail)) {
+      errorMsg = err.detail.map(d => `${d.loc ? d.loc.slice(1).join('.') : ''}: ${d.msg}`).join(', ');
+    } else if (err.detail && typeof err.detail === "object") {
+      errorMsg = JSON.stringify(err.detail);
+    } else if (err.message) {
+      errorMsg = err.message;
+    }
+    throw new Error(`HTTP ${res.status}: ${errorMsg}`);
   }
   return res.json();
+
 }
 
 export const api = {

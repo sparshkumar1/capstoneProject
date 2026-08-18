@@ -226,11 +226,12 @@ async def test_followup_injection():
         )
 
     assert injected is True
-    assert len(o._question_queue) == initial_len + 1
+    assert len(o._question_queue) == initial_len, "Follow-up replaces scheduled question and caps queue at max_q"
     injected_q = o._question_queue[1]
     assert injected_q["id"].startswith("fu_")
     assert injected_q["source"] == "qwen_followup"
     assert injected_q["parent_question_id"] == "q0"
+
 
 
 # ─── Test 9: skip_question does not add answer entry ─────────────────────────

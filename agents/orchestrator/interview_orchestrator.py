@@ -85,19 +85,31 @@ def _make_recommendations(missing: dict) -> list:
         "double pointers": "Practice: write functions that modify a pointer via double pointer.",
         "graph cycle detection": "Implement both DFS-based cycle detection and Floyd's algorithm.",
         "recursion": "Master the call stack: trace through a recursive function by hand for small inputs.",
-        "DP memoization": "Implement Fibonacci, climbing stairs, and coin change using both memoization and tabulation.",
+        "dp memoization": "Implement dynamic programming problems using both top-down memoization and bottom-up tabulation.",
         "edge cases": "Always test: empty input, single element, all-same elements, negative numbers, overflow cases.",
         "complexity analysis": "For every function you write, determine its Big-O time and space complexity.",
+        "hash map": "Practice single-pass hash map patterns for constant-time complement and frequency lookups.",
+        "two-pointer": "Use two pointers on sorted arrays to achieve optimal O(1) auxiliary space.",
+        "linked list": "Trace pointer mutation steps (prev, curr, next) carefully on paper before coding.",
     }
     result = []
-    for concept in list(missing.keys())[:5]:
+    for concept in list(missing.keys())[:6]:
+        c_str = str(concept).strip()
+        if not c_str or c_str.lower().startswith("concept "):
+            continue
+        matched = False
         for key, rec in recs.items():
-            if key in concept.lower():
-                result.append(rec)
+            if key in c_str.lower():
+                if rec not in result:
+                    result.append(rec)
+                matched = True
                 break
-        else:
-            result.append(f"Review and practice: {concept}")
+        if not matched:
+            result.append(f"Review and practice: {c_str}")
+    if not result:
+        result.append("Review core data structure invariants and state step-by-step algorithmic trade-offs.")
     return result[:5]
+
 
 
 # ── Main class ────────────────────────────────────────────────────────────
@@ -391,14 +403,6 @@ class InterviewOrchestrator:
                 current_q or {}, transcript=transcript, eval_result=eval_result
             )
 
-            # Handle action side-effects
-            hint_text = None
-            if action == "Hint":
-                h_obj = await self._get_hint(current_q or {}, mode="hint")
-                hint_text = h_obj.get("text", "") if isinstance(h_obj, dict) else str(h_obj)
-                if self._state["answers"]:
-                    self._state["answers"][-1]["hint_given"] = True
-
             self._log_turn({
                 "question_id": qid,
                 "transcript": transcript,
@@ -414,22 +418,23 @@ class InterviewOrchestrator:
 
             self._state["pending_next"] = True
 
+            max_q = int(self._state.get("num_questions", 15))
+            completed_turns = len(self._state.get("scores", []))
             all_done = (
-                self._current_q_index >= len(self._question_queue) - 1
-                and action not in {"Follow-up"}
+                completed_turns >= max_q
+                or self._current_q_index >= len(self._question_queue) - 1
             )
 
             return {
                 "feedback": feedback,
-                "difficulty_update": None if action == "Hint" else {
+                "difficulty_update": {
                     "new_difficulty": new_diff,
                     "reason": reason,
                     "action": action,
                 },
-
-                "hint": hint_text,
                 "next_action": "session_end" if all_done else "wait_for_next",
             }
+
 
 
     async def handle_code_submission(
@@ -508,14 +513,7 @@ class InterviewOrchestrator:
             # Adapt difficulty
             new_diff, reason, action = await self._adapt_difficulty(score)
 
-            hint_text = None
-            if action == "Hint":
-                h_obj = await self._get_hint(current_q or {}, mode="hint")
-                hint_text = h_obj.get("text", "") if isinstance(h_obj, dict) else str(h_obj)
-                if self._state["answers"]:
-                    self._state["answers"][-1]["hint_given"] = True
-
-            elif action == "Follow-up":
+            if action == "Follow-up":
                 await self._inject_followup_question(current_q or {}, context_text=code[:400], eval_result=result)
 
             self._log_turn({
@@ -532,23 +530,22 @@ class InterviewOrchestrator:
 
             self._state["pending_next"] = True
 
+            max_q = int(self._state.get("num_questions", 15))
+            completed_turns = len(self._state.get("scores", []))
             all_done = (
-                self._current_q_index >= len(self._question_queue) - 1
-                and action not in {"Follow-up"}
+                completed_turns >= max_q
+                or self._current_q_index >= len(self._question_queue) - 1
             )
 
             return {
                 "feedback": result,
-                "difficulty_update": None if action == "Hint" else {
+                "difficulty_update": {
                     "new_difficulty": new_diff,
                     "reason": reason,
                     "action": action,
                 },
-
-                "hint": hint_text,
                 "next_action": "session_end" if all_done else "wait_for_next",
             }
-
 
 
     async def handle_next_question(self) -> dict:
@@ -557,11 +554,22 @@ class InterviewOrchestrator:
         Returns: {type: "question", payload: q} | {type: "session_end", payload: {...}}
         """
         async with self._lock:
+            max_q = int(self._state.get("num_questions", 15))
+            if len(self._state.get("scores", [])) >= max_q:
+                report = await self._finalize_session()
+                return {"type": "session_end", "payload": {
+                    "report_id": report["id"],
+                    "overall_score": report.get("overall_score", 0.0),
+                }}
+
             if not self._state.get("pending_next", False):
                 # Duplicate event — return current question unchanged
-                if self._current_q_index < len(self._question_queue):
-                    return {"type": "question",
-                            "payload": self._question_queue[self._current_q_index]}
+                if self._current_q_index < min(len(self._question_queue), max_q):
+                    raw_q = self._question_queue[self._current_q_index]
+                    q = dict(raw_q)
+                    q["turn_index"] = self._current_q_index + 1
+                    q["total_questions"] = max_q
+                    return {"type": "question", "payload": q}
                 report = await self._finalize_session()
                 return {"type": "session_end", "payload": {
                     "report_id": report["id"],
@@ -570,6 +578,13 @@ class InterviewOrchestrator:
 
             self._state["pending_next"] = False
             self._current_q_index += 1
+            if self._current_q_index >= max_q:
+                report = await self._finalize_session()
+                return {"type": "session_end", "payload": {
+                    "report_id": report["id"],
+                    "overall_score": report.get("overall_score", 0.0),
+                }}
+
             q = self._select_and_send_question()
             if q is None:
                 report = await self._finalize_session()
@@ -578,6 +593,7 @@ class InterviewOrchestrator:
                     "overall_score": report.get("overall_score", 0.0),
                 }}
             return {"type": "question", "payload": q}
+
 
     async def request_hint(self, question_id: str) -> dict:
         """
@@ -596,11 +612,19 @@ class InterviewOrchestrator:
         Returns: {type: "question"} | {type: "session_end"}
         """
         async with self._lock:
+            max_q = int(self._state.get("num_questions", 15))
             self._state["scores"].append(0.0)
             self._state.setdefault("raw_scores", []).append(0.0)
             self._state.setdefault("timing_scores", []).append(0.0)
             self._state.setdefault("timing_modifiers", []).append(0.0)
             self._current_q_index += 1
+            if self._current_q_index >= max_q or len(self._state["scores"]) >= max_q:
+                report = await self._finalize_session()
+                return {"type": "session_end", "payload": {
+                    "report_id": report["id"],
+                    "overall_score": report.get("overall_score", 0.0),
+                }}
+
             q = self._select_and_send_question()
 
             if q is None:
@@ -610,6 +634,7 @@ class InterviewOrchestrator:
                     "overall_score": report.get("overall_score", 0.0),
                 }}
             return {"type": "question", "payload": q}
+
 
     async def end(self) -> dict:
         """Finalize session and return full report dict. Idempotent."""
@@ -634,7 +659,8 @@ class InterviewOrchestrator:
         Ensures the initial question (index 0) is Easy/Easy-Medium (difficulty <= 2).
         Starts the question timer. Returns the question dict or None (session done).
         """
-        if self._current_q_index >= len(self._question_queue):
+        max_q = int(self._state.get("num_questions", 15))
+        if self._current_q_index >= min(len(self._question_queue), max_q):
             return None
 
         # The initial question must be Easy / Easy-Medium (difficulty <= 2)
@@ -644,16 +670,20 @@ class InterviewOrchestrator:
             target_diff,
             str(self._state.get("next_question_type", "")),
         )
-        q = self._question_queue[self._current_q_index]
+        raw_q = self._question_queue[self._current_q_index]
+        q = dict(raw_q)
+        q["turn_index"] = self._current_q_index + 1
+        q["total_questions"] = max_q
         self._state["question_index"] = self._current_q_index
 
         if self._timer:
             dur_min = float(self._state.get("duration_minutes", 30))
-            n_q = max(int(self._state.get("num_questions", 10)), 1)
+            n_q = max(max_q, 1)
             allowed = dur_min * 60.0 / n_q
             self._timer_snapshot = self._timer.start(allowed_time_sec=allowed)
 
         return q
+
 
 
     def _prepare_next_question(self, target_diff: int, preferred_type: str = "") -> None:
@@ -1270,7 +1300,7 @@ class InterviewOrchestrator:
             "topic": topic,
             "difficulty": int(self._state.get("current_difficulty", 3)),
             "type": "verbal",
-            "source": dec_source,
+            "source": "qwen_followup",
             "decision_source": dec_source,
             "llm_status": llm_stat,
             "reason": fu_data.get("reason", "Targeted probe on candidate performance gap"),
@@ -1278,7 +1308,11 @@ class InterviewOrchestrator:
             "parent_question_id": question.get("id", ""),
         }
         self._question_queue.insert(self._current_q_index + 1, fu_q)
+        max_q = int(self._state.get("num_questions", 15))
+        if len(self._question_queue) > max_q:
+            self._question_queue = self._question_queue[:max_q]
         return True
+
 
     def _log_turn(self, turn_data: dict) -> None:
         """Log turn to SessionLogger if available."""

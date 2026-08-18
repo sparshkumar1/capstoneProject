@@ -50,11 +50,11 @@ export function useInterviewWS(sessionId, handlers = {}) {
           case "question":        h.onQuestion?.(msg.payload);     break;
           case "feedback":        h.onFeedback?.(msg.payload);     break;
           case "difficulty_update": h.onDifficulty?.(msg.payload); break;
-          case "hint":            h.onHint?.(msg.payload);         break;
           case "session_end":     h.onEnd?.(msg.payload);          break;
           case "code_result":     h.onCodeResult?.(msg.payload);   break;
           case "error":           h.onError?.(msg.payload);        break;
           default:                h.onRaw?.(msg);
+
         }
       } catch (err) {
         console.error("[WS] Parse error:", err);

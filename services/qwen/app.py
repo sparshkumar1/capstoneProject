@@ -45,40 +45,46 @@ Llama = None
 _ML_IMPORT_LOCK = threading.Lock()
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 GGUF_MODEL_PATH = ROOT_DIR / "models" / "gguf" / "qwen2.5-1.5b-instruct-q4_k_m.gguf"
+
 
 
 def _ensure_ml_imports():
     """Import heavy ML dependencies lazily to avoid blocking startup."""
     global torch, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TextIteratorStreamer, Llama
-    if torch is not None or Llama is not None:
-        return
     with _ML_IMPORT_LOCK:
-        if torch is not None or Llama is not None:
-            return
-        # 1. Try importing llama_cpp for CPU GGUF inference
-        try:
-            from llama_cpp import Llama as _Llama
-            Llama = _Llama
-        except Exception as exc:
-            pass
+        # 1. Import llama_cpp for CPU GGUF inference if not yet imported
+        if Llama is None:
+            try:
+                from llama_cpp import Llama as _Llama
+                Llama = _Llama
+            except Exception as exc:
+                pass
 
-        # 2. Try importing PyTorch & Transformers
-        try:
-            import torch as _torch
-            from transformers import (
-                AutoModelForCausalLM as _AutoModelForCausalLM,
-                AutoTokenizer as _AutoTokenizer,
-                BitsAndBytesConfig as _BitsAndBytesConfig,
-                TextIteratorStreamer as _TextIteratorStreamer,
-            )
-            torch = _torch
-            AutoModelForCausalLM = _AutoModelForCausalLM
-            AutoTokenizer = _AutoTokenizer
-            BitsAndBytesConfig = _BitsAndBytesConfig
-            TextIteratorStreamer = _TextIteratorStreamer
-        except Exception as exc:
-            pass
+        # 2. Import PyTorch & Transformers if not yet imported
+        if torch is None:
+            try:
+                import torch as _torch
+                from transformers import (
+                    AutoModelForCausalLM as _AutoModelForCausalLM,
+                    AutoTokenizer as _AutoTokenizer,
+                    BitsAndBytesConfig as _BitsAndBytesConfig,
+                    TextIteratorStreamer as _TextIteratorStreamer,
+                )
+                torch = _torch
+                AutoModelForCausalLM = _AutoModelForCausalLM
+                AutoTokenizer = _AutoTokenizer
+                BitsAndBytesConfig = _BitsAndBytesConfig
+                TextIteratorStreamer = _TextIteratorStreamer
+            except Exception:
+                pass
+
+
+
+import threading
+_LLM_LOCK = threading.Lock()
 
 
 # ── Model Registry ───────────────────────────────────────────────────────────
@@ -110,20 +116,21 @@ class ModelRegistry:
         if not p.exists():
             raise FileNotFoundError(f"GGUF file not found at {p}")
 
-        threads = min(os.cpu_count() or 4, 12)
+        threads = min(os.cpu_count() or 4, 8)
         print(f"[QwenService] Loading GGUF model {key} from {p} (threads={threads})...", flush=True)
         t0 = time.time()
         llm = Llama(
             model_path=str(p),
-            n_ctx=2048,
+            n_ctx=4096,
             n_threads=threads,
-            n_batch=512,
+            n_batch=256,
             verbose=False,
         )
         self.models[key] = llm
         self.model_types[key] = "gguf"
         elapsed = round(time.time() - t0, 2)
         print(f"[QwenService] GGUF model {key} ready in {elapsed}s", flush=True)
+
 
     def load_model(self, key: str, model_id: str, use_4bit: bool = True):
         """Load a Transformers PyTorch model."""
@@ -190,15 +197,17 @@ class ModelRegistry:
             else:
                 chat_prompt = prompt
 
-            res = llm(
-                chat_prompt,
-                max_tokens=max_new_tokens,
-                temperature=0.1,
-                top_p=0.9,
-                stop=["<|im_end|>", "<|endoftext|>"],
-                echo=False,
-            )
+            with _LLM_LOCK:
+                res = llm(
+                    chat_prompt,
+                    max_tokens=max_new_tokens,
+                    temperature=0.1,
+                    top_p=0.9,
+                    stop=["<|im_end|>", "<|endoftext|>"],
+                    echo=False,
+                )
             return res["choices"][0]["text"].strip()
+
 
         # Branch 2: Transformers PyTorch Inference
         _ensure_ml_imports()
@@ -254,12 +263,14 @@ async def _warm_models_background():
             print(f"[QwenService] Note: GGUF load failed ({exc}).", flush=True)
         finally:
             registry.loading["qwen_1b"] = False
+    else:
+        print(f"[QwenService] GGUF model not found at {target_gguf}.", flush=True)
+        print(f"[QwenService] Download via: python scripts/download_qwen_model.py", flush=True)
 
-    # 2. Fallback to Transformers if GGUF was not loaded and CUDA available
-    if not any_loaded:
+    # 2. Fallback to Transformers ONLY if GPU explicitly requested for research benchmark
+    if not any_loaded and os.environ.get("ENABLE_GPU_RESEARCH_MODELS", "").lower() in {"1", "true"}:
         model_plan = [
             ("qwen_1b", "Qwen/Qwen2.5-1.5B-Instruct", True),
-            ("qwen_7b", "Qwen/Qwen2.5-7B-Instruct", True),
         ]
         for key, model_id, use_4bit in model_plan:
             registry.loading[key] = True
@@ -281,6 +292,7 @@ async def _warm_models_background():
     if not any_loaded:
         MOCK_MODE = True
         print("[QwenService] Running with deterministic structured fallback engine.", flush=True)
+
 
 
 @asynccontextmanager
@@ -398,31 +410,41 @@ def _build_followup_prompt(req: FollowupRequest) -> str:
     correct_str = ", ".join(req.correct_concepts or ev.get("correct_claims", [])) or "None identified"
     missing_str = ", ".join(req.missing_concepts or ev.get("missing_concepts", [])) or "None identified"
     miscon_str = ", ".join(req.misconceptions or req.incorrect_concepts or ev.get("incorrect_claims", [])) or "None detected"
-    prev_str = "\n".join(f"- {q}" for q in (req.previous_questions + req.previous_followups)[-4:]) or "None"
 
     return f"""<|im_start|>system
-You are an expert technical interviewer. Generate exactly ONE candidate-specific follow-up question strictly based on the candidate's actual answer and missing concepts. Return ONLY a valid JSON object.<|im_end|>
+You are an expert technical interviewer conducting a technical interview on {req.topic}.
+Your task is to generate exactly ONE candidate-specific, grounded follow-up question.
+CRITICAL RULES:
+1. Do NOT repeat or re-phrase the original question.
+2. Directly probe the missing concepts ({missing_str}) or misconceptions ({miscon_str}) from the candidate's answer.
+3. Stay strictly within the topic of "{req.topic}" and the technical mechanism of the original question.
+4. Keep the question concise, clear, and direct (1-2 sentences).
+5. Output ONLY a valid JSON object matching the schema.<|im_end|>
 <|im_start|>user
 CONTEXT:
 - Topic: {req.topic} (Difficulty: {req.current_difficulty}/5)
 - Original Question: {req.original_question}
 - Candidate Answer: "{req.candidate_answer}"
 
-EVALUATION BREAKDOWN:
+EVALUATION ANALYSIS:
 - Score: {score:.2f} ({grade})
-- Correct Concepts: {correct_str}
-- Missing Concepts: {missing_str}
+- Identified Strengths: {correct_str}
+- Missing Concepts / Knowledge Gaps: {missing_str}
 - Misconceptions / Inaccuracies: {miscon_str}
-- Weakest Gap: {req.weakest_gap or ev.get('weakest_gap', 'general depth')}
+- Weakest Gap to Target: {req.weakest_gap or ev.get('weakest_gap', missing_str)}
+
+TASK:
+Generate a direct follow-up question targeting the missing concepts: {missing_str}.
 
 Return ONLY a JSON object in this exact schema:
 {{
-  "followup": "Your precise, targeted follow-up question here",
-  "reason": "Why this specific follow-up was selected based on the gap",
-  "target_concepts": ["concept1"]
+  "followup": "Your precise, targeted follow-up question probing the missing concepts",
+  "reason": "Why this specific follow-up addresses the candidate's gap",
+  "target_concepts": ["concept1", "concept2"]
 }}<|im_end|>
 <|im_start|>assistant
 """
+
 
 
 def _build_feedback_prompt(req: FeedbackRequest) -> str:
@@ -716,4 +738,4 @@ async def generate_report(req: ReportRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("services.qwen.app:app", host="0.0.0.0", port=8001, reload=False)
+    uvicorn.run(app, host="0.0.0.0", port=8001)

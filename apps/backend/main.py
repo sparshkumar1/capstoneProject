@@ -258,13 +258,14 @@ class LoginRequest(BaseModel):
     adminPass: str = ""
 
 class CreateSessionRequest(BaseModel):
-    candidate_id: str
-    c_topics: List[str]
-    dsa_topics: List[str]
-    duration_minutes: int = 20
-    num_questions: int = 5
-    interview_mode: str = "standard"  # standard | demo_rl
-    baseline_questions: int = 3         # legacy input; demo_rl baseline runs easy->mid before RL
+    candidate_id: Optional[str] = None
+    c_topics: List[str] = []
+    dsa_topics: List[str] = []
+    duration_minutes: int = 30
+    num_questions: int = 15
+    interview_mode: str = "demo_rl"  # demo_rl | standard
+    baseline_questions: int = 2
+
 
 class RunCodeRequest(BaseModel):
     code: str
@@ -577,7 +578,26 @@ def select_questions(
         topic_counts[topic] = topic_counts.get(topic, 0) + 1
         next_type = "code" if preferred == "verbal" else "verbal"
 
+    # If selected topics had fewer than requested questions, backfill from the broader question bank
+    if len(result) < num:
+        for bank_topic, bank_qs in QUESTION_BANK.items():
+            for q in bank_qs:
+                qid = str(q.get("id", ""))
+                if qid in seen_ids:
+                    continue
+                norm_text = re.sub(r"\s+", " ", q.get("text", "").strip().lower())
+                if norm_text in seen_texts:
+                    continue
+                seen_texts.add(norm_text)
+                seen_ids.add(qid)
+                result.append(q)
+                if len(result) >= num:
+                    break
+            if len(result) >= num:
+                break
+
     return result[:num]
+
 
 
 
@@ -688,7 +708,9 @@ async def login(req: LoginRequest):
 async def create_session(req: CreateSessionRequest):
     """Create a new interview session."""
     sid = str(uuid.uuid4())
-    candidate = CANDIDATES.get(req.candidate_id, {"id": req.candidate_id})
+    cid = (req.candidate_id or "").strip() or f"guest_{uuid.uuid4().hex[:8]}"
+    candidate = CANDIDATES.get(cid, {"id": cid, "name": "Guest Candidate", "email": "guest@example.com"})
+
     config = {
         "c_topics": req.c_topics,
         "dsa_topics": req.dsa_topics,
@@ -735,6 +757,7 @@ async def end_session(session_id: str):
     return {"report_id": report["id"]}
 
 
+@app.get("/api/reports/{session_id}")
 @app.get("/api/sessions/{session_id}/report")
 async def get_report(session_id: str):
     # Try direct report lookup by report UUID
@@ -745,7 +768,15 @@ async def get_report(session_id: str):
     report_id = s.get("report_id") if s else None
     if report_id and report_id in REPORTS:
         return REPORTS[report_id]
+    # If session is an active orchestrator, finalize and return report
+    if session_id in SESSIONS:
+        obj = SESSIONS[session_id]
+        if hasattr(obj, "end"):
+            report = await obj.end()
+            REPORTS[report["id"]] = report
+            return report
     raise HTTPException(404, "Report not found")
+
 
 
 @app.post("/api/transcribe")
@@ -1040,11 +1071,10 @@ async def interview_ws(websocket: WebSocket, session_id: str):
                 else:
                     await send("question", res.get("payload", res))
 
-            elif mtype == "request_hint":
-                hint = await orch.request_hint(payload.get("question_id", ""))
-                await send("hint", hint)
-
             elif mtype == "skip_question":
+
+
+
                 res = await orch.skip_question(payload.get("question_id", ""))
                 if res.get("type") == "session_end":
                     report = await orch.end()

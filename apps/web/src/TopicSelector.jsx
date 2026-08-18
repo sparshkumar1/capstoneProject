@@ -38,9 +38,9 @@ export default function TopicSelector({ navigate }) {
   const { candidate, setSession } = useContext(SessionContext);
   const [selectedC, setSelectedC] = useState([]);
   const [selectedDSA, setSelectedDSA] = useState([]);
-  const [duration, setDuration] = useState(20);
-  const [numQ, setNumQ] = useState(5);
-  const [interviewMode, setInterviewMode] = useState("standard");
+  const [duration, setDuration] = useState(30);
+  const [numQ, setNumQ] = useState(15);
+  const [interviewMode, setInterviewMode] = useState("demo_rl");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -53,22 +53,33 @@ export default function TopicSelector({ navigate }) {
     if (totalSelected === 0) { setError("Select at least one topic."); return; }
     setLoading(true); setError("");
     try {
+      let activeCandidate = candidate;
+      if (!activeCandidate?.id) {
+        activeCandidate = {
+          id: "cand_" + Math.random().toString(36).substring(2, 9),
+          name: "Guest Candidate",
+          email: "guest@example.com",
+        };
+        setCandidate(activeCandidate);
+      }
       const session = await api.createSession({
-        candidate_id: candidate?.id,
+        candidate_id: activeCandidate.id,
         c_topics: selectedC,
         dsa_topics: selectedDSA,
         duration_minutes: duration,
-        num_questions: interviewMode === "demo_rl" ? 15 : numQ,
+        num_questions: interviewMode === "demo_rl" ? 15 : (numQ || 15),
         interview_mode: interviewMode,
       });
       setSession(session);
       navigate("interview");
+
     } catch (e) {
       setError(e.message || "Could not create session.");
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="topic-page page">
