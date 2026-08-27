@@ -1218,8 +1218,9 @@ class InterviewOrchestrator:
         if score >= 0.85 and not missing and not incorrect and (not weakest_gap or "None" in str(weakest_gap)):
             return False
 
-        # Incomplete / misconception / low performance check
-        if missing or incorrect or score < 0.80:
+        # Incomplete / misconception / low performance / gap check
+        has_gap = bool(weakest_gap and "None" not in str(weakest_gap) and str(weakest_gap).strip() != "")
+        if missing or incorrect or score < 0.80 or has_gap:
             return await self._inject_followup_question(question, context_text=transcript, eval_result=eval_result)
 
         return False
@@ -1306,12 +1307,18 @@ class InterviewOrchestrator:
             "reason": fu_data.get("reason", "Targeted probe on candidate performance gap"),
             "target_concepts": fu_data.get("target_concepts", []),
             "parent_question_id": question.get("id", ""),
+            "rubric": question.get("rubric"),
+            "expected_concepts": fu_data.get("target_concepts") or question.get("expected_concepts", []),
+            "mandatory_concepts": question.get("mandatory_concepts", []),
+            "common_mistakes": question.get("common_mistakes", []),
+            "reference_answer": question.get("reference_answer", ""),
         }
         self._question_queue.insert(self._current_q_index + 1, fu_q)
         max_q = int(self._state.get("num_questions", 15))
         if len(self._question_queue) > max_q:
             self._question_queue = self._question_queue[:max_q]
         return True
+
 
 
     def _log_turn(self, turn_data: dict) -> None:

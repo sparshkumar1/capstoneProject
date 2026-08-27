@@ -106,13 +106,36 @@ elif EVALUATOR_READY:
 
 
 def _run_integrated_evaluator(transcript: str, question: dict) -> Optional[dict]:
-    if not EVALUATOR_READY or _evaluator_eval is None or _evaluator_get_rubric is None:
+    if not EVALUATOR_READY or _evaluator_eval is None:
         return None
 
-    qid = str(question.get("id", "") or question.get("qid", "")).strip()
-    rubric = _evaluator_get_rubric(qid)
+    # 1. First check if rubric is already embedded in question
+    rubric = question.get("rubric")
+
+    # 2. If not, lookup by question ID or parent question ID
+    if not rubric and _evaluator_get_rubric is not None:
+        qid = str(question.get("id", "") or question.get("qid", "")).strip()
+        rubric = _evaluator_get_rubric(qid)
+        if not rubric:
+            parent_id = str(question.get("parent_id", "") or question.get("parent_question_id", "")).strip()
+            if parent_id:
+                rubric = _evaluator_get_rubric(parent_id)
+            elif qid.startswith("fu_") or qid.startswith("f_"):
+                parts = qid.split("_")
+                if len(parts) >= 2 and parts[1]:
+                    rubric = _evaluator_get_rubric(parts[1])
+
+    # 3. If still no rubric, synthesize a domain-grounded rubric from question metadata
     if not rubric:
-        return None
+        topic = question.get("topic", "general")
+        expected = question.get("expected_concepts") or [f"{topic} core principle"]
+        rubric = {
+            "reference_answer": question.get("reference_answer") or question.get("text", ""),
+            "expected_concepts": expected,
+            "mandatory_concepts": question.get("mandatory_concepts", []),
+            "common_mistakes": question.get("common_mistakes", []),
+            "topic": topic,
+        }
 
     q_text = str(question.get("text", "") or question.get("question_text", ""))
     raw = _evaluator_eval(q_text, transcript, rubric)
@@ -129,6 +152,7 @@ def _run_integrated_evaluator(transcript: str, question: dict) -> Optional[dict]
     missing_concepts = list(raw.get("missing_concepts", []))
     incorrect_claims = list(raw.get("incorrect_claims", []))
     strong_points = list(raw.get("strong_points", []))
+
 
     # Apply score validation rules if validator ready
     if VALIDATOR_READY and _SCORE_VALIDATOR is not None:

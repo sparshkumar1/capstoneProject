@@ -284,11 +284,6 @@ function QuestionsTab({ r }) {
                         background: q.difficulty <= 2 ? "rgba(54,217,143,0.14)" : q.difficulty === 3 ? "rgba(255,184,79,0.14)" : "rgba(255,79,106,0.14)",
                         color: q.difficulty <= 2 ? "var(--success)" : q.difficulty === 3 ? "var(--warn)" : "var(--danger)"
                       }}>Lv {q.difficulty}</span>
-                      {q.grade && (
-                        <span className="badge" style={{ background: `color-mix(in srgb, ${gradeColor} 12%, transparent)`, color: gradeColor }}>
-                          Grade {q.grade}
-                        </span>
-                      )}
                       {q.trend && (
                         <span style={{ fontSize: 11, color: trendM.color, fontFamily: "Syne", fontWeight: 700 }}>
                           {trendM.icon} {trendM.label}
@@ -298,11 +293,7 @@ function QuestionsTab({ r }) {
                   </div>
                 </div>
                 <div className="q-row-right">
-                  <div className="q-score" style={{
-                    color: q.score >= 0.7 ? "var(--success)" : q.score >= 0.4 ? "var(--warn)" : "var(--danger)"
-                  }}>
-                    {Math.round((q.score || 0) * 100)}%
-                  </div>
+                  <span className="badge badge-neutral" style={{ fontSize: 11 }}>Evaluated</span>
                   <span style={{ color: "var(--text-3)", fontSize: 12 }}>{expanded === i ? "▲" : "▼"}</span>
                 </div>
               </div>
@@ -311,18 +302,6 @@ function QuestionsTab({ r }) {
                 <div className="q-detail fade-up">
                   <div className="divider" />
 
-                  {/* Score breakdown bars */}
-                  {q.score_breakdown && Object.keys(q.score_breakdown).length > 0 && (
-                    <div className="q-detail-section">
-                      <div className="q-detail-label">Score Breakdown</div>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 6 }}>
-                        <MiniBar label="Semantic relevance" value={q.score_breakdown.semantic_similarity} color="var(--accent)" />
-                        <MiniBar label="Concept coverage"   value={q.score_breakdown.concept_coverage}   color="var(--accent-2)" />
-                        <MiniBar label="Reasoning quality"  value={q.score_breakdown.reasoning_quality}  color="#a855f7" />
-                        <MiniBar label="Confidence signal"  value={q.score_breakdown.confidence_signal}  color="var(--warn)" />
-                      </div>
-                    </div>
-                  )}
 
                   {/* Transcript */}
                   {q.transcript && (
@@ -530,16 +509,12 @@ function TimelineTab({ r }) {
               <th>Topic</th>
               <th>Type</th>
               <th>Level</th>
-              <th>Grade</th>
-              <th>Score</th>
+              <th>Status</th>
               <th>Trend</th>
             </tr>
           </thead>
           <tbody>
             {questions.map((q, i) => {
-              const pct = Math.round((q.score || 0) * 100);
-              const scoreColor = pct >= 70 ? "var(--success)" : pct >= 40 ? "var(--warn)" : "var(--danger)";
-              const gradeColor = GRADE_COLOR[q.grade] ?? "var(--text-2)";
               const trendM = TREND_META[q.trend] ?? TREND_META.stable;
               return (
                 <tr key={i}>
@@ -554,12 +529,7 @@ function TimelineTab({ r }) {
                     }}>Lv {q.difficulty ?? "—"}</span>
                   </td>
                   <td>
-                    {q.grade
-                      ? <span style={{ fontFamily: "Syne", fontWeight: 800, color: gradeColor }}>{q.grade}</span>
-                      : "—"}
-                  </td>
-                  <td>
-                    <span style={{ fontFamily: "JetBrains Mono", fontWeight: 600, color: scoreColor }}>{pct}%</span>
+                    <span className="badge badge-neutral" style={{ fontSize: 11 }}>Evaluated</span>
                   </td>
                   <td style={{ color: trendM.color, fontWeight: 700, fontFamily: "Syne", fontSize: 12 }}>
                     {trendM.icon} {trendM.label}
@@ -616,12 +586,12 @@ function ConceptGroup({ title, color, icon, items }) {
       </div>
       {items.length === 0
         ? <p className="empty-msg">None in this category.</p>
-        : items.map(([concept, score], i) => (
+        : items.map(([concept], i) => (
           <div key={i} className="concept-row">
             <span className="concept-dot" style={{ background: color }} />
             <span style={{ flex: 1 }}>{concept}</span>
-            <span style={{ fontSize: 12, color, fontWeight: 600, fontFamily: "JetBrains Mono" }}>
-              {Math.round(score * 100)}%
+            <span className="badge" style={{ background: `color-mix(in srgb, ${color} 14%, transparent)`, color, fontSize: 11 }}>
+              {title}
             </span>
           </div>
         ))
@@ -632,7 +602,6 @@ function ConceptGroup({ title, color, icon, items }) {
 
 // ── Behaviour tab ─────────────────────────────────────────────────
 function BehaviourTab({ r }) {
-  const b = r.behaviour || {};
   const questions = r.question_results || [];
 
   // Communication signals aggregated across all questions
@@ -640,41 +609,24 @@ function BehaviourTab({ r }) {
   const fillerMentions = allCommTips.filter(t => t.toLowerCase().includes("filler")).length;
   const hedgeMentions  = allCommTips.filter(t => t.toLowerCase().includes("hedg") || t.toLowerCase().includes("assertive")).length;
 
-  const metrics = [
-    { label: "Voice Confidence",     value: b.avg_confidence,  color: "var(--accent)",   invert: false },
-    { label: "Hesitation Rate",      value: b.hesitation_rate, color: "var(--warn)",     invert: true  },
-    { label: "Speech Clarity",       value: b.clarity_score,   color: "var(--accent-2)", invert: false },
-    { label: "Answer Completeness",  value: b.completeness,    color: "var(--success)",  invert: false },
-    { label: "Code Quality (avg)",   value: b.code_quality,    color: "#a855f7",         invert: false },
-    { label: "Hints Requested", raw: b.hints_used, label2: "times", color: "var(--text-2)" },
+  const insights = [
+    { label: "Delivery & Pacing", desc: "Monitored speaking rate, structure, and explanation clarity across verbal turns.", icon: "🎙️", color: "var(--accent)" },
+    { label: "Verbal Fluency", desc: fillerMentions === 0 ? "Consistently fluent with minimal filler pauses." : `Observed filler patterns in ${fillerMentions} question(s). Practice pausing silently before answering.`, icon: "⚡", color: "var(--accent-2)" },
+    { label: "Assertion & Tone", desc: hedgeMentions === 0 ? "Direct and assertive technical articulation." : `Occasional hedging phrases identified in ${hedgeMentions} turn(s). State technical invariants with direct confidence.`, icon: "🎯", color: "var(--success)" },
   ];
 
   return (
     <div className="tab-content fade-up">
-      <div className="behaviour-grid">
-        {metrics.map((m, i) => (
-          <div key={i} className="card behaviour-metric">
-            <div className="bm-label">{m.label}</div>
-            {m.raw !== undefined
-              ? <div className="bm-value" style={{ color: m.color }}>
-                  {m.raw} <span style={{ fontSize: 13 }}>{m.label2}</span>
-                </div>
-              : <>
-                <div className="bm-value" style={{ color: m.color }}>
-                  {m.value !== undefined
-                    ? `${Math.round((m.invert ? 1 - m.value : m.value) * 100)}%`
-                    : "—"}
-                </div>
-                {m.value !== undefined && (
-                  <div className="progress-bar" style={{ marginTop: 10 }}>
-                    <div className="progress-fill" style={{
-                      width: `${Math.round((m.invert ? 1 - m.value : m.value) * 100)}%`,
-                      background: m.color,
-                    }} />
-                  </div>
-                )}
-              </>
-            }
+      <div className="behaviour-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14 }}>
+        {insights.map((ins, i) => (
+          <div key={i} className="card behaviour-metric" style={{ padding: "18px 20px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+              <span style={{ fontSize: 20 }}>{ins.icon}</span>
+              <div className="bm-label" style={{ fontSize: 13, color: ins.color, fontWeight: 700, fontFamily: "Syne" }}>{ins.label}</div>
+            </div>
+            <p style={{ fontSize: 13, color: "var(--text-2)", lineHeight: 1.5, margin: 0 }}>
+              {ins.desc}
+            </p>
           </div>
         ))}
       </div>

@@ -55,13 +55,8 @@ function SectionHeader({ icon, title, color }) {
 export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
   if (!feedback) return null;
 
-  const score   = feedback.final_score ?? 0;
-  const grade   = feedback.grade ?? "—";
-  const pct     = Math.round(score * 100);
-  const gradeColor = GRADE_COLOR[grade] ?? "var(--text-2)";
   const trend   = feedback.trend ?? "stable";
   const trendMeta = TREND_META[trend] ?? TREND_META.stable;
-  const sb      = feedback.score_breakdown ?? {};
   const strong  = feedback.strong_points ?? [];
   const errors  = feedback.incorrect_or_incomplete ?? [];
   const missing = feedback.missing_concepts ?? [];
@@ -75,15 +70,19 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
 
   return (
     <div className="feedback-card-rich fade-up">
-      {/* ── Header row ─────────────────────────────────────── */}
+      {/* ── Qualitative Header row ─────────────────────────── */}
       <div className="fc-header">
         <div className="fc-header-left">
-          <div className="fc-grade-ring" style={{ borderColor: gradeColor, color: gradeColor }}>
-            {grade}
+          <div className="fc-status-icon" style={{ fontSize: 24 }}>
+            📝
           </div>
           <div>
-            <div className="fc-score-big" style={{ color: gradeColor }}>{pct}%</div>
-            <div className="fc-source">{source}</div>
+            <div className="fc-title" style={{ fontFamily: "Syne", fontWeight: 700, fontSize: 16, color: "var(--text-1)" }}>
+              Feedback & Analysis
+            </div>
+            <div className="fc-source" style={{ fontSize: 11, color: "var(--text-3)", marginTop: 2 }}>
+              Verified via {source}
+            </div>
           </div>
         </div>
 
@@ -104,17 +103,6 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
         <p className="fc-trend-note">{trendNote}</p>
       )}
 
-      {/* ── Score Breakdown ─────────────────────────────────── */}
-      <div className="fc-section">
-        <SectionHeader icon="📊" title="Score Breakdown" color="var(--accent)" />
-        <div className="fc-bars">
-          <ScoreBar label="Semantic relevance"  value={sb.semantic_similarity} color="var(--accent)" />
-          <ScoreBar label="Concept coverage"    value={sb.concept_coverage}    color="var(--accent-2)" />
-          <ScoreBar label="Reasoning quality"   value={sb.reasoning_quality}   color="#a855f7" />
-          <ScoreBar label="Confidence signal"   value={sb.confidence_signal}   color="var(--warn)" />
-          <ScoreBar label="Overall"             value={sb.overall ?? score}    color={gradeColor} />
-        </div>
-      </div>
 
       {/* ── Strong Points ───────────────────────────────────── */}
       {strong.length > 0 && (

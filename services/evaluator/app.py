@@ -158,8 +158,10 @@ def semantic_score(candidate, rubric):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def cross_encoder_verification(qn, candidate, rubric):
-    reference = qn + " " + str(rubric.get("answer", ""))
+    ref_ans = str(rubric.get("answer") or rubric.get("reference_answer") or "")
+    reference = (qn + " " + ref_ans).strip()
     raw_score = float(cross_encoder.predict([(reference, candidate)])[0])
+
 
     # Calibrate continuous regression output: baseline floor is ~0.20 for unrelated/noise pairs,
     # 0.40-0.55 for partial/weak reasoning, and 0.70-0.95 for strong logical entailment.
