@@ -52,6 +52,111 @@ function SectionHeader({ icon, title, color }) {
   );
 }
 
+/**
+ * Generates a dynamic, qualitative, score-free AI summary grounded in the
+ * structured evaluation and candidate response.
+ */
+export function generateQualitativeSummary(feedback) {
+  if (!feedback) return "";
+
+  // 1. If Qwen or backend provided clean qualitative narrative feedback without score tokens:
+  const rawNarrative = (feedback.narrative_feedback || "").trim();
+  const hasScoreTokens = /Grade\s+[A-F]|Semantic\s+\d+%|Concept coverage\s+\d+%|Reasoning\s+\d+%|Confidence\s+\d+%|\b\d+%\b/i.test(rawNarrative);
+
+  if (rawNarrative && !hasScoreTokens && rawNarrative.length > 25) {
+    return rawNarrative;
+  }
+
+  // 2. Extract structured evaluation facts
+  const covered   = Array.isArray(feedback.covered_concepts) ? feedback.covered_concepts : [];
+  const missing   = Array.isArray(feedback.missing_concepts) ? feedback.missing_concepts : [];
+  const errors    = Array.isArray(feedback.incorrect_or_incomplete) ? feedback.incorrect_or_incomplete : [];
+  const strong    = Array.isArray(feedback.strong_points) ? feedback.strong_points : [];
+  const improve   = Array.isArray(feedback.how_to_improve) ? feedback.how_to_improve : [];
+  const commTips  = Array.isArray(feedback.communication_tips) ? feedback.communication_tips : [];
+  const transcript = (feedback.transcript ?? "").trim();
+  const wordCount = transcript ? transcript.split(/\s+/).filter(Boolean).length : 0;
+  const isCoding  = feedback.test_cases_passed !== undefined || feedback.tests_total !== undefined;
+
+  // Handle coding submission feedback
+  if (isCoding) {
+    const passed = feedback.passed || (feedback.test_cases_passed !== undefined && feedback.test_cases_passed === feedback.tests_total);
+    if (passed) {
+      return "All test cases passed successfully with clean execution in the sandbox environment.";
+    }
+    if (feedback.compilation_error || (feedback.stderr && feedback.stderr.includes("error:"))) {
+      return "Code compilation encountered errors. Review syntax, variable declarations, and header inclusions before re-running.";
+    }
+    return "The solution compiled, but some test cases failed. Check edge cases, boundary conditions, and memory handling.";
+  }
+
+  // Handle verbal responses: Empty or extremely brief
+  if (!transcript || wordCount < 4) {
+    if (missing.length > 0) {
+      return `No substantive verbal explanation was recorded. Key concepts required for this question include: ${missing.slice(0, 2).join(", ")}.`;
+    }
+    return "No substantive response was recorded. Provide a clear technical explanation covering the core mechanics and trade-offs.";
+  }
+
+  const parts = [];
+
+  // Scenario 1: Misconceptions / Inaccuracies detected
+  if (errors.length > 0) {
+    const primaryError = errors[0];
+    const quote = primaryError.what_was_said ? ` regarding "${primaryError.what_was_said}"` : " in the core logic";
+    const fix = primaryError.correction ? ` ${primaryError.correction}` : "";
+    parts.push(`While relevant technical terminology was used, the explanation contained an inaccuracy${quote}.${fix}`);
+
+    if (covered.length > 0) {
+      parts.push(`On the other hand, you correctly touched upon ${covered[0]}.`);
+    } else if (missing.length > 0) {
+      parts.push(`Ensure you also address ${missing[0]} in your explanation.`);
+    }
+  }
+  // Scenario 2: Strong mastery (concepts covered, no gaps, no misconceptions)
+  else if (missing.length === 0 && covered.length > 0) {
+    if (covered.length >= 2) {
+      parts.push(`Clear and comprehensive explanation addressing both ${covered[0]} and ${covered[1]}.`);
+    } else {
+      parts.push(`Clear and accurate explanation directly addressing ${covered[0]}.`);
+    }
+    if (strong.length > 0 && strong[0] && strong[0] !== "General topic familiarity") {
+      parts.push(`Key strength: ${strong[0]}.`);
+    }
+  }
+  // Scenario 3: Partial coverage (some covered, some missing)
+  else if (covered.length > 0 && missing.length > 0) {
+    parts.push(`You accurately identified key principles of ${covered[0]}, but did not fully explain ${missing.slice(0, 2).join(" and ")}.`);
+    if (improve.length > 0) {
+      parts.push(improve[0]);
+    } else {
+      parts.push(`Elaborating on ${missing[0]} will make your solution complete.`);
+    }
+  }
+  // Scenario 4: Missing key concepts without explicit misconception
+  else if (missing.length > 0) {
+    parts.push(`The response initiated the explanation, but key conceptual elements were not adequately addressed: ${missing.slice(0, 2).join(", ")}.`);
+    if (improve.length > 0) {
+      parts.push(improve[0]);
+    }
+  }
+  // Scenario 5: General fallback grounded in strong points
+  else {
+    if (strong.length > 0 && strong[0] && strong[0] !== "General topic familiarity") {
+      parts.push(`Solid explanation highlighting ${strong[0]}.`);
+    } else {
+      parts.push("Technical response recorded and evaluated across core logic and reasoning depth.");
+    }
+  }
+
+  // Delivery observation note if available
+  if (commTips.length > 0 && wordCount >= 15 && parts.length === 1) {
+    parts.push(commTips[0]);
+  }
+
+  return parts.join(" ");
+}
+
 export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
   if (!feedback) return null;
 
@@ -64,9 +169,9 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
   const improve = feedback.how_to_improve ?? [];
   const commTips = feedback.communication_tips ?? [];
   const trendNote = feedback.trend_note ?? "";
-  const justification = feedback.justification ?? "";
   const transcript    = feedback.transcript ?? "";
   const source        = feedback.decision_source ?? "evaluator";
+  const aiSummary     = generateQualitativeSummary(feedback);
 
   return (
     <div className="feedback-card-rich fade-up">
@@ -201,11 +306,11 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
         </div>
       )}
 
-      {/* ── Justification / Narrative ───────────────────────── */}
-      {justification && (
+      {/* ── Qualitative AI Summary ────────────────────────── */}
+      {aiSummary && (
         <div className="fc-section fc-justification">
           <SectionHeader icon="🤖" title="AI Summary" color="var(--text-3)" />
-          <p className="fc-just-text">{justification}</p>
+          <p className="fc-just-text">{aiSummary}</p>
         </div>
       )}
 
