@@ -10,34 +10,34 @@ import "./InterviewerAvatar.css";
  */
 export default function InterviewerAvatar({ question, questionIndex, isThinking = false }) {
   const [phase, setPhase] = useState("idle");
-  // phases: idle -> intro -> typing -> done -> listening
-  const [displayedText, setDisplayedText] = useState("");
+  // phases: idle -> intro -> done -> thinking
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const typeRef = useRef(null);
+  const animTimerRef = useRef(null);
   const prevIndexRef = useRef(null);
 
-  // Trigger full animation sequence whenever a new question arrives
+  // Trigger animation sequence whenever a new question arrives
   useEffect(() => {
     if (!question || questionIndex === prevIndexRef.current) return;
     prevIndexRef.current = questionIndex;
 
     // Reset
-    clearTimeout(typeRef.current);
-    setDisplayedText("");
+    clearTimeout(animTimerRef.current);
     setPhase("idle");
     setIsSpeaking(false);
 
-    // Phase 1 - brief "thinking" pause before speaking
+    // Phase 1 - brief "speaking" intro when question is presented
     const t1 = setTimeout(() => {
       setPhase("intro");
       setIsSpeaking(true);
-    }, 600);
+    }, 400);
 
-    // Phase 2 - start typewriter after intro animation settles
+    // Phase 2 - transition to awaiting candidate response
     const t2 = setTimeout(() => {
-      setPhase("typing");
-      typeQuestion(question.text);
-    }, 900);
+      setPhase("done");
+      setIsSpeaking(false);
+    }, 2200);
+
+    animTimerRef.current = t2;
 
     return () => {
       clearTimeout(t1);
@@ -45,42 +45,17 @@ export default function InterviewerAvatar({ question, questionIndex, isThinking 
     };
   }, [questionIndex, question]);
 
-  // Typewriter engine
-  const typeQuestion = (text) => {
-    let i = 0;
-    setDisplayedText("");
-
-    const tick = () => {
-      i += 1;
-      setDisplayedText(text.slice(0, i));
-      if (i < text.length) {
-        // Pause longer at punctuation for a speech-like rhythm.
-        const ch = text[i - 1];
-        const delay = ch === "." || ch === "?" ? 180
-          : ch === "," || ch === ";" ? 90
-          : ch === " " ? 28
-          : 22;
-        typeRef.current = setTimeout(tick, delay);
-      } else {
-        setPhase("done");
-        setIsSpeaking(false);
-      }
-    };
-
-    typeRef.current = setTimeout(tick, 30);
-  };
-
-  // Thinking state overrides speaking/typing while feedback is being generated.
+  // Thinking state overrides speaking while feedback is being generated.
   useEffect(() => {
     if (isThinking) {
-      clearTimeout(typeRef.current);
+      clearTimeout(animTimerRef.current);
       setPhase("thinking");
       setIsSpeaking(false);
     }
   }, [isThinking]);
 
   useEffect(() => {
-    return () => clearTimeout(typeRef.current);
+    return () => clearTimeout(animTimerRef.current);
   }, []);
 
   const orbs = isSpeaking ? 5 : isThinking ? 3 : 0;
@@ -160,13 +135,10 @@ export default function InterviewerAvatar({ question, questionIndex, isThinking 
 
           <div className="bubble-text">
             {phase === "intro" && (
-                <span className="intro-text">Here&apos;s your next question...</span>
+              <span className="intro-text">Here&apos;s your next question...</span>
             )}
-            {(phase === "typing" || phase === "done") && (
-              <>
-                <span className="typed-text">{displayedText}</span>
-                {phase === "typing" && <span className="type-cursor">|</span>}
-              </>
+            {phase === "done" && (
+              <span className="intro-text">Please review the question below and explain your approach.</span>
             )}
             {phase === "thinking" && (
               <span className="thinking-text">Analysing your response...</span>
@@ -175,7 +147,7 @@ export default function InterviewerAvatar({ question, questionIndex, isThinking 
 
           {phase === "done" && (
             <div className="bubble-cta">
-              <span className="mic-cue">Your turn - speak or type your answer</span>
+              <span className="mic-cue">Your turn — speak or write your answer</span>
             </div>
           )}
         </div>
