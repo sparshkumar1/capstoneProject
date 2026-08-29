@@ -21,6 +21,8 @@ coverage/
 
 # Local model weights and huggingface caches
 models/
+!services/evaluator/models/
+!services/evaluator/models/**
 services/qwen/models/
 hf_cache/
 .cache/
