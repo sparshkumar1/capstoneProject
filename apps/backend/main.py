@@ -263,6 +263,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ── Storage Layer Initialization ──────────────────────────────────────────
+try:
+    from services.storage.database import init_db
+    init_db()
+except Exception as exc:
+    print(f"[WARN] Database initialization error: {exc}")
+
 # ── In-memory stores (replace with DB in production) ────────────────────
 CANDIDATES: Dict[str, dict] = {}
 SESSIONS: Dict[str, dict] = {}
@@ -709,23 +716,38 @@ async def health():
 
 @app.post("/api/login")
 async def login(req: LoginRequest):
-    """Register/login a candidate."""
-    # In production: check DB, hash passwords, issue JWT
-    cid = str(uuid.uuid4())
-    candidate = {
-        "id": cid,
-        "name": req.name,
-        "email": req.email,
-        "college": req.college,
-        "year": req.year,
-        "roll": req.roll,
-        "primary_lang": req.primary_lang,
-        "experience": req.experience,
-        "is_admin": req.admin,
-        "created_at": datetime.now(UTC).isoformat(),
-    }
-    CANDIDATES[cid] = candidate
-    return candidate
+    """Register/login a candidate with persistent identity across sessions."""
+    try:
+        from services.storage.database import get_or_create_candidate
+        candidate = get_or_create_candidate(
+            email=req.email,
+            name=req.name,
+            college=req.college,
+            year=req.year,
+            roll=req.roll,
+            primary_lang=req.primary_lang,
+            experience=req.experience,
+            is_admin=req.admin,
+        )
+        cid = candidate["id"]
+        CANDIDATES[cid] = candidate
+        return candidate
+    except Exception as exc:
+        cid = str(uuid.uuid4())
+        candidate = {
+            "id": cid,
+            "name": req.name,
+            "email": req.email,
+            "college": req.college,
+            "year": req.year,
+            "roll": req.roll,
+            "primary_lang": req.primary_lang,
+            "experience": req.experience,
+            "is_admin": req.admin,
+            "created_at": datetime.now(UTC).isoformat(),
+        }
+        CANDIDATES[cid] = candidate
+        return candidate
 
 
 @app.post("/api/sessions")
@@ -733,7 +755,18 @@ async def create_session(req: CreateSessionRequest):
     """Create a new interview session."""
     sid = str(uuid.uuid4())
     cid = (req.candidate_id or "").strip() or f"guest_{uuid.uuid4().hex[:8]}"
-    candidate = CANDIDATES.get(cid, {"id": cid, "name": "Guest Candidate", "email": "guest@example.com"})
+    candidate = CANDIDATES.get(cid)
+    if not candidate:
+        try:
+            from services.storage.database import get_candidate_by_id
+            db_cand = get_candidate_by_id(cid)
+            if db_cand:
+                candidate = db_cand
+                CANDIDATES[cid] = candidate
+        except Exception:
+            pass
+    if not candidate:
+        candidate = {"id": cid, "name": "Guest Candidate", "email": "guest@example.com"}
 
     config = {
         "c_topics": req.c_topics,
@@ -742,6 +775,7 @@ async def create_session(req: CreateSessionRequest):
         "num_questions": req.num_questions,
         "interview_mode": req.interview_mode,
         "baseline_questions": getattr(req, "baseline_questions", None),
+        "defer_rl": True,
     }
 
     if _INTERVIEW_ORCHESTRATOR_READY and InterviewOrchestrator is not None:
@@ -753,6 +787,11 @@ async def create_session(req: CreateSessionRequest):
             select_questions_fn=select_questions,
         )
         SESSIONS[sid] = orchestrator
+        try:
+            from services.storage.database import save_session
+            save_session(orchestrator.to_session_dict())
+        except Exception:
+            pass
         if _ensure_audio_analysis_imports() and reset_audio_session is not None:
             try:
                 reset_audio_session(sid)
@@ -761,6 +800,39 @@ async def create_session(req: CreateSessionRequest):
         return {k: v for k, v in orchestrator.to_session_dict().items() if k != "questions"}
 
     raise HTTPException(503, "InterviewOrchestrator unavailable — check server imports")
+
+
+@app.get("/api/history/{candidate_id}/{question_id}")
+async def get_history_for_question(candidate_id: str, question_id: str):
+    """Retrieve historical attempts and previous best answer for candidate on question."""
+    try:
+        from services.storage.database import get_question_attempts, get_best_attempt
+        attempts = get_question_attempts(candidate_id, question_id)
+        best = get_best_attempt(candidate_id, question_id)
+        return {
+            "candidate_id": candidate_id,
+            "question_id": question_id,
+            "has_history": len(attempts) > 0,
+            "total_attempts": len(attempts),
+            "best_attempt": best,
+            "attempts": attempts,
+        }
+    except Exception as e:
+        raise HTTPException(500, f"Error retrieving history: {str(e)}")
+
+
+@app.get("/api/history/{candidate_id}")
+async def get_full_candidate_history(candidate_id: str):
+    """Retrieve full learning history for candidate across all questions."""
+    try:
+        from services.storage.database import get_candidate_history
+        history = get_candidate_history(candidate_id)
+        return {
+            "candidate_id": candidate_id,
+            "history": history,
+        }
+    except Exception as e:
+        raise HTTPException(500, f"Error retrieving history: {str(e)}")
 
 
 @app.get("/api/sessions/{session_id}")
@@ -1094,6 +1166,13 @@ async def interview_ws(websocket: WebSocket, session_id: str):
                     })
                 else:
                     await send("question", res.get("payload", res))
+
+            elif mtype in ("retry_question", "retry"):
+                res = await orch.handle_retry(payload.get("question_id", ""))
+                if res.get("type") == "retry_ready":
+                    await send("question", res.get("payload", res))
+                else:
+                    await send("error", {"message": res.get("message", "Retry failed")})
 
             elif mtype == "skip_question":
 

@@ -70,3 +70,9 @@ audio_*.wav
 
 # Model binaries
 *.gguf
+
+# Local database files
+*.db
+*.sqlite
+data/*.db
+data/*.sqlite

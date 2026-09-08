@@ -44,7 +44,7 @@ async def test_full_interview_lifecycle_simulation():
     eval_q1 = {
         "final_score": 0.88,
         "covered_concepts": ["Pointers", "Dereferencing"],
-        "missing_concepts": ["Null pointer check"],
+        "missing_concepts": [],
         "what_was_incorrect": [],
         "justification": "Good understanding of pointer mechanics.",
     }

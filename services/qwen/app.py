@@ -352,6 +352,12 @@ class FeedbackRequest(BaseModel):
     structured_evaluation: dict = Field(default_factory=dict)
     candidate_state: dict = Field(default_factory=dict)
     history: list[dict] = Field(default_factory=list)
+    attempt_number: int = 1
+    previous_best_answer: Optional[str] = None
+    previous_best_score: Optional[float] = None
+    resolved_concepts: list[str] = Field(default_factory=list)
+    remaining_concepts: list[str] = Field(default_factory=list)
+    score_delta: Optional[float] = None
 
 
 class FeedbackResponse(BaseModel):
@@ -368,6 +374,8 @@ class FeedbackResponse(BaseModel):
     grade: str
     decision_source: str = "qwen_1.5b_llm"
     llm_status: str = "available"
+    attempt_number: int = 1
+    comparison: Optional[dict] = None
 
 
 class HintRequest(BaseModel):
@@ -455,6 +463,22 @@ def _build_feedback_prompt(req: FeedbackRequest) -> str:
     missing_str = "\n".join(f"  - {m}" for m in ev.get("missing_concepts", [])) or "  - None identified"
     incorrect_str = "\n".join(f"  ! {x}" for x in ev.get("incorrect_claims", [])) or "  ! None detected"
 
+    attempt_ctx = ""
+    if req.attempt_number > 1:
+        prev_score_str = f"{req.previous_best_score:.2f}" if req.previous_best_score is not None else "N/A"
+        delta_str = f"{req.score_delta:+.2f}" if req.score_delta is not None else "N/A"
+        resolved_str = ", ".join(req.resolved_concepts) if req.resolved_concepts else "None"
+        rem_str = ", ".join(req.remaining_concepts) if req.remaining_concepts else "None"
+        attempt_ctx = f"""
+RE-ATTEMPT CONTEXT:
+- Attempt Number: {req.attempt_number}
+- Previous Best Answer: "{req.previous_best_answer or 'N/A'}"
+- Previous Best Score: {prev_score_str} (Score Delta: {delta_str})
+- Resolved Concepts in this attempt: {resolved_str}
+- Still Remaining Gaps: {rem_str}
+INSTRUCTION: Explicitly acknowledge this is attempt #{req.attempt_number}. Point out specifically what improved over the previous attempt (resolved concepts) and what still needs resolution.
+"""
+
     return f"""<|im_start|>system
 You are a senior technical interviewer providing personalized constructive feedback. Ground feedback strictly on what the candidate actually said. Return ONLY a valid JSON object.<|im_end|>
 <|im_start|>user
@@ -472,7 +496,7 @@ EVALUATION EVIDENCE:
 {missing_str}
 - Misconceptions:
 {incorrect_str}
-
+{attempt_ctx}
 Return ONLY a JSON object in this exact schema:
 {{
   "what_candidate_said": "Factual 1-sentence summary of candidate assertion",
@@ -484,7 +508,8 @@ Return ONLY a JSON object in this exact schema:
   "stronger_answer_guide": "Advice on structuring answer at senior engineer level",
   "actionable_improvements": ["Concrete action item 1", "Concrete action item 2"],
   "narrative_feedback": "A professional 3-sentence summary of performance and next steps"
-}}<|im_end|>
+}}
+<|im_end|>
 <|im_start|>assistant
 """
 
@@ -534,6 +559,20 @@ def _synthesize_structured_followup(req: FollowupRequest) -> FollowupResponse:
     )
 
 
+def _validate_feedback_output(data: Optional[dict], req: FeedbackRequest) -> bool:
+    if not isinstance(data, dict):
+        return False
+    narrative = str(data.get("narrative_feedback", "")).strip()
+    if len(narrative) < 20:
+        return False
+    generic_fluff = ["good answer", "good job", "be more detailed", "keep practicing", "nice try"]
+    if narrative.lower() in generic_fluff:
+        return False
+    how_to = str(data.get("how_to_answer", "")).strip()
+    if len(how_to) < 15:
+        return False
+    return True
+
 
 def _synthesize_structured_feedback(req: FeedbackRequest) -> FeedbackResponse:
     ev = req.structured_evaluation
@@ -547,46 +586,79 @@ def _synthesize_structured_feedback(req: FeedbackRequest) -> FeedbackResponse:
     expected_concepts = list(ev.get("expected_concepts", []))
 
     what_said = candidate_ans if candidate_ans else "No answer provided"
+    if len(what_said) > 200:
+        what_said = what_said[:197] + "..."
+
     actionable = []
     if incorrect_claims:
-        actionable.extend([f"Correct misconception: {inc}" for inc in incorrect_claims[:2]])
+        actionable.extend([f"Correct misconception regarding {inc}" for inc in incorrect_claims[:2]])
     if missing_concepts:
-        actionable.extend([f"Incorporate missing concept: {m}" for m in missing_concepts[:3]])
+        actionable.extend([f"Explicitly address {m}" for m in missing_concepts[:3]])
 
+    # Build comparison data if attempt > 1 or prior score present
+    comparison_dict = None
+    if req.attempt_number > 1 or req.previous_best_score is not None:
+        comparison_dict = {
+            "attempt_number": req.attempt_number,
+            "previous_best_score": req.previous_best_score,
+            "score_delta": req.score_delta,
+            "resolved_concepts": req.resolved_concepts,
+            "remaining_concepts": req.remaining_concepts,
+        }
+
+    # Attempt-aware narrative prefix
+    attempt_prefix = ""
+    if req.attempt_number > 1:
+        if req.resolved_concepts:
+            resolved_text = f"Successfully addressed previous gaps: {', '.join(req.resolved_concepts)}."
+        else:
+            resolved_text = "No previous conceptual gaps were resolved in this attempt."
+
+        if req.score_delta is not None and req.score_delta > 0:
+            delta_text = f"Score improved by {req.score_delta:+.0%} over previous best."
+        elif req.score_delta is not None and req.score_delta < 0:
+            delta_text = f"Score decreased by {req.score_delta:+.0%} compared to previous best."
+        else:
+            delta_text = "Score remained consistent with previous best."
+
+        attempt_prefix = f"[Attempt #{req.attempt_number}] {delta_text} {resolved_text} "
+
+    # Generate grounded narrative and advice based on grade/score and concepts
     if grade == "Excellent" or score >= 0.75:
-        what_correct = correct_claims or ["Comprehensive conceptual explanation", "Accurate time and space complexity"]
-        how_to_answer = f"For {req.topic}, your response correctly covered the required logic: {', '.join(expected_concepts[:3]) if expected_concepts else 'core algorithmic invariants'}."
-        stronger_guide = "To perform at an elite staff-level, proactively articulate cache locality, memory footprint, and concurrency trade-offs."
+        what_correct = correct_claims or ["Comprehensive conceptual explanation", "Accurate technical invariants"]
+        cov_concepts = ', '.join(expected_concepts[:3]) if expected_concepts else 'the core technical invariants'
+        how_to_answer = f"For {req.topic}, the optimal response thoroughly articulates {cov_concepts}."
+        stronger_guide = "To perform at a staff level, proactively discuss memory layout, cache locality, and concurrency safety guarantees."
         if not actionable:
-            actionable = ["Proactively highlight memory-space trade-offs upfront", "Discuss edge case guarantees under concurrency"]
-        narrative = f"Excellent work on this {req.topic} question. You demonstrated strong command with sound technical reasoning ({score:.0%})."
+            actionable = ["Proactively highlight memory-space trade-offs upfront", "Discuss edge case guarantees under concurrent access"]
+        narrative = f"{attempt_prefix}Strong command demonstrated on this {req.topic} question ({score:.0%}). Your explanation accurately covered {', '.join(correct_claims[:2]) if correct_claims else 'the primary mechanism'} with sound technical reasoning."
 
     elif grade == "Good" or score >= 0.60:
-        what_correct = correct_claims or ["Correct general algorithmic strategy"]
-        gap_desc = f"explicitly covering: {', '.join(missing_concepts[:2])}" if missing_concepts else "detailing edge case boundaries"
-        how_to_answer = f"A complete answer for {req.topic} identifies the primary algorithm while {gap_desc}."
-        stronger_guide = "Structure your explanation into three distinct phases: (1) Core algorithm, (2) Step-by-step invariants, (3) Complexity analysis."
+        what_correct = correct_claims or ["Valid high-level algorithmic strategy"]
+        gap_desc = f"explicitly detailing: {', '.join(missing_concepts[:2])}" if missing_concepts else "clarifying boundary edge conditions"
+        how_to_answer = f"A comprehensive answer for {req.topic} covers the primary mechanism while {gap_desc}."
+        stronger_guide = "Structure your explanation into three distinct phases: (1) Core algorithm, (2) State invariants, (3) Complexity analysis."
         if not actionable:
-            actionable = ["State time and space complexity bounds explicitly", "Provide a quick walk-through with a sample trace"]
-        narrative = f"Good attempt ({score:.0%}). You have the right high-level intuition for {req.topic}, but addressing {missing_concepts[0] if missing_concepts else 'core mechanics'} will elevate your response."
+            actionable = ["State time and space complexity bounds explicitly", "Walk through a concrete trace with edge inputs"]
+        narrative = f"{attempt_prefix}Good attempt ({score:.0%}). You have the correct high-level intuition for {req.topic}, but explicitly articulating {missing_concepts[0] if missing_concepts else 'underlying mechanics'} will elevate your answer."
 
     elif grade == "Average" or score >= 0.40:
-        what_correct = correct_claims or ["Recognized problem domain and terminology"]
+        what_correct = correct_claims or ["Identified relevant problem domain and terms"]
         key_missing = missing_concepts[0] if missing_concepts else "the fundamental algorithm mechanism"
-        how_to_answer = f"For {req.topic}, anchor your response around: {key_missing} to demonstrate mechanistic understanding."
-        stronger_guide = "Avoid general buzzwords; explain the step-by-step transition of variables and data state during execution."
+        how_to_answer = f"For {req.topic}, anchor your answer on the concrete mechanics of {key_missing} to demonstrate depth."
+        stronger_guide = "Avoid general high-level buzzwords; trace the exact step-by-step transition of variables and data structures."
         if not actionable:
             actionable = [f"Study the core mechanism of {key_missing}", "Practice tracing the algorithm on concrete examples"]
-        narrative = f"Average response ({score:.0%}). You touched on relevant concepts, but key mechanisms ({', '.join(missing_concepts[:2]) if missing_concepts else 'details'}) were omitted."
+        narrative = f"{attempt_prefix}Average response ({score:.0%}). Relevant concepts were mentioned, but key technical mechanisms ({', '.join(missing_concepts[:2]) if missing_concepts else 'critical details'}) were omitted."
 
     else:
         what_correct = correct_claims
         model_strat = expected_concepts[0] if expected_concepts else "the standard optimal algorithm"
-        how_to_answer = f"The optimal approach for this question uses {model_strat} to satisfy constraints without unnecessary quadratic overhead."
-        stronger_guide = "When stuck, first clarify constraints and start with the simplest valid brute force before stating an optimal strategy."
+        how_to_answer = f"The optimal approach for this question utilizes {model_strat} to achieve optimal efficiency."
+        stronger_guide = "When approaching this topic, start by clarifying problem constraints and defining the state transition before writing logic."
         if not actionable:
-            actionable = [f"Review foundational concepts in {req.topic}", "Write out and trace small test cases before speaking"]
-        narrative = f"This response scored {score:.0%} (Grade: Poor). The proposed logic has conceptual gaps or misconceptions that should be reviewed."
+            actionable = [f"Review foundational principles of {req.topic}", "Write out and trace small test cases before explaining"]
+        narrative = f"{attempt_prefix}This response scored {score:.0%} (Grade: Poor). The proposed logic exhibits conceptual gaps regarding {', '.join(missing_concepts[:2]) if missing_concepts else 'the fundamental approach'}."
 
     return FeedbackResponse(
         what_candidate_said=what_said,
@@ -597,11 +669,13 @@ def _synthesize_structured_feedback(req: FeedbackRequest) -> FeedbackResponse:
         how_to_answer=how_to_answer,
         stronger_answer_guide=stronger_guide,
         actionable_improvements=actionable,
-        narrative_feedback=narrative,
+        narrative_feedback=narrative.strip(),
         final_score=round(score, 4),
         grade=grade,
         decision_source="non_llm_structured_recovery",
         llm_status="llm_unavailable",
+        attempt_number=req.attempt_number,
+        comparison=comparison_dict,
     )
 
 
@@ -675,6 +749,16 @@ async def generate_feedback(req: FeedbackRequest):
     # Check for Research Qwen-7B first, then Live Demo Qwen-1.5B
     active_key = "qwen_7b" if "qwen_7b" in registry.models else ("qwen_1b" if "qwen_1b" in registry.models else None)
 
+    comparison_dict = None
+    if req.attempt_number > 1 or req.previous_best_score is not None:
+        comparison_dict = {
+            "attempt_number": req.attempt_number,
+            "previous_best_score": req.previous_best_score,
+            "score_delta": req.score_delta,
+            "resolved_concepts": req.resolved_concepts,
+            "remaining_concepts": req.remaining_concepts,
+        }
+
     if not MOCK_MODE and active_key:
         try:
             prompt = _build_feedback_prompt(req)
@@ -683,7 +767,7 @@ async def generate_feedback(req: FeedbackRequest):
                 None, registry.generate_full, active_key, prompt, 256
             )
             data = _extract_json_from_llm(raw)
-            if data and ("narrative_feedback" in data or "how_to_answer" in data):
+            if _validate_feedback_output(data, req):
                 ev = req.structured_evaluation
                 source_label = "qwen_7b_llm" if active_key == "qwen_7b" else "qwen_1.5b_llm"
                 return FeedbackResponse(
@@ -700,6 +784,8 @@ async def generate_feedback(req: FeedbackRequest):
                     grade=str(ev.get("grade", "Average")),
                     decision_source=source_label,
                     llm_status="available",
+                    attempt_number=req.attempt_number,
+                    comparison=comparison_dict,
                 )
         except Exception as exc:
             print(f"[QwenService] Feedback generation error: {exc}", flush=True)

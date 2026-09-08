@@ -154,7 +154,13 @@ class InterviewOrchestrator:
         self._current_q_index: int = 0
         self._timer_snapshot = None
         self._attempt_counts: Dict[str, int] = {}
+        self._active_question_attempts: Dict[str, List[dict]] = {}
+        self._pre_attempt_state: Optional[dict] = None
         self._cached_report: Optional[dict] = None
+        self._defer_rl: bool = bool(config.get("defer_rl", False))
+        self._in_retry_turn: Dict[str, bool] = {}
+        self._rl_adapted_turns: set = set()
+        self._evicted_by_followup: Dict[str, dict] = {}
 
         # Build session state from config
         sid = session_id
@@ -195,9 +201,11 @@ class InterviewOrchestrator:
 
         self._question_queue = list(questions)
 
+        cid = str((candidate or {}).get("id") or (candidate or {}).get("candidate_id") or "")
+
         self._state: dict = {
             "id": sid,
-            "candidate_id": (candidate or {}).get("id", ""),
+            "candidate_id": cid,
             "c_topics": c_topics,
             "dsa_topics": dsa_topics,
             "topics": c_topics + dsa_topics,
@@ -336,7 +344,6 @@ class InterviewOrchestrator:
                 eval_result = await self._evaluate_verbal(transcript, current_q or {})
             eval_result["transcript"] = transcript
 
-
             # Update confidence from audio if available
             audio = self._state.get("last_audio_analysis")
             if isinstance(audio, dict) and not audio.get("error"):
@@ -344,11 +351,41 @@ class InterviewOrchestrator:
                 if conf is not None:
                     self._state["last_confidence_score"] = float(conf)
 
+            # Persistence & comparison lookup
+            cid = str(self._state.get("candidate_id", ""))
+            sid = str(self._state.get("id", ""))
+            is_followup = bool(
+                str(qid).startswith("fu_")
+                or (current_q or {}).get("parent_question_id")
+                or (current_q or {}).get("source") in {"qwen_followup", "non_llm_structured_recovery", "qwen_1.5b_llm"}
+                or (current_q or {}).get("is_followup")
+            )
+            parent_qid = (current_q or {}).get("parent_question_id") if is_followup else None
+
+            lifetime_attempt_num = 1
+            comparison = None
+            if cid:
+                try:
+                    from services.storage.database import compare_with_previous_best, get_question_attempts
+                    past_attempts = get_question_attempts(cid, qid)
+                    lifetime_attempt_num = len(past_attempts) + 1
+                    comparison = compare_with_previous_best(
+                        candidate_id=cid,
+                        question_id=qid,
+                        current_eval=eval_result,
+                    )
+                except Exception:
+                    pass
+            else:
+                lifetime_attempt_num = len(self._active_question_attempts.get(qid, [])) + 1
+
             # Generate feedback
             turn_num = len(self._state["scores"]) + 1
             feedback = await self._generate_feedback(
                 transcript, current_q or {}, eval_result, audio,
                 is_code=False, turn_num=turn_num,
+                attempt_number=lifetime_attempt_num,
+                comparison=comparison,
             )
 
             raw_score = float(eval_result.get("final_score", feedback.get("final_score", 0.5)))
@@ -388,6 +425,55 @@ class InterviewOrchestrator:
             feedback["time_taken_sec"] = timing_data.get("time_taken_sec", 0.0)
             feedback["allowed_time_sec"] = timing_data.get("allowed_time_sec", 60.0)
             feedback["final_score"] = score
+            feedback["attempt_number"] = lifetime_attempt_num
+            if comparison:
+                feedback["comparison"] = comparison
+
+            # Save attempt to SQLite
+            is_best_flag = 1
+            if cid:
+                try:
+                    from services.storage.database import save_attempt
+                    save_res = save_attempt({
+                        "candidate_id": cid,
+                        "session_id": sid,
+                        "question_id": qid,
+                        "parent_question_id": parent_qid,
+                        "attempt_type": "followup" if is_followup else "primary",
+                        "answer_type": "verbal",
+                        "transcript": transcript,
+                        "raw_score": raw_score,
+                        "validated_score": raw_score,
+                        "covered_concepts": eval_result.get("correct_claims", []) or eval_result.get("covered_concepts", []),
+                        "missing_concepts": eval_result.get("missing_concepts", []),
+                        "incorrect_claims": eval_result.get("incorrect_claims", []),
+                        "feedback_json": feedback,
+                    })
+                    is_best_flag = 1 if save_res.get("is_best") else 0
+                except Exception:
+                    pass
+            feedback["is_best"] = bool(is_best_flag)
+
+            attempt_rec = {
+                "question": current_q or {},
+                "transcript": transcript,
+                "raw_score": raw_score,
+                "validated_score": raw_score,
+                "score": score,
+                "feedback": feedback,
+                "timing_mod": timing_mod,
+                "eval_result": eval_result,
+                "attempt_number": lifetime_attempt_num,
+                "is_best": bool(is_best_flag),
+            }
+            self._active_question_attempts.setdefault(qid, []).append(attempt_rec)
+
+            self._pre_attempt_state = {
+                "scores_len": len(self._state["scores"]),
+                "answers_len": len(self._state["answers"]),
+                "current_difficulty": self._state.get("current_difficulty"),
+                "difficulty_history_len": len(self._state.get("difficulty_history", [])),
+            }
 
             # Update state first (so _adapt_difficulty sees correct answered count)
             self._update_session_state(
@@ -396,7 +482,14 @@ class InterviewOrchestrator:
             )
 
             # Adapt difficulty (RL difficulty policy)
-            new_diff, reason, action = await self._adapt_difficulty(score)
+            should_defer = self._defer_rl or self._in_retry_turn.get(qid, False)
+            if not should_defer:
+                new_diff, reason, action = await self._adapt_difficulty(score)
+                self._rl_adapted_turns.add(qid)
+            else:
+                new_diff = int(self._state.get("current_difficulty", 3))
+                reason = "Turn in progress — RL adaptation deferred to question finalization"
+                action = "Pending"
 
             # Follow-up decision is owned by Follow-Up Agent (decoupled from RL difficulty)
             followup_injected = await self._decide_and_inject_followup(
@@ -414,6 +507,7 @@ class InterviewOrchestrator:
                 "new_difficulty": new_diff,
                 "time_norm": self._state.get("last_time_norm", 0.0),
                 "attempts": attempts,
+                "attempt_number": lifetime_attempt_num,
             })
 
             self._state["pending_next"] = True
@@ -471,10 +565,40 @@ class InterviewOrchestrator:
 
             qid = (current_q or {}).get("id", question_id)
 
+            # Persistence & comparison lookup
+            cid = str(self._state.get("candidate_id", ""))
+            sid = str(self._state.get("id", ""))
+            is_followup = bool(
+                str(qid).startswith("fu_")
+                or (current_q or {}).get("parent_question_id")
+                or (current_q or {}).get("is_followup")
+            )
+            parent_qid = (current_q or {}).get("parent_question_id") if is_followup else None
+
+            lifetime_attempt_num = 1
+            comparison = None
+            if cid:
+                try:
+                    from services.storage.database import compare_with_previous_best, get_question_attempts
+                    past_attempts = get_question_attempts(cid, qid)
+                    lifetime_attempt_num = len(past_attempts) + 1
+                    code_tentative_score = (tests_passed / max(tests_total, 1)) if tests_total > 0 else (0.85 if passed else 0.35)
+                    comparison = compare_with_previous_best(
+                        candidate_id=cid,
+                        question_id=qid,
+                        current_eval={"validated_score": code_tentative_score, "missing_concepts": [] if passed else ["Correct test cases"]},
+                    )
+                except Exception:
+                    pass
+            else:
+                lifetime_attempt_num = len(self._active_question_attempts.get(qid, [])) + 1
+
             # Evaluate code
             result = self._evaluate_code(
                 code, current_q or {},
                 passed, tests_passed, tests_total, stdout, stderr,
+                attempt_number=lifetime_attempt_num,
+                comparison=comparison,
             )
 
             raw_score = float(result.get("final_score", 0.5))
@@ -503,6 +627,54 @@ class InterviewOrchestrator:
             result["time_taken_sec"] = timing_data.get("time_taken_sec", 0.0)
             result["allowed_time_sec"] = timing_data.get("allowed_time_sec", 180.0)
             result["final_score"] = score
+            result["attempt_number"] = lifetime_attempt_num
+            if comparison:
+                result["comparison"] = comparison
+
+            # Save attempt to SQLite
+            is_best_flag = 1
+            if cid:
+                try:
+                    from services.storage.database import save_attempt
+                    save_res = save_attempt({
+                        "candidate_id": cid,
+                        "session_id": sid,
+                        "question_id": qid,
+                        "parent_question_id": parent_qid,
+                        "attempt_type": "followup" if is_followup else "primary",
+                        "answer_type": "code",
+                        "code_submitted": code,
+                        "raw_score": raw_score,
+                        "validated_score": raw_score,
+                        "covered_concepts": result.get("strong_points", []),
+                        "missing_concepts": result.get("missing_concepts", []),
+                        "feedback_json": result,
+                    })
+                    is_best_flag = 1 if save_res.get("is_best") else 0
+                except Exception:
+                    pass
+            result["is_best"] = bool(is_best_flag)
+
+            attempt_rec = {
+                "question": current_q or {},
+                "code": code,
+                "raw_score": raw_score,
+                "validated_score": raw_score,
+                "score": score,
+                "feedback": result,
+                "timing_mod": timing_mod,
+                "eval_result": result,
+                "attempt_number": lifetime_attempt_num,
+                "is_best": bool(is_best_flag),
+            }
+            self._active_question_attempts.setdefault(qid, []).append(attempt_rec)
+
+            self._pre_attempt_state = {
+                "scores_len": len(self._state["scores"]),
+                "answers_len": len(self._state["answers"]),
+                "current_difficulty": self._state.get("current_difficulty"),
+                "difficulty_history_len": len(self._state.get("difficulty_history", [])),
+            }
 
             # Update state
             self._update_session_state(
@@ -511,7 +683,14 @@ class InterviewOrchestrator:
             )
 
             # Adapt difficulty
-            new_diff, reason, action = await self._adapt_difficulty(score)
+            should_defer = self._defer_rl or self._in_retry_turn.get(qid, False)
+            if not should_defer:
+                new_diff, reason, action = await self._adapt_difficulty(score)
+                self._rl_adapted_turns.add(qid)
+            else:
+                new_diff = int(self._state.get("current_difficulty", 3))
+                reason = "Turn in progress — RL adaptation deferred to question finalization"
+                action = "Pending"
 
             if action == "Follow-up":
                 await self._inject_followup_question(current_q or {}, context_text=code[:400], eval_result=result)
@@ -526,6 +705,7 @@ class InterviewOrchestrator:
                 "action": action,
                 "new_difficulty": new_diff,
                 "passed": passed,
+                "attempt_number": lifetime_attempt_num,
             })
 
             self._state["pending_next"] = True
@@ -545,6 +725,105 @@ class InterviewOrchestrator:
                     "action": action,
                 },
                 "next_action": "session_end" if all_done else "wait_for_next",
+            }
+
+
+    def _rollback_tentative_attempt(self) -> None:
+        """Rollback tentative additions to session state made by the most recent attempt."""
+        if not self._pre_attempt_state:
+            return
+        target_s_len = self._pre_attempt_state["scores_len"]
+        target_a_len = self._pre_attempt_state["answers_len"]
+        target_d_len = self._pre_attempt_state["difficulty_history_len"]
+
+        while len(self._state["scores"]) > target_s_len:
+            self._state["scores"].pop()
+        while len(self._state.get("raw_scores", [])) > target_s_len:
+            self._state["raw_scores"].pop()
+        while len(self._state.get("timing_scores", [])) > target_s_len:
+            self._state["timing_scores"].pop()
+        while len(self._state.get("timing_modifiers", [])) > target_s_len:
+            self._state["timing_modifiers"].pop()
+        while len(self._state["answers"]) > target_a_len:
+            self._state["answers"].pop()
+        while len(self._state.get("difficulty_history", [])) > target_d_len:
+            self._state["difficulty_history"].pop()
+        if self._pre_attempt_state.get("current_difficulty") is not None:
+            self._state["current_difficulty"] = self._pre_attempt_state["current_difficulty"]
+
+
+    @staticmethod
+    def _select_best_attempt(attempts: List[dict]) -> dict:
+        """
+        Deterministic best attempt selection:
+        1. Highest validated technical score (raw_score)
+        2. Fewest missing concepts
+        3. Most recent attempt
+        """
+        if not attempts:
+            return {}
+        if len(attempts) == 1:
+            return attempts[0]
+
+        def key_fn(item):
+            s = round(float(item.get("raw_score", item.get("validated_score", item.get("score", 0.0)))), 4)
+            ev = item.get("eval_result") or item.get("feedback") or {}
+            missing_count = len(ev.get("missing_concepts", []))
+            att_num = int(item.get("attempt_number", 0))
+            return (s, -missing_count, att_num)
+
+        return max(attempts, key=key_fn)
+
+
+    async def handle_retry(self, question_id: str = "") -> dict:
+        """
+        Prepare current question for another attempt by the candidate.
+        Invariants:
+        - _current_q_index remains unchanged.
+        - Question turn does NOT advance.
+        - pending_next is reset to False.
+        - Tentative additions to scores/answers are rolled back so RL adapts only once on final best.
+        - Timer restarts.
+        """
+        async with self._lock:
+            current_q = self._get_current_question(question_id)
+            if not current_q:
+                return {"type": "error", "message": "No active question to retry"}
+
+            self._rollback_tentative_attempt()
+            self._state["pending_next"] = False
+            qid = current_q.get("id")
+            if qid:
+                self._in_retry_turn[qid] = True
+                self._rl_adapted_turns.discard(qid)
+                # Clean up any unserved follow-up injected for this question
+                if self._current_q_index + 1 < len(self._question_queue):
+                    nxt = self._question_queue[self._current_q_index + 1]
+                    if nxt.get("parent_question_id") == qid or (
+                        str(nxt.get("id", "")).startswith("fu_") and not nxt.get("answered")
+                    ):
+                        popped_fu = self._question_queue.pop(self._current_q_index + 1)
+                        fu_id = popped_fu.get("id")
+                        if fu_id and fu_id in self._evicted_by_followup:
+                            restored_q = self._evicted_by_followup.pop(fu_id)
+                            self._question_queue.append(restored_q)
+
+            # Restart timer
+            if self._timer:
+                dur_min = float(self._state.get("duration_minutes", 30))
+                max_q = int(self._state.get("num_questions", 15))
+                allowed = dur_min * 60.0 / max(max_q, 1)
+                self._timer_snapshot = self._timer.start(allowed_time_sec=allowed)
+
+            q_payload = dict(current_q)
+            q_payload["turn_index"] = self._current_q_index + 1
+            q_payload["total_questions"] = int(self._state.get("num_questions", 15))
+            attempts_list = self._active_question_attempts.get(qid, [])
+            q_payload["current_attempt_count"] = len(attempts_list)
+
+            return {
+                "type": "retry_ready",
+                "payload": q_payload,
             }
 
 
@@ -576,6 +855,28 @@ class InterviewOrchestrator:
                     "overall_score": report.get("overall_score", 0.0),
                 }}
 
+            # Finalize turn using the best attempt if multiple attempts were made, or adapt RL if deferred
+            if self._current_q_index < len(self._question_queue):
+                curr_q = self._question_queue[self._current_q_index]
+                qid = curr_q.get("id")
+                attempts = self._active_question_attempts.get(qid, [])
+                best = self._select_best_attempt(attempts) if attempts else None
+                if len(attempts) > 1 and best:
+                    self._rollback_tentative_attempt()
+                    self._update_session_state(
+                        curr_q, best["score"], best["feedback"],
+                        transcript=best.get("transcript"), code=best.get("code"),
+                        raw_score=best.get("raw_score"), timing_mod=best.get("timing_mod"),
+                    )
+
+                if qid and qid not in self._rl_adapted_turns:
+                    best_score = best["score"] if best else (self._state["scores"][-1] if self._state["scores"] else 0.5)
+                    await self._adapt_difficulty(best_score)
+                    self._rl_adapted_turns.add(qid)
+                if qid:
+                    self._in_retry_turn[qid] = False
+
+            self._pre_attempt_state = None
             self._state["pending_next"] = False
             self._current_q_index += 1
             if self._current_q_index >= max_q:
@@ -676,6 +977,24 @@ class InterviewOrchestrator:
         q["total_questions"] = max_q
         self._state["question_index"] = self._current_q_index
 
+        cid = self._state.get("candidate_id")
+        if cid:
+            try:
+                from services.storage.database import get_best_attempt
+                best_att = get_best_attempt(cid, q["id"])
+                if best_att:
+                    q["historical_best"] = {
+                        "attempt_number": best_att.get("attempt_number"),
+                        "answer": best_att.get("transcript") or best_att.get("code_submitted") or "",
+                        "final_score": best_att.get("validated_score"),
+                        "grade": (best_att.get("feedback_json") or {}).get("grade") if isinstance(best_att.get("feedback_json"), dict) else "Average",
+                        "covered_concepts": best_att.get("covered_concepts", []),
+                        "missing_concepts": best_att.get("missing_concepts", []),
+                        "created_at": best_att.get("created_at"),
+                    }
+            except Exception:
+                pass
+
         if self._timer:
             dur_min = float(self._state.get("duration_minutes", 30))
             n_q = max(max_q, 1)
@@ -690,6 +1009,16 @@ class InterviewOrchestrator:
         """Re-order question_queue so the best match is at current_q_index."""
         start = self._current_q_index
         if start >= len(self._question_queue):
+            return
+
+        # If current question is an injected follow-up, do NOT re-order or swap it
+        curr = self._question_queue[start]
+        if (
+            str(curr.get("id", "")).startswith("fu_")
+            or curr.get("parent_question_id")
+            or curr.get("is_followup")
+            or curr.get("source") == "qwen_followup"
+        ):
             return
 
         candidates = self._question_queue[start:]
@@ -742,26 +1071,62 @@ class InterviewOrchestrator:
         remaining = len(self._question_queue) - self._current_q_index - 1
         if remaining <= 0 or not self._select_questions_fn:
             return
+
+        # Check if an active injected follow-up is queued immediately next
+        fu_q = None
+        if self._current_q_index + 1 < len(self._question_queue):
+            cand = self._question_queue[self._current_q_index + 1]
+            if (
+                str(cand.get("id", "")).startswith("fu_")
+                or cand.get("parent_question_id")
+                or cand.get("is_followup")
+                or cand.get("source") == "qwen_followup"
+            ):
+                fu_q = cand
+
         try:
             exclude_ids = set(self._state.get("question_history", [])) | {q.get("id") for q in self._state.get("answers", [])}
-            new_q = self._select_questions_fn(
-                self._state.get("c_topics", []),
-                self._state.get("dsa_topics", []),
-                remaining,
-                new_diff,
-                exclude_ids=exclude_ids,
-                candidate_state=self._state,
-            )
-            self._question_queue[self._current_q_index + 1:] = new_q
-        except TypeError:
-            try:
+            needed = (remaining - 1) if fu_q else remaining
+            if needed > 0:
                 new_q = self._select_questions_fn(
                     self._state.get("c_topics", []),
                     self._state.get("dsa_topics", []),
-                    remaining,
+                    needed,
                     new_diff,
+                    exclude_ids=exclude_ids,
+                    candidate_state=self._state,
                 )
-                self._question_queue[self._current_q_index + 1:] = new_q
+            else:
+                new_q = []
+
+            if new_q:
+                if fu_q:
+                    self._question_queue[self._current_q_index + 1:] = [fu_q] + new_q
+                else:
+                    self._question_queue[self._current_q_index + 1:] = new_q
+            elif fu_q:
+                if self._current_q_index + 1 >= len(self._question_queue) or self._question_queue[self._current_q_index + 1].get("id") != fu_q.get("id"):
+                    self._question_queue.insert(self._current_q_index + 1, fu_q)
+        except TypeError:
+            try:
+                needed = (remaining - 1) if fu_q else remaining
+                if needed > 0:
+                    new_q = self._select_questions_fn(
+                        self._state.get("c_topics", []),
+                        self._state.get("dsa_topics", []),
+                        needed,
+                        new_diff,
+                    )
+                else:
+                    new_q = []
+                if new_q:
+                    if fu_q:
+                        self._question_queue[self._current_q_index + 1:] = [fu_q] + new_q
+                    else:
+                        self._question_queue[self._current_q_index + 1:] = new_q
+                elif fu_q:
+                    if self._current_q_index + 1 >= len(self._question_queue) or self._question_queue[self._current_q_index + 1].get("id") != fu_q.get("id"):
+                        self._question_queue.insert(self._current_q_index + 1, fu_q)
             except Exception:
                 pass
         except Exception as e:
@@ -854,6 +1219,8 @@ class InterviewOrchestrator:
         tests_total: int,
         stdout: str,
         stderr: str,
+        attempt_number: int = 1,
+        comparison: Optional[dict] = None,
     ) -> dict:
         """Generate code feedback via FeedbackAgent (sync) or fallback."""
         result: Optional[dict] = None
@@ -869,6 +1236,8 @@ class InterviewOrchestrator:
                     question=question,
                     session_history=list(self._state.get("scores", [])),
                     turn_number=len(self._state.get("scores", [])) + 1,
+                    attempt_number=attempt_number,
+                    comparison=comparison,
                 )
             except Exception as feedback_err:
                 if self._logger:
@@ -879,9 +1248,10 @@ class InterviewOrchestrator:
 
         if result is None:
             score = (tests_passed / max(tests_total, 1)) if tests_total > 0 else (0.85 if passed else 0.35)
+            attempt_prefix = f"[Attempt #{attempt_number}] " if attempt_number > 1 else ""
             justification = (
-                "All test cases passed." if passed
-                else f"Passed {tests_passed}/{tests_total} tests. Check edge cases and boundary conditions."
+                f"{attempt_prefix}All test cases passed." if passed
+                else f"{attempt_prefix}Passed {tests_passed}/{tests_total} tests. Check edge cases and boundary conditions."
             )
             if stderr and not passed:
                 justification += f" Compiler output: {stderr[:80]}"
@@ -893,6 +1263,8 @@ class InterviewOrchestrator:
                 "vague_points": [] if passed else ["Review edge cases", "Check boundary conditions"],
                 "missing_concepts": [] if passed else ["Boundary conditions", "Error handling"],
                 "decision_source": "sandbox_evaluator",
+                "attempt_number": attempt_number,
+                "comparison": comparison,
             }
 
         if self._validator:
@@ -921,6 +1293,8 @@ class InterviewOrchestrator:
         audio: Optional[dict],
         is_code: bool,
         turn_num: int,
+        attempt_number: int = 1,
+        comparison: Optional[dict] = None,
     ) -> dict:
         """Enrich eval_result with FeedbackAgent (async) or return as-is."""
         if eval_result.get("stt_status") == "stt_unavailable":
@@ -944,6 +1318,8 @@ class InterviewOrchestrator:
                 "stt_status": "stt_unavailable",
                 "llm_status": "llm_skipped",
                 "vague_points": [],
+                "attempt_number": attempt_number,
+                "comparison": comparison,
             }
 
         if _FEEDBACK_READY and FEEDBACK_AGENT is not None and not is_code:
@@ -956,10 +1332,16 @@ class InterviewOrchestrator:
                     audio_result=audio,
                     session_history=scores_so_far,
                     turn_number=turn_num,
+                    attempt_number=attempt_number,
+                    comparison=comparison,
                 )
                 return rich
             except Exception:
                 pass
+
+        eval_result["attempt_number"] = attempt_number
+        if comparison:
+            eval_result["comparison"] = comparison
         return eval_result
 
 
@@ -1316,7 +1698,8 @@ class InterviewOrchestrator:
         self._question_queue.insert(self._current_q_index + 1, fu_q)
         max_q = int(self._state.get("num_questions", 15))
         if len(self._question_queue) > max_q:
-            self._question_queue = self._question_queue[:max_q]
+            evicted = self._question_queue.pop()
+            self._evicted_by_followup[fu_q["id"]] = evicted
         return True
 
 
@@ -1369,6 +1752,8 @@ class InterviewOrchestrator:
             "transcript": transcript or "",
             "code_submitted": code or "",
             "raw_score": r_score,
+            "validated_score": r_score,
+            "attempt_number": feedback.get("attempt_number", 1),
             "score": score,
             "timing_score": t_score,
             "timing_modifier": t_mod,
@@ -1519,6 +1904,26 @@ class InterviewOrchestrator:
         if self._cached_report is not None:
             return self._cached_report
 
+        # If current question had multiple attempts, ensure best attempt is committed
+        if self._current_q_index < len(self._question_queue):
+            curr_q = self._question_queue[self._current_q_index]
+            qid = curr_q.get("id")
+            attempts = self._active_question_attempts.get(qid, [])
+            best = self._select_best_attempt(attempts) if attempts else None
+            if len(attempts) > 1 and best:
+                self._rollback_tentative_attempt()
+                self._update_session_state(
+                    curr_q, best["score"], best["feedback"],
+                    transcript=best.get("transcript"), code=best.get("code"),
+                    raw_score=best.get("raw_score"), timing_mod=best.get("timing_mod"),
+                )
+            if qid and qid not in self._rl_adapted_turns:
+                best_score = best["score"] if best else (self._state["scores"][-1] if self._state["scores"] else 0.5)
+                await self._adapt_difficulty(best_score)
+                self._rl_adapted_turns.add(qid)
+            if qid:
+                self._in_retry_turn[qid] = False
+
         self._state["status"] = "completed"
         self._state["ended_at"] = datetime.now(UTC).isoformat()
         scores = self._state.get("scores", [])
@@ -1529,6 +1934,15 @@ class InterviewOrchestrator:
         report = self._generate_report()
         self._state["report_id"] = report["id"]
         self._cached_report = report
+
+        cid = self._state.get("candidate_id")
+        sid = self._state.get("id")
+        if cid and sid:
+            try:
+                from services.storage.database import save_session
+                save_session(self._state)
+            except Exception:
+                pass
 
         if self._logger:
             try:
@@ -1639,6 +2053,9 @@ class InterviewOrchestrator:
                 "type": qtype,
                 "difficulty": q.get("difficulty"),
                 "raw_score": raw_s,
+                "validated_score": raw_s,
+                "best_score": raw_s,
+                "attempt_number": ans.get("attempt_number", fb.get("attempt_number", 1)),
                 "score": score,
                 "timing_score": ans.get("timing_score", 1.0),
                 "timing_modifier": ans.get("timing_modifier", 0.0),

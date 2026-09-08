@@ -59,11 +59,9 @@ function SectionHeader({ icon, title, color }) {
 export function generateQualitativeSummary(feedback) {
   if (!feedback) return "";
 
-  // 1. If Qwen or backend provided clean qualitative narrative feedback without score tokens:
+  // 1. If Qwen or backend provided narrative feedback, prioritize it directly:
   const rawNarrative = (feedback.narrative_feedback || "").trim();
-  const hasScoreTokens = /Grade\s+[A-F]|Semantic\s+\d+%|Concept coverage\s+\d+%|Reasoning\s+\d+%|Confidence\s+\d+%|\b\d+%\b/i.test(rawNarrative);
-
-  if (rawNarrative && !hasScoreTokens && rawNarrative.length > 25) {
+  if (rawNarrative && rawNarrative.length > 15) {
     return rawNarrative;
   }
 
@@ -157,7 +155,7 @@ export function generateQualitativeSummary(feedback) {
   return parts.join(" ");
 }
 
-export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
+export default function FeedbackCard({ feedback, onNext, awaitingNext, onRetry }) {
   if (!feedback) return null;
 
   const trend   = feedback.trend ?? "stable";
@@ -172,6 +170,8 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
   const transcript    = feedback.transcript ?? "";
   const source        = feedback.decision_source ?? "evaluator";
   const aiSummary     = generateQualitativeSummary(feedback);
+  const comparison    = feedback.comparison;
+  const attemptNum    = feedback.attempt_number || 1;
 
   return (
     <div className="feedback-card-rich fade-up">
@@ -204,10 +204,68 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
         </div>
       </div>
 
+      {/* ── Attempt & Best Status Badge Row ───────────────── */}
+      {(attemptNum > 1 || feedback.is_best !== undefined) && (
+        <div className="fc-attempt-row" style={{ display: "flex", gap: "8px", alignItems: "center", margin: "8px 0 12px 0" }}>
+          <span className="badge badge-accent" style={{ fontWeight: 600, fontSize: "12px" }}>
+            Attempt #{attemptNum}
+          </span>
+          {feedback.is_best ? (
+            <span className="badge badge-success" style={{ fontWeight: 600, fontSize: "11px" }}>
+              ⭐ Best Answer Recorded
+            </span>
+          ) : (
+            <span className="badge badge-neutral" style={{ fontSize: "11px" }}>
+              Previous best remains active
+            </span>
+          )}
+        </div>
+      )}
+
       {trendNote && (
         <p className="fc-trend-note">{trendNote}</p>
       )}
 
+      {/* ── Multi-Attempt Comparison Section ────────────────── */}
+      {comparison && comparison.has_previous_best && (
+        <div className="fc-section fc-comparison-card" style={{ background: "rgba(255,255,255,0.03)", padding: "12px", borderRadius: "8px", marginBottom: "16px", border: "1px solid var(--border)" }}>
+          <SectionHeader icon="📊" title="Attempt Progress vs Previous Best" color="var(--accent)" />
+          <div style={{ display: "flex", gap: "12px", alignItems: "center", margin: "8px 0", fontSize: "13px" }}>
+            <span>Score Change:</span>
+            <span style={{
+              fontWeight: 700,
+              color: comparison.score_delta > 0 ? "var(--success)" : comparison.score_delta < 0 ? "var(--danger)" : "var(--text-3)"
+            }}>
+              {comparison.score_delta > 0 ? `+${Math.round(comparison.score_delta * 100)}%` : `${Math.round(comparison.score_delta * 100)}%`}
+            </span>
+            {comparison.has_improvement && (
+              <span className="badge badge-success" style={{ fontSize: "11px" }}>Progress Made</span>
+            )}
+          </div>
+
+          {comparison.resolved_concepts && comparison.resolved_concepts.length > 0 && (
+            <div style={{ marginTop: "8px" }}>
+              <span style={{ fontSize: "12px", color: "var(--success)", fontWeight: 600 }}>What Improved (Gaps Resolved):</span>
+              <div className="fc-pills" style={{ marginTop: "4px" }}>
+                {comparison.resolved_concepts.map((c, i) => (
+                  <span key={i} className="badge badge-success">✓ {c}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {comparison.remaining_concepts && comparison.remaining_concepts.length > 0 && (
+            <div style={{ marginTop: "8px" }}>
+              <span style={{ fontSize: "12px", color: "var(--warn)", fontWeight: 600 }}>Still Needs Work:</span>
+              <div className="fc-pills" style={{ marginTop: "4px" }}>
+                {comparison.remaining_concepts.map((m, i) => (
+                  <span key={i} className="badge badge-warn">○ {m}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ── Strong Points ───────────────────────────────────── */}
       {strong.length > 0 && (
@@ -322,9 +380,22 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext }) {
         </div>
       )}
 
-      {/* ── Next button ─────────────────────────────────────── */}
-      <div className="fc-footer">
-        <span className="fc-footer-hint">Review this feedback, then continue when ready.</span>
+      {/* ── Action Buttons ──────────────────────────────────── */}
+      <div className="fc-footer" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          {onRetry && (
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={onRetry}
+              disabled={!awaitingNext}
+              style={{ display: "flex", alignItems: "center", gap: "4px" }}
+            >
+              <span>🔄</span> Try Again (Retry)
+            </button>
+          )}
+          <span className="fc-footer-hint">Review this feedback, then continue when ready.</span>
+        </div>
         <button
           type="button"
           className="btn btn-primary btn-sm"

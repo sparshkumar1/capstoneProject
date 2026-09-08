@@ -91,6 +91,8 @@ class FeedbackAgent:
         session_history: Optional[list] = None,
         turn_number: int = 1,
         is_code: bool = False,
+        attempt_number: int = 1,
+        comparison: Optional[dict] = None,
     ) -> dict:
         """Build and return rich feedback dict."""
         score = float(eval_result.get("final_score", 0.5))
@@ -161,6 +163,8 @@ class FeedbackAgent:
             eval_result=eval_result,
             candidate_state={"confidence": conf, "hesitation": hesitation_rate, "turn": turn_number},
             history=session_history or [],
+            attempt_number=attempt_number,
+            comparison=comparison,
         )
 
         if qwen_res:
@@ -188,6 +192,8 @@ class FeedbackAgent:
                 "decision_source":          qwen_res.get("decision_source", "qwen_feedback"),
                 "llm_status":               "available",
                 "vague_points":             qwen_res.get("actionable_improvements", [])[:3],
+                "attempt_number":           attempt_number,
+                "comparison":               comparison or qwen_res.get("comparison"),
             }
 
         # ── Explicit LLM Unavailable State (Preserves Evaluator Evidence) ──
@@ -195,6 +201,12 @@ class FeedbackAgent:
             score, grade, s1, s2, r, conf, word_count,
             covered_concepts, missing_concepts, question,
         )
+
+        if attempt_number > 1 and comparison:
+            res_str = f"Resolved: {', '.join(comparison.get('resolved_concepts', []))}." if comparison.get('resolved_concepts') else ""
+            delta_val = comparison.get('score_delta')
+            delta_str = f"Score change: {delta_val:+.2f}." if delta_val is not None else ""
+            deterministic_justification = f"[Attempt #{attempt_number}] {delta_str} {res_str} {deterministic_justification}".strip()
 
         return {
             "final_score":              round(score, 4),
@@ -220,6 +232,8 @@ class FeedbackAgent:
             "decision_source":          eval_result.get("decision_source", "evaluator_structured"),
             "llm_status":               "llm_unavailable",
             "vague_points":             [f"Cover missing concept: {m}" for m in missing_concepts[:3]],
+            "attempt_number":           attempt_number,
+            "comparison":               comparison,
         }
 
     def generate_code_feedback(
@@ -233,10 +247,13 @@ class FeedbackAgent:
         question: dict,
         session_history: Optional[list] = None,
         turn_number: int = 1,
+        attempt_number: int = 1,
+        comparison: Optional[dict] = None,
     ) -> dict:
         """Rich feedback for code submissions."""
         score = (tests_passed / max(tests_total, 1)) if tests_total > 0 else (0.85 if passed else 0.35)
         grade = self._grade(score)
+        trend, trend_note = self._trend(score, session_history or [], turn_number)
 
         strong_points: list[str] = []
         issues: list[dict] = []
@@ -308,11 +325,17 @@ class FeedbackAgent:
         else:
             status = "accepted" if passed else ("compilation_error" if "error:" in stderr.lower() or "expected" in stderr.lower() else "wrong_answer")
 
+        attempt_prefix = ""
+        if attempt_number > 1 and comparison:
+            delta_val = comparison.get("score_delta")
+            delta_str = f"Score change: {delta_val:+.2f}." if delta_val is not None else ""
+            attempt_prefix = f"[Attempt #{attempt_number}] {delta_str} "
+
         justification = (
-            f"Code grade {grade} ({score:.0%}). "
+            f"{attempt_prefix}Code grade {grade} ({score:.0%}). "
             f"{'All tests passed.' if passed else f'{tests_passed}/{tests_total} tests passed.'} "
             + (f"Compiler output: {stderr[:80]}" if stderr and not passed else "")
-        )
+        ).strip()
 
         return {
             "status":                  status,
@@ -331,6 +354,8 @@ class FeedbackAgent:
             "transcript":              "",
             "decision_source":         "sandbox_evaluator" if status != "sandbox_error" else "sandbox_error",
             "vague_points":            tips[:3],
+            "attempt_number":          attempt_number,
+            "comparison":              comparison,
         }
 
     # ── Private helpers ───────────────────────────────────────────────────
@@ -503,6 +528,8 @@ class FeedbackAgent:
         eval_result: dict,
         candidate_state: dict,
         history: list,
+        attempt_number: int = 1,
+        comparison: Optional[dict] = None,
     ) -> Optional[dict]:
         """Query Qwen microservice /api/qwen/feedback for grounded rich feedback with retry."""
         if not _HTTPX:
@@ -515,7 +542,16 @@ class FeedbackAgent:
             "structured_evaluation": eval_result,
             "candidate_state": candidate_state or {},
             "history": [{"score": float(s)} for s in history[-3:] if isinstance(s, (int, float))],
+            "attempt_number": attempt_number,
         }
+        if comparison:
+            payload.update({
+                "previous_best_answer": comparison.get("previous_best_answer"),
+                "previous_best_score": comparison.get("previous_best_score"),
+                "resolved_concepts": comparison.get("resolved_concepts", []),
+                "remaining_concepts": comparison.get("remaining_concepts", []),
+                "score_delta": comparison.get("score_delta"),
+            })
 
         # Attempt call with 1 immediate retry on connection/timeout error
         for attempt in range(2):

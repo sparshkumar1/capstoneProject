@@ -217,6 +217,15 @@ export default function InterviewRoom({ navigate }) {
     send("next_question", { question_id: question?.id });
   };
 
+  const handleRetry = () => {
+    if (!awaitingNext) return;
+    setAwaitingNext(false);
+    setPhase("question");
+    setTranscript("");
+    setStageHint("Ready for another attempt. Address the missing points to improve your score.");
+    send("retry_question", { question_id: question?.id });
+  };
+
   const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
   const progress     = Math.min(100, (questionIndex / totalQuestions) * 100);
   const timeWarning  = timeLeft < 120;
@@ -345,6 +354,30 @@ export default function InterviewRoom({ navigate }) {
                   </div>
                 )}
 
+                {question.historical_best && (
+                  <div className="historical-best-banner" style={{
+                    margin: "8px 0 12px 0",
+                    padding: "8px 12px",
+                    background: "rgba(0, 229, 200, 0.08)",
+                    border: "1px solid rgba(0, 229, 200, 0.3)",
+                    borderRadius: "8px",
+                    fontSize: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    color: "var(--accent-2)"
+                  }}>
+                    <span>
+                      🕒 <strong>Prior History:</strong> Answered in a previous session (Best: {Math.round((question.historical_best.final_score || 0) * 100)}%, Grade {question.historical_best.grade || "Average"}).
+                    </span>
+                    {question.historical_best.answer && (
+                      <span style={{ fontSize: "11px", opacity: 0.85, maxWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={question.historical_best.answer}>
+                        &quot;{question.historical_best.answer}&quot;
+                      </span>
+                    )}
+                  </div>
+                )}
+
                 <div className="question-text">{question.text}</div>
 
                 {question.code_snippet && (
@@ -384,6 +417,7 @@ export default function InterviewRoom({ navigate }) {
                 feedback={feedback}
                 onNext={handleNextQuestion}
                 awaitingNext={awaitingNext}
+                onRetry={handleRetry}
               />
             )}
           </div>
