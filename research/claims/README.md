@@ -26,6 +26,11 @@ Created 2026-09-19 (Phase 0). It contains only claims that were checked against 
 ## Status vocabulary
 `VALID` — supported by a stored artifact, wording as stated · `HISTORICAL` — true as a record, not to be used as a current result · `WITHDRAWN` — must not appear in any draft · `EXPLORATORY` — unstored or unregistered diagnostic; not citable · `PENDING-REGISTRATION` — reproduced by replay, awaiting a stored artifact (Phase 1/X3-0) · `NEW-FROZEN` — result of a registered new experiment, after its protocol has run (none yet) · `PLANNED` — reserved ID for a planned claim (none yet).
 
+### Phase 1 additions (2026-09-19, sprint authorisation)
+- Status `DESIGN-ONLY` — a configuration/design statement (e.g. sandbox flags, threat-model mapping); effectiveness not measured. `EXPLORATORY` now also covers *stored* exploratory/hypothesis-generating results (wording must say exploratory; not evidence for a claim); previously unstored diagnostics are `HISTORICAL` once reproduced.
+- Evidence labels added: `PHASE1-STORED` (recomputed from stored frozen files by a Phase-1 script), `PHASE1-REPLAY` (evaluation-only replay of frozen code in `envs/replay-Lobs`; lock record `research/locks/replay-Lobs.lock.json`), `PHASE1-X2A` (X2-A analyses on the old 64-case benchmark; sensitivity/descriptive/exploratory, never confirmatory), `CODE` (static reading).
+- ID series: `P1S-Cnnn` (Paper-1 claim-survival rows, one per statement in `research/analysis/phase1/paper1/p1_claim_survival.csv`), `X2A-Cnnn`, `P3-C017…C024`. Status changes to earlier rows carry a dated note in `notes`; the pre-update registry is commit `9e982fe`.
+
 ## Verification structure (claim → artifact → script → hash → environment)
 1. **Tier T1** (every row with an artifact): recompute the SHA-256 of `artifact_path` and compare.
 2. **Tier T2** (every headline number): recompute the value from stored per-item data with a script and compare within the stated tolerance.
