@@ -1,0 +1,4 @@
+gate,passed,detail
+G-MODEL-HASH,True,"derived 6a241a55bef2..., upstream 821d1aa69520..."
+G-METRIC-CONTROLS,True,monotone/reversed/constant synthetic controls
+G-DERIVED-REPRO,True,max |mapped derived raw - stored R| = 0.000500 (tolerance 0.002)

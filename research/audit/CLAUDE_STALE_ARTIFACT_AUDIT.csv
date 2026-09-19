@@ -1,0 +1,35 @@
+term_or_claim,file,classification,current_truth,recommended_action
+Spearman rho=0.6975 (N=20 single rater) as 'Verified Human Metric',research/CANONICAL_SCIENTIFIC_TRUTH.md,SUPERSEDED,Paper 2 rho=0.3812 N=64 (3 raters + adjudication),Add supersession note in a new file; CLAUDE.md still names this file the sole authority - USER DECISION REQUIRED
+rho=0.6975 / 0.7400 / 0.8358 / 0.9152,research/audit/rho_provenance.md; historical_results_reconciliation.md; CANONICAL_METRIC_REGRESSION_CHECK.md; PRIORITY_0_FINAL.md,HISTORICAL,Documented as superseded in these audit files,Keep as evidence; never cite
+rho=0.8358 / 0.9152 in manuscripts,docs/paper_draft_ieee.md; docs/STAGE20_SUBMISSION_READINESS.md; docs/PREPAIRED_COMPLETE_BOOKLET.md; research/papers/archived/superseded_manuscripts/*,SUPERSEDED,rho=0.3812,Do not reuse text; docs/ is large and partly superseded
+theta=0.42,research/audit/threshold_provenance.md,HISTORICAL,theta=0.30 (services/evaluator/app.py:95),Documented as never committed to the engine
+theta=0.42,docs/EVALUATION.md; docs/paper_draft_ieee.md; INTERVIEW_PREPARATION_GUIDE.md,SUPERSEDED,theta=0.30,Do not reuse
+d=87.41 / t=-195.46,research/results/paper3/paper3_raw_results.json,HISTORICAL,Artifact of dividing by SD of 5 seed means; session-level d~0.85-0.87,Frozen; cite only as documented artifact
+d=87.41,research/audit/PAPER3_POSTEXECUTION_AUDIT.md; FINAL_CROSS_PAPER_AUDIT.md; FINAL_RESEARCH_MANIFEST.*,HISTORICAL,Same,Keep with explanation
+MAE_Fixed=1.000,(none found),CURRENT_VALID (absent),MAE=1.200,None
+'PPO lower volatility (0.088 vs 0.160)',research/CLAUDE_HANDOFF/MANUSCRIPT_AUTHORING_GUIDELINES.md; CANONICAL_SCIENTIFIC_TRUTH.md; PAPER3_FINAL_REPORT.md; PAPER3_FINAL_FREEZE.md; claim matrix row 20,INCORRECT,Seed-123 value only; 5-seed guarded volatility 0.186 > heuristic 0.160,USER DECISION REQUIRED: do not carry into manuscripts
+'0 constraint violations' / 'eliminates 100% of out-of-bounds transitions',PAPER3_FINAL_REPORT.md; PAPER3_FINAL_FREEZE.md; paper3_summary_results.csv; claim matrix row 21,INCORRECT,Measured pre-clip violations 232 under guardrails; simulator clamps difficulty for all policies,USER DECISION REQUIRED
+'563 interventions ... rescue struggling candidates on 45.0% of turns',PAPER3_FINAL_FREEZE.md section 6,INCORRECT (overstated),563 rule activations; 99 action-changing overrides (7.9%),Use both numbers
+Ablation 'PPO + Guardrails (5 Seeds)': interventions 112 oscillation 0.187 violations 0,research/results/paper3/paper3_ablation_results.csv; paper3_raw_results.json,INCORRECT (frozen bug),563 / 0.160 / 232,Errata addendum; do not edit frozen file
+Sensitivity narrative (perf<0.40 Easier; hesitation suppresses Harder),research/results/paper3/PAPER3_FINAL_REPORT.md section 5,INCORRECT,Stored sweep: only avg_perf and difficulty influence action at neutral point,Remove
+'off-the-shelf / no fine-tuning' CrossEncoder,research/CLAUDE_HANDOFF/*; audit/PAPER2_MODEL_PROVENANCE_GATE.md; claim matrix row 16,INCORRECT (contradicted by weights),Top layers fine-tuned; data unknown,USER DECISION REQUIRED (P0)
+'Fine-tuned CrossEncoder (tuned_model2)',docs/EVALUATION.md; docs/PREPAIRED_COMPLETE_BOOKLET.md; INTERVIEW_PREPARATION_GUIDE.md; experiments/experiment_2_evaluation/README.md,AMBIGUOUS (now supported by weight evidence),Consistent with weights; base-model naming in docs (MiniLM-L-12) conflicts with 6-layer config,Reconcile after P0 decision
+CrossEncoder 'Trained on general passage ranking pairs and generic reasoning entailment',research/audit/data_leakage_report.md,INCORRECT/AMBIGUOUS,Training data unidentified,Do not cite; also references pilot-era commit 9cfd34f and rho 0.9152/0.8358
+Model id 'cross-encoder/ms-marco-MiniLM-L6-v2',research/CLAUDE_HANDOFF/*,AMBIGUOUS,Local HF cache holds cross-encoder/ms-marco-MiniLM-L-6-v2 (hyphenated); verify canonical id,Verify id before citing
+'pre-registered',docs/PREPAIRED_COMPLETE_BOOKLET.md; docs/paper_draft_ieee.md; research/papers/archived/*,SUPERSEDED,'pre-specified and frozen before human annotation' (tag pre-human-annotation 45845a9),Do not use 'pre-registered'
+'Zone of Proximal Development',docs/PREPAIRED_COMPLETE_BOOKLET.md; docs/PREPAIRED_HOLY_GRAIL.md; research/papers/archived/*,SUPERSEDED,'score-band stabilization',Do not use
+'100% fault tolerant' / 'fault-tolerant' phrases,research/CLAUDE_HANDOFF/README.md; MANUSCRIPT_AUTHORING_GUIDELINES.md,CURRENT_VALID (appears in prohibitions),Finite-scope wording,None
+'100% secure' / 'inviolable',research/audit/*; CLAUDE_HANDOFF/PAPER1_FINAL_REPORT.md,CURRENT_VALID (appears in prohibitions),Defense-in-depth wording,None
+Paper 1 latency: 'warm evaluator ~40-60 ms',research/results/paper1/paper1_summary_results.csv (and handoff copy),INCORRECT,median 404.6 ms; mean 1960.8 ms contaminated by cold start,Do not cite
+Paper 1 latency: 'write latencies 3.2 ms to 11.4 ms P95 (25 sessions)',research/results/paper1/PAPER1_FINAL_REPORT.md line 19,INCORRECT,Report table: 16.3 ms (1 session) to 719.1 ms P95 (25 sessions); single-thread write P95 21.0 ms,Reconcile
+'21.0 ms P95 (25 sessions)' concurrency write latency,research/CLAUDE_HANDOFF/CANONICAL_SCIENTIFIC_TRUTH.md; FINAL_RESEARCH_MANIFEST.*,AMBIGUOUS,21.0 ms is the single-thread SQLite write benchmark (n=25 writes),Relabel
+'10 DSA topics',CLAUDE_HANDOFF/CANONICAL_SCIENTIFIC_TRUTH.md; MANUSCRIPT_AUTHORING_GUIDELINES.md; claim matrix,INCORRECT,8 topics / 8 questions,Correct
+'authentic explanations' (N=64),CLAUDE_HANDOFF docs,AMBIGUOUS,Cases are constructed per category (concise_correct; keyword_stuffed; verbose_wrong ...) by the study authors,Use 'constructed benchmark answers' unless provenance shows student-authored text
+'Frozen commit b7cad49b6b7a54460f4eeb4ecb0292bfcb78e12f',research/CLAUDE_HANDOFF/CANONICAL_SCIENTIFIC_TRUTH.md; FINAL_RESEARCH_MANIFEST.*,INCORRECT (nonexistent long SHA),b7cad49529c335317ad284dba700f770d1964f6a,Correct in a new provenance note
+'Git commit 375f4f8' for Paper 3 training,research/experiments/paper3/checkpoints/*/training_meta.json; paper3_raw_results.json,INCORRECT/AMBIGUOUS,Hard-coded string; guardrails.py and env edits are first committed in b7cad49,Cite b7cad49
+'Human evidence is 1 rater N=20 rho 0.6975',CLAUDE.md,STALE,3 raters + adjudication N=64 (handoff),Update CLAUDE.md after review
+'204800 PPO steps',research/CLAUDE_HANDOFF/CANONICAL_SCIENTIFIC_TRUTH.md section F,HISTORICAL,24576 steps/seed,Kept as explained
+'bitwise reproducible',research/results/paper3/PAPER3_FINAL_REPORT.md section 6,AMBIGUOUS,Evaluation replay matched all reported numbers exactly on this machine; training not re-run; numpy 2.5.2/torch 2.11 violate pinned requirements,Say 'evaluation replay reproduced reported values'
+'PPO superiority' phrases,docs/RL_DESIGN.md; docs/stage19_publication_audit.md,SUPERSEDED,No superiority claim,Do not reuse
+'educational effectiveness' / 'learning gain',docs/CLAIMS_CHECK.md; docs/paper_draft_ieee.md,SUPERSEDED,Simulation only,Do not reuse
+'fairness / accent' language,research/audit/speech_claim_audit.md; PAPER1_FINAL_REPORT.md,CURRENT_VALID (as disclaimers),No fairness claim made,Keep disclaimers

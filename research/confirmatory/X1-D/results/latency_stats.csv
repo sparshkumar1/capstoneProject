@@ -1,0 +1,7 @@
+series,n,stat,value_ms,ci_low_ms,ci_high_ms
+evaluator_warm,100,median,236.129,221.447,252.454
+evaluator_warm,100,p95,615.425,448.037,692.09
+evaluator_warm,100,p99,803.826,614.497,812.745
+sqlite_write,100,median,12.697,12.15,13.124
+sqlite_write,100,p95,17.06,16.081,17.885
+sqlite_write,100,p99,18.226,17.041,18.407

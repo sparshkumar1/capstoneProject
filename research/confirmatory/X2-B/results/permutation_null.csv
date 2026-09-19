@@ -1,0 +1,11 @@
+scorer,observed_spearman,null_95th_percentile,one_sided_perm_p
+derived_ce,0.4825,0.1836,0.0001
+upstream_ce,0.1454,0.185,0.10929
+tfidf,0.245,0.142,0.0013
+bm25,0.3812,0.1853,0.0001
+token_overlap,0.4301,0.2067,0.0002
+length_only,0.4897,0.2251,0.0003
+ref_S1,0.207,0.0781,0.0001
+ref_S2_eff,0.3006,0.1318,0.0001
+ref_R_mapped,0.4832,0.1836,0.0001
+ref_composite_deployed,0.3812,0.1472,0.0001

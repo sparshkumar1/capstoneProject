@@ -1,0 +1,72 @@
+........................................................................ [ 31%]
+........................................................................ [ 63%]
+..............................................................F......... [ 95%]
+..........                                                               [100%]
+================================== FAILURES ===================================
+_ test_coding_turn_preserves_speech_confidence_and_does_not_fabricate_metrics _
+tests\unit\test_stage11_5_coding_adaptation.py:432: in test_coding_turn_preserves_speech_confidence_and_does_not_fabricate_metrics
+    assert pytest.approx(float(obs[4]), abs=1e-3) == 0.22  # Verbal response time preserved, NOT 1850ms execution time
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert 0.0 ± 0.001 == 0.22
+E     
+E     comparison failed
+E     Obtained: 0.22
+E     Expected: 0.0 ± 0.001
+---------------------------- Captured stdout call -----------------------------
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+============================== warnings summary ===============================
+tests\unit\test_real_qwen_inference.py:15
+  C:\Users\spars\Downloads\PrepAIred\tests\unit\test_real_qwen_inference.py:15: PytestUnknownMarkWarning: Unknown pytest.mark.real_model - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.real_model
+
+tests/integration/test_15q_demo_and_contextual_followup.py: 12 warnings
+tests/integration/test_e2e_personalization_trajectories.py: 8 warnings
+tests/integration/test_full_interview_lifecycle.py: 4 warnings
+tests/integration/test_multiagent_responsibility_and_failures.py: 12 warnings
+tests/unit/test_coding_executor.py: 8 warnings
+tests/unit/test_orchestrator.py: 76 warnings
+tests/unit/test_persistence_and_history.py: 20 warnings
+tests/unit/test_personalization_questions.py: 24 warnings
+tests/unit/test_qwen_followup_feedback.py: 4 warnings
+tests/unit/test_rl_env.py: 12 warnings
+tests/unit/test_speech_pipeline.py: 8 warnings
+tests/unit/test_stage11_3_followup_and_evaluation.py: 32 warnings
+tests/unit/test_stage11_4_coding_verification.py: 4 warnings
+tests/unit/test_stage11_5_coding_adaptation.py: 48 warnings
+tests/unit/test_stage11_6_full_interview_e2e.py: 8 warnings
+tests/unit/test_timer_scoring.py: 20 warnings
+  C:\Users\spars\Downloads\PrepAIred\.venv\Lib\site-packages\stable_baselines3\common\save_util.py:165: DeprecationWarning: numpy.core.numeric is deprecated and has been renamed to numpy._core.numeric. The numpy._core namespace contains private NumPy internals and its use is discouraged, as NumPy internals can change without warning in any release. In practice, most real-world usage of numpy.core is to access functionality in the public NumPy API. If that is the case, use the public NumPy API. If not, you are using NumPy internals. If you would still like to access an internal attribute, use numpy._core.numeric._frombuffer.
+    deserialized_object = cloudpickle.loads(base64_object)
+
+tests/unit/test_evaluator.py::test_completely_correct_answer
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type SwigPyPacked has no __module__ attribute
+
+tests/unit/test_evaluator.py::test_completely_correct_answer
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type SwigPyObject has no __module__ attribute
+
+tests/unit/test_evaluator.py::test_completely_correct_answer
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type swigvarlink has no __module__ attribute
+
+tests/unit/test_evaluator.py::test_completely_correct_answer
+tests/unit/test_speech_pipeline.py::test_audio_confidence_scoring
+  C:\Users\spars\Downloads\PrepAIred\.venv\Lib\site-packages\transformers\tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+    warnings.warn(
+
+tests/unit/test_real_qwen_inference.py::test_real_qwen_inference_misconception_followup
+  C:\Users\spars\Downloads\PrepAIred\.venv\Lib\site-packages\transformers\generation\configuration_utils.py:567: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.2` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+    warnings.warn(
+
+tests/unit/test_real_qwen_inference.py::test_real_qwen_inference_misconception_followup
+  C:\Users\spars\Downloads\PrepAIred\.venv\Lib\site-packages\transformers\generation\configuration_utils.py:572: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+    warnings.warn(
+
+tests/unit/test_real_qwen_inference.py::test_real_qwen_inference_misconception_followup
+  C:\Users\spars\Downloads\PrepAIred\.venv\Lib\site-packages\transformers\generation\configuration_utils.py:589: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/unit/test_stage11_5_coding_adaptation.py::test_coding_turn_preserves_speech_confidence_and_does_not_fabricate_metrics
+1 failed, 225 passed, 309 warnings in 366.88s (0:06:06)
+
+--- STDERR ---

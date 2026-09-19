@@ -1,0 +1,180 @@
+{
+  "manifest_version": "1.0-phase1",
+  "analysis_id": "X2-B-run",
+  "status": "completed",
+  "started_utc": "2026-09-19T17:58:08Z",
+  "finished_utc": "2026-09-19T18:00:27Z",
+  "protocol": {
+    "type": "prereg_git_tag",
+    "tag": "prereg/X2-B/v2",
+    "tag_commit": "d84b91388929bd3b70455cde94ef8720232114af",
+    "protocol_path": "research/preregistration/X2-B/PROTOCOL.md",
+    "protocol_sha256": "1f85bc5fffeb8282c39337ee07468ee824d502656b7df221a98b0409546db67d",
+    "protocol_manifest_sha256": "68fd87dd1290e05ccfc077f2aba54a74a5a9e3a2688c0d644ce4802096a107b6"
+  },
+  "code": {
+    "git_commit": "d84b91388929bd3b70455cde94ef8720232114af",
+    "git_tags_at_head": [
+      "prereg/X2-B/v2"
+    ],
+    "git_dirty": true,
+    "dirty_diff_sha256": "7f36232d95cc1a631f1c6f074281dd43280eb9e910a1832db451150087be56f3",
+    "entrypoint": "research\\confirmatory\\X2-B\\x2b_run.py",
+    "entrypoint_sha256": "b78d1407511c2c8cd80163c50d25529c4c9ca511c4ed828955d8dea7e9214808",
+    "command_line": "research/confirmatory/X2-B/x2b_run.py"
+  },
+  "config": {
+    "config_path": "research\\confirmatory\\X2-B\\x2b_config.json",
+    "config_sha256": "a44afeea9d02d837086c3f605b94fd43c986bf700cbc264e6b6bfd983ec02b0f"
+  },
+  "environment": {
+    "lock_id": "LOCK-X2-2026-09-19",
+    "env_lock_sha256": "3ea8d4d700a7d1c6354b712993cfbccc49f9e6c01e77a4a16b7bcd1dbd49ed6c",
+    "non_locked_reason": null,
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "executable": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X2-2026-09-19\\Scripts\\python.exe",
+    "packages": {
+      "numpy": {
+        "metadata": "2.5.2",
+        "module_version": "2.5.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X2-2026-09-19\\Lib\\site-packages\\numpy\\__init__.py"
+      },
+      "pandas": {
+        "metadata": "2.3.3",
+        "module_version": "2.3.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X2-2026-09-19\\Lib\\site-packages\\pandas\\__init__.py"
+      },
+      "scipy": {
+        "metadata": "1.17.1",
+        "module_version": "1.17.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X2-2026-09-19\\Lib\\site-packages\\scipy\\__init__.py"
+      },
+      "scikit-learn": {
+        "metadata": "1.8.0",
+        "module_version": "1.8.0",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X2-2026-09-19\\Lib\\site-packages\\sklearn\\__init__.py"
+      },
+      "torch": {
+        "metadata": "2.11.0+cpu",
+        "module_version": "2.11.0+cpu",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X2-2026-09-19\\Lib\\site-packages\\torch\\__init__.py"
+      },
+      "stable-baselines3": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "gymnasium": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "sentence-transformers": {
+        "metadata": "2.7.0",
+        "module_version": "2.7.0",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X2-2026-09-19\\Lib\\site-packages\\sentence_transformers\\__init__.py"
+      },
+      "transformers": {
+        "metadata": "4.44.2",
+        "module_version": "4.44.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X2-2026-09-19\\Lib\\site-packages\\transformers\\__init__.py"
+      },
+      "faiss-cpu": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "PyYAML": {
+        "metadata": "6.0.3",
+        "module_version": "6.0.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X2-2026-09-19\\Lib\\site-packages\\yaml\\__init__.py"
+      }
+    },
+    "site_packages_listing_sha256_before": "ec8becfd2e60b8c047fb6260caed06c48a29a87cf7e49bc523f839dbf53fb761",
+    "site_packages_listing_sha256_after": "ec8becfd2e60b8c047fb6260caed06c48a29a87cf7e49bc523f839dbf53fb761",
+    "hardware": {
+      "cpu": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cores": 12,
+      "ram_gb": 15.7,
+      "gpu": null
+    },
+    "env_flags": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "HF_HUB_OFFLINE": "1",
+      "WANDB_MODE": "disabled"
+    }
+  },
+  "seeds": {
+    "bootstrap": 42,
+    "permutation": 43
+  },
+  "inputs": [
+    {
+      "path": "research\\results\\paper2\\paper2_case_level_results.csv",
+      "sha256_before": "a89ba13888fbccf74287a4b8a5c008415c1c12e5793899156e59c42a1fa84e8a",
+      "sha256_after": "a89ba13888fbccf74287a4b8a5c008415c1c12e5793899156e59c42a1fa84e8a"
+    },
+    {
+      "path": "research\\data\\evaluator_benchmark\\final_human_gold.csv",
+      "sha256_before": "363dbe6d848a04fe18be5ef1d30b6bbf63b54248fe758e5e6bd4c27a26c06ce2",
+      "sha256_after": "363dbe6d848a04fe18be5ef1d30b6bbf63b54248fe758e5e6bd4c27a26c06ce2"
+    },
+    {
+      "path": "research\\annotation\\FROZEN_HUMAN_RATINGS\\RATER_1_COMPLETED.csv",
+      "sha256_before": "5c8086c6434a81100b5106c06a33dea23c30f8272b5cd4336ac3bade52ecc1ef",
+      "sha256_after": "5c8086c6434a81100b5106c06a33dea23c30f8272b5cd4336ac3bade52ecc1ef"
+    },
+    {
+      "path": "services\\evaluator\\assets\\rubrics.json",
+      "sha256_before": "c238e7d51f3e71e818b2bcb7c359baccf8ff51aa6e413b0fc5e94ae0a74eaeab",
+      "sha256_after": "c238e7d51f3e71e818b2bcb7c359baccf8ff51aa6e413b0fc5e94ae0a74eaeab"
+    },
+    {
+      "path": "services\\evaluator\\models\\tuned_model2\\model.safetensors",
+      "sha256_before": "6a241a55bef24355378db16a6380f03226fc9394312122afa648ec9e03a94450",
+      "sha256_after": "6a241a55bef24355378db16a6380f03226fc9394312122afa648ec9e03a94450"
+    }
+  ],
+  "models": [
+    {
+      "role": "upstream_ce (external HF cache, read-only)",
+      "path": "C:\\Users\\spars\\.cache\\huggingface\\hub\\models--cross-encoder--ms-marco-MiniLM-L-6-v2\\snapshots\\c5ee24cb16019beea0893ab7796b1df96625c6b8\\model.safetensors",
+      "sha256": "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae",
+      "training_seed": null
+    }
+  ],
+  "outputs": [
+    {
+      "path": "research\\confirmatory\\X2-B\\results\\gates.csv",
+      "sha256": "6417b4f4234a9cbee9a562cef9386cedd1ef2c97c4391b6eed43623b716d8393"
+    },
+    {
+      "path": "research\\confirmatory\\X2-B\\results\\scores.csv",
+      "sha256": "4edd31ecb277a074501fdda8aaa31d21dddae30d57089c9d2cfedde5203d7fdf"
+    },
+    {
+      "path": "research\\confirmatory\\X2-B\\results\\metrics_point_ci.csv",
+      "sha256": "f934d5f38940ad046822042bb8c5a995050b8a8a2f73e70be30accfdf3c5382a"
+    },
+    {
+      "path": "research\\confirmatory\\X2-B\\results\\paired_differences.csv",
+      "sha256": "f395f56a6c24d0a8a368d6f12f60fbf4ca86e986a3d5d43da1aaa06c63d650ec"
+    },
+    {
+      "path": "research\\confirmatory\\X2-B\\results\\permutation_null.csv",
+      "sha256": "de87c8e6f0fe43feda42fc1f58d2afda3d0851c577da73aa6916083f983c1fcf"
+    },
+    {
+      "path": "research\\confirmatory\\X2-B\\results\\X2B_REPORT.md",
+      "sha256": "ca40aad96c73daf724ea4904d3e8ddeef2601dd61b379832680d67d806bda2ee"
+    }
+  ],
+  "gate": {
+    "name": "G-DERIVED-REPRO",
+    "passed": true,
+    "details": "max abs diff 0.000500"
+  },
+  "deviations": [],
+  "failures": []
+}

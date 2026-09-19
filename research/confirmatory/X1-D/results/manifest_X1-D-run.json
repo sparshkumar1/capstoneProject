@@ -1,0 +1,139 @@
+{
+  "manifest_version": "1.0-phase1",
+  "analysis_id": "X1-D-run",
+  "status": "completed",
+  "started_utc": "2026-09-19T18:01:03Z",
+  "finished_utc": "2026-09-19T18:08:09Z",
+  "protocol": {
+    "type": "prereg_git_tag",
+    "tag": "prereg/X1-D/v1",
+    "tag_commit": "39047498d6459d59912338bfce2d4da543b1d4d6",
+    "sut_tag": "sut/X1/build-A",
+    "sut_commit": "39047498d6459d59912338bfce2d4da543b1d4d6",
+    "protocol_sha256": "b71e391325569650b6bb012033d6089697ace9d5da017699cd49db012f11b94d"
+  },
+  "code": {
+    "git_commit": "39047498d6459d59912338bfce2d4da543b1d4d6",
+    "git_tags_at_head": [
+      "prereg/X1-D/v1",
+      "sut/X1/build-A"
+    ],
+    "git_dirty": true,
+    "dirty_diff_sha256": "7f36232d95cc1a631f1c6f074281dd43280eb9e910a1832db451150087be56f3",
+    "entrypoint": "research\\confirmatory\\X1-D\\x1d_run.py",
+    "entrypoint_sha256": "aa1c9534a0b65809b36e5518067303a7bd8b33aa5aaa7ff72d1d4ad1a0ab5d9f",
+    "command_line": "research/confirmatory/X1-D/x1d_run.py"
+  },
+  "config": {
+    "config_path": "research\\confirmatory\\X1-D\\x1d_config.json",
+    "config_sha256": "efdab894405180a1073dfbb3544215564d21921e49aa28b75d12e42f3050f8c0"
+  },
+  "environment": {
+    "lock_id": null,
+    "env_lock_sha256": null,
+    "non_locked_reason": "SUT project .venv (unlocked by design of X1-D; versions recorded)",
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "executable": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Scripts\\python.exe",
+    "packages": {
+      "numpy": {
+        "metadata": "2.5.2",
+        "module_version": "2.5.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\numpy\\__init__.py"
+      },
+      "pandas": {
+        "metadata": "2.3.3",
+        "module_version": "2.3.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\pandas\\__init__.py"
+      },
+      "scipy": {
+        "metadata": "1.17.1",
+        "module_version": "1.17.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\scipy\\__init__.py"
+      },
+      "scikit-learn": {
+        "metadata": "1.8.0",
+        "module_version": "1.8.0",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\sklearn\\__init__.py"
+      },
+      "torch": {
+        "metadata": "2.11.0+cpu",
+        "module_version": "2.11.0+cpu",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\torch\\__init__.py"
+      },
+      "stable-baselines3": {
+        "metadata": "2.7.1",
+        "module_version": "2.7.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\stable_baselines3\\__init__.py"
+      },
+      "gymnasium": {
+        "metadata": "0.29.1",
+        "module_version": "0.29.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\gymnasium\\__init__.py"
+      },
+      "sentence-transformers": {
+        "metadata": "2.7.0",
+        "module_version": "2.7.0",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\sentence_transformers\\__init__.py"
+      },
+      "transformers": {
+        "metadata": "4.44.2",
+        "module_version": "4.44.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\transformers\\__init__.py"
+      },
+      "faiss-cpu": {
+        "metadata": "1.13.2",
+        "module_version": "1.13.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\faiss\\__init__.py"
+      },
+      "PyYAML": {
+        "metadata": "6.0.3",
+        "module_version": "6.0.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\yaml\\__init__.py"
+      }
+    },
+    "site_packages_listing_sha256_before": "9a9b26f10647042ce4e88baac092d6b69575a5dd46853422fc7edce4bb93117c",
+    "site_packages_listing_sha256_after": "9a9b26f10647042ce4e88baac092d6b69575a5dd46853422fc7edce4bb93117c",
+    "hardware": {
+      "cpu": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cores": 12,
+      "ram_gb": 15.7,
+      "gpu": null
+    },
+    "env_flags": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "HF_HUB_OFFLINE": "1",
+      "WANDB_MODE": "disabled"
+    }
+  },
+  "seeds": {
+    "bootstrap": 42
+  },
+  "inputs": [],
+  "models": [],
+  "outputs": [
+    {
+      "path": "research\\confirmatory\\X1-D\\results\\pytest_console.txt",
+      "sha256": "8b7a820a9465ebe0ee83e79064037bac947356f0fcf3332f7db1aeda0ad19718"
+    },
+    {
+      "path": "research\\confirmatory\\X1-D\\results\\junit.xml",
+      "sha256": "ec0a7c04b2d3cf02a4d9f26a4648ca0fec40f8581af1e14137436bcea4218599"
+    },
+    {
+      "path": "research\\confirmatory\\X1-D\\results\\latency_raw.csv",
+      "sha256": "e9d7860d2a41f2d42ca67e9e7563615dd2447bd50b44a9a296824d7751c16e69"
+    },
+    {
+      "path": "research\\confirmatory\\X1-D\\results\\latency_stats.csv",
+      "sha256": "415f333e9aa1bf963518a6b5066a07c917ad27e2025e5831d58e5a491ca83592"
+    },
+    {
+      "path": "research\\confirmatory\\X1-D\\results\\test_report_summary.json",
+      "sha256": "93db841cd768f8ccd46f32bc3a53303f51eb9d38fd099f02d704a86597657238"
+    }
+  ],
+  "gate": {},
+  "deviations": [],
+  "failures": []
+}

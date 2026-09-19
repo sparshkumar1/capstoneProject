@@ -1,0 +1,10 @@
+{
+  "tests": 226,
+  "failures": 1,
+  "errors": 0,
+  "skipped": 0,
+  "pytest_exit_code": 1,
+  "failed_tests": [
+    "tests.unit.test_stage11_5_coding_adaptation::test_coding_turn_preserves_speech_confidence_and_does_not_fabricate_metrics"
+  ]
+}
