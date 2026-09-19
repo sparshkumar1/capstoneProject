@@ -1,0 +1,145 @@
+{
+  "manifest_version": "1.0-phase1",
+  "analysis_id": "X3-A-analysis",
+  "status": "completed",
+  "started_utc": "2026-09-19T17:54:56Z",
+  "finished_utc": "2026-09-19T17:55:32Z",
+  "protocol": {
+    "type": "prereg_git_tag",
+    "tag": "prereg/X3-A/v1"
+  },
+  "code": {
+    "git_commit": "51cd2941780fbc2ce59b43310437e1580c8983c9",
+    "git_tags_at_head": [
+      "prereg/X2-B/v1"
+    ],
+    "git_dirty": true,
+    "dirty_diff_sha256": "7f36232d95cc1a631f1c6f074281dd43280eb9e910a1832db451150087be56f3",
+    "entrypoint": "research\\confirmatory\\X3-A\\x3a_analyze.py",
+    "entrypoint_sha256": "77744f2a6f1e09d464a51d696cbba11c2ed7da14ffd52557ceb1c6ad7955f4be",
+    "command_line": "research/confirmatory/X3-A/x3a_analyze.py --results research/confirmatory/X3-A/results"
+  },
+  "config": {
+    "config_path": "research\\confirmatory\\X3-A\\x3a_config.json",
+    "config_sha256": "929e0e3ead0f990ac18b8de661f57e2133025c96e7228cf73a8d18404003536e"
+  },
+  "environment": {
+    "lock_id": "LOCK-X3-2026-09-19",
+    "env_lock_sha256": null,
+    "non_locked_reason": null,
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "executable": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Scripts\\python.exe",
+    "packages": {
+      "numpy": {
+        "metadata": "2.5.2",
+        "module_version": "2.5.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\numpy\\__init__.py"
+      },
+      "pandas": {
+        "metadata": "2.3.3",
+        "module_version": "2.3.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\pandas\\__init__.py"
+      },
+      "scipy": {
+        "metadata": "1.17.1",
+        "module_version": "1.17.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\scipy\\__init__.py"
+      },
+      "scikit-learn": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "torch": {
+        "metadata": "2.11.0+cpu",
+        "module_version": "2.11.0+cpu",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\torch\\__init__.py"
+      },
+      "stable-baselines3": {
+        "metadata": "2.7.1",
+        "module_version": "2.7.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\stable_baselines3\\__init__.py"
+      },
+      "gymnasium": {
+        "metadata": "0.29.1",
+        "module_version": "0.29.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\gymnasium\\__init__.py"
+      },
+      "sentence-transformers": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "transformers": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "faiss-cpu": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "PyYAML": {
+        "metadata": "6.0.3",
+        "module_version": "6.0.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\yaml\\__init__.py"
+      }
+    },
+    "site_packages_listing_sha256_before": "1932d4b8ebfd027ffb47eff2ffc826479100d88738d69b8386941e4ee3da3343",
+    "site_packages_listing_sha256_after": "1932d4b8ebfd027ffb47eff2ffc826479100d88738d69b8386941e4ee3da3343",
+    "hardware": {
+      "cpu": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cores": 12,
+      "ram_gb": 15.7,
+      "gpu": null
+    },
+    "env_flags": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "HF_HUB_OFFLINE": null,
+      "WANDB_MODE": null
+    }
+  },
+  "seeds": {
+    "bootstrap": 42,
+    "B": 10000
+  },
+  "inputs": [
+    {
+      "path": "research\\confirmatory\\X3-A\\results\\sessions.csv",
+      "sha256_before": "dd7eb669e1ffc60957f254e330185d69edf276d578b0b0029efdcf3880f1bcd8",
+      "sha256_after": "dd7eb669e1ffc60957f254e330185d69edf276d578b0b0029efdcf3880f1bcd8"
+    }
+  ],
+  "models": [],
+  "outputs": [
+    {
+      "path": "research\\confirmatory\\X3-A\\results\\x3a_decision.json",
+      "sha256": "dfa9c0f7a205cfb89cb736a08b3acf47716b1f5b1fbe120791004589bf73a0ad"
+    },
+    {
+      "path": "research\\confirmatory\\X3-A\\results\\x3a_primary_and_secondary_metrics.csv",
+      "sha256": "41ab1f3cc6fbf3c84d6313af5b2c8675389fcc5f62b26cffc06a25e76deff8dd"
+    },
+    {
+      "path": "research\\confirmatory\\X3-A\\results\\x3a_secondary_contrasts.csv",
+      "sha256": "88f35d035df12d290dcd962855d90a639d77cc97896576f65a18c1560809c852"
+    },
+    {
+      "path": "research\\confirmatory\\X3-A\\results\\x3a_condition_summary.csv",
+      "sha256": "c9fbcfa9b93d8c584ddc5569653bdd04e716d7cae57a10575e1101a2cd94c941"
+    },
+    {
+      "path": "research\\confirmatory\\X3-A\\results\\x3a_strata_descriptive.csv",
+      "sha256": "8ec75f9ab91c9bd7b2528cbb1da2a8dfc28bae69089477f2a0d6a7959686691a"
+    },
+    {
+      "path": "research\\confirmatory\\X3-A\\results\\X3A_ANALYSIS_REPORT.md",
+      "sha256": "76cff3931657d55385043f024d843ca0713e86168fe7d1ac9ffd3157598bb430"
+    }
+  ],
+  "gate": {},
+  "deviations": [],
+  "failures": []
+}

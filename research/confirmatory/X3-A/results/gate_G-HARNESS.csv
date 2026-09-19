@@ -1,0 +1,12 @@
+check,sessions,mismatching_fields,expected,passed
+equivalence: Fixed,25,0,0,True
+equivalence: Heuristic,25,0,0,True
+equivalence: PPO raw (5 seeds),125,0,0,True
+equivalence: PPO+G (5 seeds),125,0,0,True
+equivalence: Constant-Same+G (stub),25,0,0,True
+shield copy equals frozen shield on 200000 random/edge states,200000,0,0,True
+mutant: G5 removed from shield (PPO+G seed 123),25,10,>0 (mutant must be detected),True
+mutant: G4 threshold 0.31 (PPO+G seed 123),25,3,>0 (mutant must be detected),True
+mutant: heuristic Easier-threshold 0.50 instead of 0.40,25,25,>0 (mutant must be detected),True
+INFORMATIONAL (not gating): heuristic Harder-threshold 0.60 instead of 0.75,25,0,informational,n/a
+INFORMATIONAL (not gating): heuristic Harder-threshold 0.76 instead of 0.75,25,0,informational,n/a

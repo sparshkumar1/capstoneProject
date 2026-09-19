@@ -1,0 +1,13 @@
+subset,n_personas,point,ci_low,ci_high,label
+all personas of the primary stratum,40,-0.03505,-0.08161,0.00232,descriptive; not part of the primary classification
+training-matched persona normal@0.60 only,1,0.0,0.0,0.0,descriptive; not part of the primary classification
+all except normal@0.60,39,-0.03594,-0.08387,0.00282,descriptive; not part of the primary classification
+persona type normal,8,-0.02841,-0.11795,0.00239,descriptive; not part of the primary classification
+persona type nervous_expert,8,-0.00455,-0.02727,0.0,descriptive; not part of the primary classification
+persona type lucky_guesser,8,0.03034,0.0,0.11455,descriptive; not part of the primary classification
+persona type overconfident_fail,8,-0.1475,-0.28182,-0.03091,descriptive; not part of the primary classification
+persona type struggling_junior,8,-0.02511,-0.08693,0.03307,descriptive; not part of the primary classification
+skill 0.20-0.40,15,0.01855,-0.032,0.08291,descriptive; not part of the primary classification
+skill 0.50-0.70,15,-0.05376,-0.12315,-0.00254,descriptive; not part of the primary classification
+skill 0.80-0.90,10,-0.08736,-0.17919,-0.01645,descriptive; not part of the primary classification
+frozen 5-persona stratum (already-seen personas),5,0.00527,-0.00727,0.02618,descriptive; reproduces the X3-0 accounting

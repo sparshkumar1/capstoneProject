@@ -1,0 +1,235 @@
+{
+  "manifest_version": "1.0-phase1",
+  "analysis_id": "X3-A-run",
+  "status": "started",
+  "started_utc": "2026-09-19T17:46:34Z",
+  "finished_utc": null,
+  "protocol": {
+    "type": "prereg_git_tag",
+    "tag": "prereg/X3-A/v1",
+    "tag_commit": "b00541f66c05e48512968fa9cd46b536e76f676a",
+    "protocol_path": "research/preregistration/X3-A/PROTOCOL.md",
+    "protocol_sha256": "b15ecb9e72ffb53bbbb8b9265bd23c26e1bfed0642986f78cd286d1b4ecc1479",
+    "protocol_manifest_sha256": "6d70640eea23266eb86dc947f37094fdea61998e11f0f28da42ecb79eaae7a97"
+  },
+  "code": {
+    "git_commit": "afe526569afedb732d464de9da8a3a79109be230",
+    "git_tags_at_head": [],
+    "git_dirty": true,
+    "dirty_diff_sha256": "7f36232d95cc1a631f1c6f074281dd43280eb9e910a1832db451150087be56f3",
+    "entrypoint": "research\\confirmatory\\X3-A\\x3a_run.py",
+    "entrypoint_sha256": "9fa86c2ce44233386076a544a9f8b911ff76a3a7f1f322640b9dbc024bdafc0f",
+    "command_line": "research/confirmatory/X3-A/x3a_run.py --confirmatory"
+  },
+  "config": {
+    "config_path": "research\\confirmatory\\X3-A\\x3a_config.json",
+    "config_sha256": "929e0e3ead0f990ac18b8de661f57e2133025c96e7228cf73a8d18404003536e"
+  },
+  "environment": {
+    "lock_id": "LOCK-X3-2026-09-19",
+    "env_lock_sha256": "c8fdfda1f5034c1d56a27f756907fcb64c3a2b1cdd6e5142b8722a62b658aa03",
+    "non_locked_reason": null,
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "executable": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Scripts\\python.exe",
+    "packages": {
+      "numpy": {
+        "metadata": "2.5.2",
+        "module_version": "2.5.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\numpy\\__init__.py"
+      },
+      "pandas": {
+        "metadata": "2.3.3",
+        "module_version": "2.3.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\pandas\\__init__.py"
+      },
+      "scipy": {
+        "metadata": "1.17.1",
+        "module_version": "1.17.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\scipy\\__init__.py"
+      },
+      "scikit-learn": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "torch": {
+        "metadata": "2.11.0+cpu",
+        "module_version": "2.11.0+cpu",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\torch\\__init__.py"
+      },
+      "stable-baselines3": {
+        "metadata": "2.7.1",
+        "module_version": "2.7.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\stable_baselines3\\__init__.py"
+      },
+      "gymnasium": {
+        "metadata": "0.29.1",
+        "module_version": "0.29.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\gymnasium\\__init__.py"
+      },
+      "sentence-transformers": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "transformers": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "faiss-cpu": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "PyYAML": {
+        "metadata": "6.0.3",
+        "module_version": "6.0.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Lib\\site-packages\\yaml\\__init__.py"
+      }
+    },
+    "site_packages_listing_sha256_before": "1932d4b8ebfd027ffb47eff2ffc826479100d88738d69b8386941e4ee3da3343",
+    "site_packages_listing_sha256_after": null,
+    "hardware": {
+      "cpu": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cores": 12,
+      "ram_gb": 15.7,
+      "gpu": null
+    },
+    "env_flags": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "HF_HUB_OFFLINE": "1",
+      "WANDB_MODE": "disabled"
+    }
+  },
+  "seeds": {
+    "training": [
+      42,
+      123,
+      456,
+      789,
+      999
+    ],
+    "eval": [
+      1001,
+      2002,
+      3003,
+      4004,
+      5005,
+      6006,
+      7007,
+      8008,
+      9009,
+      10010,
+      11011,
+      12012,
+      13013,
+      14014,
+      15015,
+      16016,
+      17017,
+      18018,
+      19019,
+      20020
+    ],
+    "bootstrap": 42
+  },
+  "inputs": [
+    {
+      "path": "research\\confirmatory\\X3-A\\x3a_lib.py",
+      "sha256_before": "3badbb39dbf4974a53899ab013c9d0091f40aad718d34fc1b7502e6d4771e506",
+      "sha256_after": null
+    },
+    {
+      "path": "research\\confirmatory\\X3-A\\x3a_run.py",
+      "sha256_before": "9fa86c2ce44233386076a544a9f8b911ff76a3a7f1f322640b9dbc024bdafc0f",
+      "sha256_after": null
+    },
+    {
+      "path": "rl\\guardrails.py",
+      "sha256_before": "c4198975227a03f9a672e982d0a3aa62ea60c41331c51ef55285410c409666ba",
+      "sha256_after": null
+    },
+    {
+      "path": "rl\\env\\interview_env.py",
+      "sha256_before": "117af6c8a7dea0cda90cc28aead0796a25f6332a329670bbe1215a412256e4b1",
+      "sha256_after": null
+    },
+    {
+      "path": "rl\\training\\simulated_candidate.py",
+      "sha256_before": "6e2c55c3326eac4626d4233784db75f6fdc2994e30c84060841d3540801ecec8",
+      "sha256_after": null
+    }
+  ],
+  "models": [
+    {
+      "role": "ppo_checkpoint",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_42\\ppo_final.zip",
+      "sha256": "8395b6da753f5d272c46bfad018f7a7ae6e5508be58bcd732094771911b3d465",
+      "training_seed": 42
+    },
+    {
+      "role": "vecnormalize",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_42\\vecnormalize.pkl",
+      "sha256": "0e24cdd77e27170137ee5739d6b9258418a98bdf5a1a1bea23e8208ed85debcf",
+      "training_seed": 42
+    },
+    {
+      "role": "ppo_checkpoint",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_123\\ppo_final.zip",
+      "sha256": "299437ea0dcdd7a5eed51326e80854bd3bb55341194420b619c5da3d675e24e0",
+      "training_seed": 123
+    },
+    {
+      "role": "vecnormalize",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_123\\vecnormalize.pkl",
+      "sha256": "f9c752bbc09e0bed5750e5d2beb3838dce58d4da1cd6de20191830f91393087d",
+      "training_seed": 123
+    },
+    {
+      "role": "ppo_checkpoint",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_456\\ppo_final.zip",
+      "sha256": "f9799143aac6a2a67664caadbfa2ce55a113704632bbbe9cfbd1990724a40c55",
+      "training_seed": 456
+    },
+    {
+      "role": "vecnormalize",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_456\\vecnormalize.pkl",
+      "sha256": "69c6605d52e97a52ce1cfe2c4a9394d1b05cac1778b286d2a559e08d09bdeefd",
+      "training_seed": 456
+    },
+    {
+      "role": "ppo_checkpoint",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_789\\ppo_final.zip",
+      "sha256": "0ebb8800f71d453a48f4e307bea4e6cf18dbeb128a38707ac2029b38e757bbcb",
+      "training_seed": 789
+    },
+    {
+      "role": "vecnormalize",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_789\\vecnormalize.pkl",
+      "sha256": "f4884dcc0c92d7edf0959791cd29d512941f53a6ffbf0d0d205431f47fa290c9",
+      "training_seed": 789
+    },
+    {
+      "role": "ppo_checkpoint",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_999\\ppo_final.zip",
+      "sha256": "16494e754125443275f83b6868a964e1688f065976396e88f400de5f60776adf",
+      "training_seed": 999
+    },
+    {
+      "role": "vecnormalize",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_999\\vecnormalize.pkl",
+      "sha256": "a9ba7fff3d065591558fe6e4e6b9c0c627e7fd7b6b15c6a5497c0d3a9a1ce809",
+      "training_seed": 999
+    }
+  ],
+  "outputs": [],
+  "gate": {
+    "name": "G-HARNESS",
+    "passed": null,
+    "details": "pending"
+  },
+  "deviations": [],
+  "failures": []
+}

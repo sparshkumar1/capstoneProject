@@ -1,0 +1,33 @@
+contrast,metric,point,ci_low,ci_high,n_personas,n_train_seeds,label
+PPO | G minus Heuristic | G,mae,-0.46414,-0.7134,-0.22601,40,5,descriptive (no error control)
+PPO | G minus Heuristic | G,volatility,0.06527,-0.03368,0.18652,40,5,descriptive (no error control)
+PPO | G minus Oracle-rule | G,mae,-0.10698,-0.21823,0.00841,40,5,descriptive (no error control)
+PPO | G minus Oracle-rule | G,volatility,0.10615,0.02282,0.21295,40,5,descriptive (no error control)
+PPO | G minus Controller | G,mae,-0.30084,-0.51982,-0.09469,40,5,descriptive (no error control)
+PPO | G minus Controller | G,volatility,0.01352,-0.08398,0.13181,40,5,descriptive (no error control)
+PPO | off minus Constant-Same | off,mae,-0.06166,-0.18481,0.06173,40,5,descriptive (no error control)
+PPO | off minus Constant-Same | off,volatility,0.08043,0.03343,0.14215,40,5,descriptive (no error control)
+PPO-state-zero | G minus PPO | G,mae,0.36982,0.09077,0.64148,40,5,descriptive (no error control)
+PPO-state-zero | G minus PPO | G,volatility,0.02123,-0.12173,0.1492,40,5,descriptive (no error control)
+PPO-state-shuffle | G minus PPO | G,mae,0.25382,0.10948,0.41417,40,5,descriptive (no error control)
+PPO-state-shuffle | G minus PPO | G,volatility,0.08193,-0.03653,0.19403,40,5,descriptive (no error control)
+Constant-Same | G minus Constant-Same | off,mae,0.10386,-0.18375,0.38796,40,1,descriptive (no error control)
+Constant-Same | G minus Constant-Same | off,volatility,0.0975,0.0675,0.1275,40,1,descriptive (no error control)
+Random | G minus Constant-Same | G,mae,0.11886,0.02761,0.21774,40,1,descriptive (no error control)
+Random | G minus Constant-Same | G,volatility,0.414,0.35725,0.46762,40,1,descriptive (no error control)
+Heuristic | G minus Constant-Same | G,mae,0.42909,0.18488,0.68909,40,1,descriptive (no error control)
+Heuristic | G minus Constant-Same | G,volatility,0.0835,0.054,0.11375,40,1,descriptive (no error control)
+Oracle-rule | G minus Constant-Same | G,mae,0.07193,-0.04045,0.18546,40,1,descriptive (no error control)
+Oracle-rule | G minus Constant-Same | G,volatility,0.04263,0.01738,0.075,40,1,descriptive (no error control)
+Controller | G minus Constant-Same | G,mae,0.2658,0.05148,0.49637,40,1,descriptive (no error control)
+Controller | G minus Constant-Same | G,volatility,0.13525,0.09888,0.17662,40,1,descriptive (no error control)
+PPO | G-minus-G4 minus PPO | G,mae,-0.00068,-0.00173,-9e-05,40,5,descriptive rule ablation
+Constant-Same | G-minus-G4 minus Constant-Same | G,mae,0.0,0.0,0.0,40,1,descriptive rule ablation
+PPO | G-minus-G1 minus PPO | G,mae,-0.08725,-0.23925,0.03782,40,5,descriptive rule ablation
+Constant-Same | G-minus-G1 minus Constant-Same | G,mae,-0.14557,-0.34944,0.03637,40,1,descriptive rule ablation
+PPO | G-minus-G2 minus PPO | G,mae,-0.00168,-0.00998,0.00407,40,5,descriptive rule ablation
+Constant-Same | G-minus-G2 minus Constant-Same | G,mae,0.0,0.0,0.0,40,1,descriptive rule ablation
+PPO | G-minus-G5 minus PPO | G,mae,0.01755,-5e-05,0.04468,40,5,descriptive rule ablation
+Constant-Same | G-minus-G5 minus Constant-Same | G,mae,0.0,0.0,0.0,40,1,descriptive rule ablation
+PPO | G-minus-G6 minus PPO | G,mae,0.00418,0.0,0.01732,40,5,descriptive rule ablation
+Constant-Same | G-minus-G6 minus Constant-Same | G,mae,0.02205,0.0,0.06614,40,1,descriptive rule ablation

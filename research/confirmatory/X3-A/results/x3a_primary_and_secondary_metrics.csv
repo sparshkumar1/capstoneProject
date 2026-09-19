@@ -1,0 +1,8 @@
+metric,point,ci_low,ci_high,classification,n_personas,n_train_seeds,sd_persona_level,cohen_dz
+PRIMARY tracking MAE,-0.03505,-0.08177,0.00214,Equivalent,40,5,0.10155,-0.345
+secondary volatility,0.14877,0.0666,0.25445,descriptive,40,5,0.20239,0.735
+secondary oscillation rate,0.25061,0.13027,0.38584,descriptive,40,5,0.31326,0.8
+secondary oracle agreement (raw action),0.2439,0.11354,0.38568,descriptive,40,5,0.38785,0.629
+secondary rule activations / session,0.798,0.33799,1.36001,descriptive,40,5,1.29895,0.614
+secondary action overrides / session,0.0675,-0.59676,0.86076,descriptive,40,5,2.07323,0.033
+secondary attempted boundary actions / session,1.17175,0.45696,2.11826,descriptive,40,5,1.46447,0.8
