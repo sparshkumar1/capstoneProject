@@ -158,7 +158,9 @@ def main():
     m.add_inputs([REPO / inp[k] for k in inp])
     dm = REPO / CFG["models"]["derived"]["dir"]
     um = Path(CFG["models"]["upstream"]["dir"])
-    m.add_inputs([dm / "model.safetensors", um / "model.safetensors"])
+    m.add_inputs([dm / "model.safetensors"])
+    if not SELFTEST:  # the upstream weights live in the external HF cache (outside the repository): recorded as a model entry, not a repo input
+        m.d["models"].append({"role": "upstream_ce (external HF cache, read-only)", "path": str(um / "model.safetensors"), "sha256": sha(um / "model.safetensors"), "training_seed": None})
     gates = []
     # G-MODEL-HASH
     h_der, h_up = sha(dm / "model.safetensors"), sha(um / "model.safetensors")

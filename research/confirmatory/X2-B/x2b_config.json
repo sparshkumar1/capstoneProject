@@ -1,7 +1,7 @@
 {
   "experiment_id": "X2-B",
   "title": "Upstream-checkpoint sensitivity and lexical/length baselines for the CrossEncoder component R (evaluation-only)",
-  "protocol_tag": "prereg/X2-B/v1",
+  "protocol_tag": "prereg/X2-B/v2",
   "lock_id": "LOCK-X2-2026-09-19",
   "lock_files": {"requirements": "research/locks/LOCK-X2-2026-09-19.requirements.txt", "lock_json": "research/locks/LOCK-X2-2026-09-19.lock.json"},
   "arms": {

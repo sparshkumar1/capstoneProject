@@ -7,8 +7,8 @@
     "upstream_model": "cross-encoder/ms-marco-MiniLM-L-6-v2 snapshot c5ee24cb16019beea0893ab7796b1df96625c6b8 (HF cache); weights sha256 prefix 821d1aa6 checked at run time"
   },
   "files": {
-    "research/confirmatory/X2-B/x2b_config.json": "d3850846c0599a79ccbb3ac60b476e8334086f7936b009579138685f3f95c6ba",
-    "research/confirmatory/X2-B/x2b_run.py": "e1f503d4a5f2712d90905727027ef79714ba3e95d0b99bee862649245d506338",
+    "research/confirmatory/X2-B/x2b_config.json": "a44afeea9d02d837086c3f605b94fd43c986bf700cbc264e6b6bfd983ec02b0f",
+    "research/confirmatory/X2-B/x2b_run.py": "b78d1407511c2c8cd80163c50d25529c4c9ca511c4ed828955d8dea7e9214808",
     "research/tools/run_manifest.py": "5f6283cbe73446e7fd7da885321c6350da6e0e66266120cf5e1e28c4ef6fed91",
     "research/locks/LOCK-X2-2026-09-19.requirements.txt": "0e6d37512aa5dbbb288159750bd7b71828b5f99ecdcf506342c6b758741a036c",
     "research/locks/LOCK-X2-2026-09-19.lock.json": "3ea8d4d700a7d1c6354b712993cfbccc49f9e6c01e77a4a16b7bcd1dbd49ed6c",
@@ -19,5 +19,8 @@
     "services/evaluator/assets/rubrics.json": "c238e7d51f3e71e818b2bcb7c359baccf8ff51aa6e413b0fc5e94ae0a74eaeab",
     "services/evaluator/models/tuned_model2/model.safetensors": "6a241a55bef24355378db16a6380f03226fc9394312122afa648ec9e03a94450",
     "services/evaluator/models/tuned_model2/config.json": "29f6b1e61849e2381c197bd0d9beb5f09f7048955b47ad15e26739be4c5d220b"
-  }
+  },
+  "amendments": [
+    "AMEND-001 (v2): manifest handling of external upstream weights; tag reference"
+  ]
 }
