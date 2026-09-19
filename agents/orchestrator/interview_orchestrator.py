@@ -252,6 +252,7 @@ class InterviewOrchestrator:
             "last_audio_analysis": None,
             "last_time_norm": 0.0,
             "last_time_overrun": False,
+            "progress": 0.0,
             "main_questions_count": 0,
             "followups_count": 0,
             "consecutive_followups": 0,
@@ -1500,6 +1501,9 @@ class InterviewOrchestrator:
 
 
         # ── RL / ADAPTATION PHASE ─────────────────────────────────────────
+        total_q = max(len(getattr(self, "_questions", [])), 1)
+        self._state["progress"] = float(min(max(answered_main / float(total_q), 0.0), 1.0))
+
         if self._strategy is not None:
             if not getattr(self._strategy, "ready", False):
                 try:

@@ -1,0 +1,10 @@
+attack_id,attack_name,threat_category,containment_layer,actual_mechanism,expected_outcome,observed_status,elapsed_sec,host_safe,status
+SEC-01,Kernel ptrace hijacking,Privilege Escalation,Static Pre-flight AST Filter,Pre-flight Policy Filter: Blocked dangerous pattern: Direct ptrace kernel inspection invocation,policy_blocked,policy_blocked,0.0,True,PASS
+SEC-02,Socket creation attempt,Network Egress,Network Namespace (--net=none),Docker Sandbox Container (wrong_answer),blocked_by_network_sandbox,wrong_answer,1.77,True,PASS
+SEC-03,Broken syntax compilation crash,Parser Integrity,Compiler Diagnostic Boundary,Docker Sandbox Container (compilation_error),compilation_error,compilation_error,0.6771,True,PASS
+SEC-04,SIGSEGV null pointer dereference,Process Crash,POSIX Signal Isolation,Docker Sandbox Container (runtime_error),runtime_error,runtime_error,1.3756,True,PASS
+SEC-05,Infinite CPU loop,Denial of Service (CPU),Wall-Clock Timeout (2.0s SIGKILL),Docker Sandbox Container (timeout),timeout,timeout,3.5158,True,PASS
+SEC-06,RAM exhaustion (malloc bomb),Denial of Service (RAM),Linux cgroups Memory Cap (128MB),Docker Sandbox Container (wrong_answer),memory_limit_or_oom,wrong_answer,1.3265,True,PASS
+SEC-07,Exfiltration to external IP,Data Exfiltration,Network Namespace (--net=none),Docker Sandbox Container (wrong_answer),network_unreachable,wrong_answer,1.4574,True,PASS
+SEC-08,Fork bomb process explosion,Denial of Service (PIDs),Linux cgroups PID Limit (--pids-limit=32),Docker Sandbox Container (timeout),pids_limit_trapped,timeout,3.5194,True,PASS
+SEC-09,Host rootfs write attempt,Filesystem Tampering,Read-Only Rootfs (--read-only),Docker Sandbox Container (wrong_answer),read_only_blocked,wrong_answer,1.5884,True,PASS

@@ -122,27 +122,32 @@ def test_training_and_runtime_semantic_parity():
     [1] rolling average
     [2] confidence
     [3] hesitation
-    [4] response latency
+    [4] normalized turn progress (t / T)
     [5] normalized difficulty
     """
-    env = InterviewEnv(max_steps=1)
+    env = InterviewEnv(max_steps=10)
     env_obs, _ = env.reset(seed=42)
     assert len(env_obs) == 6
+    assert env_obs[4] == 0.0  # progress at reset is 0 / 10 = 0.0
 
-    # Verify runtime features match intended environment layout
+    step_obs, _, _, _, info = env.step(1)
+    assert step_obs[4] == pytest.approx(0.10, abs=1e-4)  # 1 / 10 = 0.10
+    assert info["progress"] == pytest.approx(0.10, abs=1e-4)
+
+    # Verify runtime features match intended environment layout with explicit progress
     session = {
         "scores": [0.80],
         "rl_perf_history": [0.80],
         "last_confidence_score": 0.90,
         "last_hesitation_score": 0.10,
-        "last_time_norm": 0.35,
+        "progress": 0.35,
     }
     runtime_obs = build_rl_observation(0.80, current_difficulty=4, session=session)
     assert runtime_obs[0] == pytest.approx(0.80, abs=1e-4)  # perf
     assert runtime_obs[1] == pytest.approx(0.80, abs=1e-4)  # avg_perf
     assert runtime_obs[2] == pytest.approx(0.90, abs=1e-4)  # conf
     assert runtime_obs[3] == pytest.approx(0.10, abs=1e-4)  # hes
-    assert runtime_obs[4] == pytest.approx(0.35, abs=1e-4)  # time_norm
+    assert runtime_obs[4] == pytest.approx(0.35, abs=1e-4)  # progress (t / T)
     assert runtime_obs[5] == pytest.approx(0.80, abs=1e-4)  # diff_norm (4/5)
 
 

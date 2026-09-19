@@ -1,0 +1,11 @@
+scenario_id,component,failure_type,recovery_behavior,state_consistency,status
+FLT-01,Qwen LLM Feedback Service,Microservice Outage,Deterministic structured feedback rendered; no state loss,Preserved in SQLite,PASS
+FLT-02,Qwen LLM Generation Timeout,Microservice Latency Exceeded,Candidate receives instant rubric-grounded feedback,Preserved,PASS
+FLT-03,Technical Evaluator,Evaluator Failure (HTTP 503),is_infrastructure_failure flagged true; question retry permitted without penalty,Distinguished from genuine 0.0 score via evaluation_status column,PASS
+FLT-04,ScoreValidator Guardrail,Malformed Numeric Score,"Valid float [0.0, 1.0] returned with explicit validation trace",Preserved; downstream RL receives sanitized float vector,PASS
+FLT-05,Coding Sandbox Executor,Docker Daemon Unreachable,Host protected from un-sandboxed execution; clean user alert,Session state remains intact; zero memory corruption,PASS
+FLT-06,GCC Compiler Subsystem,Compilation Resource Hang,Status 'compilation_error' emitted; temporary files cleaned,Preserved,PASS
+FLT-07,SQLite Storage Engine,Database Lock Contention,Zero OperationalError exceptions; write completes on retry,100% ACID consistency; zero corrupted rows,PASS
+FLT-08,WebSocket Transport Layer,Client Connection Abrupt Reset,Candidate reconnects with session_id; fetches completed report via REST,Turn recorded in database regardless of client socket drop,PASS
+FLT-09,Praat / Parselmouth Audio,Acoustic Feature Extraction Crash,Pacing RL guardrails receive safe neutral inputs; no NaN propagation,Technical score depends solely on text transcript; 0% score drift,PASS
+FLT-10,Interview Orchestrator,Empty Client Payload,Turn flagged as ungraded; prompts candidate to check microphone,Preserved; no false technical failure recorded,PASS

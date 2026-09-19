@@ -1,0 +1,5 @@
+subsystem,condition,n_samples,mean_ms,median_ms,p95_ms,p99_ms
+Warm Evaluator (SBERT + FAISS + CrossEncoder),In-Memory PyTorch / FAISS,20,1960.839,404.564,2098.607,26369.422
+SQLite WAL Write (save_attempt + is_best index),Disk I/O + Compound Indexing,25,17.198,17.219,20.994,21.184
+SQLite WAL Read (get_candidate_history),Memory-mapped Page Cache,25,5.011,3.89,8.462,10.913
+ScoreValidator Rule Engine,In-Memory CPU Logic,100,0.004,0.004,0.005,0.013

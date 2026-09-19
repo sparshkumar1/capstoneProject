@@ -1,0 +1,7 @@
+condition,N_sessions,mean_final_difficulty,difficulty_sd,target_tracking_error,tracking_error_95ci,overshoot,undershoot,volatility,volatility_95ci,oscillation_rate,mean_difficulty_changes,total_guardrail_interventions,total_constraint_violations
+Fixed,25,3.0,0.0,0.0,"[0.000, 0.000]",0.0,0.0,0.0,"[0.000, 0.000]",0.0,0.0,0,0
+Heuristic,25,3.0,1.789,1.382,"[1.105, 1.658]",0.691,0.691,0.16,"[0.128, 0.192]",0.0,1.6,0,0
+"PPO (Aligned, Seed 123)",25,2.64,0.933,0.167,"[0.076, 0.284]",0.011,0.156,0.092,"[0.056, 0.132]",0.16,0.92,0,11
+"PPO+Guardrails (Aligned, Seed 123)",25,2.52,0.9,0.385,"[0.164, 0.662]",0.007,0.378,0.072,"[0.044, 0.108]",0.04,0.72,10,40
+PPO (Historical Mismatch),25,3.0,1.789,1.382,"[1.105, 1.658]",0.691,0.691,0.16,"[0.128, 0.192]",0.0,1.6,0,160
+PPO+Guardrails (Historical Mismatch),25,2.2,0.98,0.691,"[0.414, 1.036]",0.0,0.691,0.08,"[0.048, 0.120]",0.0,0.8,100,80

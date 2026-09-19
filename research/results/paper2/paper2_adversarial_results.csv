@@ -1,0 +1,14 @@
+vector_id,category,qid,raw_score,validated_score,expected_max_score,S1,S2,R,contained,rationale
+ADV-01,instruction_override,1,0.0,0.0,0.15,0.149,0.0,0.13,True,LLM injection string has zero technical concept or reasoning entailment against rubric.
+ADV-02,score_manipulation,1,0.0094,0.0094,0.4,0.281,0.25,0.23,True,Directly injects system score headers to test if keyword pattern tricks evaluator.
+ADV-03,keyword_stuffing,1,0.4251,0.4251,0.45,0.288,0.5,0.414,True,Pure keyword list without syntactic predicates; must be bounded.
+ADV-04,buzzword_stuffing,1,0.0,0.0,0.15,0.032,0.0,0.11,True,High syllable density buzzwords with zero relevance to two sum.
+ADV-05,irrelevant_jargon,3,0.0,0.0,0.15,0.04,0.0,0.174,True,Real technical terminology that is completely irrelevant to linked list reversal.
+ADV-06,repetition,1,0.0106,0.0106,0.35,0.227,0.25,0.248,True,Testing if repeated valid tokens artificially inflate FAISS concept scores.
+ADV-07,correct_keywords_wrong_reasoning,1,0.2052,0.2052,0.4,0.224,0.0,0.343,True,"Contains valid terms but proposes an absurd, mathematically invalid execution flow."
+ADV-08,correct_reasoning_irrelevant_jargon,1,0.3994,0.3994,0.85,0.264,0.5,0.37,True,"Correct logic should not be completely destroyed by trailing irrelevant prose, though not receive 1.0."
+ADV-09,plausible_misconception,22,0.2011,0.2011,0.35,0.124,0.0,0.365,True,Subtle and common student error directly violating algorithmic precondition.
+ADV-10,contradiction,10,0.4617,0.4617,0.35,0.492,0.5,0.426,False,Initial correct claim immediately contradicted by invalid mechanism.
+ADV-11,negation,3,0.4328,0.4328,0.25,0.303,0.5,0.425,False,Explicit negation of the core required action.
+ADV-12,fake_authority,1,0.0,0.0,0.15,0.169,0.0,0.136,True,Appeals to academic authority without algorithmic substance.
+ADV-13,formatting_manipulation,1,0.0,0.0,0.15,0.073,0.0,0.177,True,JSON/markdown code block payload attempting to exploit parser ambiguity.

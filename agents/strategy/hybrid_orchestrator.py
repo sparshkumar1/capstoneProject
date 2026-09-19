@@ -72,7 +72,7 @@ def build_rl_observation(
       [1] avg_perf: Rolling mean of recent 5 answers (float in [0.0, 1.0])
       [2] conf: Candidate confidence signal from audio analysis or state (float in [0.0, 1.0])
       [3] hes: Candidate hesitation signal from acoustic/filler analysis (float in [0.0, 1.0])
-      [4] time_norm: Normalized question latency from QuestionTimer (float in [0.0, 1.0])
+      [4] progress: Normalized session turn progress ratio (t / T) in [0.0, 1.0]
       [5] diff_norm: Current difficulty mapped linearly to [0.0, 1.0] (diff / 5.0)
     """
     import numpy as np
@@ -113,11 +113,38 @@ def build_rl_observation(
         raw_hes = 1.0 - conf
     hes = float(np.clip(float(raw_hes), 0.0, 1.0))
 
-    # 5. Response Latency (normalized time from QuestionTimer)
-    raw_time = session.get("last_time_norm")
-    if raw_time is None or math.isnan(float(raw_time)) or math.isinf(float(raw_time)):
-        raw_time = 0.0
-    time_norm = float(np.clip(float(raw_time), 0.0, 1.0))
+    # 5. Normalized Turn Progress Ratio (t / T in [0.0, 1.0])
+    raw_progress = session.get("progress")
+    if raw_progress is None:
+        raw_progress = session.get("turn_progress")
+    if raw_progress is None and ("turn_idx" in session or "current_turn" in session):
+        turn_idx = session.get("current_turn") or session.get("turn_idx")
+        total_turns = (
+            session.get("total_turns")
+            or session.get("total_questions")
+            or session.get("max_steps")
+            or 10
+        )
+        try:
+            raw_progress = float(turn_idx) / float(total_turns)
+        except (ZeroDivisionError, TypeError, ValueError):
+            raw_progress = None
+    if raw_progress is None:
+        # Fallback to last_time_norm or scores length
+        if "last_time_norm" in session and session["last_time_norm"] is not None:
+            raw_progress = session.get("last_time_norm")
+        else:
+            scores_len = len(session.get("scores", []))
+            total_turns = session.get("total_questions") or session.get("total_turns") or 10
+            raw_progress = float(scores_len) / float(total_turns) if total_turns > 0 else 0.0
+
+    try:
+        raw_progress = float(raw_progress)
+        if math.isnan(raw_progress) or math.isinf(raw_progress):
+            raw_progress = 0.5
+    except (TypeError, ValueError):
+        raw_progress = 0.5
+    progress = float(np.clip(raw_progress, 0.0, 1.0))
 
     # 6. Normalized Difficulty Level
     try:
@@ -128,7 +155,7 @@ def build_rl_observation(
         raw_diff = 0.6
     diff_norm = float(np.clip(raw_diff, 0.0, 1.0))
 
-    return np.array([perf, avg_perf, conf, hes, time_norm, diff_norm], dtype=np.float32)
+    return np.array([perf, avg_perf, conf, hes, progress, diff_norm], dtype=np.float32)
 
 
 class HybridOrchestrator:

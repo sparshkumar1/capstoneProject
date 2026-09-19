@@ -1,0 +1,6 @@
+training_seed,initial_reward,final_reward,rolling_mean_reward,final_action_easier_pct,final_action_same_pct,final_action_harder_pct,total_episodes,total_timesteps
+42,0.3329,-0.1614,0.1493,0.1901,0.5069,0.303,1638,24576
+123,0.3087,0.2981,0.2147,0.2004,0.513,0.2865,1638,24576
+456,0.344,0.1238,0.219,0.1834,0.5345,0.2821,1638,24576
+789,0.4273,0.2526,0.2008,0.1917,0.5168,0.2915,1638,24576
+999,0.4266,0.2409,0.1575,0.1936,0.5247,0.2817,1638,24576

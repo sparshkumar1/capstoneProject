@@ -1,0 +1,74 @@
+# PREPAIred Paper 3 Frozen RL Experiment Configuration
+# Target: Guardrailed Multimodal Reinforcement Learning for Adaptive Technical Interview Difficulty
+
+algorithm: PPO
+policy: MlpPolicy
+net_arch: [64, 64]
+learning_rate: 0.0003
+gamma: 0.99
+gae_lambda: 0.95
+clip_range: 0.20
+n_steps: 2048
+batch_size: 64
+n_epochs: 10
+total_timesteps_per_seed: 24576
+training_seeds: [42, 123, 456, 789, 999]
+evaluation_seeds: [1001, 2002, 3003, 4004, 5005]
+
+state_space:
+  dimensions: 6
+  type: Box(0.0, 1.0, (6,), float32)
+  mapping:
+    0: perf (latest score)
+    1: avg_perf (rolling mean of 5)
+    2: conf (speech confidence)
+    3: hes (acoustic hesitation)
+    4: dim4 (progress ratio t/T)
+    5: diff (current difficulty / 5.0)
+
+action_space:
+  dimensions: 3
+  type: Discrete(3)
+  mapping:
+    0: Easier
+    1: Same
+    2: Harder
+
+reward_weights:
+  decision_alignment: 0.60
+  outcome_delta: 0.30
+  multimodal_shaping: 0.10
+  stability_penalty: -0.10
+  critical_match: 0.20
+  critical_mismatch: -1.00
+
+guardrails:
+  version: canonical_G1_G6
+  rules:
+    G0: infrastructure_failure -> Same
+    G4: perf < 0.30 and hes > 0.60 -> Easier
+    G1: perf < 0.30 and 0.4 <= diff <= 0.7 -> Easier
+    G2: conf < 0.30 and hes > 0.70 and perf < 0.80 -> Same
+    G5: 0.40 < perf < 0.65 and avg_perf < 0.60 -> Same
+    G6: perf >= 0.90 and gap > 0.25 and not nervous_expert -> Harder
+
+baselines:
+  fixed:
+    difficulty: 3.0
+    expected_mae: 1.200
+  personas:
+    struggling_junior:
+      skill: 0.20
+      target_difficulty: 1.0
+    overconfident_fail:
+      skill: 0.30
+      target_difficulty: 1.5
+    normal:
+      skill: 0.60
+      target_difficulty: 3.0
+    lucky_guesser:
+      skill: 0.80
+      target_difficulty: 4.0
+    nervous_expert:
+      skill: 0.88
+      target_difficulty: 4.5

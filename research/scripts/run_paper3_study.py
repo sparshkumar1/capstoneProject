@@ -39,19 +39,35 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "rl" / "env"))
 sys.path.insert(0, str(ROOT / "rl" / "training"))
+sys.path.insert(0, str(ROOT / "rl"))
 
 import gymnasium as gym
 from gymnasium import spaces
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
+from stable_baselines3.common.callbacks import BaseCallback
 
 from rl.env.interview_env import InterviewEnv
 from rl.training.simulated_candidate import SimulatedCandidate
+from rl.guardrails import apply_canonical_guardrails
 from agents.strategy.hybrid_orchestrator import HybridOrchestrator
 
 
 # ----------------------------------------------------------------------
-# 1. Aligned Environment Definition
+# 1. Canonical Persona Definitions & Skill Targets
+# ----------------------------------------------------------------------
+
+PERSONA_TARGETS: Dict[str, Dict[str, float]] = {
+    "struggling_junior":  {"skill": 0.20, "target_difficulty": 1.0},
+    "overconfident_fail": {"skill": 0.30, "target_difficulty": 1.5},
+    "normal":             {"skill": 0.60, "target_difficulty": 3.0},
+    "lucky_guesser":      {"skill": 0.80, "target_difficulty": 4.0},
+    "nervous_expert":     {"skill": 0.88, "target_difficulty": 4.5},
+}
+
+
+# ----------------------------------------------------------------------
+# 2. Aligned Environment Definition
 # ----------------------------------------------------------------------
 
 class AlignedInterviewEnv(InterviewEnv):
@@ -63,6 +79,7 @@ class AlignedInterviewEnv(InterviewEnv):
       - 'aligned_progress': Dim 4 is exact session turn progress (step / max_steps).
       - 'aligned_response_time': Dim 4 is normalized response time.
       - 'historical_mismatch': Dim 4 is response time during training, but evaluated with progress.
+      - 'zero': Dim 4 is ablated to 0.0.
     """
     def __init__(self, *args, dim4_mode: str = "aligned_progress", **kwargs):
         super().__init__(*args, **kwargs)
@@ -72,18 +89,93 @@ class AlignedInterviewEnv(InterviewEnv):
         obs, reward, terminated, truncated, info = super().step(action)
         # Modify dim 4 in observation according to selected mode
         if self.dim4_mode == "aligned_progress":
-            progress = float(np.clip(self.current_step / float(self.max_steps), 0.0, 1.0))
-            obs[4] = progress
-            self.last_obs[4] = progress
+            # InterviewEnv natively sets obs[4] to progress (current_step / max_steps)
+            pass
+        elif self.dim4_mode == "aligned_response_time":
+            t_norm = float(info.get("time_norm", 0.0))
+            obs[4] = t_norm
+            self.last_obs[4] = t_norm
         elif self.dim4_mode == "zero":
             obs[4] = 0.0
             self.last_obs[4] = 0.0
-        # If 'aligned_response_time' or default, super().step() already calculated normalized response time
         return obs, reward, terminated, truncated, info
 
 
 # ----------------------------------------------------------------------
-# 2. Bootstrap Confidence Interval Helper
+# 3. Training Convergence Instrumentation (Callback)
+# ----------------------------------------------------------------------
+
+class TrainingConvergenceCallback(BaseCallback):
+    """
+    Deterministic training progress recorder for Paper 3.
+    Records machine-readable step-level training metrics:
+      - Timesteps
+      - Episode count
+      - Latest reward
+      - Rolling mean reward (window 100)
+      - Action distribution (proportions of Easier, Same, Harder)
+    """
+    def __init__(self, log_path: Path, log_freq: int = 256, verbose: int = 0):
+        super().__init__(verbose=verbose)
+        self.log_path = Path(log_path)
+        self.log_freq = log_freq
+        self.records: List[Dict[str, Any]] = []
+        self.episode_rewards: List[float] = []
+        self.episode_counts = 0
+        self.action_counts = {0: 0, 1: 0, 2: 0}
+
+    def _on_step(self) -> bool:
+        actions = self.locals.get("actions")
+        if actions is not None:
+            for a in np.asarray(actions).reshape(-1):
+                a_int = int(a)
+                if a_int in self.action_counts:
+                    self.action_counts[a_int] += 1
+
+        rewards = self.locals.get("rewards")
+        if rewards is not None:
+            for r in np.asarray(rewards).reshape(-1):
+                self.episode_rewards.append(float(r))
+
+        dones = self.locals.get("dones")
+        if dones is not None and np.any(dones):
+            self.episode_counts += int(np.sum(dones))
+
+        if self.num_timesteps % self.log_freq == 0:
+            recent_rewards = self.episode_rewards[-100:] if self.episode_rewards else [0.0]
+            mean_rew = float(np.mean(recent_rewards))
+            last_rew = float(self.episode_rewards[-1]) if self.episode_rewards else 0.0
+
+            total_actions = sum(self.action_counts.values()) or 1
+            record = {
+                "timestep": int(self.num_timesteps),
+                "episode": int(self.episode_counts),
+                "latest_reward": round(last_rew, 4),
+                "mean_reward_rolling": round(mean_rew, 4),
+                "action_easier_pct": round(self.action_counts[0] / total_actions, 4),
+                "action_same_pct": round(self.action_counts[1] / total_actions, 4),
+                "action_harder_pct": round(self.action_counts[2] / total_actions, 4),
+            }
+            self.records.append(record)
+        return True
+
+    def _on_training_end(self) -> None:
+        self.log_path.mkdir(parents=True, exist_ok=True)
+        csv_file = self.log_path / "training_curves.csv"
+        json_file = self.log_path / "training_curves.json"
+        if self.records:
+            fieldnames = list(self.records[0].keys())
+            with open(csv_file, "w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(self.records)
+
+            with open(json_file, "w", encoding="utf-8") as f:
+                json.dump(self.records, f, indent=2)
+
+
+# ----------------------------------------------------------------------
+# 4. Bootstrap Confidence Interval Helper
 # ----------------------------------------------------------------------
 
 def bootstrap_ci(data: List[float], n_resamples: int = 2000, alpha: float = 0.05) -> Tuple[float, float]:
@@ -100,7 +192,7 @@ def bootstrap_ci(data: List[float], n_resamples: int = 2000, alpha: float = 0.05
 
 
 # ----------------------------------------------------------------------
-# 3. PPO Retraining Routine across Multi-Seeds
+# 5. PPO Retraining Routine across Multi-Seeds
 # ----------------------------------------------------------------------
 
 TRAIN_SEEDS = [42, 123, 456, 789, 999]
@@ -108,6 +200,18 @@ EVAL_SEEDS = [1001, 2002, 3003, 4004, 5005]
 TIMESTEPS_PER_SEED = 24576  # 12 rollout iterations of 2048 steps (~10s per seed)
 
 def train_ppo_seed(seed: int, dim4_mode: str, output_dir: Path) -> Tuple[str, Dict[str, Any]]:
+    output_dir = Path(output_dir)
+
+    # Strict isolation assertion: historical mismatch experiments must never write to canonical dir
+    if dim4_mode != "aligned_progress":
+        assert "historical_mismatch" in str(output_dir), (
+            f"Safety violation: Non-canonical mode '{dim4_mode}' cannot write to canonical dir '{output_dir}'"
+        )
+    else:
+        assert "historical_mismatch" not in str(output_dir), (
+            f"Safety violation: Canonical mode '{dim4_mode}' cannot write to mismatch dir '{output_dir}'"
+        )
+
     seed_dir = output_dir / f"seed_{seed}"
     seed_dir.mkdir(parents=True, exist_ok=True)
     
@@ -120,6 +224,8 @@ def train_ppo_seed(seed: int, dim4_mode: str, output_dir: Path) -> Tuple[str, Di
         norm_reward=True,
         clip_obs=10.0
     )
+
+    callback = TrainingConvergenceCallback(log_path=seed_dir, log_freq=256)
 
     t0 = time.time()
     model = PPO(
@@ -135,13 +241,19 @@ def train_ppo_seed(seed: int, dim4_mode: str, output_dir: Path) -> Tuple[str, Di
         verbose=0,
         seed=seed,
     )
-    model.learn(total_timesteps=TIMESTEPS_PER_SEED)
+    model.learn(total_timesteps=TIMESTEPS_PER_SEED, callback=callback)
     elapsed = time.time() - t0
 
     model_path = seed_dir / "ppo_final"
     norm_path = seed_dir / "vecnormalize.pkl"
     model.save(str(model_path))
     train_vec_env.save(str(norm_path))
+
+    # Assert convergence curve records exist and are non-empty
+    curve_csv = seed_dir / "training_curves.csv"
+    assert curve_csv.exists() and curve_csv.stat().st_size > 0, (
+        f"Convergence curve logging failed: {curve_csv} missing or empty"
+    )
 
     meta = {
         "seed": seed,
@@ -150,10 +262,17 @@ def train_ppo_seed(seed: int, dim4_mode: str, output_dir: Path) -> Tuple[str, Di
         "elapsed_sec": round(elapsed, 2),
         "model_path": str(model_path) + ".zip",
         "norm_path": str(norm_path),
+        "curves_csv": str(seed_dir / "training_curves.csv"),
+        "curves_json": str(seed_dir / "training_curves.json"),
         "policy": "MlpPolicy [64, 64]",
         "lr": 3e-4,
         "gamma": 0.99,
-        "clip_range": 0.2
+        "gae_lambda": 0.95,
+        "clip_range": 0.2,
+        "state_definition_version": "v2_progress_ratio_t_over_T",
+        "guardrail_version": "canonical_G1_G6",
+        "baseline_version": "persona_adjusted_targets_v2",
+        "git_commit": "375f4f869c47907d7c222d27df3b4f9e09dc8941",
     }
     with open(seed_dir / "training_meta.json", "w", encoding="utf-8") as f:
         json.dump(meta, f, indent=2)
@@ -179,8 +298,9 @@ def run_session_trajectory(
     Returns trajectory metrics.
     """
     rng = np.random.RandomState(eval_seed)
-    candidate = SimulatedCandidate(persona=persona_name, seed=eval_seed)
-    target_difficulty = candidate.skill * 5.0  # ideal target on 1..5 scale
+    p_cfg = PERSONA_TARGETS.get(persona_name, {"skill": 0.60, "target_difficulty": 3.0})
+    candidate = SimulatedCandidate(skill=p_cfg["skill"], persona=persona_name, seed=eval_seed)
+    target_difficulty = float(p_cfg["target_difficulty"])  # true target on 1..5 scale
     
     current_difficulty = 3.0  # starts at level 3
     difficulties = [current_difficulty]
@@ -257,23 +377,21 @@ def run_session_trajectory(
 
             act_name = {0: "Easier", 1: "Same", 2: "Harder"}[act]
 
-            # Apply Guardrails if requested
+            # Apply Canonical Guardrails if requested
             if guardrails_enabled:
                 pre_guard_act = act
-                # G1: High hesitation suppresses Harder
-                if hes > 0.60 and act == 2:
-                    act = 1
-                    guardrail_interventions += 1
-                # G2: Low confidence + low perf forces Easier
-                if conf < 0.35 and perf < 0.40 and act != 0:
-                    act = 0
-                    guardrail_interventions += 1
-                # G3: Rapid oscillation suppression
-                if len(actions) >= 2 and actions[-1] == "Easier" and act == 2:
-                    act = 1
-                    guardrail_interventions += 1
-                elif len(actions) >= 2 and actions[-1] == "Harder" and act == 0:
-                    act = 1
+                act, was_overridden, gid = apply_canonical_guardrails(
+                    perf=perf,
+                    avg_perf=avg_perf,
+                    conf=conf,
+                    hes=hes,
+                    progress=dim4_val,
+                    difficulty=current_difficulty / 5.0,
+                    proposed_action=act,
+                    consecutive_failures=0,
+                    is_infrastructure_failure=False,
+                )
+                if was_overridden:
                     guardrail_interventions += 1
                 act_name = {0: "Easier", 1: "Same", 2: "Harder"}[act]
         else:
@@ -410,7 +528,7 @@ def main():
     # Also train 1 seed with historical response-time semantics for the mismatch ablation
     mismatch_dir = checkpoints_dir / "historical_mismatch"
     print("  --> Training historical response_time baseline for mismatch ablation...")
-    _, mismatch_meta = train_ppo_seed(123, dim4_mode="aligned_response_time", output_dir=checkpoints_dir)
+    _, mismatch_meta = train_ppo_seed(123, dim4_mode="aligned_response_time", output_dir=mismatch_dir)
     print("  [OK] Historical model saved.")
 
     # ------------------------------------------------------------------

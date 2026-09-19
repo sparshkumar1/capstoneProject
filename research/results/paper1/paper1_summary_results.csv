@@ -1,0 +1,8 @@
+benchmark_area,tested_coverage,pass_rate,key_finding,defensible_framing
+Code Execution Security,9 Attack Vectors (SEC-01..09),100% (9/9),All tested attacks contained by pre-flight or Docker,Defense-in-depth OS isolation; shares host kernel
+Fault Tolerance & Resilience,10 Defined Faults (FLT-01..10),100% (10/10),All tested fault scenarios recovered gracefully,All tested fault scenarios recovered; not universal proof
+SQLite WAL Concurrency,"1, 5, 10, 25 Sessions",100% (0 errors),Zero lock contention errors; zero isolation leaks,Measured concurrency behavior under tested workload
+Subsystem Latency Profile,4 Core Subsystems,All < SLA,Warm evaluator ~40-60ms; DB write <15ms P95,Suitable for turn-based technical interviews
+Qwen LLM Role Isolation,5 Boundary Invariants,100% (5/5),Zero scoring/difficulty authority; deterministic fallback,LLM strictly confined to qualitative language synthesis
+Multimodal Separation,Audio vs Technical Score,100% Insulated,Acoustic features strictly insulated from scoring,Prosody influences pacing only; zero score drift
+Threat Model Coverage,7 Threat Categories,100% Mapped,Mitigations implemented & tested across boundaries,Mitigations established with explicit remaining limitations

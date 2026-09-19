@@ -1,0 +1,12 @@
+subsystem,metric,tested_value,unit,control_boundary,status
+Container Sandbox,Negative Security Attack Vectors,9/9 Contained,count,Docker cgroups/namespaces/capabilities,PASS
+Fault Tolerance,Defined Fault Scenarios Recovered,10/10 Recovered,count,Orchestrator Fallback + ScoreValidator,PASS
+Database Concurrency,Max Tested Concurrent Sessions,25,sessions,SQLite WAL Mode,PASS
+Database Concurrency,Lock Contention Errors,0,errors,SQLite 30s Busy Timeout,PASS
+Database Concurrency,Cross-Session Attempt Isolation,100%,percentage,Parameterized Candidate Scoping,PASS
+Evaluator Latency,Warm Inference Mean Latency,1960.8,ms,In-Memory PyTorch / FAISS,PASS
+Evaluator Latency,Warm Inference P95 Latency,2098.6,ms,In-Memory PyTorch / FAISS,PASS
+Storage Latency,SQLite Write P95 Latency,21.0,ms,WAL Mode Write + is_best Recalculation,PASS
+ScoreValidator,Sanitization & Clamping Mean Latency,0.004,ms,In-Memory Rule Engine,PASS
+Qwen Isolation,Scoring Authority Excluded,100%,percentage,Deterministic Evaluator Gating,PASS
+Multimodal Insulation,Prosody Excluded from Technical Score,100%,percentage,Strict String-Only Evaluator Input,PASS

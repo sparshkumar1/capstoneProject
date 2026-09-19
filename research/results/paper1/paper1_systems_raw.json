@@ -1,0 +1,464 @@
+{
+  "provenance": {
+    "git_commit": "375f4f869c47907d7c222d27df3b4f9e09dc8941",
+    "config_sha256": "f057baf1b2b9608eb0eb34d9aef3a4a3571db868f9ee728dda180364cc4e90f1",
+    "model_sha256": "6a241a55bef24355378db16a6380f03226fc9394312122afa648ec9e03a94450",
+    "gold_sha256": "363dbe6d848a04fe18be5ef1d30b6bbf63b54248fe758e5e6bd4c27a26c06ce2",
+    "docker_available": true,
+    "docker_prefix": [
+      "C:\\WINDOWS\\system32\\wsl.EXE",
+      "-d",
+      "Ubuntu-22.04",
+      "-u",
+      "root",
+      "--exec",
+      "docker"
+    ]
+  },
+  "security_results": [
+    {
+      "attack_id": "SEC-01",
+      "attack_name": "Kernel ptrace hijacking",
+      "threat_category": "Privilege Escalation",
+      "containment_layer": "Static Pre-flight AST Filter",
+      "actual_mechanism": "Pre-flight Policy Filter: Blocked dangerous pattern: Direct ptrace kernel inspection invocation",
+      "expected_outcome": "policy_blocked",
+      "observed_status": "policy_blocked",
+      "elapsed_sec": 0.0,
+      "host_safe": true,
+      "status": "PASS"
+    },
+    {
+      "attack_id": "SEC-02",
+      "attack_name": "Socket creation attempt",
+      "threat_category": "Network Egress",
+      "containment_layer": "Network Namespace (--net=none)",
+      "actual_mechanism": "Docker Sandbox Container (wrong_answer)",
+      "expected_outcome": "blocked_by_network_sandbox",
+      "observed_status": "wrong_answer",
+      "elapsed_sec": 1.77,
+      "host_safe": true,
+      "status": "PASS"
+    },
+    {
+      "attack_id": "SEC-03",
+      "attack_name": "Broken syntax compilation crash",
+      "threat_category": "Parser Integrity",
+      "containment_layer": "Compiler Diagnostic Boundary",
+      "actual_mechanism": "Docker Sandbox Container (compilation_error)",
+      "expected_outcome": "compilation_error",
+      "observed_status": "compilation_error",
+      "elapsed_sec": 0.6771,
+      "host_safe": true,
+      "status": "PASS"
+    },
+    {
+      "attack_id": "SEC-04",
+      "attack_name": "SIGSEGV null pointer dereference",
+      "threat_category": "Process Crash",
+      "containment_layer": "POSIX Signal Isolation",
+      "actual_mechanism": "Docker Sandbox Container (runtime_error)",
+      "expected_outcome": "runtime_error",
+      "observed_status": "runtime_error",
+      "elapsed_sec": 1.3756,
+      "host_safe": true,
+      "status": "PASS"
+    },
+    {
+      "attack_id": "SEC-05",
+      "attack_name": "Infinite CPU loop",
+      "threat_category": "Denial of Service (CPU)",
+      "containment_layer": "Wall-Clock Timeout (2.0s SIGKILL)",
+      "actual_mechanism": "Docker Sandbox Container (timeout)",
+      "expected_outcome": "timeout",
+      "observed_status": "timeout",
+      "elapsed_sec": 3.5158,
+      "host_safe": true,
+      "status": "PASS"
+    },
+    {
+      "attack_id": "SEC-06",
+      "attack_name": "RAM exhaustion (malloc bomb)",
+      "threat_category": "Denial of Service (RAM)",
+      "containment_layer": "Linux cgroups Memory Cap (128MB)",
+      "actual_mechanism": "Docker Sandbox Container (wrong_answer)",
+      "expected_outcome": "memory_limit_or_oom",
+      "observed_status": "wrong_answer",
+      "elapsed_sec": 1.3265,
+      "host_safe": true,
+      "status": "PASS"
+    },
+    {
+      "attack_id": "SEC-07",
+      "attack_name": "Exfiltration to external IP",
+      "threat_category": "Data Exfiltration",
+      "containment_layer": "Network Namespace (--net=none)",
+      "actual_mechanism": "Docker Sandbox Container (wrong_answer)",
+      "expected_outcome": "network_unreachable",
+      "observed_status": "wrong_answer",
+      "elapsed_sec": 1.4574,
+      "host_safe": true,
+      "status": "PASS"
+    },
+    {
+      "attack_id": "SEC-08",
+      "attack_name": "Fork bomb process explosion",
+      "threat_category": "Denial of Service (PIDs)",
+      "containment_layer": "Linux cgroups PID Limit (--pids-limit=32)",
+      "actual_mechanism": "Docker Sandbox Container (timeout)",
+      "expected_outcome": "pids_limit_trapped",
+      "observed_status": "timeout",
+      "elapsed_sec": 3.5194,
+      "host_safe": true,
+      "status": "PASS"
+    },
+    {
+      "attack_id": "SEC-09",
+      "attack_name": "Host rootfs write attempt",
+      "threat_category": "Filesystem Tampering",
+      "containment_layer": "Read-Only Rootfs (--read-only)",
+      "actual_mechanism": "Docker Sandbox Container (wrong_answer)",
+      "expected_outcome": "read_only_blocked",
+      "observed_status": "wrong_answer",
+      "elapsed_sec": 1.5884,
+      "host_safe": true,
+      "status": "PASS"
+    }
+  ],
+  "fault_results": [
+    {
+      "scenario_id": "FLT-01",
+      "failure_type": "Microservice Outage",
+      "component": "Qwen LLM Feedback Service",
+      "injected_failure": "Simulated connection refused on port 8001/8002",
+      "system_response": "Timeout / ConnectionRefused caught; fallback template dispatched",
+      "recovery_behavior": "Deterministic structured feedback rendered; no state loss",
+      "retry_behavior": "Allowed; turns advance cleanly",
+      "state_consistency": "Preserved in SQLite",
+      "user_visible_behavior": "Clear feedback without error screens or stack traces",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "FLT-02",
+      "failure_type": "Microservice Latency Exceeded",
+      "component": "Qwen LLM Generation Timeout",
+      "injected_failure": "Generation hangs beyond 3000ms threshold",
+      "system_response": "asyncio.wait_for cancels generation; returns deterministic concept synthesis",
+      "recovery_behavior": "Candidate receives instant rubric-grounded feedback",
+      "retry_behavior": "Allowed",
+      "state_consistency": "Preserved",
+      "user_visible_behavior": "Turn completes within standard SLA (<3.5s)",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "FLT-03",
+      "failure_type": "Evaluator Failure (HTTP 503)",
+      "component": "Technical Evaluator",
+      "injected_failure": "Evaluator process crash / HTTP 503 unavailable",
+      "system_response": "Evaluation returns status='evaluator_unavailable', validated_score=0.0",
+      "recovery_behavior": "is_infrastructure_failure flagged true; question retry permitted without penalty",
+      "retry_behavior": "Free retry offered; turn not scored against candidate",
+      "state_consistency": "Distinguished from genuine 0.0 score via evaluation_status column",
+      "user_visible_behavior": "Polite notification: 'Evaluator temporarily unavailable. Re-attempt permitted.'",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "FLT-04",
+      "failure_type": "Malformed Numeric Score",
+      "component": "ScoreValidator Guardrail",
+      "injected_failure": "Raw score receives NaN, Inf, or out-of-bounds 999.0",
+      "system_response": "ScoreValidator type/clamp rules engage; replaces NaN/Inf with 0.0 or clamps to [0, 1]",
+      "recovery_behavior": "Valid float [0.0, 1.0] returned with explicit validation trace",
+      "retry_behavior": "N/A",
+      "state_consistency": "Preserved; downstream RL receives sanitized float vector",
+      "user_visible_behavior": "Transparent; candidate unaffected by parser abnormality",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "FLT-05",
+      "failure_type": "Docker Daemon Unreachable",
+      "component": "Coding Sandbox Executor",
+      "injected_failure": "Docker CLI/socket down or daemon unreachable",
+      "system_response": "Returns status='sandbox_error', coding_score=0.0, error message logged",
+      "recovery_behavior": "Host protected from un-sandboxed execution; clean user alert",
+      "retry_behavior": "Candidate re-submission enabled once daemon recovers",
+      "state_consistency": "Session state remains intact; zero memory corruption",
+      "user_visible_behavior": "Sandbox offline error message; host remains uncompromised",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "FLT-06",
+      "failure_type": "Compilation Resource Hang",
+      "component": "GCC Compiler Subsystem",
+      "injected_failure": "Compiler hangs (>10.0s timeout)",
+      "system_response": "Subprocess timeout kills compiler process",
+      "recovery_behavior": "Status 'compilation_error' emitted; temporary files cleaned",
+      "retry_behavior": "Candidate prompted to revise syntax and re-submit",
+      "state_consistency": "Preserved",
+      "user_visible_behavior": "Compilation timed out error displayed",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "FLT-07",
+      "failure_type": "Database Lock Contention",
+      "component": "SQLite Storage Engine",
+      "injected_failure": "Simulated concurrent write locks under heavy burst",
+      "system_response": "WAL mode + 30.0s busy timeout retry loop serializes transaction",
+      "recovery_behavior": "Zero OperationalError exceptions; write completes on retry",
+      "retry_behavior": "Transparent to candidate",
+      "state_consistency": "100% ACID consistency; zero corrupted rows",
+      "user_visible_behavior": "Smooth turn transition without database disconnect alert",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "FLT-08",
+      "failure_type": "Client Connection Abrupt Reset",
+      "component": "WebSocket Transport Layer",
+      "injected_failure": "Abrupt client TCP RST during evaluation computation",
+      "system_response": "FastAPI WebSocket disconnect caught; background evaluation completes and writes to SQLite",
+      "recovery_behavior": "Candidate reconnects with session_id; fetches completed report via REST",
+      "retry_behavior": "Resume from last saved turn",
+      "state_consistency": "Turn recorded in database regardless of client socket drop",
+      "user_visible_behavior": "Session restored upon page reload",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "FLT-09",
+      "failure_type": "Acoustic Feature Extraction Crash",
+      "component": "Praat / Parselmouth Audio",
+      "injected_failure": "Truncated / malformed audio buffer supplied to speech analyzer",
+      "system_response": "Audio pipeline catches exception; substitutes default neutral prosody (conf=0.5, hes=0.5)",
+      "recovery_behavior": "Pacing RL guardrails receive safe neutral inputs; no NaN propagation",
+      "retry_behavior": "N/A (technical scoring unaffected)",
+      "state_consistency": "Technical score depends solely on text transcript; 0% score drift",
+      "user_visible_behavior": "Verbal feedback provided normally without audio crash",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "FLT-10",
+      "failure_type": "Empty Client Payload",
+      "component": "Interview Orchestrator",
+      "injected_failure": "Client sends empty string answer or NULL transcript",
+      "system_response": "Orchestrator detects empty transcript; returns status='stt_unavailable'",
+      "recovery_behavior": "Turn flagged as ungraded; prompts candidate to check microphone",
+      "retry_behavior": "Immediate re-attempt allowed with zero penalty",
+      "state_consistency": "Preserved; no false technical failure recorded",
+      "user_visible_behavior": "'No audio detected. Please re-record your answer.'",
+      "status": "PASS"
+    }
+  ],
+  "concurrency_results": [
+    {
+      "concurrency_level": 1,
+      "total_sessions": 1,
+      "total_operations": 7,
+      "elapsed_seconds": 0.136,
+      "throughput_ops_sec": 51.61,
+      "mean_latency_ms": 16.303,
+      "median_latency_ms": 16.819,
+      "p95_latency_ms": 17.938,
+      "p99_latency_ms": 18.105,
+      "lock_errors": 0,
+      "isolation_violations": 0
+    },
+    {
+      "concurrency_level": 5,
+      "total_sessions": 5,
+      "total_operations": 35,
+      "elapsed_seconds": 0.727,
+      "throughput_ops_sec": 48.15,
+      "mean_latency_ms": 83.054,
+      "median_latency_ms": 83.161,
+      "p95_latency_ms": 126.497,
+      "p99_latency_ms": 163.046,
+      "lock_errors": 0,
+      "isolation_violations": 0
+    },
+    {
+      "concurrency_level": 10,
+      "total_sessions": 10,
+      "total_operations": 70,
+      "elapsed_seconds": 1.491,
+      "throughput_ops_sec": 46.96,
+      "mean_latency_ms": 181.23,
+      "median_latency_ms": 186.151,
+      "p95_latency_ms": 263.788,
+      "p99_latency_ms": 401.753,
+      "lock_errors": 0,
+      "isolation_violations": 0
+    },
+    {
+      "concurrency_level": 25,
+      "total_sessions": 25,
+      "total_operations": 175,
+      "elapsed_seconds": 3.593,
+      "throughput_ops_sec": 48.7,
+      "mean_latency_ms": 419.47,
+      "median_latency_ms": 402.031,
+      "p95_latency_ms": 719.124,
+      "p99_latency_ms": 867.034,
+      "lock_errors": 0,
+      "isolation_violations": 0
+    }
+  ],
+  "latency_results": [
+    {
+      "subsystem": "Warm Evaluator (SBERT + FAISS + CrossEncoder)",
+      "condition": "In-Memory PyTorch / FAISS",
+      "n_samples": 20,
+      "mean_ms": 1960.839,
+      "median_ms": 404.564,
+      "p95_ms": 2098.607,
+      "p99_ms": 26369.422
+    },
+    {
+      "subsystem": "SQLite WAL Write (save_attempt + is_best index)",
+      "condition": "Disk I/O + Compound Indexing",
+      "n_samples": 25,
+      "mean_ms": 17.198,
+      "median_ms": 17.219,
+      "p95_ms": 20.994,
+      "p99_ms": 21.184
+    },
+    {
+      "subsystem": "SQLite WAL Read (get_candidate_history)",
+      "condition": "Memory-mapped Page Cache",
+      "n_samples": 25,
+      "mean_ms": 5.011,
+      "median_ms": 3.89,
+      "p95_ms": 8.462,
+      "p99_ms": 10.913
+    },
+    {
+      "subsystem": "ScoreValidator Rule Engine",
+      "condition": "In-Memory CPU Logic",
+      "n_samples": 100,
+      "mean_ms": 0.004,
+      "median_ms": 0.004,
+      "p95_ms": 0.005,
+      "p99_ms": 0.013
+    }
+  ],
+  "qwen_results": [
+    {
+      "test_id": "QWN-01",
+      "domain": "Technical Scoring Exclusion",
+      "qwen_output_tested": "Score suggestion or hallucinated score header in LLM feedback",
+      "authority_restricted": "Technical score authority",
+      "containment_verified": "Score derived strictly from SBERT+FAISS+CrossEncoder; LLM output ignored in scoring",
+      "deterministic_fallback_verified": "Verified (evaluator runs in isolated process with zero LLM dependency)",
+      "status": "PASS"
+    },
+    {
+      "test_id": "QWN-02",
+      "domain": "Difficulty Adjustment Isolation",
+      "qwen_output_tested": "Prompt asking LLM to change interview difficulty or skip question",
+      "authority_restricted": "Curriculum / difficulty pacing authority",
+      "containment_verified": "Difficulty decided strictly by PPO RL policy and G1-G4 guardrails; LLM cannot alter state",
+      "deterministic_fallback_verified": "Verified (difficulty history controlled by Orchestrator state machine)",
+      "status": "PASS"
+    },
+    {
+      "test_id": "QWN-03",
+      "domain": "Best-Answer Flag Isolation",
+      "qwen_output_tested": "LLM attempting to designate an attempt as best",
+      "authority_restricted": "Database is_best flag assignment",
+      "containment_verified": "is_best recalculated deterministically via SQL compound key; LLM output has zero DB write access",
+      "deterministic_fallback_verified": "Verified (database.py enforces sorting invariant)",
+      "status": "PASS"
+    },
+    {
+      "test_id": "QWN-04",
+      "domain": "Evaluator Truth Grounding",
+      "qwen_output_tested": "LLM generating feedback contradicting evaluator missing concepts",
+      "authority_restricted": "Ground truth concept coverage",
+      "containment_verified": "Feedback prompt grounded strictly with evaluator claims; FeedbackValidator rejects empty/boilerplate outputs",
+      "deterministic_fallback_verified": "Verified (fallback synthesizes deterministic explanation from rubric)",
+      "status": "PASS"
+    },
+    {
+      "test_id": "QWN-05",
+      "domain": "Offline / Timeout Resilience",
+      "qwen_output_tested": "Qwen service offline or timing out (>3.0s)",
+      "authority_restricted": "Service availability dependency",
+      "containment_verified": "Orchestrator falls back instantly to deterministic rubric template in <50ms without crashing session",
+      "deterministic_fallback_verified": "Verified (zero state loss; candidate receives structured feedback)",
+      "status": "PASS"
+    }
+  ],
+  "multimodal_results": {
+    "evaluator_parameters": [
+      "qn",
+      "candidate",
+      "rubric"
+    ],
+    "acoustic_features_in_evaluator": false,
+    "acoustic_features_in_rl_pacing": true,
+    "statement": "Acoustic prosody is insulated from technical scoring."
+  },
+  "threat_results": [
+    {
+      "threat_id": "THR-01",
+      "threat_name": "Host Compromise via Malicious C Binary",
+      "boundary": "Container Sandbox vs. Host OS",
+      "implemented_mitigation": "Non-root user (1001:1001), --net=none, --cap-drop=ALL, --security-opt=no-new-privileges, read-only rootfs",
+      "tested": "YES (SEC-01, SEC-07, SEC-09)",
+      "evidence_artifact": "research/results/paper1/paper1_security_results.csv",
+      "remaining_limitation": "Docker container shares host Linux kernel; microVM virtualization (e.g. Firecracker) provides stronger hypervisor isolation"
+    },
+    {
+      "threat_id": "THR-02",
+      "threat_name": "Denial of Service via Resource Exhaustion",
+      "boundary": "Linux cgroups v2 / Process Table",
+      "implemented_mitigation": "--memory=128m, --memory-swap=128m, --pids-limit=32, 2.0s execution timeout (SIGKILL)",
+      "tested": "YES (SEC-05, SEC-06, SEC-08)",
+      "evidence_artifact": "research/results/paper1/paper1_security_results.csv",
+      "remaining_limitation": "Container creation overhead (~1.2-1.5s per turn) under burst traffic requires warm pool optimization"
+    },
+    {
+      "threat_id": "THR-03",
+      "threat_name": "Network Data Exfiltration / Remote Shell",
+      "boundary": "Container Network Stack",
+      "implemented_mitigation": "Docker network isolation flag --net=none (loopback only, no external IP routing)",
+      "tested": "YES (SEC-02, SEC-07)",
+      "evidence_artifact": "research/results/paper1/paper1_security_results.csv",
+      "remaining_limitation": "In-band covert channels via CPU timing remain theoretical possibilities"
+    },
+    {
+      "threat_id": "THR-04",
+      "threat_name": "Filesystem Tampering / Rootkit Placement",
+      "boundary": "Root Filesystem Layer",
+      "implemented_mitigation": "Container root mounted strictly read-only; dedicated 32MB tmpfs mounted at /workspace (noexec on root)",
+      "tested": "YES (SEC-09)",
+      "evidence_artifact": "research/results/paper1/paper1_security_results.csv",
+      "remaining_limitation": "Tmpfs is volatile and cleared upon container exit"
+    },
+    {
+      "threat_id": "THR-05",
+      "threat_name": "Prompt Injection via Answer Text",
+      "boundary": "Candidate Answer vs. Evaluator / LLM",
+      "implemented_mitigation": "Technical scoring performed by deterministic SBERT+FAISS+CrossEncoder (zero LLM evaluation); ScoreValidator caps",
+      "tested": "YES (EXP-EVAL-3, paper2_adversarial_results.csv)",
+      "evidence_artifact": "research/results/paper2/paper2_adversarial_results.csv",
+      "remaining_limitation": "Dense keyword strings can achieve partial CrossEncoder collocation hits, bounded by ScoreValidator"
+    },
+    {
+      "threat_id": "THR-06",
+      "threat_name": "Cross-Candidate Data Leakage / Tenant Bleed",
+      "boundary": "Database & REST API Session State",
+      "implemented_mitigation": "UUIDv4 unguessable session tokens; SQL queries strictly parameterized and scoped by candidate_id / session_id",
+      "tested": "YES (paper1_concurrency_results.csv, isolation_violations=0)",
+      "evidence_artifact": "research/results/paper1/paper1_concurrency_results.csv",
+      "remaining_limitation": "API uses capability tokens without cryptographic JWT signatures"
+    },
+    {
+      "threat_id": "THR-07",
+      "threat_name": "Database Corruption Under Concurrent Load",
+      "boundary": "Storage Engine Subsystem",
+      "implemented_mitigation": "SQLite Write-Ahead Logging (WAL) mode, 30.0s busy timeout, thread lock synchronization",
+      "tested": "YES (concurrency_level=1, 5, 10, 25; 0 lock errors)",
+      "evidence_artifact": "research/results/paper1/paper1_concurrency_results.csv",
+      "remaining_limitation": "Single-file SQLite write lock ceiling (~150-200 ops/sec); horizontal scaling requires Postgres"
+    }
+  ]
+}

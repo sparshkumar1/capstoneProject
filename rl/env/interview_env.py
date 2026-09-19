@@ -7,7 +7,7 @@ State (6D):
   [1] avg_performance  - rolling mean of last 5 scores
   [2] confidence       - from SimulatedCandidate
   [3] hesitation       - from SimulatedCandidate
-  [4] time_norm        - normalised response time
+  [4] progress         - normalized turn progress ratio (t / T in 0..1)
   [5] difficulty       - current difficulty 0.0..1.0
 
 Actions (3):
@@ -34,6 +34,14 @@ try:
     from simulated_candidate import SimulatedCandidate
 except ImportError:  # fallback when imported from the repo root
     from rl.training.simulated_candidate import SimulatedCandidate
+
+try:
+    from rl.guardrails import apply_canonical_guardrails
+except ImportError:
+    try:
+        from guardrails import apply_canonical_guardrails
+    except ImportError:
+        apply_canonical_guardrails = None
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -222,12 +230,23 @@ class InterviewEnv(gym.Env):
         if not self.guardrails_enabled:
             return int(proposed_action), False, "none"
 
-        perf, avg_perf, conf, hes, time_norm, difficulty = [float(x) for x in pre_obs]
+        perf, avg_perf, conf, hes, progress, difficulty = [float(x) for x in pre_obs]
+        if apply_canonical_guardrails is not None:
+            return apply_canonical_guardrails(
+                perf=perf,
+                avg_perf=avg_perf,
+                conf=conf,
+                hes=hes,
+                progress=progress,
+                difficulty=difficulty,
+                proposed_action=proposed_action,
+                medium_difficulty_min=self.medium_difficulty_min,
+                medium_difficulty_max=self.medium_difficulty_max,
+            )
+
         action = int(proposed_action)
 
         # G4: Stuck candidate — HIGHEST PRIORITY (before G1)
-        # perf<0.30 AND hes>0.60: needs Easier, not a harder follow-up.
-        # Must come before G1 which would fire first on the same low-perf state.
         if perf < 0.30 and hes > 0.60:
             return 0, True, "g4_stuck_easier"
 
@@ -237,24 +256,14 @@ class InterviewEnv(gym.Env):
             return 0, True, "g1_overload_protection"
 
         # G2: anxiety stabiliser — low confidence + high hesitation + NOT high performer
-        # High performers (perf >= 0.80) with anxiety still need Harder, not stabilisation.
-        # Lucky Guesser persona has high perf but low conf — should get Harder.
         if conf < 0.30 and hes > 0.70 and perf < 0.80:
             return 1, True, "g2_anxiety_stabilizer_same"
 
         # G5: Partial understanding — stay at Same
-        # The partial-understanding zone (0.40<perf<0.65, avg<0.60) sits adjacent to Easier,
-        # causing PPO to produce unstable boundaries across seeds.
-        # Guardrail keeps the policy stable while remaining in the 3-action space.
-        if (0.40 < perf < 0.65
-                and avg_perf < 0.60
-                ):
+        if (0.40 < perf < 0.65 and avg_perf < 0.60):
             return 1, True, "g5_partial_same"
 
         # G6: Strong candidate with big gap -> always Harder
-        # Handles Rock Star and Lucky Guesser personas.
-        # Excludes nervous expert state (0.80<perf<0.95 AND hes>0.65)
-        # because nervous experts need stabilisation, not more difficulty.
         gap = perf - difficulty
         nervous_expert_state = 0.80 < perf < 0.95 and hes > 0.65
         if perf >= 0.90 and gap > 0.25 and not nervous_expert_state:
@@ -395,8 +404,10 @@ class InterviewEnv(gym.Env):
             self.difficulty = min(1.0, self.difficulty + 0.1)
         # Same does not change difficulty
 
+        progress = float(np.clip(self.current_step / float(self.max_steps), 0.0, 1.0))
+
         obs = np.array(
-            [perf, avg_perf, conf, hes, t_norm, self.difficulty],
+            [perf, avg_perf, conf, hes, progress, self.difficulty],
             dtype=np.float32,
         )
         self.prev_action = action
@@ -409,7 +420,7 @@ class InterviewEnv(gym.Env):
                     self.current_step,
                     getattr(self.sim_candidate, "skill", None),
                     getattr(self.sim_candidate, "persona", "normal"),
-                    current_difficulty, perf, avg_perf, conf, hes, t_norm,
+                    current_difficulty, perf, avg_perf, conf, hes, progress,
                     pre_action, action, oracle_action,
                     int(action == oracle_action),
                     int(forced_action), guardrail_id,
@@ -429,6 +440,8 @@ class InterviewEnv(gym.Env):
             "difficulty":           self.difficulty,
             "avg_perf":             avg_perf,
             "persona":              getattr(self.sim_candidate, "persona", "normal"),
+            "progress":             float(progress),
+            "time_norm":            float(t_norm),
             "pre_action":           int(pre_action),
             "final_action":         int(action),
             "final_action_name":    self.ACTION_NAMES.get(action, str(action)),

@@ -2,11 +2,18 @@
   "seed": 999,
   "dim4_mode": "aligned_progress",
   "timesteps": 24576,
-  "elapsed_sec": 50.3,
+  "elapsed_sec": 48.53,
   "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\experiments\\paper3\\checkpoints\\seed_999\\ppo_final.zip",
   "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\experiments\\paper3\\checkpoints\\seed_999\\vecnormalize.pkl",
+  "curves_csv": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\experiments\\paper3\\checkpoints\\seed_999\\training_curves.csv",
+  "curves_json": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\experiments\\paper3\\checkpoints\\seed_999\\training_curves.json",
   "policy": "MlpPolicy [64, 64]",
   "lr": 0.0003,
   "gamma": 0.99,
-  "clip_range": 0.2
+  "gae_lambda": 0.95,
+  "clip_range": 0.2,
+  "state_definition_version": "v2_progress_ratio_t_over_T",
+  "guardrail_version": "canonical_G1_G6",
+  "baseline_version": "persona_adjusted_targets_v2",
+  "git_commit": "375f4f869c47907d7c222d27df3b4f9e09dc8941"
 }

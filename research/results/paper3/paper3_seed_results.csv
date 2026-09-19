@@ -1,0 +1,6 @@
+training_seed,mean_final_difficulty,target_tracking_error,volatility,oscillation_rate,guardrail_interventions,constraint_violations
+42,2.24,0.687,0.268,0.261,122,26
+123,2.2,0.673,0.088,0.027,101,71
+456,2.2,0.676,0.208,0.197,115,41
+789,2.2,0.673,0.24,0.178,120,33
+999,2.2,0.676,0.128,0.139,105,61
