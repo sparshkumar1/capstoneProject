@@ -1,6 +1,6 @@
 # Claude Research Index & Navigation Map
 
-**Audited Commit:** `9cfd34f`  
+**Audited Commit:** `9cfd34f`
 **Purpose:** Direct Claude, AI assistants, and human researchers to canonical, verified information and prevent the hallucination or replication of superseded historical claims.
 
 ---
@@ -37,7 +37,7 @@ When working on research, writing papers, verifying claims, or checking experime
 | If You Need Information On... | DO NOT Look In... | ALWAYS Use This Canonical Path |
 |:---|:---|:---|
 | **Evaluator Formula / Weights** | Old drafts in `docs/` | `services/evaluator/app.py:350-405` & `research/CANONICAL_SCIENTIFIC_TRUTH.md` |
-| **Human Correlation ($\rho, r$)** | `ratings_proxy.csv` (0.9152) | `research/results/rater_analysis.json` & `table_eval_ablation.md` ($\rho = 0.7400$) |
+| **Human Correlation ($\rho, r$)** | `ratings_proxy.csv` (0.9152), stale CSV (0.7400) | `research/results/paper2_final_results.md` & `research/CANONICAL_SCIENTIFIC_TRUTH.md` ($\rho = 0.6975$) |
 | **RL State & Steps** | Early drafts (204,800 steps) | `rl/training/retrain_quick.py` (300,000 steps) & `research/audit/rl_state_alignment.md` |
 | **Sandbox Security & Docker** | Unsubstantiated claims in `docs/` | `research/tables/table_sys_security_boundary.md` & `research/audit/threat_model.md` |
 | **Engineering Test Status** | Outdated stage reports | `research/results/engineering_tests.json` & `research/audit/current_test_manifest.md` |
@@ -48,7 +48,7 @@ When working on research, writing papers, verifying claims, or checking experime
 ---
 
 ## 3. Strict Rules for AI Reasoning
-1. **Never Cite $\rho = 0.9152$ or $\rho = 0.8358$ as Authentic Human Agreement:** These were synthetic proxies. The sole authentic single-educator benchmark is $\rho = 0.7400$ ($p < 0.001$, $N=20$).
+1. **Never Cite $\rho = 0.9152$ or $\rho = 0.8358$ as Authentic Human Agreement:** These were synthetic proxies. Also do not cite $\rho = 0.7400$ (superseded static CSV artifact). The sole authentic live single-educator benchmark is **$\rho = 0.6975$** ($p = 0.00063$, $r = 0.7290$, $\text{MAE} = 0.2245$, $N=20$).
 2. **Never Cite 204,800 PPO Steps:** The canonical training duration is 300,000 steps.
 3. **Never Claim Free-Form LLM Scoring:** The LLM is strictly isolated from technical grading; scoring is deterministic SBERT + FAISS + CrossEncoder.
-4. **Treat `research/archive/` and `submission/` as Historical Only:** Do not extract current evidence from archived folders.
+4. **Treat `research/archive/` and `submission/` as Historical Only:** Do not extract current evidence from archived folders.

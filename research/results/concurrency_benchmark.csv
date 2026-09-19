@@ -1,0 +1,5 @@
+concurrency_level,journal_mode,total_sessions,questions_per_session,total_operations,elapsed_seconds,throughput_ops_sec,mean_latency_ms,median_latency_ms,p95_latency_ms,p99_latency_ms,max_latency_ms,lock_errors,isolation_violations
+1,WAL,1,5,7,0.066,105.46,8.627,8.621,9.533,9.679,9.716,0,0
+5,WAL,5,5,35,0.37,94.65,43.351,43.926,83.313,89.896,90.552,0,0
+10,WAL,10,5,70,0.818,85.54,88.012,89.561,199.679,272.146,284.406,0,0
+25,WAL,25,5,175,2.154,81.24,224.299,215.882,547.307,851.271,1100.515,0,0

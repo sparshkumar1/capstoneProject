@@ -1,0 +1,629 @@
+{
+  "audit_metadata": {
+    "timestamp": "2026-09-19T12:55:00+05:30",
+    "benchmark_file_csv": "research/data/evaluator_benchmark/benchmark_dataset.csv",
+    "benchmark_file_json": "research/data/evaluator_benchmark/benchmark_cases.json",
+    "audited_commit": "1b11c1ab48d774a5d2db34df50834b07e0fd0810",
+    "status": "VERIFIED_CLEAN"
+  },
+  "audit_summary": {
+    "total_cases": 64,
+    "unique_case_ids": 64,
+    "duplicate_cases": 0,
+    "unique_questions": 8,
+    "cases_per_question": 8,
+    "unique_candidate_answers": 64,
+    "duplicate_candidate_answers": 0,
+    "unique_reference_answers": 8,
+    "missing_fields": 0,
+    "empty_fields": 0,
+    "overlap_with_20_case_pilot": 0,
+    "metadata_leakage_count": 0
+  },
+  "domain_distribution": {
+    "Arrays & Hashing": 8,
+    "Binary Search": 8,
+    "C Pointers & Memory": 8,
+    "Dynamic Programming": 8,
+    "Graphs & DFS": 8,
+    "Linked Lists": 8,
+    "OS & Concurrency": 8,
+    "Trees & BFS": 8
+  },
+  "typology_distribution": {
+    "concise_correct": 8,
+    "contradictory": 4,
+    "incorrect": 6,
+    "keyword_stuffed": 8,
+    "misconception": 8,
+    "paraphrase": 4,
+    "partial_incomplete": 8,
+    "suboptimal_correct": 2,
+    "verbose_correct": 8,
+    "verbose_wrong": 8
+  },
+  "typology_sum_discrepancy_explanation": {
+    "reported_in_earlier_summary_text": 68,
+    "actual_benchmark_case_count": 64,
+    "cause": "Historical narrative drafting discrepancy. An earlier report text listed an aspirational 11-typology template (8, 8, 8, 6, 6, 6, 6, 6, 6, 4, 4 = 68). The authoritative machine-readable benchmark files (JSON and CSV) have always contained strictly 64 unique, balanced cases (8 domains x 8 variants) with zero duplication.",
+    "reconciliation": "No benchmark cases were missing, corrupted, or duplicated. The prose metadata has been audited and reconciled."
+  },
+  "cases_manifest": [
+    {
+      "case_id": "BM-001",
+      "qid": 1,
+      "topic": "Arrays & Hashing",
+      "expected_category": "concise_correct",
+      "question_char_len": 85,
+      "answer_char_len": 204,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-002",
+      "qid": 1,
+      "topic": "Arrays & Hashing",
+      "expected_category": "verbose_correct",
+      "question_char_len": 85,
+      "answer_char_len": 705,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-003",
+      "qid": 1,
+      "topic": "Arrays & Hashing",
+      "expected_category": "suboptimal_correct",
+      "question_char_len": 85,
+      "answer_char_len": 196,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-004",
+      "qid": 1,
+      "topic": "Arrays & Hashing",
+      "expected_category": "partial_incomplete",
+      "question_char_len": 85,
+      "answer_char_len": 84,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-005",
+      "qid": 1,
+      "topic": "Arrays & Hashing",
+      "expected_category": "verbose_wrong",
+      "question_char_len": 85,
+      "answer_char_len": 308,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-006",
+      "qid": 1,
+      "topic": "Arrays & Hashing",
+      "expected_category": "keyword_stuffed",
+      "question_char_len": 85,
+      "answer_char_len": 128,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-007",
+      "qid": 1,
+      "topic": "Arrays & Hashing",
+      "expected_category": "misconception",
+      "question_char_len": 85,
+      "answer_char_len": 133,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-008",
+      "qid": 1,
+      "topic": "Arrays & Hashing",
+      "expected_category": "contradictory",
+      "question_char_len": 85,
+      "answer_char_len": 160,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-009",
+      "qid": 3,
+      "topic": "Linked Lists",
+      "expected_category": "concise_correct",
+      "question_char_len": 63,
+      "answer_char_len": 209,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-010",
+      "qid": 3,
+      "topic": "Linked Lists",
+      "expected_category": "verbose_correct",
+      "question_char_len": 63,
+      "answer_char_len": 725,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-011",
+      "qid": 3,
+      "topic": "Linked Lists",
+      "expected_category": "partial_incomplete",
+      "question_char_len": 63,
+      "answer_char_len": 108,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-012",
+      "qid": 3,
+      "topic": "Linked Lists",
+      "expected_category": "incorrect",
+      "question_char_len": 63,
+      "answer_char_len": 116,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-013",
+      "qid": 3,
+      "topic": "Linked Lists",
+      "expected_category": "verbose_wrong",
+      "question_char_len": 63,
+      "answer_char_len": 295,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-014",
+      "qid": 3,
+      "topic": "Linked Lists",
+      "expected_category": "keyword_stuffed",
+      "question_char_len": 63,
+      "answer_char_len": 136,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-015",
+      "qid": 3,
+      "topic": "Linked Lists",
+      "expected_category": "misconception",
+      "question_char_len": 63,
+      "answer_char_len": 110,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-016",
+      "qid": 3,
+      "topic": "Linked Lists",
+      "expected_category": "paraphrase",
+      "question_char_len": 63,
+      "answer_char_len": 233,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-017",
+      "qid": 10,
+      "topic": "Trees & BFS",
+      "expected_category": "concise_correct",
+      "question_char_len": 64,
+      "answer_char_len": 219,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-018",
+      "qid": 10,
+      "topic": "Trees & BFS",
+      "expected_category": "verbose_correct",
+      "question_char_len": 64,
+      "answer_char_len": 703,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-019",
+      "qid": 10,
+      "topic": "Trees & BFS",
+      "expected_category": "partial_incomplete",
+      "question_char_len": 64,
+      "answer_char_len": 92,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-020",
+      "qid": 10,
+      "topic": "Trees & BFS",
+      "expected_category": "incorrect",
+      "question_char_len": 64,
+      "answer_char_len": 103,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-021",
+      "qid": 10,
+      "topic": "Trees & BFS",
+      "expected_category": "verbose_wrong",
+      "question_char_len": 64,
+      "answer_char_len": 249,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-022",
+      "qid": 10,
+      "topic": "Trees & BFS",
+      "expected_category": "keyword_stuffed",
+      "question_char_len": 64,
+      "answer_char_len": 125,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-023",
+      "qid": 10,
+      "topic": "Trees & BFS",
+      "expected_category": "misconception",
+      "question_char_len": 64,
+      "answer_char_len": 115,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-024",
+      "qid": 10,
+      "topic": "Trees & BFS",
+      "expected_category": "contradictory",
+      "question_char_len": 64,
+      "answer_char_len": 143,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-025",
+      "qid": 41,
+      "topic": "C Pointers & Memory",
+      "expected_category": "concise_correct",
+      "question_char_len": 50,
+      "answer_char_len": 155,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-026",
+      "qid": 41,
+      "topic": "C Pointers & Memory",
+      "expected_category": "verbose_correct",
+      "question_char_len": 50,
+      "answer_char_len": 675,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-027",
+      "qid": 41,
+      "topic": "C Pointers & Memory",
+      "expected_category": "partial_incomplete",
+      "question_char_len": 50,
+      "answer_char_len": 71,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-028",
+      "qid": 41,
+      "topic": "C Pointers & Memory",
+      "expected_category": "incorrect",
+      "question_char_len": 50,
+      "answer_char_len": 93,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-029",
+      "qid": 41,
+      "topic": "C Pointers & Memory",
+      "expected_category": "verbose_wrong",
+      "question_char_len": 50,
+      "answer_char_len": 198,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-030",
+      "qid": 41,
+      "topic": "C Pointers & Memory",
+      "expected_category": "keyword_stuffed",
+      "question_char_len": 50,
+      "answer_char_len": 120,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-031",
+      "qid": 41,
+      "topic": "C Pointers & Memory",
+      "expected_category": "misconception",
+      "question_char_len": 50,
+      "answer_char_len": 123,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-032",
+      "qid": 41,
+      "topic": "C Pointers & Memory",
+      "expected_category": "paraphrase",
+      "question_char_len": 50,
+      "answer_char_len": 146,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-033",
+      "qid": 7,
+      "topic": "Dynamic Programming",
+      "expected_category": "concise_correct",
+      "question_char_len": 96,
+      "answer_char_len": 218,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-034",
+      "qid": 7,
+      "topic": "Dynamic Programming",
+      "expected_category": "verbose_correct",
+      "question_char_len": 96,
+      "answer_char_len": 704,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-035",
+      "qid": 7,
+      "topic": "Dynamic Programming",
+      "expected_category": "suboptimal_correct",
+      "question_char_len": 96,
+      "answer_char_len": 158,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-036",
+      "qid": 7,
+      "topic": "Dynamic Programming",
+      "expected_category": "partial_incomplete",
+      "question_char_len": 96,
+      "answer_char_len": 110,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-037",
+      "qid": 7,
+      "topic": "Dynamic Programming",
+      "expected_category": "verbose_wrong",
+      "question_char_len": 96,
+      "answer_char_len": 229,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-038",
+      "qid": 7,
+      "topic": "Dynamic Programming",
+      "expected_category": "keyword_stuffed",
+      "question_char_len": 96,
+      "answer_char_len": 133,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-039",
+      "qid": 7,
+      "topic": "Dynamic Programming",
+      "expected_category": "misconception",
+      "question_char_len": 96,
+      "answer_char_len": 113,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-040",
+      "qid": 7,
+      "topic": "Dynamic Programming",
+      "expected_category": "contradictory",
+      "question_char_len": 96,
+      "answer_char_len": 128,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-041",
+      "qid": 15,
+      "topic": "Graphs & DFS",
+      "expected_category": "concise_correct",
+      "question_char_len": 73,
+      "answer_char_len": 250,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-042",
+      "qid": 15,
+      "topic": "Graphs & DFS",
+      "expected_category": "verbose_correct",
+      "question_char_len": 73,
+      "answer_char_len": 764,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-043",
+      "qid": 15,
+      "topic": "Graphs & DFS",
+      "expected_category": "partial_incomplete",
+      "question_char_len": 73,
+      "answer_char_len": 112,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-044",
+      "qid": 15,
+      "topic": "Graphs & DFS",
+      "expected_category": "incorrect",
+      "question_char_len": 73,
+      "answer_char_len": 135,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-045",
+      "qid": 15,
+      "topic": "Graphs & DFS",
+      "expected_category": "verbose_wrong",
+      "question_char_len": 73,
+      "answer_char_len": 224,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-046",
+      "qid": 15,
+      "topic": "Graphs & DFS",
+      "expected_category": "keyword_stuffed",
+      "question_char_len": 73,
+      "answer_char_len": 120,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-047",
+      "qid": 15,
+      "topic": "Graphs & DFS",
+      "expected_category": "misconception",
+      "question_char_len": 73,
+      "answer_char_len": 122,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-048",
+      "qid": 15,
+      "topic": "Graphs & DFS",
+      "expected_category": "paraphrase",
+      "question_char_len": 73,
+      "answer_char_len": 184,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-049",
+      "qid": 22,
+      "topic": "Binary Search",
+      "expected_category": "concise_correct",
+      "question_char_len": 58,
+      "answer_char_len": 231,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-050",
+      "qid": 22,
+      "topic": "Binary Search",
+      "expected_category": "verbose_correct",
+      "question_char_len": 58,
+      "answer_char_len": 707,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-051",
+      "qid": 22,
+      "topic": "Binary Search",
+      "expected_category": "partial_incomplete",
+      "question_char_len": 58,
+      "answer_char_len": 89,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-052",
+      "qid": 22,
+      "topic": "Binary Search",
+      "expected_category": "incorrect",
+      "question_char_len": 58,
+      "answer_char_len": 106,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-053",
+      "qid": 22,
+      "topic": "Binary Search",
+      "expected_category": "verbose_wrong",
+      "question_char_len": 58,
+      "answer_char_len": 227,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-054",
+      "qid": 22,
+      "topic": "Binary Search",
+      "expected_category": "keyword_stuffed",
+      "question_char_len": 58,
+      "answer_char_len": 133,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-055",
+      "qid": 22,
+      "topic": "Binary Search",
+      "expected_category": "misconception",
+      "question_char_len": 58,
+      "answer_char_len": 118,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-056",
+      "qid": 22,
+      "topic": "Binary Search",
+      "expected_category": "contradictory",
+      "question_char_len": 58,
+      "answer_char_len": 124,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-057",
+      "qid": 50,
+      "topic": "OS & Concurrency",
+      "expected_category": "concise_correct",
+      "question_char_len": 69,
+      "answer_char_len": 238,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-058",
+      "qid": 50,
+      "topic": "OS & Concurrency",
+      "expected_category": "verbose_correct",
+      "question_char_len": 69,
+      "answer_char_len": 687,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-059",
+      "qid": 50,
+      "topic": "OS & Concurrency",
+      "expected_category": "partial_incomplete",
+      "question_char_len": 69,
+      "answer_char_len": 107,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-060",
+      "qid": 50,
+      "topic": "OS & Concurrency",
+      "expected_category": "incorrect",
+      "question_char_len": 69,
+      "answer_char_len": 109,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-061",
+      "qid": 50,
+      "topic": "OS & Concurrency",
+      "expected_category": "verbose_wrong",
+      "question_char_len": 69,
+      "answer_char_len": 240,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-062",
+      "qid": 50,
+      "topic": "OS & Concurrency",
+      "expected_category": "keyword_stuffed",
+      "question_char_len": 69,
+      "answer_char_len": 141,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-063",
+      "qid": 50,
+      "topic": "OS & Concurrency",
+      "expected_category": "misconception",
+      "question_char_len": 69,
+      "answer_char_len": 119,
+      "concepts_count": 4
+    },
+    {
+      "case_id": "BM-064",
+      "qid": 50,
+      "topic": "OS & Concurrency",
+      "expected_category": "paraphrase",
+      "question_char_len": 69,
+      "answer_char_len": 212,
+      "concepts_count": 4
+    }
+  ]
+}

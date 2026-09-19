@@ -39,13 +39,14 @@
 ---
 
 ## D. Current Verified Human Evaluation Result
-- **Verified Human Metric:** **Spearman $\rho = 0.7400$ ($p = 1.91 \times 10^{-4}$)**, **Pearson $r = 0.6690$ ($p = 0.0013$)**, **MAE = $0.2092$**, **RMSE = $0.2728$**.
+- **Verified Human Metric:** **Spearman $\rho = 0.6975$ ($p = 6.29 \times 10^{-4}$)**, **Pearson $r = 0.7290$ ($p = 3.03 \times 10^{-4}$)**, **MAE = $0.2245$**, **RMSE = $0.3039$**.
 - **Sample Size:** $N = 20$ technical answer explanations across 4 standard DSA topics.
 - **Rater Ground Truth:** 1 authentic blinded Computer Science educator / faculty evaluator (`ablation/results/ratings_rater1.csv`).
-- **95% Bootstrap Confidence Intervals ($B=1000$):**
-  - $\rho \in [0.4581, 0.9097]$
-  - $r \in [0.4270, 0.8690]$
-- **Clarification on Historical Numbers:**
+- **95% Bootstrap Confidence Intervals ($B=2000$):**
+  - $\rho \in [0.4401, 0.8371]$
+  - $r \in [0.5018, 0.8654]$
+- **Clarification on Superseded / Historical Numbers:**
+  - $\rho = 0.7400$ is an **EXPLICITLY SUPERSEDED STATIC CSV ARTIFACT** (produced by reading an older uncalibrated `system_score` column and applying `.fillna(0.0)`, forensic provenance detailed in `research/audit/rho_provenance.md`).
   - $\rho = 0.9152$ is **SYNTHETIC PROXY DATA** (`ratings_proxy.csv`).
   - $\rho = 0.8358$ is an **AVERAGED COMPOSITE** of 1 human + 3 synthetic proxy raters.
 
@@ -136,7 +137,7 @@
 
 ## N. Current Three-Paper Split & O scope
 1. **Paper 1 (Systems & Security):** Architecture, Docker sandboxing, negative security testing, failure recovery, subsystem latencies, persistent multi-attempt state.
-2. **Paper 2 (Technical Evaluator):** Multi-signal scoring ($0.15 S_1 + 0.35 S_{2,\text{eff}} + 0.50 R$), FAISS concept index, reasoning dampening, human pilot correlation ($\rho = 0.7400$), threshold sensitivity, metamorphic testing.
+2. **Paper 2 (Technical Evaluator):** Multi-signal scoring ($0.15 S_1 + 0.35 S_{2,\text{eff}} + 0.50 R$), FAISS concept index, reasoning dampening, human pilot correlation ($\rho = 0.6975$), threshold sensitivity, metamorphic testing.
 3. **Paper 3 (Adaptive RL):** 6D state formulation, PPO pacing policy, 21% volatility reduction vs heuristic baselines, speech perturbation robustness, dimension 4 domain transfer.
 
 ---

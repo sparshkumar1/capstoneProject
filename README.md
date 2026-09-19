@@ -44,13 +44,13 @@ Candidate (Audio/Code/Text)
 1. **Adaptive Difficulty Adaptation (EXP-1, $n=150$):** `[RESEARCH RESULT]`
    PPO with safety guardrails achieves statistically significant positive difficulty adaptation ($\rho = +0.1572 \pm 0.08$) relative to static fixed ($\rho = 0.0, p = 6.15 \times 10^{-4}$) and heuristic rule-based controllers ($\rho = -0.2572, p = 5.30 \times 10^{-8}$) in simulation.
 2. **Neural Answer Evaluation (EXP-2, $n=140$):** `[RESEARCH RESULT / HUMAN VALIDATED]`
-   The multi-component scoring pipeline ($S_1+S_2+R$) achieves strong rank correlation ($\rho = \mathbf{0.8358}, p = \mathbf{4.46 \times 10^{-6}}, \text{MAE} = 0.2585$) with blinded human expert ratings on a 20-sample benchmark (human inter-rater reliability Krippendorff's $\alpha = \mathbf{0.8255}$).
+   The multi-component scoring pipeline ($S_1+S_2+R$) achieves rank correlation ($\rho = \mathbf{0.6975}, p = \mathbf{6.29 \times 10^{-4}}$, Pearson $r = \mathbf{0.7290}, p = 3.03 \times 10^{-4}, \text{MAE} = 0.2245$) with blinded human expert educator ratings on a 20-sample pilot benchmark. (A multi-expert 3-rater protocol on an expanded 64-case suite is designed and pending human evaluation).
 3. **Formative Feedback Trade-Offs (EXP-3, $n=60$):** `[RESEARCH RESULT]`
    Generative `Qwen2.5-7B-Instruct` (Tesla T4 GPU) exhibits higher transcript lexical grounding ($0.2496$ vs. $0.0383, p = 2.56 \times 10^{-3}$), while deterministic structured recovery guarantees strictly superior rubric gap coverage ($100.0\%$ vs. $72.5\%, p = 9.11 \times 10^{-4}$) at sub-50ms latency.
 4. **Personalization & Deduplication (EXP-4, $n=60$):** `[RESEARCH RESULT]`
    3-level deduplication completely eliminates question repetition ($0.0\%$ vs. $6.0\%, p < 0.001$), producing distinct trajectory divergence ($d = 14.21$) between candidate ability profiles in simulation.
 5. **System Behavioral Decoupling (EXP-5, $n=70$):** `[RESEARCH RESULT]`
-   100% clean subsystem isolation confirmed across 7 leave-one-out conditions without cascading crashes.
+   Empirically verified subsystem isolation across 7 leave-one-out conditions without cascading crashes.
 
 *Scientific Boundary: Candidate longitudinal learning gains and whole-system hiring efficacy represent documented future longitudinal trials. External third-party reproduction is pending (independent reproduction protocol provided in docs/FRIEND_REPRODUCTION_CHECKLIST.md).*
 

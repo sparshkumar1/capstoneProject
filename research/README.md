@@ -25,9 +25,9 @@
 
 | Metric / Dimension | Verified Value | Empirical Nature & Sample | Authoritative Evidence File |
 |:---|:---:|:---|:---|
-| **Evaluator Human Correlation** | **$\rho = 0.7400$** ($p = 1.91 \times 10^{-4}$) | 1 Real CS Educator ($N=20$) | [`research/results/rater_analysis.json`](file:///c:/Users/spars/Downloads/PrepAIred/research/results/rater_analysis.json) |
-| **Evaluator Pearson Correlation** | **$r = 0.6690$** ($p = 1.26 \times 10^{-3}$) | 1 Real CS Educator ($N=20$) | [`research/results/rater_analysis.json`](file:///c:/Users/spars/Downloads/PrepAIred/research/results/rater_analysis.json) |
-| **Evaluator Mean Absolute Error** | **$\text{MAE} = 0.2092$** | 1 Real CS Educator ($N=20$) | [`research/tables/table_eval_ablation.md`](file:///c:/Users/spars/Downloads/PrepAIred/research/tables/table_eval_ablation.md) |
+| **Evaluator Human Correlation** | **$\rho = 0.6975$** ($p = 6.29 \times 10^{-4}$) | 1 Real CS Educator ($N=20$) | [`research/results/paper2_final_results.md`](file:///c:/Users/spars/Downloads/PrepAIred/research/results/paper2_final_results.md) |
+| **Evaluator Pearson Correlation** | **$r = 0.7290$** ($p = 3.03 \times 10^{-4}$) | 1 Real CS Educator ($N=20$) | [`research/results/paper2_final_results.md`](file:///c:/Users/spars/Downloads/PrepAIred/research/results/paper2_final_results.md) |
+| **Evaluator Mean Absolute Error** | **$\text{MAE} = 0.2245$** | 1 Real CS Educator ($N=20$) | [`research/tables/table_eval_threshold.md`](file:///c:/Users/spars/Downloads/PrepAIred/research/tables/table_eval_threshold.md) |
 | **PPO Volatility vs Heuristic** | **$0.451$ vs $0.573$ (-21.3%)** | 100 sessions, 20 seeds ($p=0.0028$) | [`research/tables/table_rl_policy_comparison.md`](file:///c:/Users/spars/Downloads/PrepAIred/research/tables/table_rl_policy_comparison.md) |
 | **Dimension 4 Action Agreement** | **80.50%** | Progress vs Response Time | [`research/tables/table_rl_dim4_analysis.md`](file:///c:/Users/spars/Downloads/PrepAIred/research/tables/table_rl_dim4_analysis.md) |
 | **PPO Training Duration** | **300,000 steps** | SB3 MlpPolicy checkpoint | [`rl/training/retrain_quick.py`](file:///c:/Users/spars/Downloads/PrepAIred/rl/training/retrain_quick.py) |
@@ -39,7 +39,7 @@
 ---
 
 ## 4. Known Scientific Limitations
-1. **Pilot Human Ground Truth ($N=20$):** Single-educator ground truth provides initial validation ($\rho=0.7400, \text{CI: } [0.458, 0.910]$); multi-rater expansion is prepared in `research/annotation/`.
+1. **Pilot Human Ground Truth ($N=20$):** Single-educator ground truth provides initial validation ($\rho=0.6975, \text{CI: } [0.440, 0.837]$, note: $\rho=0.7400$ was superseded as an uncalibrated static CSV artifact); multi-rater expansion is prepared in `research/annotation/`.
 2. **Dimension 4 Covariate Shift:** Simulator trained with response time while runtime uses turn progress ($80.5\%$ action agreement, $0.020$ difficulty discrepancy).
 3. **CrossEncoder Collocations:** Ungrammatical keyword bags with dense multi-word phrases can achieve partial entailment ($R \approx 0.46 - 0.52$), bounded by ScoreValidator caps.
 4. **Cold-Start Docker Overhead:** Container startup adds ~1.5s latency per compilation turn.

@@ -1,0 +1,76 @@
+{
+  "manifest_version": "1.0.0",
+  "benchmark_version": "64_cases_v1.0_frozen",
+  "guideline_version": "v1.0_blinded",
+  "rating_form_version": "v1.0_csv",
+  "case_count": 64,
+  "created_at": "2026-09-19T12:52:50.624601",
+  "packages": [
+    {
+      "package_id": "RATER_1",
+      "description": "Primary Technical Educator (Rater 1)",
+      "zip_filename": "PREPAIred_Rater_1_Package.zip",
+      "zip_path": "research\\annotation\\distribution\\PREPAIred_Rater_1_Package.zip",
+      "zip_sha256": "f13569babbb23dff979333ca4a35dce8661717e3f8c2829cbda0a188469d5fa0",
+      "zip_size_bytes": 8703,
+      "files": {
+        "README.md": {
+          "sha256": "9c0b9413293482e8097d5862700215a8477837b9750445a0f9df047f84d50f1c",
+          "size_bytes": 1009
+        },
+        "SCORING_RUBRIC.md": {
+          "sha256": "76d1b7426cfc8f2e73db5e1eed56b3f73d86114195c040b81abda8e20872e7c9",
+          "size_bytes": 2815
+        },
+        "RATING_SHEET_64_CASES.csv": {
+          "sha256": "b1af0795f1daf4518152b2e6baed489739ceb4ce73c7cbe396c2262c93ca9023",
+          "size_bytes": 21039
+        }
+      }
+    },
+    {
+      "package_id": "RATER_2",
+      "description": "Independent Technical Expert A (Rater 2)",
+      "zip_filename": "PREPAIred_Rater_2_Package.zip",
+      "zip_path": "research\\annotation\\distribution\\PREPAIred_Rater_2_Package.zip",
+      "zip_sha256": "e1742099967816f23a86c87354e3291fdbaee68a591ed20a4c38d3f76b139fd5",
+      "zip_size_bytes": 8707,
+      "files": {
+        "README.md": {
+          "sha256": "2e83e9016e0b30104335249efd1ca9c2b77557b59bd806f7cf35bd589c62bc52",
+          "size_bytes": 1013
+        },
+        "SCORING_RUBRIC.md": {
+          "sha256": "76d1b7426cfc8f2e73db5e1eed56b3f73d86114195c040b81abda8e20872e7c9",
+          "size_bytes": 2815
+        },
+        "RATING_SHEET_64_CASES.csv": {
+          "sha256": "b1af0795f1daf4518152b2e6baed489739ceb4ce73c7cbe396c2262c93ca9023",
+          "size_bytes": 21039
+        }
+      }
+    },
+    {
+      "package_id": "RATER_3",
+      "description": "Independent Technical Expert B (Rater 3)",
+      "zip_filename": "PREPAIred_Rater_3_Package.zip",
+      "zip_path": "research\\annotation\\distribution\\PREPAIred_Rater_3_Package.zip",
+      "zip_sha256": "8c7ba02e42e7ac1b9b7c624e8bb9aa6dff1c759ab986dc0dd874d57dc64f84c9",
+      "zip_size_bytes": 8707,
+      "files": {
+        "README.md": {
+          "sha256": "a293da45645bc6ae688c29e37cb13281e601412766d40ca8ea4a9535754ce8e0",
+          "size_bytes": 1013
+        },
+        "SCORING_RUBRIC.md": {
+          "sha256": "76d1b7426cfc8f2e73db5e1eed56b3f73d86114195c040b81abda8e20872e7c9",
+          "size_bytes": 2815
+        },
+        "RATING_SHEET_64_CASES.csv": {
+          "sha256": "b1af0795f1daf4518152b2e6baed489739ceb4ce73c7cbe396c2262c93ca9023",
+          "size_bytes": 21039
+        }
+      }
+    }
+  ]
+}

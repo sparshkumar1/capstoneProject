@@ -1,0 +1,55 @@
+{
+  "manifest_name": "FINAL_HUMAN_GATE_MANIFEST",
+  "timestamp_iso": "2026-09-19T13:45:00+05:30",
+  "status": "FROZEN_BEFORE_HUMAN_ANNOTATION",
+  "benchmark_version": "64_cases_v1.0_frozen",
+  "case_count": 64,
+  "adjudication_rule": {
+    "consensus_delta_threshold": 0.2,
+    "consensus_formula": "arithmetic_mean_of_3_ratings",
+    "disagreement_action": "HUMAN_ADJUDICATION_REQUIRED = true (held for HUMAN GATE 3)",
+    "automated_selection": "NONE (do not automatically choose mean or median)"
+  },
+  "artifacts": {
+    "benchmark_dataset_csv": {
+      "path": "research\\\\data\\\\evaluator_benchmark\\\\benchmark_dataset.csv",
+      "size_bytes": 39708,
+      "sha256": "824ee6c961ddb31c3652bbe90e7f395c1019021eae4dd6378f6437d97c1d13be"
+    },
+    "benchmark_cases_json": {
+      "path": "research\\\\data\\\\evaluator_benchmark\\\\benchmark_cases.json",
+      "size_bytes": 54073,
+      "sha256": "6d96a38a53b6b2051b0568156af4c1512acb0ad41236f75d5905cf1d373b9c66"
+    },
+    "human_rating_protocol_md": {
+      "path": "research\\\\annotation\\\\HUMAN_RATING_PROTOCOL.md",
+      "size_bytes": 4593,
+      "sha256": "2f997921b0b25e3699804f5d07daa9d2e814b9ab0701d40021ac702bcc8f5a29"
+    },
+    "rater_guidelines_md": {
+      "path": "research\\\\annotation\\\\rater_guidelines.md",
+      "size_bytes": 3152,
+      "sha256": "b36c50501c0f7d7cd7f31b2b9a19b21dc8dd1ba18727fd310ac9350608b4af22"
+    },
+    "rating_form_template_csv": {
+      "path": "research\\\\annotation\\\\rating_template_64cases.csv",
+      "size_bytes": 21039,
+      "sha256": "b1af0795f1daf4518152b2e6baed489739ceb4ce73c7cbe396c2262c93ca9023"
+    },
+    "rater_package_rater_1_zip": {
+      "path": "research\\\\annotation\\\\distribution\\\\PREPAIred_Rater_1_Package.zip",
+      "size_bytes": 8703,
+      "sha256": "f13569babbb23dff979333ca4a35dce8661717e3f8c2829cbda0a188469d5fa0"
+    },
+    "rater_package_rater_2_zip": {
+      "path": "research\\\\annotation\\\\distribution\\\\PREPAIred_Rater_2_Package.zip",
+      "size_bytes": 8707,
+      "sha256": "e1742099967816f23a86c87354e3291fdbaee68a591ed20a4c38d3f76b139fd5"
+    },
+    "rater_package_rater_3_zip": {
+      "path": "research\\\\annotation\\\\distribution\\\\PREPAIred_Rater_3_Package.zip",
+      "size_bytes": 8707,
+      "sha256": "8c7ba02e42e7ac1b9b7c624e8bb9aa6dff1c759ab986dc0dd874d57dc64f84c9"
+    }
+  }
+}

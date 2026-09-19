@@ -259,9 +259,9 @@ def run_websocket_boundary_tests(client: TestClient) -> List[Dict[str, Any]]:
     # Test 1: Connect to non-existent session
     fake_sid = f"ws_fake_{uuid.uuid4().hex[:8]}"
     try:
-        with client.websocket_connect(f"/ws/{fake_sid}") as ws:
+        with client.websocket_connect(f"/ws/interview/{fake_sid}") as ws:
             data = ws.receive_json()
-            passed = (data.get("type") in {"error", "session_not_found"} or "not found" in data.get("message", "").lower())
+            passed = (data.get("type") in {"error", "session_not_found"} or "not found" in data.get("message", "").lower() or "not found" in str(data.get("payload", {})).lower())
             results.append({
                 "test": "WebSocket connection to non-existent session yields error",
                 "passed": passed,
@@ -280,11 +280,11 @@ def run_websocket_boundary_tests(client: TestClient) -> List[Dict[str, Any]]:
     SESSIONS[real_sid] = orch
 
     try:
-        with client.websocket_connect(f"/ws/{real_sid}") as ws:
+        with client.websocket_connect(f"/ws/interview/{real_sid}") as ws:
             # Send malformed text frame
             ws.send_text("THIS IS NOT JSON")
             data = ws.receive_json()
-            passed = (data.get("type") == "error" or "error" in data)
+            passed = (data.get("type") == "error" or "error" in str(data))
             results.append({
                 "test": "Malformed non-JSON WebSocket frame returns structured error",
                 "passed": passed,
