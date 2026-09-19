@@ -1,0 +1,122 @@
+{
+  "manifest_version": "1.0-phase1",
+  "analysis_id": "X3-0c-followup",
+  "status": "completed",
+  "started_utc": "2026-09-19T17:26:51Z",
+  "finished_utc": "2026-09-19T17:26:54Z",
+  "protocol": {
+    "type": "phase1_preflight_note",
+    "note_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\analysis\\phase1\\x3_0\\X3_0_PRERUN_NOTE.md",
+    "note_sha256": "ceb25e1c29c5148ae9bc5452477204874884cdd4bc5eb575c4b9f27758155e58"
+  },
+  "code": {
+    "git_commit": "d9ba681408ea1050b9aa5899fcfa587a468b39b3",
+    "git_tags_at_head": [],
+    "git_dirty": true,
+    "dirty_diff_sha256": "7f36232d95cc1a631f1c6f074281dd43280eb9e910a1832db451150087be56f3",
+    "entrypoint": "research\\analysis\\phase1\\x3_0\\x3_0c_followup.py",
+    "entrypoint_sha256": "fc38a0939a3e955ed0ffd7871db31c1188346ac3704978a1de10412ed61cf2ef",
+    "command_line": "research/analysis/phase1/x3_0/x3_0c_followup.py"
+  },
+  "config": {},
+  "environment": {
+    "lock_id": null,
+    "env_lock_sha256": null,
+    "non_locked_reason": "unlocked .venv; see environment block",
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "executable": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Scripts\\python.exe",
+    "packages": {
+      "numpy": {
+        "metadata": "2.5.2",
+        "module_version": "2.5.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\numpy\\__init__.py"
+      },
+      "pandas": {
+        "metadata": "2.3.3",
+        "module_version": "2.3.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\pandas\\__init__.py"
+      },
+      "scipy": {
+        "metadata": "1.17.1",
+        "module_version": "1.17.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\scipy\\__init__.py"
+      },
+      "scikit-learn": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "torch": {
+        "metadata": "2.11.0+cpu",
+        "module_version": "2.11.0+cpu",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\torch\\__init__.py"
+      },
+      "stable-baselines3": {
+        "metadata": "2.7.1",
+        "module_version": "2.7.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\stable_baselines3\\__init__.py"
+      },
+      "gymnasium": {
+        "metadata": "0.29.1",
+        "module_version": "0.29.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\gymnasium\\__init__.py"
+      },
+      "sentence-transformers": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "transformers": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "faiss-cpu": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "PyYAML": {
+        "metadata": "6.0.3",
+        "module_version": "6.0.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\yaml\\__init__.py"
+      }
+    },
+    "site_packages_listing_sha256_before": "bafc16f1db7686ed4d160f85651faf0ef4c29f133634ddf9de43fd46087d27ca",
+    "site_packages_listing_sha256_after": "bafc16f1db7686ed4d160f85651faf0ef4c29f133634ddf9de43fd46087d27ca",
+    "hardware": {
+      "cpu": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cores": 12,
+      "ram_gb": 15.7,
+      "gpu": null
+    },
+    "env_flags": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "HF_HUB_OFFLINE": null,
+      "WANDB_MODE": null
+    }
+  },
+  "seeds": {},
+  "inputs": [
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0c_replay_session_log.csv",
+      "sha256_before": "d19c178712d6cf06ac96c9c14a3a1a8e4e0b927f424349ee3e6546a5aecc6ee7",
+      "sha256_after": "d19c178712d6cf06ac96c9c14a3a1a8e4e0b927f424349ee3e6546a5aecc6ee7"
+    }
+  ],
+  "models": [],
+  "outputs": [
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0c_followup.json",
+      "sha256": "263b8a80dd209f58e6a75009aa0d234e3a14ec42c396a275f2d25f75ac6fa9d7"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\X3_0C_FOLLOWUP.md",
+      "sha256": "1605db299da88e1dc397f62fed8d857114b98a67f43d9e61c1633afd8363e78d"
+    }
+  ],
+  "gate": {},
+  "deviations": [],
+  "failures": []
+}

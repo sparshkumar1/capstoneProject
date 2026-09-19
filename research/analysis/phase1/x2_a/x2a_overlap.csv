@@ -1,0 +1,3 @@
+set,qids,n,rho_composite,rho_R_only
+pilot-overlap qids,1 3 10 41,32,0.7092,0.5838
+other qids,7 15 22 50,32,0.4249,0.449

@@ -1,0 +1,11 @@
+category,n,mean_human,mean_composite,signed_bias_composite_minus_human,mean_R,rho_composite
+concise_correct,8,0.9121,0.3966,-0.5154,0.4771,-0.1084
+contradictory,4,0.1533,0.2812,0.1278,0.3363,not computed (n<8)
+incorrect,6,0.0867,0.1589,0.0722,0.2928,not computed (n<8)
+keyword_stuffed,8,0.305,0.3445,0.0395,0.3909,-0.5108
+misconception,8,0.1079,0.2284,0.1204,0.3193,0.3571
+paraphrase,4,0.8441,0.3607,-0.4835,0.3733,not computed (n<8)
+partial_incomplete,8,0.5196,0.2074,-0.3122,0.2929,0.1078
+suboptimal_correct,2,0.725,0.3037,-0.4213,0.377,not computed (n<8)
+verbose_correct,8,0.9837,0.5909,-0.3928,0.6586,-0.5455
+verbose_wrong,8,0.105,0.3243,0.2193,0.4304,0.4524

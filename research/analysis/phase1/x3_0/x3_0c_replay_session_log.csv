@@ -1,0 +1,351 @@
+condition,training_seed,persona,eval_seed,mae,volatility,oscillation,final_difficulty,activations,attempted_boundary_final,overrides,raw_proposal_attempts_on_visited_states,final_actions
+Fixed,-,struggling_junior,1001,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,struggling_junior,2002,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,struggling_junior,3003,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,struggling_junior,4004,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,struggling_junior,5005,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,overconfident_fail,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,overconfident_fail,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,overconfident_fail,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,overconfident_fail,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,overconfident_fail,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,normal,1001,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,normal,2002,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,normal,3003,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,normal,4004,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,normal,5005,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Fixed,-,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,struggling_junior,1001,0.273,0.2,0.0,1.0,0,0,0,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,struggling_junior,2002,0.273,0.2,0.0,1.0,0,0,0,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,struggling_junior,3003,0.273,0.2,0.0,1.0,0,0,0,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,struggling_junior,4004,0.273,0.2,0.0,1.0,0,0,0,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,struggling_junior,5005,0.273,0.2,0.0,1.0,0,0,0,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,overconfident_fail,1001,0.591,0.2,0.0,1.0,0,0,0,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,overconfident_fail,2002,0.591,0.2,0.0,1.0,0,0,0,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,overconfident_fail,3003,0.591,0.2,0.0,1.0,0,0,0,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,overconfident_fail,4004,0.591,0.2,0.0,1.0,0,0,0,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,overconfident_fail,5005,0.591,0.2,0.0,1.0,0,0,0,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,normal,1001,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,normal,2002,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,normal,3003,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,normal,4004,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,normal,5005,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,lucky_guesser,1001,0.909,0.2,0.0,5.0,0,0,0,0,Harder|Harder|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,lucky_guesser,2002,0.909,0.2,0.0,5.0,0,0,0,0,Harder|Harder|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,lucky_guesser,3003,0.909,0.2,0.0,5.0,0,0,0,0,Harder|Harder|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,lucky_guesser,4004,0.909,0.2,0.0,5.0,0,0,0,0,Harder|Harder|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,lucky_guesser,5005,0.909,0.2,0.0,5.0,0,0,0,0,Harder|Harder|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,nervous_expert,1001,0.591,0.2,0.0,5.0,0,0,0,0,Harder|Harder|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,nervous_expert,2002,0.591,0.2,0.0,5.0,0,0,0,0,Harder|Harder|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,nervous_expert,3003,0.591,0.2,0.0,5.0,0,0,0,0,Harder|Harder|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,nervous_expert,4004,0.591,0.2,0.0,5.0,0,0,0,0,Harder|Harder|Same|Same|Same|Same|Same|Same|Same|Same
+Heuristic,-,nervous_expert,5005,0.591,0.2,0.0,5.0,0,0,0,0,Harder|Harder|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,struggling_junior,1001,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,struggling_junior,2002,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,struggling_junior,3003,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,struggling_junior,4004,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,struggling_junior,5005,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,overconfident_fail,1001,1.136,0.8,1.0,3.0,0,0,0,0,Easier|Harder|Easier|Harder|Easier|Harder|Same|Easier|Harder|Same
+PPO raw,42,overconfident_fail,2002,1.136,0.8,1.0,3.0,0,0,0,0,Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Same|Same
+PPO raw,42,overconfident_fail,3003,1.136,0.8,1.0,3.0,0,0,0,0,Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Same|Same
+PPO raw,42,overconfident_fail,4004,1.136,0.8,1.0,3.0,0,0,0,0,Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Same|Same
+PPO raw,42,overconfident_fail,5005,1.136,0.8,1.0,3.0,0,0,0,0,Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Same|Same
+PPO raw,42,normal,1001,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,normal,2002,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,normal,3003,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,normal,4004,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,normal,5005,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,42,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,struggling_junior,1001,0.364,0.4,0.667,1.0,9,3,4,6,Easier|Easier|Same|Easier|Same|Harder|Easier|Easier|Same|Easier
+PPO+G,42,struggling_junior,2002,0.364,0.4,0.667,1.0,8,5,2,6,Easier|Easier|Easier|Easier|Easier|Easier|Same|Easier|Harder|Easier
+PPO+G,42,struggling_junior,3003,0.273,0.2,0.0,1.0,8,8,1,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,42,struggling_junior,4004,0.273,0.2,0.0,1.0,9,5,4,8,Easier|Easier|Easier|Same|Same|Same|Easier|Easier|Easier|Easier
+PPO+G,42,struggling_junior,5005,0.455,0.5,0.75,2.0,8,5,1,5,Easier|Easier|Easier|Easier|Easier|Harder|Easier|Easier|Easier|Harder
+PPO+G,42,overconfident_fail,1001,0.591,1.0,0.889,1.0,6,0,5,0,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Easier
+PPO+G,42,overconfident_fail,2002,0.591,1.0,0.889,1.0,6,0,5,0,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Easier
+PPO+G,42,overconfident_fail,3003,0.591,1.0,0.889,1.0,6,0,5,0,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Easier
+PPO+G,42,overconfident_fail,4004,0.591,1.0,0.889,1.0,6,0,5,0,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Easier
+PPO+G,42,overconfident_fail,5005,0.591,1.0,0.889,1.0,6,0,5,0,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Easier
+PPO+G,42,normal,1001,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,normal,2002,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,normal,3003,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,normal,4004,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,normal,5005,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,42,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,struggling_junior,1001,0.818,0.2,0.0,1.0,0,5,0,5,Same|Same|Same|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,123,struggling_junior,2002,0.455,0.2,0.0,1.0,0,7,0,7,Same|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,123,struggling_junior,3003,1.0,0.2,0.0,1.0,0,4,0,4,Same|Same|Same|Same|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,123,struggling_junior,4004,1.364,0.2,0.0,1.0,0,2,0,2,Same|Same|Same|Same|Same|Same|Easier|Easier|Easier|Easier
+PPO raw,123,struggling_junior,5005,1.0,0.2,0.0,1.0,0,4,0,4,Same|Same|Same|Same|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,123,overconfident_fail,1001,0.591,0.2,0.0,1.0,0,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,123,overconfident_fail,2002,0.591,0.2,0.0,1.0,0,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,123,overconfident_fail,3003,0.591,0.2,0.0,1.0,0,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,123,overconfident_fail,4004,0.591,0.4,0.667,1.0,0,6,0,6,Easier|Easier|Easier|Easier|Easier|Harder|Easier|Easier|Easier|Easier
+PPO raw,123,overconfident_fail,5005,0.591,0.2,0.0,1.0,0,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,123,normal,1001,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,normal,2002,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,normal,3003,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,normal,4004,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,normal,5005,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,123,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,struggling_junior,1001,0.273,0.2,0.0,1.0,8,5,4,8,Easier|Easier|Same|Easier|Same|Easier|Easier|Easier|Same|Easier
+PPO+G,123,struggling_junior,2002,0.273,0.2,0.0,1.0,8,7,2,8,Easier|Easier|Easier|Easier|Easier|Easier|Same|Easier|Easier|Easier
+PPO+G,123,struggling_junior,3003,0.273,0.2,0.0,1.0,8,8,1,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,123,struggling_junior,4004,0.273,0.2,0.0,1.0,9,5,4,8,Easier|Easier|Easier|Same|Same|Same|Easier|Easier|Easier|Easier
+PPO+G,123,struggling_junior,5005,0.273,0.2,0.0,1.0,7,8,1,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,123,overconfident_fail,1001,0.591,0.2,0.0,1.0,2,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,123,overconfident_fail,2002,0.591,0.2,0.0,1.0,2,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,123,overconfident_fail,3003,0.591,0.2,0.0,1.0,2,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,123,overconfident_fail,4004,0.591,0.4,0.667,1.0,3,6,0,6,Easier|Easier|Easier|Easier|Easier|Harder|Easier|Easier|Easier|Easier
+PPO+G,123,overconfident_fail,5005,0.591,0.2,0.0,1.0,2,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,123,normal,1001,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,normal,2002,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,normal,3003,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,normal,4004,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,normal,5005,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,123,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,struggling_junior,1001,1.364,0.2,0.0,1.0,0,2,0,2,Same|Same|Same|Same|Same|Same|Easier|Easier|Easier|Easier
+PPO raw,456,struggling_junior,2002,1.909,0.1,0.0,2.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Easier
+PPO raw,456,struggling_junior,3003,1.727,0.2,0.0,1.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Easier|Easier
+PPO raw,456,struggling_junior,4004,1.727,0.2,0.0,1.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Easier|Easier
+PPO raw,456,struggling_junior,5005,1.727,0.2,0.0,1.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Easier|Easier
+PPO raw,456,overconfident_fail,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,overconfident_fail,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,overconfident_fail,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,overconfident_fail,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,overconfident_fail,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,normal,1001,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,normal,2002,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,normal,3003,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,normal,4004,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,normal,5005,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,456,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,struggling_junior,1001,0.273,0.2,0.0,1.0,8,5,4,8,Easier|Easier|Same|Easier|Same|Easier|Easier|Easier|Same|Easier
+PPO+G,456,struggling_junior,2002,0.273,0.2,0.0,1.0,8,7,2,8,Easier|Easier|Easier|Easier|Easier|Easier|Same|Easier|Easier|Easier
+PPO+G,456,struggling_junior,3003,0.364,0.4,0.667,1.0,8,6,1,6,Easier|Easier|Harder|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,456,struggling_junior,4004,0.273,0.2,0.0,1.0,9,5,4,7,Easier|Easier|Easier|Same|Same|Same|Easier|Easier|Easier|Easier
+PPO+G,456,struggling_junior,5005,0.273,0.2,0.0,1.0,7,8,1,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,456,overconfident_fail,1001,0.591,0.8,0.857,1.0,5,2,1,2,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Easier|Easier
+PPO+G,456,overconfident_fail,2002,0.591,0.6,0.8,1.0,4,4,1,4,Easier|Easier|Harder|Easier|Easier|Harder|Easier|Easier|Easier|Easier
+PPO+G,456,overconfident_fail,3003,0.591,1.0,0.889,1.0,6,0,2,0,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Easier
+PPO+G,456,overconfident_fail,4004,0.591,0.8,0.857,1.0,5,2,3,2,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Easier|Easier
+PPO+G,456,overconfident_fail,5005,0.591,0.8,0.857,1.0,5,2,1,2,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Easier|Easier
+PPO+G,456,normal,1001,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,normal,2002,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,normal,3003,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,normal,4004,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,normal,5005,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,456,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,struggling_junior,1001,0.273,0.2,0.0,1.0,0,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,789,struggling_junior,2002,0.273,0.2,0.0,1.0,0,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,789,struggling_junior,3003,0.273,0.2,0.0,1.0,0,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,789,struggling_junior,4004,0.273,0.2,0.0,1.0,0,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,789,struggling_junior,5005,0.273,0.2,0.0,1.0,0,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,789,overconfident_fail,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,overconfident_fail,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,overconfident_fail,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,overconfident_fail,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,overconfident_fail,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,normal,1001,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,normal,2002,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,normal,3003,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,normal,4004,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,normal,5005,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,789,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,struggling_junior,1001,0.273,0.2,0.0,1.0,8,5,3,8,Easier|Easier|Same|Easier|Same|Easier|Easier|Easier|Same|Easier
+PPO+G,789,struggling_junior,2002,0.273,0.2,0.0,1.0,8,7,1,8,Easier|Easier|Easier|Easier|Easier|Easier|Same|Easier|Easier|Easier
+PPO+G,789,struggling_junior,3003,0.273,0.2,0.0,1.0,8,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,789,struggling_junior,4004,0.273,0.2,0.0,1.0,9,5,3,8,Easier|Easier|Easier|Same|Same|Same|Easier|Easier|Easier|Easier
+PPO+G,789,struggling_junior,5005,0.273,0.2,0.0,1.0,7,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,789,overconfident_fail,1001,0.591,1.0,0.889,1.0,6,0,2,0,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Easier
+PPO+G,789,overconfident_fail,2002,0.591,1.0,0.889,1.0,6,0,2,0,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Easier
+PPO+G,789,overconfident_fail,3003,0.591,1.0,0.889,1.0,6,0,3,0,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Easier
+PPO+G,789,overconfident_fail,4004,0.591,1.0,0.889,1.0,6,0,3,0,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Easier
+PPO+G,789,overconfident_fail,5005,0.591,1.0,0.889,1.0,6,0,1,0,Easier|Easier|Harder|Easier|Harder|Easier|Harder|Easier|Harder|Easier
+PPO+G,789,normal,1001,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,normal,2002,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,normal,3003,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,normal,4004,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,normal,5005,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,789,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,struggling_junior,1001,0.273,0.2,0.0,1.0,0,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,999,struggling_junior,2002,0.364,0.4,0.667,1.0,0,6,0,6,Easier|Easier|Easier|Easier|Easier|Easier|Harder|Easier|Easier|Easier
+PPO raw,999,struggling_junior,3003,0.364,0.4,0.667,1.0,0,6,0,6,Easier|Easier|Harder|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,999,struggling_junior,4004,0.364,0.4,0.667,1.0,0,6,0,6,Easier|Easier|Easier|Harder|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,999,struggling_junior,5005,0.273,0.2,0.0,1.0,0,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO raw,999,overconfident_fail,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,overconfident_fail,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,overconfident_fail,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,overconfident_fail,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,overconfident_fail,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,normal,1001,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,normal,2002,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,normal,3003,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,normal,4004,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,normal,5005,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO raw,999,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,struggling_junior,1001,0.273,0.2,0.0,1.0,8,5,3,8,Easier|Easier|Same|Easier|Same|Easier|Easier|Easier|Same|Easier
+PPO+G,999,struggling_junior,2002,0.273,0.2,0.0,1.0,8,7,1,7,Easier|Easier|Easier|Easier|Easier|Easier|Same|Easier|Easier|Easier
+PPO+G,999,struggling_junior,3003,0.364,0.4,0.667,1.0,8,6,0,6,Easier|Easier|Harder|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,999,struggling_junior,4004,0.273,0.2,0.0,1.0,9,5,3,5,Easier|Easier|Easier|Same|Same|Same|Easier|Easier|Easier|Easier
+PPO+G,999,struggling_junior,5005,0.273,0.2,0.0,1.0,7,8,0,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,999,overconfident_fail,1001,0.591,0.4,0.667,1.0,3,6,1,6,Easier|Easier|Harder|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,999,overconfident_fail,2002,0.591,0.4,0.667,1.0,3,6,1,6,Easier|Easier|Easier|Harder|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,999,overconfident_fail,3003,0.591,0.4,0.667,1.0,3,6,1,6,Easier|Easier|Easier|Harder|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,999,overconfident_fail,4004,0.591,0.6,0.8,1.0,4,4,1,4,Easier|Easier|Harder|Easier|Harder|Easier|Easier|Easier|Easier|Easier
+PPO+G,999,overconfident_fail,5005,0.591,0.2,0.0,1.0,2,8,1,8,Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier|Easier
+PPO+G,999,normal,1001,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,normal,2002,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,normal,3003,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,normal,4004,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,normal,5005,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+PPO+G,999,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,struggling_junior,1001,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,struggling_junior,2002,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,struggling_junior,3003,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,struggling_junior,4004,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,struggling_junior,5005,2.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,overconfident_fail,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,overconfident_fail,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,overconfident_fail,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,overconfident_fail,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,overconfident_fail,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,normal,1001,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,normal,2002,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,normal,3003,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,normal,4004,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,normal,5005,0.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same raw,-,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,struggling_junior,1001,0.273,0.2,0.0,1.0,8,3,5,0,Easier|Easier|Same|Easier|Same|Same|Same|Easier|Same|Easier
+Constant-Same+G,-,struggling_junior,2002,0.273,0.2,0.0,1.0,8,5,7,0,Easier|Easier|Easier|Same|Easier|Easier|Same|Easier|Same|Easier
+Constant-Same+G,-,struggling_junior,3003,0.273,0.2,0.0,1.0,8,6,8,0,Easier|Easier|Same|Easier|Easier|Easier|Easier|Easier|Same|Easier
+Constant-Same+G,-,struggling_junior,4004,0.273,0.2,0.0,1.0,9,4,6,0,Easier|Easier|Same|Same|Same|Same|Easier|Easier|Easier|Easier
+Constant-Same+G,-,struggling_junior,5005,0.273,0.2,0.0,1.0,7,5,7,0,Easier|Easier|Easier|Easier|Easier|Same|Same|Easier|Easier|Same
+Constant-Same+G,-,overconfident_fail,1001,0.591,0.2,0.0,1.0,2,0,2,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,overconfident_fail,2002,0.591,0.2,0.0,1.0,2,0,2,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,overconfident_fail,3003,0.591,0.2,0.0,1.0,2,0,2,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,overconfident_fail,4004,0.591,0.2,0.0,1.0,2,0,2,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,overconfident_fail,5005,0.591,0.2,0.0,1.0,2,0,2,0,Easier|Easier|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,normal,1001,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,normal,2002,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,normal,3003,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,normal,4004,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,normal,5005,0.0,0.0,0.0,3.0,10,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,lucky_guesser,1001,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,lucky_guesser,2002,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,lucky_guesser,3003,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,lucky_guesser,4004,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,lucky_guesser,5005,1.0,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,nervous_expert,1001,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,nervous_expert,2002,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,nervous_expert,3003,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,nervous_expert,4004,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same
+Constant-Same+G,-,nervous_expert,5005,1.5,0.0,0.0,3.0,0,0,0,0,Same|Same|Same|Same|Same|Same|Same|Same|Same|Same

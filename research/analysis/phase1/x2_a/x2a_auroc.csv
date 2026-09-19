@@ -1,0 +1,6 @@
+scorer,AUROC_correct_vs_adversarial,ci_low,ci_high,valid_reps,n_correct_reference,n_adversarial
+composite,0.7206,0.5836,0.8926,10000,22,34
+R_only,0.7821,0.6477,0.9279,10000,22,34
+S1,0.627,0.4783,0.8155,10000,22,34
+S2_eff,0.6444,0.4764,0.8663,10000,22,34
+S1_plus_R,0.7807,0.6465,0.9317,10000,22,34

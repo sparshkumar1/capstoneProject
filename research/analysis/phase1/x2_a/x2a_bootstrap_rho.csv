@@ -1,0 +1,6 @@
+scorer,spearman,two_level_ci_low,two_level_ci_high,two_level_valid_reps,question_only_ci_low,question_only_ci_high,question_only_valid_reps,share_two_level_reps_le_0
+composite,0.3812,0.1529,0.649,10000,0.3066,0.5888,10000,0.0011
+R_only,0.4832,0.246,0.6983,10000,0.4359,0.5766,10000,0.0002
+S1,0.207,-0.0226,0.501,10000,0.1473,0.4015,10000,0.0347
+S2_eff,0.3006,0.0031,0.6543,9996,0.1196,0.5985,9997,0.0242
+S1_plus_R,0.4884,0.2537,0.712,10000,0.432,0.6258,10000,0.0001

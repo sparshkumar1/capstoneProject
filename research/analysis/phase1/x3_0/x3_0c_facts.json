@@ -1,0 +1,62 @@
+{
+  "pooled_PPO_raw": {
+    "condition": "PPO raw",
+    "training_seed": "pooled 5 seeds",
+    "sessions": 125,
+    "mae": 0.9578,
+    "mae_sd_over_sessions": 0.6262,
+    "volatility": 0.0776,
+    "oscillation": 0.0613,
+    "rule_activations": 0,
+    "action_overrides": 0,
+    "unchanged_activations": 0,
+    "attempted_boundary_final_action": 136,
+    "sessions_with_attempted_boundary": 21,
+    "sessions_with_override": 0
+  },
+  "pooled_PPO_G": {
+    "condition": "PPO+G",
+    "training_seed": "pooled 5 seeds",
+    "sessions": 125,
+    "mae": 0.6772,
+    "mae_sd_over_sessions": 0.5304,
+    "volatility": 0.1864,
+    "oscillation": 0.1603,
+    "rule_activations": 563,
+    "action_overrides": 99,
+    "unchanged_activations": 464,
+    "attempted_boundary_final_action": 232,
+    "sessions_with_attempted_boundary": 39,
+    "sessions_with_override": 41
+  },
+  "constant_same_G": {
+    "condition": "Constant-Same+G",
+    "training_seed": "-",
+    "sessions": 25,
+    "mae": 0.6728,
+    "mae_sd_over_sessions": 0.5421,
+    "volatility": 0.08,
+    "oscillation": 0.0,
+    "rule_activations": 100,
+    "action_overrides": 43,
+    "unchanged_activations": 57,
+    "attempted_boundary_final_action": 23,
+    "sessions_with_attempted_boundary": 5,
+    "sessions_with_override": 10
+  },
+  "ppoG_sessions_differing_from_constsameG": [
+    50,
+    125
+  ],
+  "audit_reference_values": {
+    "raw_attempted_boundary_total": 136,
+    "overrides": 99,
+    "unchanged_activations": 464,
+    "sessions_with_override": 41,
+    "of_sessions": 125,
+    "constant_same_G_mae_approx": 0.673,
+    "ppoG_sessions_differing_from_constsameG": 5
+  },
+  "persona_delta_mean": 0.00436,
+  "persona_delta_sd_ddof1": 0.009749256381899083
+}

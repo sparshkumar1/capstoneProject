@@ -1,0 +1,33 @@
+check,replayed,stored_or_required,tolerance,match
+seed 42 guarded activations,122.0,122,0.0,True
+seed 42 guarded attempted boundary,26.0,26,0.0,True
+seed 42 guarded MAE vs seed_results,0.687,0.687,0.0011,True
+seed 42 guarded volatility vs seed_results,0.268,0.268,0.0011,True
+seed 42 guarded oscillation vs seed_results,0.261,0.261,0.0011,True
+seed 123 guarded activations,101.0,101,0.0,True
+seed 123 guarded attempted boundary,71.0,71,0.0,True
+seed 123 guarded MAE vs seed_results,0.673,0.673,0.0011,True
+seed 123 guarded volatility vs seed_results,0.088,0.088,0.0011,True
+seed 123 guarded oscillation vs seed_results,0.027,0.027,0.0011,True
+seed 456 guarded activations,115.0,115,0.0,True
+seed 456 guarded attempted boundary,41.0,41,0.0,True
+seed 456 guarded MAE vs seed_results,0.676,0.676,0.0011,True
+seed 456 guarded volatility vs seed_results,0.208,0.208,0.0011,True
+seed 456 guarded oscillation vs seed_results,0.197,0.197,0.0011,True
+seed 789 guarded activations,120.0,120,0.0,True
+seed 789 guarded attempted boundary,33.0,33,0.0,True
+seed 789 guarded MAE vs seed_results,0.673,0.673,0.0011,True
+seed 789 guarded volatility vs seed_results,0.24,0.24,0.0011,True
+seed 789 guarded oscillation vs seed_results,0.178,0.178,0.0011,True
+seed 999 guarded activations,105.0,105,0.0,True
+seed 999 guarded attempted boundary,61.0,61,0.0,True
+seed 999 guarded MAE vs seed_results,0.676,0.676,0.0011,True
+seed 999 guarded volatility vs seed_results,0.128,0.128,0.0011,True
+seed 999 guarded oscillation vs seed_results,0.139,0.139,0.0011,True
+Fixed MAE vs baseline_results,1.2,1.2,0.0011,True
+Heuristic MAE vs baseline_results,0.473,0.473,0.0011,True
+Heuristic volatility vs baseline_results,0.16,0.16,0.0011,True
+PPO raw seed 123 MAE vs baseline_results,0.804,0.804,0.0011,True
+PPO raw seed 123 attempted boundary vs baseline_results,60.0,60,0.0,True
+Constant-Same raw MAE equals Fixed MAE,1.2,1.2,0.0011,True
+"seed-123 activation rows (persona, eval_seed, rule, raw, final) equal stored guardrail file as multiset",101,101,0,True

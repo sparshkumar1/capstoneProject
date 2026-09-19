@@ -1,0 +1,4 @@
+contrast,point,two_level_ci_low,two_level_ci_high,valid_reps
+composite - R_only,-0.102,-0.2849,0.1174,10000
+composite - S1_plus_R,-0.1072,-0.2502,0.0517,10000
+R_only - S1_plus_R,-0.0052,-0.1543,0.0881,10000

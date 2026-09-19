@@ -1,0 +1,4 @@
+scorer,within_question_spearman_demeaned
+composite,0.5796
+R_only,0.5516
+S1_plus_R,0.5956

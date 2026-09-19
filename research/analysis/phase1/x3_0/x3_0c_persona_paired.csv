@@ -1,0 +1,8 @@
+persona,target,constant_same_G_mae,ppo_G_mae_seed42,ppo_G_mae_seed123,ppo_G_mae_seed456,ppo_G_mae_seed789,ppo_G_mae_seed999,ppo_G_mae_mean_over_seeds,delta_ppoG_minus_constsameG
+struggling_junior,1.0,0.273,0.3458,0.273,0.2912,0.273,0.2912,0.2948,0.0218
+overconfident_fail,1.5,0.591,0.591,0.591,0.591,0.591,0.591,0.591,0.0
+normal,3.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+lucky_guesser,4.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.0
+nervous_expert,4.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,0.0
+MEAN over 5 personas,,,,,,,,,0.0044
+SD over 5 personas (ddof=1),,,,,,,,,0.0097

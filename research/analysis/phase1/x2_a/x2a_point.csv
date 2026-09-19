@@ -1,0 +1,6 @@
+scorer,spearman,kendall_tau_b
+composite,0.3812,0.2715
+R_only,0.4832,0.3492
+S1,0.207,0.1406
+S2_eff,0.3006,0.2528
+S1_plus_R,0.4884,0.346

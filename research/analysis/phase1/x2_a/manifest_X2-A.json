@@ -1,0 +1,196 @@
+{
+  "manifest_version": "1.0-phase1",
+  "analysis_id": "X2-A",
+  "status": "completed",
+  "started_utc": "2026-09-19T17:20:35Z",
+  "finished_utc": "2026-09-19T17:21:52Z",
+  "protocol": {
+    "type": "phase1_preflight_note",
+    "note_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\analysis\\phase1\\x2_a\\X2A_PRERUN_NOTE.md",
+    "note_sha256": "763a7547dbda71c6aa02caba840e5fa9abf6c41a592e9230ee07f51b5ce69ce8"
+  },
+  "code": {
+    "git_commit": "d9ba681408ea1050b9aa5899fcfa587a468b39b3",
+    "git_tags_at_head": [],
+    "git_dirty": true,
+    "dirty_diff_sha256": "7f36232d95cc1a631f1c6f074281dd43280eb9e910a1832db451150087be56f3",
+    "entrypoint": "research\\analysis\\phase1\\x2_a\\x2a_analysis.py",
+    "entrypoint_sha256": "e8340c0e80ad98bbabce6af24a95f5b943d284d3ce190a2d94d077c85b4d7856",
+    "command_line": "research/analysis/phase1/x2_a/x2a_analysis.py"
+  },
+  "config": {
+    "config_path": "research\\analysis\\phase1\\x2_a\\x2a_config.json",
+    "config_sha256": "aade271b52f7f7ce90d155eeb7d1f38ad427ce2d2d73fdb1c596056e8a458a3b"
+  },
+  "environment": {
+    "lock_id": null,
+    "env_lock_sha256": null,
+    "non_locked_reason": "unlocked .venv; see environment block",
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "executable": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Scripts\\python.exe",
+    "packages": {
+      "numpy": {
+        "metadata": "2.5.2",
+        "module_version": "2.5.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\numpy\\__init__.py"
+      },
+      "pandas": {
+        "metadata": "2.3.3",
+        "module_version": "2.3.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\pandas\\__init__.py"
+      },
+      "scipy": {
+        "metadata": "1.17.1",
+        "module_version": "1.17.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\scipy\\__init__.py"
+      },
+      "scikit-learn": {
+        "metadata": "1.8.0",
+        "module_version": "1.8.0",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\sklearn\\__init__.py"
+      },
+      "torch": {
+        "metadata": "2.11.0+cpu",
+        "module_version": "2.11.0+cpu",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\torch\\__init__.py"
+      },
+      "stable-baselines3": {
+        "metadata": "2.7.1",
+        "module_version": "2.7.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\stable_baselines3\\__init__.py"
+      },
+      "gymnasium": {
+        "metadata": "0.29.1",
+        "module_version": "0.29.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\gymnasium\\__init__.py"
+      },
+      "sentence-transformers": {
+        "metadata": "2.7.0",
+        "module_version": "2.7.0",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\sentence_transformers\\__init__.py"
+      },
+      "transformers": {
+        "metadata": "4.44.2",
+        "module_version": "4.44.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\transformers\\__init__.py"
+      },
+      "faiss-cpu": {
+        "metadata": "1.13.2",
+        "module_version": "1.13.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\faiss\\__init__.py"
+      },
+      "PyYAML": {
+        "metadata": "6.0.3",
+        "module_version": "6.0.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\yaml\\__init__.py"
+      }
+    },
+    "site_packages_listing_sha256_before": "9a9b26f10647042ce4e88baac092d6b69575a5dd46853422fc7edce4bb93117c",
+    "site_packages_listing_sha256_after": "9a9b26f10647042ce4e88baac092d6b69575a5dd46853422fc7edce4bb93117c",
+    "hardware": {
+      "cpu": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cores": 12,
+      "ram_gb": 15.7,
+      "gpu": null
+    },
+    "env_flags": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "HF_HUB_OFFLINE": "1",
+      "WANDB_MODE": "disabled"
+    }
+  },
+  "seeds": {
+    "bootstrap": 42,
+    "B": 10000
+  },
+  "inputs": [
+    {
+      "path": "research\\results\\paper2\\paper2_case_level_results.csv",
+      "sha256_before": "a89ba13888fbccf74287a4b8a5c008415c1c12e5793899156e59c42a1fa84e8a",
+      "sha256_after": "a89ba13888fbccf74287a4b8a5c008415c1c12e5793899156e59c42a1fa84e8a"
+    },
+    {
+      "path": "research\\data\\evaluator_benchmark\\final_human_gold.csv",
+      "sha256_before": "363dbe6d848a04fe18be5ef1d30b6bbf63b54248fe758e5e6bd4c27a26c06ce2",
+      "sha256_after": "363dbe6d848a04fe18be5ef1d30b6bbf63b54248fe758e5e6bd4c27a26c06ce2"
+    },
+    {
+      "path": "research\\annotation\\FROZEN_HUMAN_RATINGS\\RATER_1_COMPLETED.csv",
+      "sha256_before": "5c8086c6434a81100b5106c06a33dea23c30f8272b5cd4336ac3bade52ecc1ef",
+      "sha256_after": "5c8086c6434a81100b5106c06a33dea23c30f8272b5cd4336ac3bade52ecc1ef"
+    },
+    {
+      "path": "research\\annotation\\FROZEN_HUMAN_RATINGS\\RATER_2_COMPLETED.csv",
+      "sha256_before": "b0d15a693dd68a15b0c694ee2a1815bece562c4f84813ed343b17fd1f984ebd0",
+      "sha256_after": "b0d15a693dd68a15b0c694ee2a1815bece562c4f84813ed343b17fd1f984ebd0"
+    },
+    {
+      "path": "research\\annotation\\FROZEN_HUMAN_RATINGS\\RATER_3_COMPLETED.csv",
+      "sha256_before": "ce995d0e159053cb3ff46676b7844da2aab6335ecd47148eedb4c477737a9614",
+      "sha256_after": "ce995d0e159053cb3ff46676b7844da2aab6335ecd47148eedb4c477737a9614"
+    }
+  ],
+  "models": [],
+  "outputs": [
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_point.csv",
+      "sha256": "3c4b11104831950185859eeac4fb5aa1b82814c6d8cbbec65487fed70fb154e1"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_bootstrap_rho.csv",
+      "sha256": "4371dd8020af3daf3cae0a3edd05c64bfd7e9260c39838183ab13cd069924b16"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_bootstrap_rho_diff.csv",
+      "sha256": "bc0115f70839162fc0cf007cf3feaef6f56d4177be268c606dbba1f5aaa60519"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_loqo.csv",
+      "sha256": "343e362751235efb9413a648bb895bfd7d7d950a01a548f6b087d44c9c8b7f40"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_per_question.csv",
+      "sha256": "2d73c36602430c4578324d6e89ef9bae538aa0f6cd7b192782bb8bce9ce918b1"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_per_category.csv",
+      "sha256": "238d45387a62ca52e09aba44c2815419c402459759fefc6a8d36fe6e6d0dd6d3"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_within_question.csv",
+      "sha256": "f309442283cd8fd0011e7cbb923650fefc3ccfd919d529597bd88cae824036c1"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_rater_loo.csv",
+      "sha256": "8ba4db9e11491e718353030b6bc0ee61c80d42d317ae07f4ca046eb57702b3a0"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_overlap.csv",
+      "sha256": "f2ed42a5eb89833e4ab0069b92febde854498c1fa83397deb14b4036c76103a3"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_auroc.csv",
+      "sha256": "6e4ee07424ba7307ae7e987fda16f661c6d4f38a52fd09721003600810f75537"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_auroc_diff.csv",
+      "sha256": "7c0fd2f0098630d18b8620660d08499854a88e785cfdc7839f54ba8f97a34c53"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_false_accept.csv",
+      "sha256": "488a297d6c84d07e075f8cbdb9639a8913aaf2d1b60e610cdd811b4318ae0131"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_agreement.csv",
+      "sha256": "84687dda8b3bc9b064ec35aa6ee0bdd3ef15b5f2a94ebada21be3adf691ca876"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x2_a\\x2a_meta.json",
+      "sha256": "d5162cc71984c57ed8cbcfba0a632e7a262c6b6b1e9fc611c4519b1ae9df2640"
+    }
+  ],
+  "gate": {},
+  "deviations": [],
+  "failures": []
+}

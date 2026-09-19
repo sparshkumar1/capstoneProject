@@ -1,0 +1,9 @@
+omitted_rater,items,n,rho_composite,rho_R_only
+R1,all 64 items,64,0.3552,0.4542
+R1,54 non-adjudicated items,54,0.4147,0.5108
+R2,all 64 items,64,0.3815,0.4883
+R2,54 non-adjudicated items,54,0.4499,0.5586
+R3,all 64 items,64,0.3781,0.4805
+R3,54 non-adjudicated items,54,0.4618,0.5564
+none (frozen gold),all 64 items,64,0.3812,0.4832
+none (frozen gold),54 non-adjudicated items,54,0.4454,0.5458

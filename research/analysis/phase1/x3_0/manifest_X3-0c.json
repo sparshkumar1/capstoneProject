@@ -1,0 +1,247 @@
+{
+  "manifest_version": "1.0-phase1",
+  "analysis_id": "X3-0c",
+  "status": "completed",
+  "started_utc": "2026-09-19T17:25:57Z",
+  "finished_utc": "2026-09-19T17:26:23Z",
+  "protocol": {
+    "type": "phase1_preflight_note",
+    "note_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\analysis\\phase1\\x3_0\\X3_0_PRERUN_NOTE.md",
+    "note_sha256": "ceb25e1c29c5148ae9bc5452477204874884cdd4bc5eb575c4b9f27758155e58"
+  },
+  "code": {
+    "git_commit": "d9ba681408ea1050b9aa5899fcfa587a468b39b3",
+    "git_tags_at_head": [],
+    "git_dirty": true,
+    "dirty_diff_sha256": "7f36232d95cc1a631f1c6f074281dd43280eb9e910a1832db451150087be56f3",
+    "entrypoint": "research\\analysis\\phase1\\x3_0\\x3_0c_replay.py",
+    "entrypoint_sha256": "f0b536b25dfbbc3ef56d0fabab0dbdec6754bdd53c951779b4ef87f8bf3ff96d",
+    "command_line": "research/analysis/phase1/x3_0/x3_0c_replay.py"
+  },
+  "config": {},
+  "environment": {
+    "lock_id": null,
+    "env_lock_sha256": null,
+    "non_locked_reason": "envs/replay-Lobs built 2026-09-19 from pinned versions matching the probed .venv; wheel hashes not recorded; lock files written in research/locks/",
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "executable": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Scripts\\python.exe",
+    "packages": {
+      "numpy": {
+        "metadata": "2.5.2",
+        "module_version": "2.5.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\numpy\\__init__.py"
+      },
+      "pandas": {
+        "metadata": "2.3.3",
+        "module_version": "2.3.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\pandas\\__init__.py"
+      },
+      "scipy": {
+        "metadata": "1.17.1",
+        "module_version": "1.17.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\scipy\\__init__.py"
+      },
+      "scikit-learn": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "torch": {
+        "metadata": "2.11.0+cpu",
+        "module_version": "2.11.0+cpu",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\torch\\__init__.py"
+      },
+      "stable-baselines3": {
+        "metadata": "2.7.1",
+        "module_version": "2.7.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\stable_baselines3\\__init__.py"
+      },
+      "gymnasium": {
+        "metadata": "0.29.1",
+        "module_version": "0.29.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\gymnasium\\__init__.py"
+      },
+      "sentence-transformers": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "transformers": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "faiss-cpu": {
+        "metadata": null,
+        "module_version": "IMPORT_FAILED:ModuleNotFoundError",
+        "module_file": null
+      },
+      "PyYAML": {
+        "metadata": "6.0.3",
+        "module_version": "6.0.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\replay-Lobs\\Lib\\site-packages\\yaml\\__init__.py"
+      }
+    },
+    "site_packages_listing_sha256_before": "bafc16f1db7686ed4d160f85651faf0ef4c29f133634ddf9de43fd46087d27ca",
+    "site_packages_listing_sha256_after": "bafc16f1db7686ed4d160f85651faf0ef4c29f133634ddf9de43fd46087d27ca",
+    "hardware": {
+      "cpu": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cores": 12,
+      "ram_gb": 15.7,
+      "gpu": null
+    },
+    "env_flags": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "HF_HUB_OFFLINE": "1",
+      "WANDB_MODE": "disabled"
+    }
+  },
+  "seeds": {
+    "training_seeds": [
+      42,
+      123,
+      456,
+      789,
+      999
+    ],
+    "eval_seeds": "frozen EVAL_SEEDS 1001..5005",
+    "rng": "none of its own; SimulatedCandidate(seed=eval_seed) as in the frozen code"
+  },
+  "inputs": [
+    {
+      "path": "research\\scripts\\execute_paper3_study.py",
+      "sha256_before": "29aa61d6231eacdc70f4b191c88a72ef874071782471df412d3184dfc723c0a7",
+      "sha256_after": "29aa61d6231eacdc70f4b191c88a72ef874071782471df412d3184dfc723c0a7"
+    },
+    {
+      "path": "rl\\guardrails.py",
+      "sha256_before": "c4198975227a03f9a672e982d0a3aa62ea60c41331c51ef55285410c409666ba",
+      "sha256_after": "c4198975227a03f9a672e982d0a3aa62ea60c41331c51ef55285410c409666ba"
+    },
+    {
+      "path": "rl\\env\\interview_env.py",
+      "sha256_before": "117af6c8a7dea0cda90cc28aead0796a25f6332a329670bbe1215a412256e4b1",
+      "sha256_after": "117af6c8a7dea0cda90cc28aead0796a25f6332a329670bbe1215a412256e4b1"
+    },
+    {
+      "path": "rl\\training\\simulated_candidate.py",
+      "sha256_before": "6e2c55c3326eac4626d4233784db75f6fdc2994e30c84060841d3540801ecec8",
+      "sha256_after": "6e2c55c3326eac4626d4233784db75f6fdc2994e30c84060841d3540801ecec8"
+    },
+    {
+      "path": "research\\results\\paper3\\paper3_seed_results.csv",
+      "sha256_before": "232ad964a22b342b9ce72be1013c8828e2b0995fddc5feecf678fbd363e1edf8",
+      "sha256_after": "232ad964a22b342b9ce72be1013c8828e2b0995fddc5feecf678fbd363e1edf8"
+    },
+    {
+      "path": "research\\results\\paper3\\paper3_baseline_results.csv",
+      "sha256_before": "50a184d3508d9879a579c7d7f01b98652dc8a96e7c2d0ff86f544d8fbce9fff9",
+      "sha256_after": "50a184d3508d9879a579c7d7f01b98652dc8a96e7c2d0ff86f544d8fbce9fff9"
+    },
+    {
+      "path": "research\\results\\paper3\\paper3_guardrail_results.csv",
+      "sha256_before": "286729c1533387cad682039729ca3f9560c33184e61091db60629a6820c46609",
+      "sha256_after": "286729c1533387cad682039729ca3f9560c33184e61091db60629a6820c46609"
+    }
+  ],
+  "models": [
+    {
+      "role": "ppo_checkpoint",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_42\\ppo_final.zip",
+      "sha256": "8395b6da753f5d272c46bfad018f7a7ae6e5508be58bcd732094771911b3d465",
+      "training_seed": 42
+    },
+    {
+      "role": "vecnormalize",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_42\\vecnormalize.pkl",
+      "sha256": "0e24cdd77e27170137ee5739d6b9258418a98bdf5a1a1bea23e8208ed85debcf",
+      "training_seed": 42
+    },
+    {
+      "role": "ppo_checkpoint",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_123\\ppo_final.zip",
+      "sha256": "299437ea0dcdd7a5eed51326e80854bd3bb55341194420b619c5da3d675e24e0",
+      "training_seed": 123
+    },
+    {
+      "role": "vecnormalize",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_123\\vecnormalize.pkl",
+      "sha256": "f9c752bbc09e0bed5750e5d2beb3838dce58d4da1cd6de20191830f91393087d",
+      "training_seed": 123
+    },
+    {
+      "role": "ppo_checkpoint",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_456\\ppo_final.zip",
+      "sha256": "f9799143aac6a2a67664caadbfa2ce55a113704632bbbe9cfbd1990724a40c55",
+      "training_seed": 456
+    },
+    {
+      "role": "vecnormalize",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_456\\vecnormalize.pkl",
+      "sha256": "69c6605d52e97a52ce1cfe2c4a9394d1b05cac1778b286d2a559e08d09bdeefd",
+      "training_seed": 456
+    },
+    {
+      "role": "ppo_checkpoint",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_789\\ppo_final.zip",
+      "sha256": "0ebb8800f71d453a48f4e307bea4e6cf18dbeb128a38707ac2029b38e757bbcb",
+      "training_seed": 789
+    },
+    {
+      "role": "vecnormalize",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_789\\vecnormalize.pkl",
+      "sha256": "f4884dcc0c92d7edf0959791cd29d512941f53a6ffbf0d0d205431f47fa290c9",
+      "training_seed": 789
+    },
+    {
+      "role": "ppo_checkpoint",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_999\\ppo_final.zip",
+      "sha256": "16494e754125443275f83b6868a964e1688f065976396e88f400de5f60776adf",
+      "training_seed": 999
+    },
+    {
+      "role": "vecnormalize",
+      "path": "research\\experiments\\paper3\\checkpoints\\seed_999\\vecnormalize.pkl",
+      "sha256": "a9ba7fff3d065591558fe6e4e6b9c0c627e7fd7b6b15c6a5497c0d3a9a1ce809",
+      "training_seed": 999
+    }
+  ],
+  "outputs": [
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0c_gate_G-REPRO.csv",
+      "sha256": "52470b7cba693784b5b0bf774ebdc4b7b8791637f4eb4a9804b47147c8469e7a"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0c_replay_summary.csv",
+      "sha256": "ce9e5d6c06021733ccd94543fc001abc6648db0245bd2690beaf5187ba9411b3"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0c_persona_paired.csv",
+      "sha256": "da13ad71feea06afa819edd78fccf0ae7962e2c8440f42b8eb9d2e9d42b17b61"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0c_replay_turn_log.csv",
+      "sha256": "5302f2a852acf364b204fa3bb15a552c19f0c73550d0ec7e3b537918a43c9d27"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0c_replay_session_log.csv",
+      "sha256": "d19c178712d6cf06ac96c9c14a3a1a8e4e0b927f424349ee3e6546a5aecc6ee7"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0c_facts.json",
+      "sha256": "1622b09398b84ea6d85ffeefc1d49044e99a76d684e1718a049b0e57406efede"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\X3_0C_REPORT.md",
+      "sha256": "46f9c49b8c41c47c6592405ae818f52d63a4823ea5f180b9172d71918df8b896"
+    }
+  ],
+  "gate": {
+    "name": "G-REPRO",
+    "passed": true,
+    "details": "32/32 checks matched"
+  },
+  "deviations": [],
+  "failures": []
+}

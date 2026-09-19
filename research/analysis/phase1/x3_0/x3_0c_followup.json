@@ -1,0 +1,33 @@
+{
+  "n_sessions": 125,
+  "final_action_sequence_differs": 50,
+  "executed_difficulty_path_differs": 25,
+  "session_mae_differs": 5,
+  "per_training_seed[seq,path,mae]": {
+    "42": [
+      10,
+      8,
+      3
+    ],
+    "123": [
+      10,
+      1,
+      0
+    ],
+    "456": [
+      10,
+      6,
+      1
+    ],
+    "789": [
+      10,
+      5,
+      0
+    ],
+    "999": [
+      10,
+      5,
+      1
+    ]
+  }
+}

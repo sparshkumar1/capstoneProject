@@ -1,0 +1,1 @@
+step,skill,persona,difficulty,performance,avg_perf,confidence,hesitation,time_norm,pre_action,action,oracle_action,oracle_match,forced_action,guardrail_id,decision_component,outcome_component,shaping_component,stability_penalty,critical_consistency,persona_bias,reward

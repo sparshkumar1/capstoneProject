@@ -1,0 +1,10 @@
+{
+  "B": 10000,
+  "seed": 42,
+  "n": 64,
+  "n_questions": 8,
+  "n_adversarial": 34,
+  "n_correct_reference": 22,
+  "n_excluded_from_both": 8,
+  "n_adjudicated": 10
+}
