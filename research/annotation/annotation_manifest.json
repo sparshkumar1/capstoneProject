@@ -1,0 +1,27 @@
+{
+  "manifest_name": "ANNOTATION_RAW_INCOMING_MANIFEST",
+  "created_at": "2026-09-19T14:54:35+05:30",
+  "files": [
+    {
+      "filename": "RATER_1_COMPLETED.csv",
+      "sha256": "5c8086c6434a81100b5106c06a33dea23c30f8272b5cd4336ac3bade52ecc1ef",
+      "file_size_bytes": 26192,
+      "row_count": 64,
+      "timestamp_received": "2026-09-19T14:54:35+05:30"
+    },
+    {
+      "filename": "RATER_2_COMPLETED.csv",
+      "sha256": "b0d15a693dd68a15b0c694ee2a1815bece562c4f84813ed343b17fd1f984ebd0",
+      "file_size_bytes": 26102,
+      "row_count": 64,
+      "timestamp_received": "2026-09-19T14:54:35+05:30"
+    },
+    {
+      "filename": "RATER_3_COMPLETED.csv",
+      "sha256": "ce995d0e159053cb3ff46676b7844da2aab6335ecd47148eedb4c477737a9614",
+      "file_size_bytes": 27031,
+      "row_count": 64,
+      "timestamp_received": "2026-09-19T14:54:35+05:30"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "manifest_name": "FROZEN_HUMAN_RATINGS_MANIFEST",
+  "collection_timestamp": "2026-09-19T14:54:35+05:30",
+  "benchmark_dataset_hash": "824ee6c961ddb31c3652bbe90e7f395c1019021eae4dd6378f6437d97c1d13be",
+  "human_rating_protocol_hash": "2f997921b0b25e3699804f5d07daa9d2e814b9ab0701d40021ac702bcc8f5a29",
+  "case_count": 64,
+  "rater_files": {
+    "RATER_1_COMPLETED.csv": {
+      "sha256": "5c8086c6434a81100b5106c06a33dea23c30f8272b5cd4336ac3bade52ecc1ef",
+      "size_bytes": 26192
+    },
+    "RATER_2_COMPLETED.csv": {
+      "sha256": "b0d15a693dd68a15b0c694ee2a1815bece562c4f84813ed343b17fd1f984ebd0",
+      "size_bytes": 26102
+    },
+    "RATER_3_COMPLETED.csv": {
+      "sha256": "ce995d0e159053cb3ff46676b7844da2aab6335ecd47148eedb4c477737a9614",
+      "size_bytes": 27031
+    }
+  },
+  "immutability_status": "FROZEN_PERMANENT_RECORD"
+}
