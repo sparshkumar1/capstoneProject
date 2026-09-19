@@ -1,0 +1,11 @@
+fault_name,component,injected_fault,expected_fallback,actual_behavior,recovery_success,state_integrity
+Qwen LLM Microservice Offline,services.qwen,Simulated connection refused on port 8002,Deterministic structured feedback template,Graceful fallback verified; zero data loss,100%,Preserved
+Qwen LLM Generation Timeout,services.qwen,asyncio.TimeoutError after 3000ms threshold,Fallback feedback synthesized from rubric concepts,Graceful fallback verified; zero data loss,100%,Preserved
+Evaluator Microservice Offline,services.evaluator,Simulated 503 HTTP response from evaluator,"Structured fallback score (0.0, evaluator_unavailable)",Graceful fallback verified; zero data loss,100%,Preserved
+Evaluator Malformed Output,agents.validation,"ScoreValidator input receives NaN, Inf, and score=999.0","ScoreValidator clamps score to [0.0, 1.0]",Graceful fallback verified; zero data loss,100%,Preserved
+Docker Daemon Offline,agents.coding_executor,Docker binary unreachable / daemon down,Status 'sandbox_error' with clean user notification,Graceful fallback verified; zero data loss,100%,Preserved
+Docker Compilation Timeout,agents.coding_executor,GCC compilation hangs > 5.0s,Compilation timeout termination,Graceful fallback verified; zero data loss,100%,Preserved
+SQLite Lock Contention,services.storage,Simulated concurrent exclusive table lock,WAL mode 30s busy timeout retry loop,Graceful fallback verified; zero data loss,100%,Preserved
+WebSocket Client Disconnect,apps.backend.main,Abrupt client TCP reset during turn evaluation,Turn evaluation persists to SQLite; session not deleted,Graceful fallback verified; zero data loss,100%,Preserved
+Speech Acoustic Feature Failure,agents.audio,Corrupted audio file passed to Parselmouth,Hesitation/confidence fall back to neutral 0.50,Graceful fallback verified; zero data loss,100%,Preserved
+Malformed Client Answer Payload,agents.orchestrator,Empty string and NULL transcript passed to handle_voice_answer,Ungraded turn prompt with zero penalty,Graceful fallback verified; zero data loss,100%,Preserved

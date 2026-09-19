@@ -1,0 +1,118 @@
+{
+  "summary": {
+    "PPO": {
+      "n_sessions": 100,
+      "mean_score": 0.5596329583729643,
+      "score_std": 0.32835952692185166,
+      "mean_difficulty": 2.6189999999999998,
+      "diff_std": 0.5279573846438744,
+      "mean_final_difficulty": 2.92,
+      "smoothness": 0.342,
+      "smoothness_std": 0.32899240112805034,
+      "volatility": 0.45128697502082055,
+      "volatility_std": 0.21158879517279053,
+      "oscillation_rate": 0.23,
+      "oscillation_std": 0.3326864092709233,
+      "skill_difficulty_alignment_r": 0.3031414659047612,
+      "skill_difficulty_alignment_p": 0.0021710118162557323
+    },
+    "Heuristic": {
+      "n_sessions": 100,
+      "mean_score": 0.568533045622072,
+      "score_std": 0.294393262577163,
+      "mean_difficulty": 2.8739999999999997,
+      "diff_std": 1.6555736166054347,
+      "mean_final_difficulty": 3.0,
+      "smoothness": 0.1800000000000001,
+      "smoothness_std": 0.0979795897113271,
+      "volatility": 0.5730054847193753,
+      "volatility_std": 0.3393166498444762,
+      "oscillation_rate": 0.0,
+      "oscillation_std": 0.0,
+      "skill_difficulty_alignment_r": 0.9624571126908509,
+      "skill_difficulty_alignment_p": 2.633645893493432e-57
+    },
+    "Fixed": {
+      "n_sessions": 100,
+      "mean_score": 0.5128782827166358,
+      "score_std": 0.37686429299679436,
+      "mean_difficulty": 3.0,
+      "diff_std": 0.0,
+      "mean_final_difficulty": 3.0,
+      "smoothness": 0.09999999999999998,
+      "smoothness_std": 2.7755575615628914e-17,
+      "volatility": 0.2874797872880346,
+      "volatility_std": 1.1102230246251565e-16,
+      "oscillation_rate": 0.0,
+      "oscillation_std": 0.0,
+      "skill_difficulty_alignment_r": 0.0,
+      "skill_difficulty_alignment_p": 1.0
+    }
+  },
+  "comparisons": {
+    "PPO_vs_Heuristic": {
+      "mean_score": {
+        "delta": -0.008900087249107624,
+        "t_stat": -0.20080113231941904,
+        "p_value": 0.841062628614831,
+        "cohens_d": -0.02839756846659968
+      },
+      "mean_difficulty": {
+        "delta": -0.2549999999999999,
+        "t_stat": -1.4600863435150673,
+        "p_value": 0.14690293327695955,
+        "cohens_d": -0.206487390923475
+      },
+      "smoothness": {
+        "delta": 0.16199999999999992,
+        "t_stat": 4.695627268193297,
+        "p_value": 7.323396127581497e-06,
+        "cohens_d": 0.6640619766527888
+      },
+      "volatility": {
+        "delta": -0.12171850969855474,
+        "t_stat": -3.028603202842717,
+        "p_value": 0.0028500420892537356,
+        "cohens_d": -0.42830917245067635
+      },
+      "oscillation_rate": {
+        "delta": 0.23,
+        "t_stat": 6.878763428780792,
+        "p_value": 5.51284743052999e-10,
+        "cohens_d": 0.972804053333785
+      }
+    },
+    "PPO_vs_Fixed": {
+      "mean_score": {
+        "delta": 0.046754675656328515,
+        "t_stat": 0.9306917398594263,
+        "p_value": 0.35316761206332337,
+        "cohens_d": 0.1316196880897813
+      },
+      "mean_difficulty": {
+        "delta": -0.3810000000000002,
+        "t_stat": -7.180318422732771,
+        "p_value": 1.304900177286835e-10,
+        "cohens_d": -1.0154503695586077
+      },
+      "smoothness": {
+        "delta": 0.24200000000000005,
+        "t_stat": 7.318921621113158,
+        "p_value": 6.689376144004486e-11,
+        "cohens_d": 1.0350518218523908
+      },
+      "volatility": {
+        "delta": 0.16380718773278596,
+        "t_stat": 7.702964316649553,
+        "p_value": 1.032872425853946e-11,
+        "cohens_d": 1.0893636607081798
+      },
+      "oscillation_rate": {
+        "delta": 0.23,
+        "t_stat": 6.878763428780792,
+        "p_value": 5.51284743052999e-10,
+        "cohens_d": 0.972804053333785
+      }
+    }
+  }
+}

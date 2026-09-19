@@ -1,0 +1,93 @@
+[
+  {
+    "test_id": "ADV-01",
+    "name": "Complete Concept Omission (Score 0.0)",
+    "candidate_transcript": "I do not know how to solve this problem.",
+    "eval_score": 0.0,
+    "feedback_score": 0.0,
+    "score_preserved": true,
+    "missing_concepts_grounded": true,
+    "decision_source": "evaluator_structured",
+    "strong_points": [
+      "Attempted question"
+    ],
+    "how_to_improve": [
+      "Cover missing concept: single pass iteration through the array",
+      "Cover missing concept: hash table complement lookup",
+      "Cover missing concept: handling indices pair retrieval"
+    ],
+    "justification": "Grade Poor (0%) on Arrays. Semantic 0% | Concept coverage 0% | Reasoning 0% | Confidence 50%. Missing: single pass itera..."
+  },
+  {
+    "test_id": "ADV-02",
+    "name": "Asserted Algorithmic Misconception",
+    "candidate_transcript": "I reverse it by allocating a brand new array and copying all elements into new nodes.",
+    "eval_score": 0.35,
+    "feedback_score": 0.35,
+    "score_preserved": true,
+    "missing_concepts_grounded": true,
+    "decision_source": "evaluator_structured",
+    "strong_points": [
+      "traversing the linked list"
+    ],
+    "how_to_improve": [
+      "Cover missing concept: three pointer in-place rewiring",
+      "Cover missing concept: O(1) auxiliary space constraint"
+    ],
+    "justification": "Grade Poor (35%) on LinkedLists. Semantic 35% | Concept coverage 35% | Reasoning 35% | Confidence 50%. Strength: travers..."
+  },
+  {
+    "test_id": "ADV-03",
+    "name": "Empty Response (0 Words)",
+    "candidate_transcript": "",
+    "eval_score": 0.0,
+    "feedback_score": 0.0,
+    "score_preserved": true,
+    "missing_concepts_grounded": true,
+    "decision_source": "evaluator_structured",
+    "strong_points": [
+      "Attempted question"
+    ],
+    "how_to_improve": [
+      "Cover missing concept: FIFO queue initialization",
+      "Cover missing concept: enqueue root and children",
+      "Cover missing concept: level by level processing"
+    ],
+    "justification": "Grade Poor (0%) on Trees. Semantic 0% | Concept coverage 0% | Reasoning 0% | Confidence 50%. Missing: FIFO queue initial..."
+  },
+  {
+    "test_id": "ADV-04",
+    "name": "Adversarial Keyword Stuffed Response",
+    "candidate_transcript": "Pointer memory address asterisk ampersand heap stack dereference int *p address-of.",
+    "eval_score": 0.42,
+    "feedback_score": 0.42,
+    "score_preserved": true,
+    "missing_concepts_grounded": true,
+    "decision_source": "evaluator_structured",
+    "strong_points": [
+      "memory address storage"
+    ],
+    "how_to_improve": [
+      "Cover missing concept: dereference operator semantics",
+      "Cover missing concept: pointer syntax declaration int *p"
+    ],
+    "justification": "Grade Average (42%) on C_Programming. Semantic 42% | Concept coverage 42% | Reasoning 42% | Confidence 50%. Strength: me..."
+  },
+  {
+    "test_id": "ADV-05",
+    "name": "Contradictory / Edge Case Claims",
+    "candidate_transcript": "It is dynamic programming with O(1) space, but we use a recursion tree of depth 2^n with no memoization.",
+    "eval_score": 0.45,
+    "feedback_score": 0.45,
+    "score_preserved": true,
+    "missing_concepts_grounded": true,
+    "decision_source": "evaluator_structured",
+    "strong_points": [
+      "recurrence relation formulation"
+    ],
+    "how_to_improve": [
+      "Cover missing concept: subproblem memoization / tabulation"
+    ],
+    "justification": "Grade Average (45%) on Matrix. Semantic 45% | Concept coverage 45% | Reasoning 45% | Confidence 50%. Strength: recurrenc..."
+  }
+]

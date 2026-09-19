@@ -1,0 +1,962 @@
+[
+  {
+    "case_id": "BM-001",
+    "qid": 1,
+    "topic": "Arrays & Hashing",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "reference_answer": "Use a hash map to store visited elements and their indices. In a single pass, check if target minus current element exists in the map.",
+    "rubric_concepts": [
+      "hash table / dictionary",
+      "complement (target - num)",
+      "single-pass O(N) time",
+      "index lookup"
+    ],
+    "candidate_answer": "Use a hash table to store number-to-index mappings. For each x in the array, check if target - x is already in the map. If found, return both indices; otherwise insert x. Runs in O(N) time and O(N) space.",
+    "expected_quality_category": "concise_correct"
+  },
+  {
+    "case_id": "BM-002",
+    "qid": 1,
+    "topic": "Arrays & Hashing",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "reference_answer": "Use a hash map to store visited elements and their indices. In a single pass, check if target minus current element exists in the map.",
+    "rubric_concepts": [
+      "hash table / dictionary",
+      "complement (target - num)",
+      "single-pass O(N) time",
+      "index lookup"
+    ],
+    "candidate_answer": "We begin by initializing an empty associative array or hash map that will keep track of all elements we have inspected so far along with their corresponding 0-indexed positions. We then iterate through the input list from left to right. At each iteration, we calculate the required complement by subtracting the current value from the target sum. We perform a constant-time lookup in our hash map. If the complement is present, we immediately output a tuple containing the stored index and our current index. If it is not present, we record the current value and its index into the map to be referenced by future elements. This guarantees linear time complexity O(n) while utilizing O(n) auxiliary memory.",
+    "expected_quality_category": "verbose_correct"
+  },
+  {
+    "case_id": "BM-003",
+    "qid": 1,
+    "topic": "Arrays & Hashing",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "reference_answer": "Use a hash map to store visited elements and their indices. In a single pass, check if target minus current element exists in the map.",
+    "rubric_concepts": [
+      "hash table / dictionary",
+      "complement (target - num)",
+      "single-pass O(N) time",
+      "index lookup"
+    ],
+    "candidate_answer": "Run two nested loops from i = 0 to n and j = i + 1 to n. Check if arr[i] + arr[j] equals the target. If so, return i and j. This requires O(1) extra space but has O(N^2) quadratic time complexity.",
+    "expected_quality_category": "suboptimal_correct"
+  },
+  {
+    "case_id": "BM-004",
+    "qid": 1,
+    "topic": "Arrays & Hashing",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "reference_answer": "Use a hash map to store visited elements and their indices. In a single pass, check if target minus current element exists in the map.",
+    "rubric_concepts": [
+      "hash table / dictionary",
+      "complement (target - num)",
+      "single-pass O(N) time",
+      "index lookup"
+    ],
+    "candidate_answer": "You can use a hash map to look up numbers quickly while iterating through the array.",
+    "expected_quality_category": "partial_incomplete"
+  },
+  {
+    "case_id": "BM-005",
+    "qid": 1,
+    "topic": "Arrays & Hashing",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "reference_answer": "Use a hash map to store visited elements and their indices. In a single pass, check if target minus current element exists in the map.",
+    "rubric_concepts": [
+      "hash table / dictionary",
+      "complement (target - num)",
+      "single-pass O(N) time",
+      "index lookup"
+    ],
+    "candidate_answer": "To solve two sum efficiently, we must first sort the array using quicksort in O(n log n) time. Then we compute the mathematical average of all numbers, subtract the mean from the target, and perform binary search on the lower half of the array. This finds the exact matching pair in O(log n) additional time.",
+    "expected_quality_category": "verbose_wrong"
+  },
+  {
+    "case_id": "BM-006",
+    "qid": 1,
+    "topic": "Arrays & Hashing",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "reference_answer": "Use a hash map to store visited elements and their indices. In a single pass, check if target minus current element exists in the map.",
+    "rubric_concepts": [
+      "hash table / dictionary",
+      "complement (target - num)",
+      "single-pass O(N) time",
+      "index lookup"
+    ],
+    "candidate_answer": "Hash map array indices complement lookup dictionary key value O(N) linear time insertion collision resolution target difference.",
+    "expected_quality_category": "keyword_stuffed"
+  },
+  {
+    "case_id": "BM-007",
+    "qid": 1,
+    "topic": "Arrays & Hashing",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "reference_answer": "Use a hash map to store visited elements and their indices. In a single pass, check if target minus current element exists in the map.",
+    "rubric_concepts": [
+      "hash table / dictionary",
+      "complement (target - num)",
+      "single-pass O(N) time",
+      "index lookup"
+    ],
+    "candidate_answer": "We can find the two sum in O(1) time without extra memory by simply calculating target modulo 2 and indexing directly into the array.",
+    "expected_quality_category": "misconception"
+  },
+  {
+    "case_id": "BM-008",
+    "qid": 1,
+    "topic": "Arrays & Hashing",
+    "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "reference_answer": "Use a hash map to store visited elements and their indices. In a single pass, check if target minus current element exists in the map.",
+    "rubric_concepts": [
+      "hash table / dictionary",
+      "complement (target - num)",
+      "single-pass O(N) time",
+      "index lookup"
+    ],
+    "candidate_answer": "Use a hash map to store visited numbers for O(1) lookups, but hash maps do not allow lookups and you have to search the entire array linearly every single time.",
+    "expected_quality_category": "contradictory"
+  },
+  {
+    "case_id": "BM-009",
+    "qid": 3,
+    "topic": "Linked Lists",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "reference_answer": "Maintain three pointers: prev (NULL), curr (head), and next_node. Iterate through the list, saving curr->next, pointing curr->next to prev, then advancing prev and curr.",
+    "rubric_concepts": [
+      "three pointers (prev, curr, next)",
+      "pointer redirection (curr->next = prev)",
+      "in-place O(1) space",
+      "head update"
+    ],
+    "candidate_answer": "Initialize prev to NULL and curr to head. Loop while curr is not NULL: cache curr->next in next_temp, redirect curr->next to prev, move prev to curr, and advance curr to next_temp. Return prev as the new head.",
+    "expected_quality_category": "concise_correct"
+  },
+  {
+    "case_id": "BM-010",
+    "qid": 3,
+    "topic": "Linked Lists",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "reference_answer": "Maintain three pointers: prev (NULL), curr (head), and next_node. Iterate through the list, saving curr->next, pointing curr->next to prev, then advancing prev and curr.",
+    "rubric_concepts": [
+      "three pointers (prev, curr, next)",
+      "pointer redirection (curr->next = prev)",
+      "in-place O(1) space",
+      "head update"
+    ],
+    "candidate_answer": "Reversing a singly linked list in-place requires redirecting every node's next pointer toward its predecessor without allocating auxiliary heap memory. We initialize three pointer variables: prev initialized to NULL, curr initialized to the list head, and a temporary pointer next_node. In a while loop that executes as long as curr is not NULL, we first preserve the remainder of the list by assigning next_node = curr->next. We then redirect curr->next to prev, effectively reversing the link. Next, we advance prev to curr, and curr to next_node. Upon loop termination, curr is NULL and prev points to the original tail, which is now the new head of the reversed list. Space complexity is O(1) and time complexity is O(N).",
+    "expected_quality_category": "verbose_correct"
+  },
+  {
+    "case_id": "BM-011",
+    "qid": 3,
+    "topic": "Linked Lists",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "reference_answer": "Maintain three pointers: prev (NULL), curr (head), and next_node. Iterate through the list, saving curr->next, pointing curr->next to prev, then advancing prev and curr.",
+    "rubric_concepts": [
+      "three pointers (prev, curr, next)",
+      "pointer redirection (curr->next = prev)",
+      "in-place O(1) space",
+      "head update"
+    ],
+    "candidate_answer": "We walk along the linked list and point each node backwards toward the previous node until reaching the end.",
+    "expected_quality_category": "partial_incomplete"
+  },
+  {
+    "case_id": "BM-012",
+    "qid": 3,
+    "topic": "Linked Lists",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "reference_answer": "Maintain three pointers: prev (NULL), curr (head), and next_node. Iterate through the list, saving curr->next, pointing curr->next to prev, then advancing prev and curr.",
+    "rubric_concepts": [
+      "three pointers (prev, curr, next)",
+      "pointer redirection (curr->next = prev)",
+      "in-place O(1) space",
+      "head update"
+    ],
+    "candidate_answer": "We swap the first and last elements using array indexing list[0] and list[n-1], then increment and decrement inward.",
+    "expected_quality_category": "incorrect"
+  },
+  {
+    "case_id": "BM-013",
+    "qid": 3,
+    "topic": "Linked Lists",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "reference_answer": "Maintain three pointers: prev (NULL), curr (head), and next_node. Iterate through the list, saving curr->next, pointing curr->next to prev, then advancing prev and curr.",
+    "rubric_concepts": [
+      "three pointers (prev, curr, next)",
+      "pointer redirection (curr->next = prev)",
+      "in-place O(1) space",
+      "head update"
+    ],
+    "candidate_answer": "To reverse a singly linked list in-place, we allocate a secondary doubly linked list with forward and backward pointers. We push each node from the original list into a stack, allocate fresh memory for N new nodes, and pop from the stack to construct the reversed list in O(N) additional memory.",
+    "expected_quality_category": "verbose_wrong"
+  },
+  {
+    "case_id": "BM-014",
+    "qid": 3,
+    "topic": "Linked Lists",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "reference_answer": "Maintain three pointers: prev (NULL), curr (head), and next_node. Iterate through the list, saving curr->next, pointing curr->next to prev, then advancing prev and curr.",
+    "rubric_concepts": [
+      "three pointers (prev, curr, next)",
+      "pointer redirection (curr->next = prev)",
+      "in-place O(1) space",
+      "head update"
+    ],
+    "candidate_answer": "Three pointers prev curr next pointer redirection in-place O(1) space auxiliary head update reverse singly linked list null termination.",
+    "expected_quality_category": "keyword_stuffed"
+  },
+  {
+    "case_id": "BM-015",
+    "qid": 3,
+    "topic": "Linked Lists",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "reference_answer": "Maintain three pointers: prev (NULL), curr (head), and next_node. Iterate through the list, saving curr->next, pointing curr->next to prev, then advancing prev and curr.",
+    "rubric_concepts": [
+      "three pointers (prev, curr, next)",
+      "pointer redirection (curr->next = prev)",
+      "in-place O(1) space",
+      "head update"
+    ],
+    "candidate_answer": "You can reverse a singly linked list by simply following the backward pointers from each node's prev property.",
+    "expected_quality_category": "misconception"
+  },
+  {
+    "case_id": "BM-016",
+    "qid": 3,
+    "topic": "Linked Lists",
+    "question": "Describe the approach to reverse a singly linked list in-place.",
+    "reference_answer": "Maintain three pointers: prev (NULL), curr (head), and next_node. Iterate through the list, saving curr->next, pointing curr->next to prev, then advancing prev and curr.",
+    "rubric_concepts": [
+      "three pointers (prev, curr, next)",
+      "pointer redirection (curr->next = prev)",
+      "in-place O(1) space",
+      "head update"
+    ],
+    "candidate_answer": "Set previous to null and pointer current to head. While current exists, hold current's following node, point current's forward link to previous, shift previous forward, and shift current forward. When finished, previous is the start.",
+    "expected_quality_category": "paraphrase"
+  },
+  {
+    "case_id": "BM-017",
+    "qid": 10,
+    "topic": "Trees & BFS",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "reference_answer": "Use a FIFO queue. Enqueue the root, then while the queue is not empty, dequeue a node, visit it, and enqueue its left and right children.",
+    "rubric_concepts": [
+      "FIFO queue",
+      "enqueue root",
+      "level-by-level traversal",
+      "enqueue left and right children"
+    ],
+    "candidate_answer": "Breadth-first search traverses level by level using a FIFO queue. Push the root to the queue. While queue is non-empty, pop the front node, record its value, and push its non-null left and right children into the queue.",
+    "expected_quality_category": "concise_correct"
+  },
+  {
+    "case_id": "BM-018",
+    "qid": 10,
+    "topic": "Trees & BFS",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "reference_answer": "Use a FIFO queue. Enqueue the root, then while the queue is not empty, dequeue a node, visit it, and enqueue its left and right children.",
+    "rubric_concepts": [
+      "FIFO queue",
+      "enqueue root",
+      "level-by-level traversal",
+      "enqueue left and right children"
+    ],
+    "candidate_answer": "Level order traversal explores a tree hierarchy breadth-first, visiting all nodes at depth d before proceeding to depth d+1. This is implemented using a First-In-First-Out (FIFO) queue data structure. If the root is null, we return immediately. Otherwise, we enqueue the root node. In a while loop running while the queue is not empty, we determine the number of nodes in the current level. For each node in that level, we dequeue it, append its value to our level results, and enqueue its left child if non-null, followed by its right child if non-null. The FIFO property ensures shallower nodes are dequeued before deeper nodes, running in O(N) time and O(W) auxiliary space where W is max tree width.",
+    "expected_quality_category": "verbose_correct"
+  },
+  {
+    "case_id": "BM-019",
+    "qid": 10,
+    "topic": "Trees & BFS",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "reference_answer": "Use a FIFO queue. Enqueue the root, then while the queue is not empty, dequeue a node, visit it, and enqueue its left and right children.",
+    "rubric_concepts": [
+      "FIFO queue",
+      "enqueue root",
+      "level-by-level traversal",
+      "enqueue left and right children"
+    ],
+    "candidate_answer": "Level order traversal uses a queue to visit the nodes level by level starting from the root.",
+    "expected_quality_category": "partial_incomplete"
+  },
+  {
+    "case_id": "BM-020",
+    "qid": 10,
+    "topic": "Trees & BFS",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "reference_answer": "Use a FIFO queue. Enqueue the root, then while the queue is not empty, dequeue a node, visit it, and enqueue its left and right children.",
+    "rubric_concepts": [
+      "FIFO queue",
+      "enqueue root",
+      "level-by-level traversal",
+      "enqueue left and right children"
+    ],
+    "candidate_answer": "BFS uses a recursive function that dives down the left subtree to the deepest leaf before backtracking.",
+    "expected_quality_category": "incorrect"
+  },
+  {
+    "case_id": "BM-021",
+    "qid": 10,
+    "topic": "Trees & BFS",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "reference_answer": "Use a FIFO queue. Enqueue the root, then while the queue is not empty, dequeue a node, visit it, and enqueue its left and right children.",
+    "rubric_concepts": [
+      "FIFO queue",
+      "enqueue root",
+      "level-by-level traversal",
+      "enqueue left and right children"
+    ],
+    "candidate_answer": "Breadth-first search on a binary tree is performed using a LIFO stack. We push the root node, then pop it and push its right child followed by its left child, recursively drilling down the leftmost path until a leaf is reached, then popping back up.",
+    "expected_quality_category": "verbose_wrong"
+  },
+  {
+    "case_id": "BM-022",
+    "qid": 10,
+    "topic": "Trees & BFS",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "reference_answer": "Use a FIFO queue. Enqueue the root, then while the queue is not empty, dequeue a node, visit it, and enqueue its left and right children.",
+    "rubric_concepts": [
+      "FIFO queue",
+      "enqueue root",
+      "level-by-level traversal",
+      "enqueue left and right children"
+    ],
+    "candidate_answer": "FIFO queue level order traversal breadth first search root enqueue dequeue left child right child depth width tree traversal.",
+    "expected_quality_category": "keyword_stuffed"
+  },
+  {
+    "case_id": "BM-023",
+    "qid": 10,
+    "topic": "Trees & BFS",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "reference_answer": "Use a FIFO queue. Enqueue the root, then while the queue is not empty, dequeue a node, visit it, and enqueue its left and right children.",
+    "rubric_concepts": [
+      "FIFO queue",
+      "enqueue root",
+      "level-by-level traversal",
+      "enqueue left and right children"
+    ],
+    "candidate_answer": "BFS can be performed using simple recursion without any queue data structure because function call stacks are FIFO.",
+    "expected_quality_category": "misconception"
+  },
+  {
+    "case_id": "BM-024",
+    "qid": 10,
+    "topic": "Trees & BFS",
+    "question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "reference_answer": "Use a FIFO queue. Enqueue the root, then while the queue is not empty, dequeue a node, visit it, and enqueue its left and right children.",
+    "rubric_concepts": [
+      "FIFO queue",
+      "enqueue root",
+      "level-by-level traversal",
+      "enqueue left and right children"
+    ],
+    "candidate_answer": "BFS uses a FIFO queue to visit nodes level by level, but instead of visiting children next, it visits the parent nodes of the root recursively.",
+    "expected_quality_category": "contradictory"
+  },
+  {
+    "case_id": "BM-025",
+    "qid": 41,
+    "topic": "C Pointers & Memory",
+    "question": "What is a pointer in C and how do you declare one?",
+    "reference_answer": "A pointer is a variable that stores the memory address of another variable. Declared using an asterisk with base type, e.g. int *ptr.",
+    "rubric_concepts": [
+      "memory address storage",
+      "asterisk * dereference / declaration",
+      "address-of & operator",
+      "data type specification"
+    ],
+    "candidate_answer": "A pointer in C is a variable that stores the memory address of another variable. It is declared with the base type followed by an asterisk, like int *ptr;.",
+    "expected_quality_category": "concise_correct"
+  },
+  {
+    "case_id": "BM-026",
+    "qid": 41,
+    "topic": "C Pointers & Memory",
+    "question": "What is a pointer in C and how do you declare one?",
+    "reference_answer": "A pointer is a variable that stores the memory address of another variable. Declared using an asterisk with base type, e.g. int *ptr.",
+    "rubric_concepts": [
+      "memory address storage",
+      "asterisk * dereference / declaration",
+      "address-of & operator",
+      "data type specification"
+    ],
+    "candidate_answer": "In C, a pointer is a distinct variable type whose value represents the memory address of another variable, array, or allocated memory block. Pointers provide direct memory access, enabling dynamic memory allocation, pass-by-reference semantics in functions, and efficient data structure manipulation. To declare a pointer, you specify the data type of the value being pointed to, followed by an asterisk dereference symbol and the pointer variable name, such as int *ptr; or char *str;. The address-of operator & is used to assign an address to the pointer (&variable), and the asterisk * is used as the dereference operator to read or write the value at that address (*ptr).",
+    "expected_quality_category": "verbose_correct"
+  },
+  {
+    "case_id": "BM-027",
+    "qid": 41,
+    "topic": "C Pointers & Memory",
+    "question": "What is a pointer in C and how do you declare one?",
+    "reference_answer": "A pointer is a variable that stores the memory address of another variable. Declared using an asterisk with base type, e.g. int *ptr.",
+    "rubric_concepts": [
+      "memory address storage",
+      "asterisk * dereference / declaration",
+      "address-of & operator",
+      "data type specification"
+    ],
+    "candidate_answer": "A pointer holds an address in memory. You declare it using an asterisk.",
+    "expected_quality_category": "partial_incomplete"
+  },
+  {
+    "case_id": "BM-028",
+    "qid": 41,
+    "topic": "C Pointers & Memory",
+    "question": "What is a pointer in C and how do you declare one?",
+    "reference_answer": "A pointer is a variable that stores the memory address of another variable. Declared using an asterisk with base type, e.g. int *ptr.",
+    "rubric_concepts": [
+      "memory address storage",
+      "asterisk * dereference / declaration",
+      "address-of & operator",
+      "data type specification"
+    ],
+    "candidate_answer": "A pointer is an integer variable that holds the total size of your program's executable code.",
+    "expected_quality_category": "incorrect"
+  },
+  {
+    "case_id": "BM-029",
+    "qid": 41,
+    "topic": "C Pointers & Memory",
+    "question": "What is a pointer in C and how do you declare one?",
+    "reference_answer": "A pointer is a variable that stores the memory address of another variable. Declared using an asterisk with base type, e.g. int *ptr.",
+    "rubric_concepts": [
+      "memory address storage",
+      "asterisk * dereference / declaration",
+      "address-of & operator",
+      "data type specification"
+    ],
+    "candidate_answer": "A pointer in C is a special function that points to other functions in the operating system. You declare one by writing pointer function_name() and compiling with the -O3 flag to link memory tables.",
+    "expected_quality_category": "verbose_wrong"
+  },
+  {
+    "case_id": "BM-030",
+    "qid": 41,
+    "topic": "C Pointers & Memory",
+    "question": "What is a pointer in C and how do you declare one?",
+    "reference_answer": "A pointer is a variable that stores the memory address of another variable. Declared using an asterisk with base type, e.g. int *ptr.",
+    "rubric_concepts": [
+      "memory address storage",
+      "asterisk * dereference / declaration",
+      "address-of & operator",
+      "data type specification"
+    ],
+    "candidate_answer": "Memory address pointer declaration asterisk int *p dereference operator address-of ampersand heap stack byte allocation.",
+    "expected_quality_category": "keyword_stuffed"
+  },
+  {
+    "case_id": "BM-031",
+    "qid": 41,
+    "topic": "C Pointers & Memory",
+    "question": "What is a pointer in C and how do you declare one?",
+    "reference_answer": "A pointer is a variable that stores the memory address of another variable. Declared using an asterisk with base type, e.g. int *ptr.",
+    "rubric_concepts": [
+      "memory address storage",
+      "asterisk * dereference / declaration",
+      "address-of & operator",
+      "data type specification"
+    ],
+    "candidate_answer": "Declaring int *p allocates heap memory automatically for an integer without needing malloc or an existing variable address.",
+    "expected_quality_category": "misconception"
+  },
+  {
+    "case_id": "BM-032",
+    "qid": 41,
+    "topic": "C Pointers & Memory",
+    "question": "What is a pointer in C and how do you declare one?",
+    "reference_answer": "A pointer is a variable that stores the memory address of another variable. Declared using an asterisk with base type, e.g. int *ptr.",
+    "rubric_concepts": [
+      "memory address storage",
+      "asterisk * dereference / declaration",
+      "address-of & operator",
+      "data type specification"
+    ],
+    "candidate_answer": "Pointers hold memory locations of objects rather than direct values. In C, writing int *p creates a pointer capable of holding an integer address.",
+    "expected_quality_category": "paraphrase"
+  },
+  {
+    "case_id": "BM-033",
+    "qid": 7,
+    "topic": "Dynamic Programming",
+    "question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "reference_answer": "Use DP with recurrence dp[n] = dp[n-1] + dp[n-2], base cases dp[1]=1, dp[2]=2. Space can be optimized to O(1) using two variables.",
+    "rubric_concepts": [
+      "recurrence relation dp[n] = dp[n-1] + dp[n-2]",
+      "base cases dp[1]=1, dp[2]=2",
+      "overlapping subproblems / optimal substructure",
+      "space optimization O(1)"
+    ],
+    "candidate_answer": "This is the Fibonacci sequence. The number of ways to reach step n is dp[n] = dp[n-1] + dp[n-2], with base cases dp[1] = 1 and dp[2] = 2. We can compute this iteratively in O(N) time and O(1) space using two variables.",
+    "expected_quality_category": "concise_correct"
+  },
+  {
+    "case_id": "BM-034",
+    "qid": 7,
+    "topic": "Dynamic Programming",
+    "question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "reference_answer": "Use DP with recurrence dp[n] = dp[n-1] + dp[n-2], base cases dp[1]=1, dp[2]=2. Space can be optimized to O(1) using two variables.",
+    "rubric_concepts": [
+      "recurrence relation dp[n] = dp[n-1] + dp[n-2]",
+      "base cases dp[1]=1, dp[2]=2",
+      "overlapping subproblems / optimal substructure",
+      "space optimization O(1)"
+    ],
+    "candidate_answer": "The climbing stairs problem models optimal substructure and overlapping subproblems. To reach step n, you can arrive either from step n-1 by taking a 1-step or from step n-2 by taking a 2-step. Therefore, total distinct ways satisfies the recurrence relation ways(n) = ways(n-1) + ways(n-2). The base cases are ways(1) = 1 (only one 1-step) and ways(2) = 2 (1+1 or 2). A naive recursive solution exhibits O(2^N) exponential time due to recomputing identical states. By applying bottom-up tabulation or dynamic programming, we compute ways from 3 to n iteratively in O(N) time. Furthermore, since we only need the prior two states, we optimize auxiliary memory to O(1) by maintaining two scalar variables.",
+    "expected_quality_category": "verbose_correct"
+  },
+  {
+    "case_id": "BM-035",
+    "qid": 7,
+    "topic": "Dynamic Programming",
+    "question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "reference_answer": "Use DP with recurrence dp[n] = dp[n-1] + dp[n-2], base cases dp[1]=1, dp[2]=2. Space can be optimized to O(1) using two variables.",
+    "rubric_concepts": [
+      "recurrence relation dp[n] = dp[n-1] + dp[n-2]",
+      "base cases dp[1]=1, dp[2]=2",
+      "overlapping subproblems / optimal substructure",
+      "space optimization O(1)"
+    ],
+    "candidate_answer": "Use simple recursion: ways(n) = ways(n-1) + ways(n-2) with base cases 1 and 2. This is correct in logic but takes exponential O(2^n) time without memoization.",
+    "expected_quality_category": "suboptimal_correct"
+  },
+  {
+    "case_id": "BM-036",
+    "qid": 7,
+    "topic": "Dynamic Programming",
+    "question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "reference_answer": "Use DP with recurrence dp[n] = dp[n-1] + dp[n-2], base cases dp[1]=1, dp[2]=2. Space can be optimized to O(1) using two variables.",
+    "rubric_concepts": [
+      "recurrence relation dp[n] = dp[n-1] + dp[n-2]",
+      "base cases dp[1]=1, dp[2]=2",
+      "overlapping subproblems / optimal substructure",
+      "space optimization O(1)"
+    ],
+    "candidate_answer": "You can use dynamic programming because the number of ways to get to step n depends on the two previous steps.",
+    "expected_quality_category": "partial_incomplete"
+  },
+  {
+    "case_id": "BM-037",
+    "qid": 7,
+    "topic": "Dynamic Programming",
+    "question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "reference_answer": "Use DP with recurrence dp[n] = dp[n-1] + dp[n-2], base cases dp[1]=1, dp[2]=2. Space can be optimized to O(1) using two variables.",
+    "rubric_concepts": [
+      "recurrence relation dp[n] = dp[n-1] + dp[n-2]",
+      "base cases dp[1]=1, dp[2]=2",
+      "overlapping subproblems / optimal substructure",
+      "space optimization O(1)"
+    ],
+    "candidate_answer": "To solve climbing stairs, generate a complete binary tree of all step paths, convert the tree to an adjacency matrix, and run Dijkstra's shortest path algorithm with weights equal to 1 or 2 to find the total paths in O(V^2) time.",
+    "expected_quality_category": "verbose_wrong"
+  },
+  {
+    "case_id": "BM-038",
+    "qid": 7,
+    "topic": "Dynamic Programming",
+    "question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "reference_answer": "Use DP with recurrence dp[n] = dp[n-1] + dp[n-2], base cases dp[1]=1, dp[2]=2. Space can be optimized to O(1) using two variables.",
+    "rubric_concepts": [
+      "recurrence relation dp[n] = dp[n-1] + dp[n-2]",
+      "base cases dp[1]=1, dp[2]=2",
+      "overlapping subproblems / optimal substructure",
+      "space optimization O(1)"
+    ],
+    "candidate_answer": "Dynamic programming recurrence relation dp[n-1] + dp[n-2] base cases memoization bottom up tabulation Fibonacci O(N) time O(1) space.",
+    "expected_quality_category": "keyword_stuffed"
+  },
+  {
+    "case_id": "BM-039",
+    "qid": 7,
+    "topic": "Dynamic Programming",
+    "question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "reference_answer": "Use DP with recurrence dp[n] = dp[n-1] + dp[n-2], base cases dp[1]=1, dp[2]=2. Space can be optimized to O(1) using two variables.",
+    "rubric_concepts": [
+      "recurrence relation dp[n] = dp[n-1] + dp[n-2]",
+      "base cases dp[1]=1, dp[2]=2",
+      "overlapping subproblems / optimal substructure",
+      "space optimization O(1)"
+    ],
+    "candidate_answer": "Because you can take 1 or 2 steps, the total number of ways to climb n stairs is always n factorial divided by 2.",
+    "expected_quality_category": "misconception"
+  },
+  {
+    "case_id": "BM-040",
+    "qid": 7,
+    "topic": "Dynamic Programming",
+    "question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "reference_answer": "Use DP with recurrence dp[n] = dp[n-1] + dp[n-2], base cases dp[1]=1, dp[2]=2. Space can be optimized to O(1) using two variables.",
+    "rubric_concepts": [
+      "recurrence relation dp[n] = dp[n-1] + dp[n-2]",
+      "base cases dp[1]=1, dp[2]=2",
+      "overlapping subproblems / optimal substructure",
+      "space optimization O(1)"
+    ],
+    "candidate_answer": "The recurrence is dp[n] = dp[n-1] + dp[n-2], but to compute it you must multiply dp[n-1] by dp[n-2] and divide by the step size.",
+    "expected_quality_category": "contradictory"
+  },
+  {
+    "case_id": "BM-041",
+    "qid": 15,
+    "topic": "Graphs & DFS",
+    "question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "reference_answer": "Use a 3-color state (unvisited, visiting/in-stack, visited). A cycle exists if DFS encounters a node currently in the recursion stack (visiting).",
+    "rubric_concepts": [
+      "recursion stack / visiting state",
+      "3-state coloring (white/gray/black)",
+      "back-edge detection",
+      "visited set"
+    ],
+    "candidate_answer": "In a directed graph, DFS detects cycles by maintaining a recursion stack state. Nodes are marked: unvisited, currently visiting (in stack), or visited. If DFS encounters a neighbor marked as currently visiting, a back-edge exists, indicating a cycle.",
+    "expected_quality_category": "concise_correct"
+  },
+  {
+    "case_id": "BM-042",
+    "qid": 15,
+    "topic": "Graphs & DFS",
+    "question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "reference_answer": "Use a 3-color state (unvisited, visiting/in-stack, visited). A cycle exists if DFS encounters a node currently in the recursion stack (visiting).",
+    "rubric_concepts": [
+      "recursion stack / visiting state",
+      "3-state coloring (white/gray/black)",
+      "back-edge detection",
+      "visited set"
+    ],
+    "candidate_answer": "Cycle detection in directed graphs requires distinguishing back-edges from cross-edges or forward-edges. We implement DFS using a three-state coloring scheme: White (unvisited), Gray (currently visiting in the active recursion call stack), and Black (fully processed and exited). We iterate through all vertices to handle disconnected components. When exploring a vertex v, we mark it Gray. For each directed neighbor u of v, if u is Gray, we have found an edge pointing back to an ancestor in the active recursion stack, which conclusively proves a cycle exists. If u is White, we recursively explore it. After inspecting all outgoing edges from v, we mark v Black. Time complexity is O(V + E) and space complexity is O(V) for the recursion stack and state array.",
+    "expected_quality_category": "verbose_correct"
+  },
+  {
+    "case_id": "BM-043",
+    "qid": 15,
+    "topic": "Graphs & DFS",
+    "question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "reference_answer": "Use a 3-color state (unvisited, visiting/in-stack, visited). A cycle exists if DFS encounters a node currently in the recursion stack (visiting).",
+    "rubric_concepts": [
+      "recursion stack / visiting state",
+      "3-state coloring (white/gray/black)",
+      "back-edge detection",
+      "visited set"
+    ],
+    "candidate_answer": "We run DFS and keep track of visited nodes. If we visit a node that was already visited, there might be a cycle.",
+    "expected_quality_category": "partial_incomplete"
+  },
+  {
+    "case_id": "BM-044",
+    "qid": 15,
+    "topic": "Graphs & DFS",
+    "question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "reference_answer": "Use a 3-color state (unvisited, visiting/in-stack, visited). A cycle exists if DFS encounters a node currently in the recursion stack (visiting).",
+    "rubric_concepts": [
+      "recursion stack / visiting state",
+      "3-state coloring (white/gray/black)",
+      "back-edge detection",
+      "visited set"
+    ],
+    "candidate_answer": "Count the total number of edges in the graph. If E > V, the directed graph is guaranteed to have a cycle regardless of edge directions.",
+    "expected_quality_category": "incorrect"
+  },
+  {
+    "case_id": "BM-045",
+    "qid": 15,
+    "topic": "Graphs & DFS",
+    "question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "reference_answer": "Use a 3-color state (unvisited, visiting/in-stack, visited). A cycle exists if DFS encounters a node currently in the recursion stack (visiting).",
+    "rubric_concepts": [
+      "recursion stack / visiting state",
+      "3-state coloring (white/gray/black)",
+      "back-edge detection",
+      "visited set"
+    ],
+    "candidate_answer": "To detect cycles in a directed graph, compute the topological sort using BFS Kahn's algorithm, but instead of tracking in-degrees, compute all shortest paths with Floyd-Warshall and check if any diagonal element is positive.",
+    "expected_quality_category": "verbose_wrong"
+  },
+  {
+    "case_id": "BM-046",
+    "qid": 15,
+    "topic": "Graphs & DFS",
+    "question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "reference_answer": "Use a 3-color state (unvisited, visiting/in-stack, visited). A cycle exists if DFS encounters a node currently in the recursion stack (visiting).",
+    "rubric_concepts": [
+      "recursion stack / visiting state",
+      "3-state coloring (white/gray/black)",
+      "back-edge detection",
+      "visited set"
+    ],
+    "candidate_answer": "DFS directed graph cycle detection recursion stack three colors white gray black back-edge visiting visited O(V+E) time.",
+    "expected_quality_category": "keyword_stuffed"
+  },
+  {
+    "case_id": "BM-047",
+    "qid": 15,
+    "topic": "Graphs & DFS",
+    "question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "reference_answer": "Use a 3-color state (unvisited, visiting/in-stack, visited). A cycle exists if DFS encounters a node currently in the recursion stack (visiting).",
+    "rubric_concepts": [
+      "recursion stack / visiting state",
+      "3-state coloring (white/gray/black)",
+      "back-edge detection",
+      "visited set"
+    ],
+    "candidate_answer": "In a directed graph, encountering any previously visited node always indicates a cycle, exactly like in undirected graphs.",
+    "expected_quality_category": "misconception"
+  },
+  {
+    "case_id": "BM-048",
+    "qid": 15,
+    "topic": "Graphs & DFS",
+    "question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "reference_answer": "Use a 3-color state (unvisited, visiting/in-stack, visited). A cycle exists if DFS encounters a node currently in the recursion stack (visiting).",
+    "rubric_concepts": [
+      "recursion stack / visiting state",
+      "3-state coloring (white/gray/black)",
+      "back-edge detection",
+      "visited set"
+    ],
+    "candidate_answer": "Cycle detection in directed networks tracks vertices on the current path. When DFS reaches a vertex that is already an active ancestor on the current search path, a cycle is confirmed.",
+    "expected_quality_category": "paraphrase"
+  },
+  {
+    "case_id": "BM-049",
+    "qid": 22,
+    "topic": "Binary Search",
+    "question": "Explain the binary search algorithm and its preconditions.",
+    "reference_answer": "Binary search finds a target in a sorted collection by repeatedly halving the search range. Precondition: the collection must be sorted or monotonically ordered.",
+    "rubric_concepts": [
+      "sorted / monotonic precondition",
+      "divide and conquer / halving range",
+      "mid calculation (low + (high-low)/2)",
+      "O(log N) time"
+    ],
+    "candidate_answer": "Binary search requires the input array to be sorted. It maintains low and high pointers, computes mid = low + (high - low)/2, compares array[mid] to the target, and halves the search space until found or exhausted in O(log N) time.",
+    "expected_quality_category": "concise_correct"
+  },
+  {
+    "case_id": "BM-050",
+    "qid": 22,
+    "topic": "Binary Search",
+    "question": "Explain the binary search algorithm and its preconditions.",
+    "reference_answer": "Binary search finds a target in a sorted collection by repeatedly halving the search range. Precondition: the collection must be sorted or monotonically ordered.",
+    "rubric_concepts": [
+      "sorted / monotonic precondition",
+      "divide and conquer / halving range",
+      "mid calculation (low + (high-low)/2)",
+      "O(log N) time"
+    ],
+    "candidate_answer": "Binary search is a divide-and-conquer search algorithm with a strict precondition: the underlying elements must be sorted in monotonic order (or possess a monotonic predicate). We define search boundaries low = 0 and high = n - 1. In each iteration of a while loop (low <= high), we compute mid = low + (high - low) / 2 to prevent 32-bit integer overflow. If array[mid] == target, we return the index. If array[mid] < target, the target must lie in the right half, so we update low = mid + 1. If array[mid] > target, the target must lie in the left half, so we update high = mid - 1. Because each step discards half the remaining candidate elements, time complexity is O(log n) and space complexity is O(1).",
+    "expected_quality_category": "verbose_correct"
+  },
+  {
+    "case_id": "BM-051",
+    "qid": 22,
+    "topic": "Binary Search",
+    "question": "Explain the binary search algorithm and its preconditions.",
+    "reference_answer": "Binary search finds a target in a sorted collection by repeatedly halving the search range. Precondition: the collection must be sorted or monotonically ordered.",
+    "rubric_concepts": [
+      "sorted / monotonic precondition",
+      "divide and conquer / halving range",
+      "mid calculation (low + (high-low)/2)",
+      "O(log N) time"
+    ],
+    "candidate_answer": "Binary search splits the array in half each time to find a target value in O(log N) time.",
+    "expected_quality_category": "partial_incomplete"
+  },
+  {
+    "case_id": "BM-052",
+    "qid": 22,
+    "topic": "Binary Search",
+    "question": "Explain the binary search algorithm and its preconditions.",
+    "reference_answer": "Binary search finds a target in a sorted collection by repeatedly halving the search range. Precondition: the collection must be sorted or monotonically ordered.",
+    "rubric_concepts": [
+      "sorted / monotonic precondition",
+      "divide and conquer / halving range",
+      "mid calculation (low + (high-low)/2)",
+      "O(log N) time"
+    ],
+    "candidate_answer": "Binary search starts at index 0 and inspects every second element (0, 2, 4, ...) until finding the target.",
+    "expected_quality_category": "incorrect"
+  },
+  {
+    "case_id": "BM-053",
+    "qid": 22,
+    "topic": "Binary Search",
+    "question": "Explain the binary search algorithm and its preconditions.",
+    "reference_answer": "Binary search finds a target in a sorted collection by repeatedly halving the search range. Precondition: the collection must be sorted or monotonically ordered.",
+    "rubric_concepts": [
+      "sorted / monotonic precondition",
+      "divide and conquer / halving range",
+      "mid calculation (low + (high-low)/2)",
+      "O(log N) time"
+    ],
+    "candidate_answer": "Binary search can operate on completely random unsorted data by first calculating the hash code of every element, inserting them into a binary search tree in O(N^2) time, and performing in-order traversal to locate the element.",
+    "expected_quality_category": "verbose_wrong"
+  },
+  {
+    "case_id": "BM-054",
+    "qid": 22,
+    "topic": "Binary Search",
+    "question": "Explain the binary search algorithm and its preconditions.",
+    "reference_answer": "Binary search finds a target in a sorted collection by repeatedly halving the search range. Precondition: the collection must be sorted or monotonically ordered.",
+    "rubric_concepts": [
+      "sorted / monotonic precondition",
+      "divide and conquer / halving range",
+      "mid calculation (low + (high-low)/2)",
+      "O(log N) time"
+    ],
+    "candidate_answer": "Binary search sorted array monotonic precondition divide and conquer low high mid halving O(log N) logarithmic time integer overflow.",
+    "expected_quality_category": "keyword_stuffed"
+  },
+  {
+    "case_id": "BM-055",
+    "qid": 22,
+    "topic": "Binary Search",
+    "question": "Explain the binary search algorithm and its preconditions.",
+    "reference_answer": "Binary search finds a target in a sorted collection by repeatedly halving the search range. Precondition: the collection must be sorted or monotonically ordered.",
+    "rubric_concepts": [
+      "sorted / monotonic precondition",
+      "divide and conquer / halving range",
+      "mid calculation (low + (high-low)/2)",
+      "O(log N) time"
+    ],
+    "candidate_answer": "Binary search works on any array regardless of order because it automatically reorders the elements during the search.",
+    "expected_quality_category": "misconception"
+  },
+  {
+    "case_id": "BM-056",
+    "qid": 22,
+    "topic": "Binary Search",
+    "question": "Explain the binary search algorithm and its preconditions.",
+    "reference_answer": "Binary search finds a target in a sorted collection by repeatedly halving the search range. Precondition: the collection must be sorted or monotonically ordered.",
+    "rubric_concepts": [
+      "sorted / monotonic precondition",
+      "divide and conquer / halving range",
+      "mid calculation (low + (high-low)/2)",
+      "O(log N) time"
+    ],
+    "candidate_answer": "Binary search halves the search space in O(log N) time, but it only works if the array is completely unordered and unsorted.",
+    "expected_quality_category": "contradictory"
+  },
+  {
+    "case_id": "BM-057",
+    "qid": 50,
+    "topic": "OS & Concurrency",
+    "question": "What is a race condition in multithreading and how do you prevent it?",
+    "reference_answer": "A race condition occurs when multiple threads concurrently access shared data and at least one writes, making outcome dependent on execution order. Prevent using mutexes, locks, or atomics.",
+    "rubric_concepts": [
+      "concurrent shared memory access",
+      "at least one write operation",
+      "non-deterministic outcome / timing dependency",
+      "mutex / lock / atomic synchronization"
+    ],
+    "candidate_answer": "A race condition occurs when two or more threads concurrently access shared data without synchronization and at least one modifies it, leading to unpredictable outcomes. It is prevented using mutex locks, semaphores, or atomic operations.",
+    "expected_quality_category": "concise_correct"
+  },
+  {
+    "case_id": "BM-058",
+    "qid": 50,
+    "topic": "OS & Concurrency",
+    "question": "What is a race condition in multithreading and how do you prevent it?",
+    "reference_answer": "A race condition occurs when multiple threads concurrently access shared data and at least one writes, making outcome dependent on execution order. Prevent using mutexes, locks, or atomics.",
+    "rubric_concepts": [
+      "concurrent shared memory access",
+      "at least one write operation",
+      "non-deterministic outcome / timing dependency",
+      "mutex / lock / atomic synchronization"
+    ],
+    "candidate_answer": "A race condition is a concurrency bug that arises when two or more threads execute concurrently, access shared mutable state simultaneously, and at least one thread performs a write operation. Because thread scheduling is non-deterministic and managed by the operating system kernel, the final program state depends on the exact interleaving of instruction execution. This leads to subtle, intermittent bugs like lost updates, dirty reads, or data corruption. Race conditions are prevented by enforcing mutual exclusion around critical sections. Primary mechanisms include mutex locks (pthread_mutex), read-write locks, semaphores, and atomic hardware primitives (e.g. compare-and-swap).",
+    "expected_quality_category": "verbose_correct"
+  },
+  {
+    "case_id": "BM-059",
+    "qid": 50,
+    "topic": "OS & Concurrency",
+    "question": "What is a race condition in multithreading and how do you prevent it?",
+    "reference_answer": "A race condition occurs when multiple threads concurrently access shared data and at least one writes, making outcome dependent on execution order. Prevent using mutexes, locks, or atomics.",
+    "rubric_concepts": [
+      "concurrent shared memory access",
+      "at least one write operation",
+      "non-deterministic outcome / timing dependency",
+      "mutex / lock / atomic synchronization"
+    ],
+    "candidate_answer": "A race condition happens when threads run at the same time and overwrite each other. You fix it with locks.",
+    "expected_quality_category": "partial_incomplete"
+  },
+  {
+    "case_id": "BM-060",
+    "qid": 50,
+    "topic": "OS & Concurrency",
+    "question": "What is a race condition in multithreading and how do you prevent it?",
+    "reference_answer": "A race condition occurs when multiple threads concurrently access shared data and at least one writes, making outcome dependent on execution order. Prevent using mutexes, locks, or atomics.",
+    "rubric_concepts": [
+      "concurrent shared memory access",
+      "at least one write operation",
+      "non-deterministic outcome / timing dependency",
+      "mutex / lock / atomic synchronization"
+    ],
+    "candidate_answer": "A race condition is when your computer's CPU clock runs faster than your RAM bus speed, causing memory drops.",
+    "expected_quality_category": "incorrect"
+  },
+  {
+    "case_id": "BM-061",
+    "qid": 50,
+    "topic": "OS & Concurrency",
+    "question": "What is a race condition in multithreading and how do you prevent it?",
+    "reference_answer": "A race condition occurs when multiple threads concurrently access shared data and at least one writes, making outcome dependent on execution order. Prevent using mutexes, locks, or atomics.",
+    "rubric_concepts": [
+      "concurrent shared memory access",
+      "at least one write operation",
+      "non-deterministic outcome / timing dependency",
+      "mutex / lock / atomic synchronization"
+    ],
+    "candidate_answer": "A race condition occurs when threads compete for bandwidth across network interfaces. To prevent it, increase the thread priority to real-time and disable interrupt handling in user space so threads run sequentially without OS interference.",
+    "expected_quality_category": "verbose_wrong"
+  },
+  {
+    "case_id": "BM-062",
+    "qid": 50,
+    "topic": "OS & Concurrency",
+    "question": "What is a race condition in multithreading and how do you prevent it?",
+    "reference_answer": "A race condition occurs when multiple threads concurrently access shared data and at least one writes, making outcome dependent on execution order. Prevent using mutexes, locks, or atomics.",
+    "rubric_concepts": [
+      "concurrent shared memory access",
+      "at least one write operation",
+      "non-deterministic outcome / timing dependency",
+      "mutex / lock / atomic synchronization"
+    ],
+    "candidate_answer": "Race condition multithreading shared mutable state concurrent write critical section mutual exclusion mutex lock semaphore atomic operations.",
+    "expected_quality_category": "keyword_stuffed"
+  },
+  {
+    "case_id": "BM-063",
+    "qid": 50,
+    "topic": "OS & Concurrency",
+    "question": "What is a race condition in multithreading and how do you prevent it?",
+    "reference_answer": "A race condition occurs when multiple threads concurrently access shared data and at least one writes, making outcome dependent on execution order. Prevent using mutexes, locks, or atomics.",
+    "rubric_concepts": [
+      "concurrent shared memory access",
+      "at least one write operation",
+      "non-deterministic outcome / timing dependency",
+      "mutex / lock / atomic synchronization"
+    ],
+    "candidate_answer": "Declaring a shared variable as volatile in C/C++ completely eliminates race conditions and makes all operations atomic.",
+    "expected_quality_category": "misconception"
+  },
+  {
+    "case_id": "BM-064",
+    "qid": 50,
+    "topic": "OS & Concurrency",
+    "question": "What is a race condition in multithreading and how do you prevent it?",
+    "reference_answer": "A race condition occurs when multiple threads concurrently access shared data and at least one writes, making outcome dependent on execution order. Prevent using mutexes, locks, or atomics.",
+    "rubric_concepts": [
+      "concurrent shared memory access",
+      "at least one write operation",
+      "non-deterministic outcome / timing dependency",
+      "mutex / lock / atomic synchronization"
+    ],
+    "candidate_answer": "When multiple threads concurrently manipulate shared memory with unsynchronized writes, the resulting values depend on execution timing. Mutexes and atomic primitives ensure exclusive access, preventing the race.",
+    "expected_quality_category": "paraphrase"
+  }
+]

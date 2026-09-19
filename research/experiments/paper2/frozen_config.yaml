@@ -1,0 +1,32 @@
+# PREPAIred Evaluator Frozen Configuration (Paper 2)
+git_commit: '9cfd34f9a0c710d540209677334ae112658a086b'
+evaluator_version: '2.0.0-frozen'
+models:
+  sbert:
+    name: 'sentence-transformers/all-MiniLM-L6-v2'
+    embedding_dim: 384
+    normalization: 'L2'
+  cross_encoder:
+    name: 'cross-encoder/ms-marco-MiniLM-L6-v2'
+    checkpoint_path: 'services/evaluator/models/tuned_model2/'
+    sha256: '6a241a55bef24355378db16a6380f03226fc9394312122afa648ec9e03a94450'
+faiss:
+  index_path: 'services/evaluator/assets/logic_vectors.faiss'
+  metadata_path: 'services/evaluator/assets/logic_metadata.pkl'
+  metric: 'IndexFlatIP (Cosine Similarity)'
+  indexed_vectors: 1518
+thresholds:
+  concept_threshold: 0.30  # single source of truth
+  reasoning_dampening_threshold: 0.30
+  reasoning_dampening_factor: 0.60
+  mandatory_threshold: 0.40
+  mandatory_cap: 0.60
+composite_weights:
+  w_s1: 0.15
+  w_s2: 0.35
+  w_r: 0.50
+grade_boundaries:
+  excellent: 0.75
+  good: 0.60
+  average: 0.40
+  poor: 0.00

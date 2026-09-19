@@ -1,3 +1,15 @@
+# ARCHIVED / SUPERSEDED — NOT A SOURCE OF CURRENT FACTS
+> **Superseded by:** 
+esearch/CANONICAL_SCIENTIFIC_TRUTH.md and 
+esearch/audit/  
+> **Date Archived:** 2026-09-17  
+> **Reason:** Historical milestone report from earlier development stages. Contains superseded metrics, monolithic draft plans, or deprecated architecture references.  
+> **Current Authoritative Source:** Consult 
+esearch/README.md and 
+esearch/CANONICAL_SCIENTIFIC_TRUTH.md.
+
+---
+
 # Stage 26.1 — Master Publication Inventory & Distribution Pre-Flight Check
 
 **Document ID:** `STAGE-26-1-PUBLICATION-INVENTORY`

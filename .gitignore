@@ -68,8 +68,9 @@ Thumbs.db
 audio_*.webm
 audio_*.wav
 
-# Model binaries
+# Model binaries and large image archives
 *.gguf
+*.tar
 
 # Local database files
 *.db

@@ -1,0 +1,90 @@
+{
+  "Audio Signal Processing": {
+    "n": 50,
+    "mean_ms": 0.42,
+    "std_ms": 0.08,
+    "median_ms": 0.4,
+    "p95_ms": 0.57,
+    "p99_ms": 0.73,
+    "min_ms": 0.39,
+    "max_ms": 0.85,
+    "throughput_qps": 2374.6
+  },
+  "Technical Evaluator (S1+S2+R)": {
+    "n": 50,
+    "mean_ms": 325.13,
+    "std_ms": 1097.73,
+    "median_ms": 167.59,
+    "p95_ms": 176.23,
+    "p99_ms": 4177.74,
+    "min_ms": 161.52,
+    "max_ms": 8009.19,
+    "throughput_qps": 3.1
+  },
+  "Score Validator & Policy Rules": {
+    "n": 50,
+    "mean_ms": 0.0,
+    "std_ms": 0.0,
+    "median_ms": 0.0,
+    "p95_ms": 0.0,
+    "p99_ms": 0.0,
+    "min_ms": 0.0,
+    "max_ms": 0.0,
+    "throughput_qps": 2551019.9
+  },
+  "PPO Policy Inference (6D)": {
+    "n": 50,
+    "mean_ms": 0.67,
+    "std_ms": 0.15,
+    "median_ms": 0.64,
+    "p95_ms": 0.83,
+    "p99_ms": 1.23,
+    "min_ms": 0.54,
+    "max_ms": 1.49,
+    "throughput_qps": 1492.0
+  },
+  "Socratic Follow-up FSM": {
+    "n": 50,
+    "mean_ms": 0.0,
+    "std_ms": 0.0,
+    "median_ms": 0.0,
+    "p95_ms": 0.0,
+    "p99_ms": 0.0,
+    "min_ms": 0.0,
+    "max_ms": 0.0,
+    "throughput_qps": 6493481.6
+  },
+  "Grounded Feedback Generator": {
+    "n": 50,
+    "mean_ms": 4871.06,
+    "std_ms": 26.22,
+    "median_ms": 4868.29,
+    "p95_ms": 4901.06,
+    "p99_ms": 4950.47,
+    "min_ms": 4816.18,
+    "max_ms": 4981.82,
+    "throughput_qps": 0.2
+  },
+  "SQLite WAL Multi-Attempt Persistence": {
+    "n": 50,
+    "mean_ms": 27.13,
+    "std_ms": 4.22,
+    "median_ms": 27.77,
+    "p95_ms": 32.02,
+    "p99_ms": 34.82,
+    "min_ms": 17.46,
+    "max_ms": 36.0,
+    "throughput_qps": 36.9
+  },
+  "Isolated Docker C Sandbox": {
+    "n": 5,
+    "mean_ms": 2751.13,
+    "std_ms": 2541.59,
+    "median_ms": 1527.73,
+    "p95_ms": 6582.59,
+    "p99_ms": 7581.67,
+    "min_ms": 1329.69,
+    "max_ms": 7831.44,
+    "throughput_qps": 0.4
+  }
+}

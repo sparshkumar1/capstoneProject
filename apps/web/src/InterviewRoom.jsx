@@ -222,7 +222,7 @@ export default function InterviewRoom({ navigate }) {
     setAwaitingNext(false);
     setPhase("question");
     setTranscript("");
-    setStageHint("Ready for another attempt. Address the missing points to improve your score.");
+    setStageHint("Ready for another attempt. Apply the feedback and answer again.");
     send("retry_question", { question_id: question?.id });
   };
 
@@ -318,97 +318,21 @@ export default function InterviewRoom({ navigate }) {
 
         {/* Left: avatar + question + feedback */}
         <div className="interview-left">
+          {/* Unified Question Card with Integrated AI Interviewer */}
           <InterviewerAvatar
             question={question}
             questionIndex={questionIndex}
+            totalQuestions={totalQuestions}
+            difficulty={difficulty}
+            followUpQueued={followUpQueued}
+            session={session}
+            baselineDone={baselineDone}
+            stageHint={stageHint}
+            ttsActive={ttsActive}
             isThinking={phase === "evaluating"}
+            onSkip={handleSkip}
+            connected={connected}
           />
-
-          {/* Question card */}
-          <div className="card question-card">
-            {question ? (
-              <>
-                <div className="question-meta">
-                  <span className="badge badge-accent">Q{questionIndex} of {totalQuestions}</span>
-                  <span className="badge badge-neutral">{question.topic}</span>
-
-                  {followUpQueued && <span className="badge badge-accent" style={{ background: "rgba(0,229,200,0.14)", color: "var(--accent-2)" }}>Follow-up</span>}
-                  {session?.interview_mode === "demo_rl" && !baselineDone && (
-                    <span className="badge badge-warn">Baseline</span>
-                  )}
-                  {session?.interview_mode === "demo_rl" && baselineDone && (
-                    <span className="badge badge-success">RL Active</span>
-                  )}
-                  <span className="badge" style={{
-                    background: difficulty <= 2 ? "rgba(54,217,143,0.14)" : difficulty === 3 ? "rgba(255,184,79,0.14)" : "rgba(255,79,106,0.14)",
-                    color: difficulty <= 2 ? "var(--success)" : difficulty === 3 ? "var(--warn)" : "var(--danger)"
-                  }}>
-                    Level {difficulty}
-                  </span>
-                  {question.type && <span className="badge badge-neutral">{question.type}</span>}
-                </div>
-
-                {stageHint && (
-                  <div style={{ marginTop: 6, marginBottom: 8, padding: "7px 12px", background: "var(--bg-2)", borderRadius: 8, fontSize: 12, color: "var(--text-2)", borderLeft: "3px solid var(--accent)" }}>
-                    {stageHint}
-                  </div>
-                )}
-
-                {question.historical_best && (
-                  <div className="historical-best-banner" style={{
-                    margin: "8px 0 12px 0",
-                    padding: "8px 12px",
-                    background: "rgba(0, 229, 200, 0.08)",
-                    border: "1px solid rgba(0, 229, 200, 0.3)",
-                    borderRadius: "8px",
-                    fontSize: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    color: "var(--accent-2)"
-                  }}>
-                    <span>
-                      🕒 <strong>Prior History:</strong> Answered in a previous session (Best: {Math.round((question.historical_best.final_score || 0) * 100)}%, Grade {question.historical_best.grade || "Average"}).
-                    </span>
-                    {question.historical_best.answer && (
-                      <span style={{ fontSize: "11px", opacity: 0.85, maxWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={question.historical_best.answer}>
-                        &quot;{question.historical_best.answer}&quot;
-                      </span>
-                    )}
-                  </div>
-                )}
-
-                <div className="question-text">{question.text}</div>
-
-                {question.code_snippet && (
-                  <pre className="code-snippet"><code>{question.code_snippet}</code></pre>
-                )}
-                {question.constraints && (
-                  <div className="constraints-box">
-                    <span style={{ fontWeight: 600, fontSize: 12, color: "var(--text-2)" }}>Constraints: </span>
-                    {question.constraints}
-                  </div>
-                )}
-
-                {!ttsActive && phase !== "evaluating" && (
-                  <div className="question-actions">
-                    <button className="btn btn-ghost btn-sm" onClick={handleSkip}>⏭ Skip Question</button>
-                  </div>
-                )}
-                {ttsActive && (
-                  <div className="question-actions" style={{ opacity: 0.6 }}>
-                    <p style={{ fontSize: 12, color: "var(--text-3)" }}>🔊 Reading question aloud...</p>
-                  </div>
-                )}
-
-              </>
-            ) : (
-              <div className="waiting-state">
-                <div className="waiting-spinner" />
-                <p>{connected ? "Loading question…" : "Connecting to interview server…"}</p>
-              </div>
-            )}
-          </div>
 
           {/* Rich Feedback Card */}
           <div ref={feedbackRef}>
@@ -507,9 +431,9 @@ export default function InterviewRoom({ navigate }) {
                   </div>
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
                     <span className="badge badge-accent">
-                      Confidence: {Math.round((audioAnalysis.confidence_score || 0) * 100)}%
+                      Clarity: {(audioAnalysis.confidence_score ?? 1) >= 0.7 ? "High" : (audioAnalysis.confidence_score ?? 1) >= 0.4 ? "Moderate" : "Low"}
                     </span>
-                    <span className="badge badge-neutral">{audioAnalysis.label || "—"}</span>
+                    <span className="badge badge-neutral">{audioAnalysis.label || "Detected"}</span>
                   </div>
                   <div style={{ fontSize: 12, color: "var(--text-2)", display: "flex", flexDirection: "column", gap: 3 }}>
                     <span>Speaking rate: {audioAnalysis?.transcription?.true_speaking_rate ?? 0} WPM</span>

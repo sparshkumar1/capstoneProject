@@ -1,3 +1,11 @@
+# ARCHIVED / SUPERSEDED — NOT A SOURCE OF CURRENT FACTS
+> **Superseded by:** `research/CANONICAL_SCIENTIFIC_TRUTH.md` and `research/papers/`  
+> **Date Archived:** 2026-09-17  
+> **Reason:** Historical draft manuscript from Stage 17. Contains superseded single-paper draft claims (e.g. monolithic IEEE paper draft, pre-audit metrics).  
+> **Current Authoritative Source:** Consult `research/README.md` and `research/CANONICAL_SCIENTIFIC_TRUTH.md`.
+
+---
+
 # A Personalized Adaptive Framework for Multimodal Technical Interview Assessment and Preparation
 
 **Authors:** Sparsh Kumar and the PrepAIred Research Group

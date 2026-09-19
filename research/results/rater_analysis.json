@@ -1,0 +1,24 @@
+{
+  "system_vs_human": {
+    "n": 20,
+    "spearman_rho": 0.7400376247460365,
+    "spearman_p": 0.00019130744585760723,
+    "spearman_ci95": [
+      0.45806338172783384,
+      0.9096777038341805
+    ],
+    "pearson_r": 0.6689515222000271,
+    "pearson_p": 0.001259153801949996,
+    "pearson_ci95": [
+      0.42695155073939073,
+      0.8689976655123405
+    ],
+    "mae": 0.209205,
+    "rmse": 0.27275015398712427
+  },
+  "inter_rater_reliability": {
+    "n_raters": 4,
+    "krippendorff_alpha_interval": 0.9177248784488743,
+    "composition": "1 Real Human + 3 Synthetic Proxies"
+  }
+}

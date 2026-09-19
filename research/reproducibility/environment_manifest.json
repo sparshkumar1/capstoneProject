@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-09-17T15:00:00+05:30",
+  "git": {
+    "commit": "9cfd34f9a0c710d540209677334ae112658a086b",
+    "short_commit": "9cfd34f",
+    "branch": "workspace/human-eval-clean-push"
+  },
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "python_version": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "cpu": "12th Gen Intel(R) Core(TM) i5-1235U (10 cores, 12 threads)",
+    "ram_gb": 15.68,
+    "cuda_available": false
+  },
+  "packages": {
+    "torch": "2.11.0+cpu",
+    "torchaudio": "2.11.0+cpu",
+    "faiss": "1.13.2",
+    "sentence_transformers": "2.7.0",
+    "stable_baselines3": "2.7.1",
+    "transformers": "4.41.2",
+    "gymnasium": "0.29.1",
+    "sqlite3": "3.50.2",
+    "docker_sandbox_image": "prepaired-c-sandbox:latest"
+  },
+  "checksums_sha256": {
+    "data/questions/qns.json": "2007ff39ff694b16fa364d44dd83b448c823901a7858c427ca495a4dcb26d2aa",
+    "data/rubrics/rubrics_final_clean.json": "57a2ed5a088dc9597a0bd04cb6592c79c801550c50c2ca4149c2866d29d9c9cd",
+    "services/evaluator/assets/logic_vectors.faiss": "5d6ac4d710a5ddd5ad303ad868b67b77bd4d9cdddf18bbbe9eac08848e5fa2da",
+    "services/evaluator/assets/logic_metadata.pkl": "2f15209f729cb9258cee6b790e6cf72c0ed73dfbfe6b3250fac29324e975afed",
+    "services/evaluator/models/tuned_model2/model.safetensors": "6a241a55bef24355378db16a6380f03226fc9394312122afa648ec9e03a94450",
+    "services/evaluator/models/tuned_model2/config.json": "29f6b1e61849e2381c197bd0d9beb5f09f7048955b47ad15e26739be4c5d220b",
+    "rl/checkpoints/seed_123/ppo_final.zip": "2ab8d514ca748abd0ac650d4a0b1676093530b21a16b1586c764b6db8ac54575",
+    "rl/checkpoints/seed_123/vecnormalize.pkl": "1481ca2c11cb1c2f9ae055c5350fc168359900daea2da3897a6b63f4dfc29df2",
+    "ablation/results/ratings_rater1.csv": "98495db2363eb51b83fc90efba78034691ba029e2854cd8456b714a3376cd610",
+    "ablation/results/ratings_proxy.csv": "16f88e55bc974f2179503c8d6ede5e6dc5e4855f07f014c39f288cf2aa57ec11",
+    "ablation/results/ratings_averaged.csv": "7f23e503f83f041a6a355857a34035882180200b4735d8b45735d802161ae5a2"
+  }
+}

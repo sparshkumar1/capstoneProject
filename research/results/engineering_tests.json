@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-09-17T22:27:03+05:30",
+  "git_commit": "9cfd34f278de8cc6b2810a4855b571b6b7264495",
+  "git_branch": "workspace/human-eval-clean-push",
+  "environment": "Windows 11 / .venv (Python 3.12.7, Torch 2.11.0+cpu, Stable-Baselines3 2.7.1, FAISS 1.13.2)",
+  "backend_tests": {
+    "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/ -q",
+    "discovered_tests": 205,
+    "executed_tests": 205,
+    "passed": 205,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 309,
+    "execution_time_seconds": 440.19,
+    "breakdown": {
+      "unit_tests": 193,
+      "integration_tests": 12
+    }
+  },
+  "frontend_tests": {
+    "command": "npm --prefix apps/web run test:ci",
+    "test_files": 2,
+    "discovered_tests": 20,
+    "executed_tests": 20,
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "execution_time_seconds": 2.07
+  },
+  "frontend_build": {
+    "command": "npm --prefix apps/web run build",
+    "status": "success",
+    "modules_transformed": 57,
+    "bundle_duration_seconds": 0.864,
+    "output_assets": [
+      "dist/index.html (1.82 kB)",
+      "dist/assets/index-cw2DIPLZ.css (47.86 kB)",
+      "dist/assets/index-DDy7VFzy.js (107.24 kB)",
+      "dist/assets/react-jVyfcstf.js (140.78 kB)"
+    ]
+  }
+}

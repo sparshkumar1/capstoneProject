@@ -9,15 +9,8 @@
  *   decision_source, vague_points
  */
 
+import { useState, useEffect } from "react";
 import "./FeedbackCard.css";
-
-const GRADE_COLOR = {
-  A: "var(--success)",
-  B: "var(--accent-2)",
-  C: "var(--warn)",
-  D: "#ff8c4f",
-  F: "var(--danger)",
-};
 
 const TREND_META = {
   improving: { icon: "↑", color: "var(--success)", label: "Improving" },
@@ -25,20 +18,53 @@ const TREND_META = {
   stable:     { icon: "→", color: "var(--warn)",    label: "Stable"     },
 };
 
-function ScoreBar({ label, value, color }) {
-  const pct = Math.round((value ?? 0) * 100);
-  return (
-    <div className="fc-bar-row">
-      <span className="fc-bar-label">{label}</span>
-      <div className="fc-bar-track">
-        <div
-          className="fc-bar-fill"
-          style={{ width: `${pct}%`, background: color }}
-        />
-      </div>
-      <span className="fc-bar-pct" style={{ color }}>{pct}%</span>
-    </div>
-  );
+/**
+ * Strips redundant improvement tips that merely re-state missing concepts.
+ * E.g., if missing_concepts includes "single pass iteration", advice like
+ * "Cover missing concept: single pass iteration" is pruned.
+ */
+export function filterUniqueImprovementTips(improveList, missingList) {
+  if (!Array.isArray(improveList) || improveList.length === 0) return [];
+
+  const normalizedMissing = (missingList || [])
+    .filter((m) => typeof m === "string" && m.trim())
+    .map((m) => m.trim().toLowerCase());
+
+  const seen = new Set();
+  const result = [];
+
+  for (const item of improveList) {
+    if (!item || typeof item !== "string") continue;
+    const trimmed = item.trim();
+    if (!trimmed) continue;
+
+    // Strip common repetitive prefixes
+    const stripped = trimmed
+      .replace(/^(cover\s+missing\s+concept\s*:?|missing\s+concept\s*:?|cover\s*:?|review\s*:?)\s*/i, "")
+      .trim();
+
+    const lowerStripped = stripped.toLowerCase();
+
+    // Check if stripped tip duplicates any missing concept
+    const isMissingDuplicate = normalizedMissing.some((m) => {
+      if (lowerStripped === m) return true;
+      if (lowerStripped === `cover ${m}`) return true;
+      if (lowerStripped === `review ${m}`) return true;
+      if (lowerStripped === `address ${m}`) return true;
+      return false;
+    });
+
+    if (isMissingDuplicate) {
+      continue;
+    }
+
+    if (!seen.has(lowerStripped)) {
+      seen.add(lowerStripped);
+      result.push(trimmed);
+    }
+  }
+
+  return result;
 }
 
 function SectionHeader({ icon, title, color }) {
@@ -59,22 +85,53 @@ function SectionHeader({ icon, title, color }) {
 export function generateQualitativeSummary(feedback) {
   if (!feedback) return "";
 
-  // 1. If Qwen or backend provided narrative feedback, prioritize it directly:
-  const rawNarrative = (feedback.narrative_feedback || "").trim();
-  if (rawNarrative && rawNarrative.length > 15) {
-    return rawNarrative;
+  // 1. If narrative feedback provided, validate grounding and lack of score leaks
+  const rawNarrative = (typeof feedback.narrative_feedback === "string" ? feedback.narrative_feedback : "").trim();
+  const covered = Array.isArray(feedback.covered_concepts) ? feedback.covered_concepts : [];
+  const missing = Array.isArray(feedback.missing_concepts) ? feedback.missing_concepts : [];
+  const errors = Array.isArray(feedback.incorrect_or_incomplete) ? feedback.incorrect_or_incomplete : [];
+  const strong = Array.isArray(feedback.strong_points) ? feedback.strong_points : [];
+  const rawImprove = Array.isArray(feedback.how_to_improve) ? feedback.how_to_improve : [];
+  const improve = filterUniqueImprovementTips(rawImprove, missing);
+  const commTips = Array.isArray(feedback.communication_tips) ? feedback.communication_tips : [];
+  const transcript = (typeof feedback.transcript === "string" ? feedback.transcript : "").trim();
+
+  const isScoreTemplate = /Grade\s+[A-Za-z0-9+-]+/i.test(rawNarrative) && /Semantic/i.test(rawNarrative);
+
+  if (rawNarrative && !isScoreTemplate) {
+    const sanitized = rawNarrative
+      .replace(/\bGrade\s+[A-Za-z0-9+-]+(?:\s*\(\d+%\))?/gi, "")
+      .replace(/\bScore(?:\s*(?:change|delta|improved by|decreased by))?:\s*[+-]?\d+(?:\.\d+)?%?/gi, "")
+      .replace(/\b[+-]?\d+(?:\.\d+)?%/g, "")
+      .replace(/\b(?:Semantic|Reasoning|Concept coverage|Confidence)\s+\d+%?/gi, "")
+      .replace(/\b(?:improved|decreased)\s+by\s+[+-]?\d+%?/gi, "")
+      .replace(/\bScore\s+[+-]?\d+(?:\.\d+)?\b/gi, "")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+
+    // Contradiction check: LLM must not claim missing concepts were correctly covered
+    const hasContradiction = missing.some((m) => {
+      const lowM = m.toLowerCase();
+      return (
+        sanitized.toLowerCase().includes(`correctly explained ${lowM}`) ||
+        sanitized.toLowerCase().includes(`correctly covered ${lowM}`)
+      );
+    });
+
+    // Grounding check: ensure narrative is grounded in topic or covered/missing concepts
+    const isGrounded =
+      (covered.length === 0 && missing.length === 0) ||
+      covered.some((c) => sanitized.toLowerCase().includes(c.toLowerCase())) ||
+      missing.some((m) => sanitized.toLowerCase().includes(m.toLowerCase()));
+
+    if (!hasContradiction && isGrounded && sanitized.length > 20) {
+      return sanitized;
+    }
   }
 
-  // 2. Extract structured evaluation facts
-  const covered   = Array.isArray(feedback.covered_concepts) ? feedback.covered_concepts : [];
-  const missing   = Array.isArray(feedback.missing_concepts) ? feedback.missing_concepts : [];
-  const errors    = Array.isArray(feedback.incorrect_or_incomplete) ? feedback.incorrect_or_incomplete : [];
-  const strong    = Array.isArray(feedback.strong_points) ? feedback.strong_points : [];
-  const improve   = Array.isArray(feedback.how_to_improve) ? feedback.how_to_improve : [];
-  const commTips  = Array.isArray(feedback.communication_tips) ? feedback.communication_tips : [];
-  const transcript = (feedback.transcript ?? "").trim();
+  // 2. Extract structured evaluation facts for dynamic qualitative synthesis
   const wordCount = transcript ? transcript.split(/\s+/).filter(Boolean).length : 0;
-  const isCoding  = feedback.test_cases_passed !== undefined || feedback.tests_total !== undefined;
+  const isCoding = feedback.test_cases_passed !== undefined || feedback.tests_total !== undefined;
 
   // Handle coding submission feedback
   if (isCoding) {
@@ -158,20 +215,29 @@ export function generateQualitativeSummary(feedback) {
 export default function FeedbackCard({ feedback, onNext, awaitingNext, onRetry }) {
   if (!feedback) return null;
 
-  const trend   = feedback.trend ?? "stable";
-  const trendMeta = TREND_META[trend] ?? TREND_META.stable;
-  const strong  = feedback.strong_points ?? [];
-  const errors  = feedback.incorrect_or_incomplete ?? [];
-  const missing = feedback.missing_concepts ?? [];
-  const covered = feedback.covered_concepts ?? [];
-  const improve = feedback.how_to_improve ?? [];
-  const commTips = feedback.communication_tips ?? [];
-  const trendNote = feedback.trend_note ?? "";
-  const transcript    = feedback.transcript ?? "";
-  const source        = feedback.decision_source ?? "evaluator";
-  const aiSummary     = generateQualitativeSummary(feedback);
-  const comparison    = feedback.comparison;
-  const attemptNum    = feedback.attempt_number || 1;
+  const [showBestAnswer, setShowBestAnswer] = useState(false);
+
+  useEffect(() => {
+    setShowBestAnswer(false);
+  }, [feedback?.attempt_number, feedback?.transcript]);
+
+  const strong = Array.isArray(feedback.strong_points) ? feedback.strong_points : [];
+  const errors = Array.isArray(feedback.incorrect_or_incomplete) ? feedback.incorrect_or_incomplete : [];
+  const missing = Array.isArray(feedback.missing_concepts) ? feedback.missing_concepts : [];
+  const covered = Array.isArray(feedback.covered_concepts) ? feedback.covered_concepts : [];
+  const rawImprove = Array.isArray(feedback.how_to_improve) ? feedback.how_to_improve : [];
+  const improve = filterUniqueImprovementTips(rawImprove, missing);
+  const commTips = Array.isArray(feedback.communication_tips) ? feedback.communication_tips : [];
+  const transcript = typeof feedback.transcript === "string" ? feedback.transcript : "";
+  const source = typeof feedback.decision_source === "string" ? feedback.decision_source : "evaluator";
+  const aiSummary = generateQualitativeSummary(feedback);
+  const comparison = feedback.comparison && typeof feedback.comparison === "object" ? feedback.comparison : null;
+  const attemptNum = typeof feedback.attempt_number === "number" ? feedback.attempt_number : 1;
+  const hasPreviousComparable = Boolean(comparison && comparison.has_previous_best);
+
+  const authoritativeBestAnswer = feedback.is_best
+    ? (typeof feedback.transcript === "string" && feedback.transcript ? feedback.transcript : (feedback.code_submitted || feedback.code || ""))
+    : (comparison?.previous_best_answer || feedback.transcript || "");
 
   return (
     <div className="feedback-card-rich fade-up">
@@ -192,80 +258,16 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext, onRetry }
         </div>
 
         <div className="fc-header-right">
-          {trendNote && (
-            <div className="fc-trend-chip" style={{ color: trendMeta.color, borderColor: trendMeta.color }}>
-              <span className="fc-trend-icon">{trendMeta.icon}</span>
-              {trendMeta.label}
-            </div>
+          {attemptNum > 1 && (
+            <span className="badge badge-accent" style={{ fontWeight: 600, fontSize: "11px" }}>
+              Attempt #{attemptNum}
+            </span>
           )}
-          {feedback.decision_source && (
+          {source && (
             <span className="badge badge-neutral" style={{ fontSize: 10 }}>{source}</span>
           )}
         </div>
       </div>
-
-      {/* ── Attempt & Best Status Badge Row ───────────────── */}
-      {(attemptNum > 1 || feedback.is_best !== undefined) && (
-        <div className="fc-attempt-row" style={{ display: "flex", gap: "8px", alignItems: "center", margin: "8px 0 12px 0" }}>
-          <span className="badge badge-accent" style={{ fontWeight: 600, fontSize: "12px" }}>
-            Attempt #{attemptNum}
-          </span>
-          {feedback.is_best ? (
-            <span className="badge badge-success" style={{ fontWeight: 600, fontSize: "11px" }}>
-              ⭐ Best Answer Recorded
-            </span>
-          ) : (
-            <span className="badge badge-neutral" style={{ fontSize: "11px" }}>
-              Previous best remains active
-            </span>
-          )}
-        </div>
-      )}
-
-      {trendNote && (
-        <p className="fc-trend-note">{trendNote}</p>
-      )}
-
-      {/* ── Multi-Attempt Comparison Section ────────────────── */}
-      {comparison && comparison.has_previous_best && (
-        <div className="fc-section fc-comparison-card" style={{ background: "rgba(255,255,255,0.03)", padding: "12px", borderRadius: "8px", marginBottom: "16px", border: "1px solid var(--border)" }}>
-          <SectionHeader icon="📊" title="Attempt Progress vs Previous Best" color="var(--accent)" />
-          <div style={{ display: "flex", gap: "12px", alignItems: "center", margin: "8px 0", fontSize: "13px" }}>
-            <span>Score Change:</span>
-            <span style={{
-              fontWeight: 700,
-              color: comparison.score_delta > 0 ? "var(--success)" : comparison.score_delta < 0 ? "var(--danger)" : "var(--text-3)"
-            }}>
-              {comparison.score_delta > 0 ? `+${Math.round(comparison.score_delta * 100)}%` : `${Math.round(comparison.score_delta * 100)}%`}
-            </span>
-            {comparison.has_improvement && (
-              <span className="badge badge-success" style={{ fontSize: "11px" }}>Progress Made</span>
-            )}
-          </div>
-
-          {comparison.resolved_concepts && comparison.resolved_concepts.length > 0 && (
-            <div style={{ marginTop: "8px" }}>
-              <span style={{ fontSize: "12px", color: "var(--success)", fontWeight: 600 }}>What Improved (Gaps Resolved):</span>
-              <div className="fc-pills" style={{ marginTop: "4px" }}>
-                {comparison.resolved_concepts.map((c, i) => (
-                  <span key={i} className="badge badge-success">✓ {c}</span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {comparison.remaining_concepts && comparison.remaining_concepts.length > 0 && (
-            <div style={{ marginTop: "8px" }}>
-              <span style={{ fontSize: "12px", color: "var(--warn)", fontWeight: 600 }}>Still Needs Work:</span>
-              <div className="fc-pills" style={{ marginTop: "4px" }}>
-                {comparison.remaining_concepts.map((m, i) => (
-                  <span key={i} className="badge badge-warn">○ {m}</span>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
 
       {/* ── Strong Points ───────────────────────────────────── */}
       {strong.length > 0 && (
@@ -372,6 +374,113 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext, onRetry }
         </div>
       )}
 
+      {/* ── Retry / Best-Answer Status Section ──────────────── */}
+      {hasPreviousComparable && (
+        <div className="fc-section fc-best-status-section" style={{ background: "rgba(255,255,255,0.02)", borderLeft: feedback.is_best ? "3px solid var(--success)" : "3px solid var(--warn)" }}>
+          <SectionHeader
+            icon={feedback.is_best ? "🏆" : "🔄"}
+            title="Retry / Best-Answer Status"
+            color={feedback.is_best ? "var(--success)" : "var(--warn)"}
+          />
+
+          <div style={{ marginTop: "8px" }}>
+            {feedback.is_best ? (
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                  <span className="badge badge-success" style={{ fontWeight: 700, fontSize: "12px", padding: "3px 10px" }}>
+                    ✓ New Best Answer
+                  </span>
+                </div>
+                <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "var(--text-1)", lineHeight: 1.5 }}>
+                  Your latest answer is now your best attempt for this question.
+                </p>
+              </div>
+            ) : (
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                  <span className="badge badge-neutral" style={{ fontWeight: 600, fontSize: "12px", padding: "3px 10px" }}>
+                    Your Previous Best Answer Remains Best
+                  </span>
+                </div>
+                <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "var(--text-2)", lineHeight: 1.5 }}>
+                  Your latest attempt did not replace your previous best answer.
+                </p>
+              </div>
+            )}
+
+            {/* Grounded Improvements (from structured comparison only) */}
+            {comparison?.resolved_concepts && comparison.resolved_concepts.length > 0 && (
+              <div style={{ marginTop: "12px" }}>
+                <span style={{ fontSize: "12px", color: "var(--success)", fontWeight: 600 }}>What improved:</span>
+                <ul className="fc-check-list" style={{ marginTop: "4px" }}>
+                  {comparison.resolved_concepts.map((c, i) => (
+                    <li key={i} className="fc-check-item" style={{ fontSize: "12px" }}>
+                      <span className="fc-check-icon">✓</span>
+                      <span>Covered {c}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Still to improve (if not best and remaining concepts exist) */}
+            {!feedback.is_best && comparison?.remaining_concepts && comparison.remaining_concepts.length > 0 && (
+              <div style={{ marginTop: "10px" }}>
+                <span style={{ fontSize: "12px", color: "var(--warn)", fontWeight: 600 }}>Still to improve:</span>
+                <div className="fc-pills" style={{ marginTop: "4px" }}>
+                  {comparison.remaining_concepts.map((m, i) => (
+                    <span key={i} className="badge badge-warn">○ {m}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Authoritative Best Answer Inline Disclosure */}
+            {authoritativeBestAnswer && (
+              <div style={{ marginTop: "12px" }}>
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => setShowBestAnswer((prev) => !prev)}
+                  aria-expanded={showBestAnswer}
+                  aria-controls="fc-best-answer-panel"
+                  style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12px" }}
+                >
+                  <span>{showBestAnswer ? "Hide Best Answer ▴" : "View Best Answer ▾"}</span>
+                </button>
+
+                {showBestAnswer && (
+                  <div
+                    id="fc-best-answer-panel"
+                    style={{
+                      marginTop: "10px",
+                      padding: "12px 14px",
+                      background: "var(--bg-2)",
+                      borderRadius: "8px",
+                      border: "1px solid var(--border)",
+                      fontSize: "13px",
+                      lineHeight: 1.6,
+                      color: "var(--text-1)",
+                    }}
+                  >
+                    <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em", color: "var(--accent-2)", marginBottom: "6px" }}>
+                      Authoritative Best Answer
+                    </div>
+                    {authoritativeBestAnswer.includes("\n") || authoritativeBestAnswer.includes(";") ? (
+                      <pre className="code-snippet" style={{ margin: 0, fontSize: "12px" }}><code>{authoritativeBestAnswer}</code></pre>
+                    ) : (
+                      <div style={{ fontStyle: "italic", color: "var(--text-2)" }}>
+                        &quot;{authoritativeBestAnswer}&quot;
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ── Transcript ──────────────────────────────────────── */}
       {transcript && (
         <div className="fc-transcript">
@@ -381,20 +490,22 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext, onRetry }
       )}
 
       {/* ── Action Buttons ──────────────────────────────────── */}
-      <div className="fc-footer" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
-        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+      <div className="fc-footer" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
           {onRetry && (
             <button
               type="button"
               className="btn btn-secondary btn-sm"
               onClick={onRetry}
               disabled={!awaitingNext}
-              style={{ display: "flex", alignItems: "center", gap: "4px" }}
+              style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontWeight: 600 }}
             >
-              <span>🔄</span> Try Again (Retry)
+              <span>↻</span> Try Again
             </button>
           )}
-          <span className="fc-footer-hint">Review this feedback, then continue when ready.</span>
+          <span className="fc-footer-hint" style={{ fontSize: "11px", color: "var(--text-3)" }}>
+            Apply the feedback and answer again.
+          </span>
         </div>
         <button
           type="button"

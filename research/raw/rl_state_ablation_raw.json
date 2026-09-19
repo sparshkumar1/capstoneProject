@@ -1,0 +1,58 @@
+{
+  "state_ablation": {
+    "full": {
+      "mean_difficulty": 2.6480000000000006,
+      "final_difficulty": 2.97,
+      "smoothness": 0.32899999999999996,
+      "oscillation_rate": 0.21111111111111114,
+      "mean_score": 0.5554615458857265,
+      "alignment_r": 0.18078776125514012
+    },
+    "text_only": {
+      "mean_difficulty": 2.464,
+      "final_difficulty": 2.75,
+      "smoothness": 0.34300000000000014,
+      "oscillation_rate": 0.22333333333333338,
+      "mean_score": 0.5659318845961606,
+      "alignment_r": 0.5576584909052398
+    },
+    "performance_only": {
+      "mean_difficulty": 2.807999999999999,
+      "final_difficulty": 2.95,
+      "smoothness": 0.335,
+      "oscillation_rate": 0.19111111111111112,
+      "mean_score": 0.5194451436972262,
+      "alignment_r": 0.9113710094932224
+    }
+  },
+  "speech_perturbation": {
+    "sigma_0.00": {
+      "noise_sigma": 0.0,
+      "action_stability": 1.0,
+      "mean_difficulty": 2.6390000000000002,
+      "smoothness": 0.33,
+      "oscillation_rate": 0.21111111111111114
+    },
+    "sigma_0.10": {
+      "noise_sigma": 0.1,
+      "action_stability": 0.899,
+      "mean_difficulty": 2.6379999999999995,
+      "smoothness": 0.32899999999999996,
+      "oscillation_rate": 0.20777777777777778
+    },
+    "sigma_0.20": {
+      "noise_sigma": 0.2,
+      "action_stability": 0.869,
+      "mean_difficulty": 2.6699999999999995,
+      "smoothness": 0.303,
+      "oscillation_rate": 0.18444444444444447
+    },
+    "sigma_0.30": {
+      "noise_sigma": 0.3,
+      "action_stability": 0.861,
+      "mean_difficulty": 2.738999999999999,
+      "smoothness": 0.293,
+      "oscillation_rate": 0.16555555555555554
+    }
+  }
+}

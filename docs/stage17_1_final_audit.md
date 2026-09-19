@@ -1,3 +1,15 @@
+# ARCHIVED / SUPERSEDED — NOT A SOURCE OF CURRENT FACTS
+> **Superseded by:** 
+esearch/CANONICAL_SCIENTIFIC_TRUTH.md and 
+esearch/audit/  
+> **Date Archived:** 2026-09-17  
+> **Reason:** Historical milestone report from earlier development stages. Contains superseded metrics, monolithic draft plans, or deprecated architecture references.  
+> **Current Authoritative Source:** Consult 
+esearch/README.md and 
+esearch/CANONICAL_SCIENTIFIC_TRUTH.md.
+
+---
+
 # Stage 17.1 — Final Research Paper & Evidence Audit Report
 
 **Document ID:** `STAGE-17.1-REPORT`

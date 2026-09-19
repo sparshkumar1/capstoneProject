@@ -1,0 +1,12 @@
+{
+  "seed": 123,
+  "dim4_mode": "aligned_response_time",
+  "timesteps": 24576,
+  "elapsed_sec": 48.74,
+  "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\experiments\\paper3\\checkpoints\\seed_123\\ppo_final.zip",
+  "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\experiments\\paper3\\checkpoints\\seed_123\\vecnormalize.pkl",
+  "policy": "MlpPolicy [64, 64]",
+  "lr": 0.0003,
+  "gamma": 0.99,
+  "clip_range": 0.2
+}

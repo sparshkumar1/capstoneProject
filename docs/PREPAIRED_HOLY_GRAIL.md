@@ -1,3 +1,15 @@
+# ARCHIVED / SUPERSEDED — NOT A SOURCE OF CURRENT FACTS
+> **Superseded by:** 
+esearch/CANONICAL_SCIENTIFIC_TRUTH.md and 
+esearch/audit/  
+> **Date Archived:** 2026-09-17  
+> **Reason:** Historical milestone report from earlier development stages. Contains superseded metrics, monolithic draft plans, or deprecated architecture references.  
+> **Current Authoritative Source:** Consult 
+esearch/README.md and 
+esearch/CANONICAL_SCIENTIFIC_TRUTH.md.
+
+---
+
 # PREPAIRED — THE "HOLY GRAIL" MASTER PROJECT BOOK
 ## Technical Architecture, System Engineering, Research Compendium, Debugging Archaeology & Viva Voce Defense Guide
 
@@ -347,11 +359,13 @@ graph LR
 
 ### Mathematical Scoring Formulation
 1. **Topical Semantic Similarity ($S_1$):**
-   $$\mathbf{e}_{ans} = 	ext{SBERT}(a), \quad \mathbf{e}_{ref} = 	ext{SBERT}(r), \quad S_1 = \max\left(0, rac{\mathbf{e}_{ans} \cdot \mathbf{e}_{ref}}{\|\mathbf{e}_{ans}\| \|\mathbf{e}_{ref}\|}ight)$$
+   $$\mathbf{e}_{ans} = 	ext{SBERT}(a), \quad \mathbf{e}_{ref} = 	ext{SBERT}(r), \quad S_1 = \max\left(0, rac{\mathbf{e}_{ans} \cdot \mathbf{e}_{ref}}{\|\mathbf{e}_{ans}\| \|\mathbf{e}_{ref}\|}
+ight)$$
 2. **Structural Concept Coverage ($S_2$):**
    $$S_2 = rac{1}{|C|} \sum_{c \in C} \max_{s \in 	ext{sentences}(a)} \cos(	ext{SBERT}(s), 	ext{SBERT}(c))$$
 3. **Cross-Encoder Logical Entailment ($R$):**
-   $$R = \sigma\left(	ext{CrossEncoder}(q \oplus r, a)ight)$$
+   $$R = \sigma\left(	ext{CrossEncoder}(q \oplus r, a)
+ight)$$
 4. **Anti-Keyword Dampening Rule:**
    $$S_{2,	ext{eff}} = egin{cases} 0.60 	imes S_2 & 	ext{if } R \le 0.30 \ S_2 & 	ext{if } R > 0.30 \end{cases}$$
 5. **Final Composite Grade:**

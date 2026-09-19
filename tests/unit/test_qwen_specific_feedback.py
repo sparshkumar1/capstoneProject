@@ -216,3 +216,81 @@ async def test_feedback_agent_passes_attempt_and_comparison():
     )
     assert code_res["attempt_number"] == 2
     assert code_res["comparison"] == comparison
+
+
+# ── 6. Contradiction & Score-Leakage Guardrail Tests ──────────────────────────
+
+def test_validate_feedback_output_rejects_contradictions():
+    """Validator must reject feedback claiming a concept was correctly covered when evaluator marked it missing."""
+    req = FeedbackRequest(
+        question_text="Explain Two Sum logic.",
+        topic="arrays",
+        candidate_answer="I loop through the array.",
+        structured_evaluation={
+            "final_score": 0.40,
+            "grade": "C",
+            "correct_claims": ["array iteration"],
+            "missing_concepts": ["hash map lookup", "complement calculation"],
+        },
+    )
+
+    # 1. Contradiction in what_was_correct list
+    contradictory_list = {
+        "what_was_correct": ["hash map lookup"],
+        "narrative_feedback": "Candidate attempted iteration but needs more depth in the implementation.",
+        "how_to_answer": "Use a hash map to look up the complement in O(1) time.",
+    }
+    assert _validate_feedback_output(contradictory_list, req) is False
+
+    # 2. Contradiction in narrative prose
+    contradictory_prose = {
+        "what_was_correct": ["array iteration"],
+        "narrative_feedback": "You correctly explained hash map lookup and solved the problem.",
+        "how_to_answer": "Use a hash map to look up the complement in O(1) time.",
+    }
+    assert _validate_feedback_output(contradictory_prose, req) is False
+
+
+def test_validate_feedback_output_rejects_score_leakage():
+    """Validator must reject LLM output that attempts to inject raw evaluator scores or percentages."""
+    req = FeedbackRequest(
+        question_text="Explain malloc in C.",
+        candidate_answer="Allocates heap memory.",
+        structured_evaluation={"final_score": 0.85, "grade": "A"},
+    )
+
+    score_leak = {
+        "narrative_feedback": "Score: 0.85 achieved with clear explanation of heap allocation mechanics.",
+        "how_to_answer": "Explain malloc returns a void pointer to allocated heap memory.",
+    }
+    assert _validate_feedback_output(score_leak, req) is False
+
+    semantic_leak = {
+        "narrative_feedback": "Semantic 90% reached on pointer allocation mechanics with clear explanation.",
+        "how_to_answer": "Explain malloc returns a void pointer to allocated heap memory.",
+    }
+    assert _validate_feedback_output(semantic_leak, req) is False
+
+
+def test_feedback_cannot_alter_authoritative_evaluator_score():
+    """Adversarial or malformed feedback must never alter the authoritative score or grade."""
+    eval_result = {
+        "final_score": 0.7250,
+        "grade": "B+",
+        "correct_claims": ["allocated heap memory"],
+        "missing_concepts": ["free", "null check"],
+    }
+    req = FeedbackRequest(
+        question_text="Explain malloc.",
+        candidate_answer="Allocates memory.",
+        structured_evaluation=eval_result,
+        attempt_number=1,
+    )
+
+    resp = _synthesize_structured_feedback(req)
+    # Technical score and grade must remain strictly identical to evaluator
+    assert resp.final_score == 0.7250
+    assert resp.grade == "B+"
+    assert resp.what_was_correct == ["allocated heap memory"]
+    assert "free" in resp.missing_concepts
+

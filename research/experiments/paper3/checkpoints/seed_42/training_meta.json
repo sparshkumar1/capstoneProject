@@ -1,0 +1,12 @@
+{
+  "seed": 42,
+  "dim4_mode": "aligned_progress",
+  "timesteps": 24576,
+  "elapsed_sec": 41.12,
+  "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\experiments\\paper3\\checkpoints\\seed_42\\ppo_final.zip",
+  "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\experiments\\paper3\\checkpoints\\seed_42\\vecnormalize.pkl",
+  "policy": "MlpPolicy [64, 64]",
+  "lr": 0.0003,
+  "gamma": 0.99,
+  "clip_range": 0.2
+}

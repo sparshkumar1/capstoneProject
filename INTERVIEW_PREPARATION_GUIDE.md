@@ -1,3 +1,11 @@
+# CANDIDATE PREPARATION & STUDY GUIDE (EDUCATIONAL REFERENCE)
+> **Note:** This document is a candidate-facing technical interview study guide covering core CS and DSA concepts. It is not an authoritative system specification or research paper.
+> **Current Research Ground Truth:** Consult 
+esearch/README.md and 
+esearch/CANONICAL_SCIENTIFIC_TRUTH.md.
+
+---
+
 ﻿# PrepAIred â€” Complete Interview Preparation Guide
 ## Comprehensive Technical Overview & Viva Preparation
 

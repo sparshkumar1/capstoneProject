@@ -1,0 +1,130 @@
+{
+  "tier_labels": [
+    "Poor",
+    "Average",
+    "Good",
+    "Excellent"
+  ],
+  "confusion_matrix": [
+    [
+      8,
+      1,
+      0,
+      0
+    ],
+    [
+      2,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      3,
+      0,
+      0
+    ],
+    [
+      2,
+      2,
+      2,
+      0
+    ]
+  ],
+  "total_evaluated": 20,
+  "exact_agreement": 8,
+  "exact_agreement_rate": 0.4,
+  "large_errors": [
+    {
+      "qid": "1",
+      "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "answer": "",
+      "human_score": 0.4,
+      "system_score": 0.0634,
+      "diff": -0.3366,
+      "error_type": "False Negative (Underestimated)",
+      "s1": 0.0,
+      "s2": 0.0,
+      "reasoning_score": 0.127,
+      "weakest_gap": "Omitted mandatory requirement specified in rubric"
+    },
+    {
+      "qid": "1",
+      "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "answer": "I usually start by sorting arrays because sorted data is clean to read, and then I print all values to verify input formatting before coding.",
+      "human_score": 0.5,
+      "system_score": 0.0,
+      "diff": -0.5,
+      "error_type": "False Negative (Underestimated)",
+      "s1": 0.151,
+      "s2": 0.0,
+      "reasoning_score": 0.189,
+      "weakest_gap": "single pass iteration through the array with constant-time hash map lookup at each step"
+    },
+    {
+      "qid": "1",
+      "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "answer": "One way is to check each pair and stop when the sum matches the target. That is correct but it is O(n squared), so it can be slow on large arrays.",
+      "human_score": 0.8,
+      "system_score": 0.2324,
+      "diff": -0.5676,
+      "error_type": "False Negative (Underestimated)",
+      "s1": 0.321,
+      "s2": 0.0,
+      "reasoning_score": 0.309,
+      "weakest_gap": "single pass iteration through the array with constant-time hash map lookup at each step"
+    },
+    {
+      "qid": "1",
+      "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "answer": "I keep a dictionary of seen numbers and their positions while scanning left to right. For each value I compute target minus value and check if it was seen. I might need care with duplicates and whethe",
+      "human_score": 0.9,
+      "system_score": 0.1151,
+      "diff": -0.7849,
+      "error_type": "False Negative (Underestimated)",
+      "s1": 0.211,
+      "s2": 0.0,
+      "reasoning_score": 0.267,
+      "weakest_gap": "single pass iteration through the array with constant-time hash map lookup at each step"
+    },
+    {
+      "qid": "1",
+      "question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "answer": "Use one pass with a hash table from number to index. At index i with value x, compute need = target - x and check whether need is already in the table. If yes, return that stored index and i. If no, s",
+      "human_score": 0.9,
+      "system_score": 0.4692,
+      "diff": -0.4308,
+      "error_type": "False Negative (Underestimated)",
+      "s1": 0.372,
+      "s2": 0.75,
+      "reasoning_score": 0.442,
+      "weakest_gap": "Arrays core principle"
+    },
+    {
+      "qid": "3",
+      "question": "Describe the approach to reverse a singly linked list in-place.",
+      "answer": "Maintain three references: previous, current, and next_node. While current is not null, first save next_node = current.next, then redirect current.next to previous, move previous to current, and move ",
+      "human_score": 0.7,
+      "system_score": 0.404,
+      "diff": -0.296,
+      "error_type": "False Negative (Underestimated)",
+      "s1": 0.235,
+      "s2": 0.5,
+      "reasoning_score": 0.527,
+      "weakest_gap": "LinkedLists core principle"
+    },
+    {
+      "qid": "41",
+      "question": "What is a pointer in C and how do you declare one?",
+      "answer": "A pointer is a variable that holds a memory location of another object. For example, int *p declares a pointer to int. If int x = 7, then p = &x stores x's address, and *p reads or writes the value at",
+      "human_score": 0.8,
+      "system_score": 0.5146,
+      "diff": -0.2854,
+      "error_type": "False Negative (Underestimated)",
+      "s1": 0.582,
+      "s2": 0.75,
+      "reasoning_score": 0.429,
+      "weakest_gap": "C_Programming core principle"
+    }
+  ]
+}

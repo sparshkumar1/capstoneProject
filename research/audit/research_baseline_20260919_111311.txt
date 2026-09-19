@@ -1,0 +1,497 @@
+PREPAIred Baseline Manifest
+Timestamp: 20260919_111311
+Repository Root: C:/Users/spars/Downloads/PrepAIred
+Branch: workspace/human-eval-clean-push
+HEAD: 9cfd34f278de8cc6b2810a4855b571b6b7264495
+
+============================================================
+GIT STATUS (COMPLETE)
+============================================================
+On branch workspace/human-eval-clean-push
+Your branch is up to date with 'origin/workspace/human-eval-clean-push'.
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .gitignore
+	modified:   INTERVIEW_PREPARATION_GUIDE.md
+	modified:   apps/web/src/FeedbackCard.jsx
+	modified:   apps/web/src/InterviewRoom.jsx
+	modified:   apps/web/src/InterviewerAvatar.css
+	modified:   apps/web/src/InterviewerAvatar.jsx
+	modified:   apps/web/src/__tests__/ui_fixes.test.jsx
+	modified:   docs/FALLBACK_AUDIT.md
+	modified:   docs/FINAL_PRODUCTION_CALL_GRAPH.md
+	modified:   docs/FINAL_REPOSITORY_TREE.md
+	modified:   docs/PREPAIRED_COMPLETE_BOOKLET.md
+	modified:   docs/PREPAIRED_HOLY_GRAIL.md
+	modified:   docs/STAGE20_SUBMISSION_READINESS.md
+	modified:   docs/STAGE22_1_FINAL_LIVE_SYSTEM_CHECK.md
+	modified:   docs/STAGE22_3_QWEN_CPU_DEMO_INTEGRATION.md
+	modified:   docs/STAGE22_4_FINAL_INDEPENDENT_COMPLETION_GATE.md
+	modified:   docs/STAGE22_FINAL_PROJECT_REVIEW.md
+	modified:   docs/STAGE23_FINAL_REVIEW_PACKAGE.md
+	modified:   docs/STAGE24_5_SOURCE_OF_TRUTH_AUDIT.md
+	modified:   docs/STAGE24_GITHUB_RELEASE_GATE.md
+	modified:   docs/STAGE25_PRE_GITHUB_CLEANUP_REPORT.md
+	modified:   docs/STAGE26_1_PUBLICATION_INVENTORY.md
+	modified:   docs/STAGE26_FINAL_PRE_GITHUB_GATE.md
+	modified:   docs/paper_draft_ieee.md
+	modified:   docs/stage12_2_architecture_freeze_report.md
+	modified:   docs/stage16_5_qwen7b_colab_report.md
+	modified:   docs/stage16_7_exp3_qwen_verification.md
+	modified:   docs/stage17_1_final_audit.md
+	modified:   docs/stage17_5_github_release_audit.md
+	modified:   docs/stage17_paper_audit.md
+	modified:   docs/stage18_final_independent_audit.md
+	modified:   docs/stage19_claim_revision_table.md
+	modified:   docs/stage19_publication_audit.md
+	modified:   docs/stage19_reviewer_simulation.md
+	modified:   docs/stage19_submission_checklist.md
+	deleted:    research/papers/paper_aied_multiagent_feedback.md
+	deleted:    research/papers/paper_rl_adaptive_assessment.md
+	deleted:    research/papers/paper_systems_agentic_architecture.md
+	deleted:    research/results/summaries/experiment_1_summary.md
+	deleted:    research/results/summaries/experiment_2_summary.md
+	deleted:    research/results/summaries/experiment_3_summary.md
+	deleted:    research/results/summaries/experiment_4_summary.md
+	deleted:    research/results/summaries/experiment_5_summary.md
+	deleted:    research/results/verification/verification_report.md
+	modified:   services/qwen/app.py
+	deleted:    submission/README.md
+	deleted:    submission/figures/figure1_system_architecture.png
+	deleted:    submission/figures/figure2_candidate_state_loop.png
+	deleted:    submission/figures/figure3_experimental_methodology.png
+	deleted:    submission/figures/figure4_adaptive_difficulty.png
+	deleted:    submission/figures/figure5_evaluator_ablation.png
+	deleted:    submission/figures/figure6_feedback_comparison.png
+	deleted:    submission/figures/figure7_personalization_divergence.png
+	deleted:    submission/figures/figure8_leave_one_out_ablation.png
+	deleted:    submission/manuscript/IEEE_TLT_MANUSCRIPT.md
+	deleted:    submission/manuscript/paper_draft_ieee.md
+	deleted:    submission/reproducibility/REPRODUCIBILITY.md
+	deleted:    submission/reproducibility/reproduce_paper.py
+	deleted:    submission/supplementary/CLAIMS_CHECK.md
+	deleted:    submission/supplementary/PAPER_RESULTS_TRACEABILITY.md
+	deleted:    submission/supplementary/STAGE20_SUBMISSION_READINESS.md
+	deleted:    submission/supplementary/stage19_publication_audit.md
+	modified:   tests/unit/test_qwen_specific_feedback.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	research/CANONICAL_SCIENTIFIC_TRUTH.md
+	research/CLAUDE_RESEARCH_INDEX.md
+	research/PLAN.md
+	research/README.md
+	research/annotation/
+	research/archive/
+	research/audit/
+	research/data/
+	research/experiments/
+	research/figures/
+	research/papers/archived/
+	research/papers/paper1_systems/
+	research/papers/paper2_evaluator/
+	research/papers/paper3_rl/
+	research/prompts/
+	research/raw/
+	research/reproducibility/
+	research/results/engineering_tests.json
+	research/results/fault_injection.csv
+	research/results/metamorphic_tests.csv
+	research/results/paper2_error_analysis.md
+	research/results/paper2_final_results.csv
+	research/results/paper2_final_results.md
+	research/results/performance.csv
+	research/results/rater_analysis.json
+	research/results/rl_results.csv
+	research/results/rl_results.md
+	research/results/tests_current.md
+	research/scripts/
+	research/tables/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+============================================================
+GIT STATUS (SHORT)
+============================================================
+ M .gitignore
+ M INTERVIEW_PREPARATION_GUIDE.md
+ M apps/web/src/FeedbackCard.jsx
+ M apps/web/src/InterviewRoom.jsx
+ M apps/web/src/InterviewerAvatar.css
+ M apps/web/src/InterviewerAvatar.jsx
+ M apps/web/src/__tests__/ui_fixes.test.jsx
+ M docs/FALLBACK_AUDIT.md
+ M docs/FINAL_PRODUCTION_CALL_GRAPH.md
+ M docs/FINAL_REPOSITORY_TREE.md
+ M docs/PREPAIRED_COMPLETE_BOOKLET.md
+ M docs/PREPAIRED_HOLY_GRAIL.md
+ M docs/STAGE20_SUBMISSION_READINESS.md
+ M docs/STAGE22_1_FINAL_LIVE_SYSTEM_CHECK.md
+ M docs/STAGE22_3_QWEN_CPU_DEMO_INTEGRATION.md
+ M docs/STAGE22_4_FINAL_INDEPENDENT_COMPLETION_GATE.md
+ M docs/STAGE22_FINAL_PROJECT_REVIEW.md
+ M docs/STAGE23_FINAL_REVIEW_PACKAGE.md
+ M docs/STAGE24_5_SOURCE_OF_TRUTH_AUDIT.md
+ M docs/STAGE24_GITHUB_RELEASE_GATE.md
+ M docs/STAGE25_PRE_GITHUB_CLEANUP_REPORT.md
+ M docs/STAGE26_1_PUBLICATION_INVENTORY.md
+ M docs/STAGE26_FINAL_PRE_GITHUB_GATE.md
+ M docs/paper_draft_ieee.md
+ M docs/stage12_2_architecture_freeze_report.md
+ M docs/stage16_5_qwen7b_colab_report.md
+ M docs/stage16_7_exp3_qwen_verification.md
+ M docs/stage17_1_final_audit.md
+ M docs/stage17_5_github_release_audit.md
+ M docs/stage17_paper_audit.md
+ M docs/stage18_final_independent_audit.md
+ M docs/stage19_claim_revision_table.md
+ M docs/stage19_publication_audit.md
+ M docs/stage19_reviewer_simulation.md
+ M docs/stage19_submission_checklist.md
+ D research/papers/paper_aied_multiagent_feedback.md
+ D research/papers/paper_rl_adaptive_assessment.md
+ D research/papers/paper_systems_agentic_architecture.md
+ D research/results/summaries/experiment_1_summary.md
+ D research/results/summaries/experiment_2_summary.md
+ D research/results/summaries/experiment_3_summary.md
+ D research/results/summaries/experiment_4_summary.md
+ D research/results/summaries/experiment_5_summary.md
+ D research/results/verification/verification_report.md
+ M services/qwen/app.py
+ D submission/README.md
+ D submission/figures/figure1_system_architecture.png
+ D submission/figures/figure2_candidate_state_loop.png
+ D submission/figures/figure3_experimental_methodology.png
+ D submission/figures/figure4_adaptive_difficulty.png
+ D submission/figures/figure5_evaluator_ablation.png
+ D submission/figures/figure6_feedback_comparison.png
+ D submission/figures/figure7_personalization_divergence.png
+ D submission/figures/figure8_leave_one_out_ablation.png
+ D submission/manuscript/IEEE_TLT_MANUSCRIPT.md
+ D submission/manuscript/paper_draft_ieee.md
+ D submission/reproducibility/REPRODUCIBILITY.md
+ D submission/reproducibility/reproduce_paper.py
+ D submission/supplementary/CLAIMS_CHECK.md
+ D submission/supplementary/PAPER_RESULTS_TRACEABILITY.md
+ D submission/supplementary/STAGE20_SUBMISSION_READINESS.md
+ D submission/supplementary/stage19_publication_audit.md
+ M tests/unit/test_qwen_specific_feedback.py
+?? research/CANONICAL_SCIENTIFIC_TRUTH.md
+?? research/CLAUDE_RESEARCH_INDEX.md
+?? research/PLAN.md
+?? research/README.md
+?? research/annotation/
+?? research/archive/
+?? research/audit/
+?? research/data/
+?? research/experiments/
+?? research/figures/
+?? research/papers/archived/
+?? research/papers/paper1_systems/
+?? research/papers/paper2_evaluator/
+?? research/papers/paper3_rl/
+?? research/prompts/
+?? research/raw/
+?? research/reproducibility/
+?? research/results/engineering_tests.json
+?? research/results/fault_injection.csv
+?? research/results/metamorphic_tests.csv
+?? research/results/paper2_error_analysis.md
+?? research/results/paper2_final_results.csv
+?? research/results/paper2_final_results.md
+?? research/results/performance.csv
+?? research/results/rater_analysis.json
+?? research/results/rl_results.csv
+?? research/results/rl_results.md
+?? research/results/tests_current.md
+?? research/scripts/
+?? research/tables/
+
+
+============================================================
+GIT DIFF STAT
+============================================================
+ .gitignore                                         |   3 +-
+ INTERVIEW_PREPARATION_GUIDE.md                     |   8 +
+ apps/web/src/FeedbackCard.jsx                      | 357 +++++++++++------
+ apps/web/src/InterviewRoom.jsx                     | 102 +----
+ apps/web/src/InterviewerAvatar.css                 |  17 +-
+ apps/web/src/InterviewerAvatar.jsx                 | 251 ++++++++++--
+ apps/web/src/__tests__/ui_fixes.test.jsx           | 435 +++++++++++++++++++++
+ docs/FALLBACK_AUDIT.md                             |  12 +
+ docs/FINAL_PRODUCTION_CALL_GRAPH.md                |  12 +
+ docs/FINAL_REPOSITORY_TREE.md                      |  12 +
+ docs/PREPAIRED_COMPLETE_BOOKLET.md                 |  12 +
+ docs/PREPAIRED_HOLY_GRAIL.md                       |  18 +-
+ docs/STAGE20_SUBMISSION_READINESS.md               |  12 +
+ docs/STAGE22_1_FINAL_LIVE_SYSTEM_CHECK.md          |  12 +
+ docs/STAGE22_3_QWEN_CPU_DEMO_INTEGRATION.md        |  12 +
+ .../STAGE22_4_FINAL_INDEPENDENT_COMPLETION_GATE.md |  12 +
+ docs/STAGE22_FINAL_PROJECT_REVIEW.md               |  12 +
+ docs/STAGE23_FINAL_REVIEW_PACKAGE.md               |  12 +
+ docs/STAGE24_5_SOURCE_OF_TRUTH_AUDIT.md            |  12 +
+ docs/STAGE24_GITHUB_RELEASE_GATE.md                |  12 +
+ docs/STAGE25_PRE_GITHUB_CLEANUP_REPORT.md          |  12 +
+ docs/STAGE26_1_PUBLICATION_INVENTORY.md            |  12 +
+ docs/STAGE26_FINAL_PRE_GITHUB_GATE.md              |  12 +
+ docs/paper_draft_ieee.md                           |   8 +
+ docs/stage12_2_architecture_freeze_report.md       |  12 +
+ docs/stage16_5_qwen7b_colab_report.md              |  12 +
+ docs/stage16_7_exp3_qwen_verification.md           |  12 +
+ docs/stage17_1_final_audit.md                      |  12 +
+ docs/stage17_5_github_release_audit.md             |  12 +
+ docs/stage17_paper_audit.md                        |  12 +
+ docs/stage18_final_independent_audit.md            |  12 +
+ docs/stage19_claim_revision_table.md               |  12 +
+ docs/stage19_publication_audit.md                  |  12 +
+ docs/stage19_reviewer_simulation.md                |  12 +
+ docs/stage19_submission_checklist.md               |  12 +
+ research/papers/paper_aied_multiagent_feedback.md  | 299 --------------
+ research/papers/paper_rl_adaptive_assessment.md    | 295 --------------
+ .../papers/paper_systems_agentic_architecture.md   | 326 ---------------
+ research/results/summaries/experiment_1_summary.md |  38 --
+ research/results/summaries/experiment_2_summary.md |  41 --
+ research/results/summaries/experiment_3_summary.md |  71 ----
+ research/results/summaries/experiment_4_summary.md |  38 --
+ research/results/summaries/experiment_5_summary.md |  41 --
+ .../results/verification/verification_report.md    |  43 --
+ services/qwen/app.py                               |  28 +-
+ submission/README.md                               |  21 -
+ submission/figures/figure1_system_architecture.png | Bin 249456 -> 0 bytes
+ .../figures/figure2_candidate_state_loop.png       | Bin 206624 -> 0 bytes
+ .../figures/figure3_experimental_methodology.png   | Bin 316966 -> 0 bytes
+ submission/figures/figure4_adaptive_difficulty.png | Bin 226617 -> 0 bytes
+ submission/figures/figure5_evaluator_ablation.png  | Bin 192241 -> 0 bytes
+ submission/figures/figure6_feedback_comparison.png | Bin 241548 -> 0 bytes
+ .../figures/figure7_personalization_divergence.png | Bin 284223 -> 0 bytes
+ .../figures/figure8_leave_one_out_ablation.png     | Bin 299028 -> 0 bytes
+ submission/manuscript/IEEE_TLT_MANUSCRIPT.md       | 417 --------------------
+ submission/manuscript/paper_draft_ieee.md          | 417 --------------------
+ submission/reproducibility/REPRODUCIBILITY.md      |  80 ----
+ submission/reproducibility/reproduce_paper.py      | 103 -----
+ submission/supplementary/CLAIMS_CHECK.md           |  78 ----
+ .../supplementary/PAPER_RESULTS_TRACEABILITY.md    |  49 ---
+ .../supplementary/STAGE20_SUBMISSION_READINESS.md  | 140 -------
+ .../supplementary/stage19_publication_audit.md     | 145 -------
+ tests/unit/test_qwen_specific_feedback.py          |  78 ++++
+ 63 files changed, 1356 insertions(+), 2903 deletions(-)
+
+
+============================================================
+TRACKED DELETED FILES
+============================================================
+research/papers/paper_aied_multiagent_feedback.md
+research/papers/paper_rl_adaptive_assessment.md
+research/papers/paper_systems_agentic_architecture.md
+research/results/summaries/experiment_1_summary.md
+research/results/summaries/experiment_2_summary.md
+research/results/summaries/experiment_3_summary.md
+research/results/summaries/experiment_4_summary.md
+research/results/summaries/experiment_5_summary.md
+research/results/verification/verification_report.md
+submission/README.md
+submission/figures/figure1_system_architecture.png
+submission/figures/figure2_candidate_state_loop.png
+submission/figures/figure3_experimental_methodology.png
+submission/figures/figure4_adaptive_difficulty.png
+submission/figures/figure5_evaluator_ablation.png
+submission/figures/figure6_feedback_comparison.png
+submission/figures/figure7_personalization_divergence.png
+submission/figures/figure8_leave_one_out_ablation.png
+submission/manuscript/IEEE_TLT_MANUSCRIPT.md
+submission/manuscript/paper_draft_ieee.md
+submission/reproducibility/REPRODUCIBILITY.md
+submission/reproducibility/reproduce_paper.py
+submission/supplementary/CLAIMS_CHECK.md
+submission/supplementary/PAPER_RESULTS_TRACEABILITY.md
+submission/supplementary/STAGE20_SUBMISSION_READINESS.md
+submission/supplementary/stage19_publication_audit.md
+
+
+============================================================
+UNTRACKED FILES
+============================================================
+research/CANONICAL_SCIENTIFIC_TRUTH.md
+research/CLAUDE_RESEARCH_INDEX.md
+research/PLAN.md
+research/README.md
+research/annotation/README.md
+research/annotation/rater_guidelines.md
+research/annotation/rating_template.csv
+research/annotation/rating_template_64cases.csv
+research/archive/old_audits/circularity.md
+research/archive/old_audits/historical_changes.md
+research/archive/old_audits/implementation_map.md
+research/archive/old_audits/publication_readiness.md
+research/archive/old_audits/unknowns.md
+research/archive/old_manuscripts/submission_package_archive/README.md
+research/archive/old_manuscripts/submission_package_archive/figures/figure1_system_architecture.png
+research/archive/old_manuscripts/submission_package_archive/figures/figure2_candidate_state_loop.png
+research/archive/old_manuscripts/submission_package_archive/figures/figure3_experimental_methodology.png
+research/archive/old_manuscripts/submission_package_archive/figures/figure4_adaptive_difficulty.png
+research/archive/old_manuscripts/submission_package_archive/figures/figure5_evaluator_ablation.png
+research/archive/old_manuscripts/submission_package_archive/figures/figure6_feedback_comparison.png
+research/archive/old_manuscripts/submission_package_archive/figures/figure7_personalization_divergence.png
+research/archive/old_manuscripts/submission_package_archive/figures/figure8_leave_one_out_ablation.png
+research/archive/old_manuscripts/submission_package_archive/reproducibility/REPRODUCIBILITY.md
+research/archive/old_manuscripts/submission_package_archive/reproducibility/reproduce_paper.py
+research/archive/old_manuscripts/submission_package_archive/supplementary/CLAIMS_CHECK.md
+research/archive/old_manuscripts/submission_package_archive/supplementary/PAPER_RESULTS_TRACEABILITY.md
+research/archive/old_manuscripts/submission_package_archive/supplementary/STAGE20_SUBMISSION_READINESS.md
+research/archive/old_manuscripts/submission_package_archive/supplementary/stage19_publication_audit.md
+research/archive/old_plans/experiment_1_summary.md
+research/archive/old_plans/experiment_2_summary.md
+research/archive/old_plans/experiment_3_summary.md
+research/archive/old_plans/experiment_4_summary.md
+research/archive/old_plans/experiment_5_summary.md
+research/archive/old_plans/verification_report.md
+research/audit/PRIORITY_0_FINAL.md
+research/audit/SUPERSEDED_DOCUMENTS.md
+research/audit/artifact_provenance.md
+research/audit/claim_audit.md
+research/audit/current_implementation_map.md
+research/audit/current_test_manifest.md
+research/audit/data_leakage_report.md
+research/audit/data_lineage.md
+research/audit/dataset_inventory.md
+research/audit/documentation_inventory.md
+research/audit/equation_code_audit.md
+research/audit/evaluator_result_provenance.md
+research/audit/failure_matrix.md
+research/audit/fault_tolerance.md
+research/audit/historical_results_reconciliation.md
+research/audit/paper_overlap_matrix.md
+research/audit/privacy_data_flow.md
+research/audit/reviewer_attack_report.md
+research/audit/reviewer_simulation.md
+research/audit/rho_provenance.md
+research/audit/rl_state_alignment.md
+research/audit/rl_state_definition.md
+research/audit/speech_ethics.md
+research/audit/threat_model.md
+research/audit/threshold_provenance.md
+research/data/evaluator_benchmark/README.md
+research/data/evaluator_benchmark/benchmark_cases.json
+research/data/evaluator_benchmark/benchmark_dataset.csv
+research/experiments/paper2/ablation/README.md
+research/experiments/paper2/adversarial/README.md
+research/experiments/paper2/frozen_config.yaml
+research/experiments/paper2/metamorphic/README.md
+research/experiments/paper3/checkpoints/seed_123/ppo_final.zip
+research/experiments/paper3/checkpoints/seed_123/training_meta.json
+research/experiments/paper3/checkpoints/seed_123/vecnormalize.pkl
+research/experiments/paper3/checkpoints/seed_42/ppo_final.zip
+research/experiments/paper3/checkpoints/seed_42/training_meta.json
+research/experiments/paper3/checkpoints/seed_42/vecnormalize.pkl
+research/experiments/paper3/checkpoints/seed_456/ppo_final.zip
+research/experiments/paper3/checkpoints/seed_456/training_meta.json
+research/experiments/paper3/checkpoints/seed_456/vecnormalize.pkl
+research/experiments/paper3/checkpoints/seed_789/ppo_final.zip
+research/experiments/paper3/checkpoints/seed_789/training_meta.json
+research/experiments/paper3/checkpoints/seed_789/vecnormalize.pkl
+research/experiments/paper3/checkpoints/seed_999/ppo_final.zip
+research/experiments/paper3/checkpoints/seed_999/training_meta.json
+research/experiments/paper3/checkpoints/seed_999/vecnormalize.pkl
+research/experiments/paper3/evaluation/README.md
+research/experiments/paper3/personas/README.md
+research/experiments/paper3/state_sensitivity/README.md
+research/experiments/paper3/training/README.md
+research/figures/eval_ablation_comparison.png
+research/figures/eval_threshold_sensitivity.png
+research/figures/rl_speech_perturbation_stability.png
+research/figures/rl_trajectory_comparison.png
+research/figures/sys_subsystem_latency.png
+research/papers/archived/abandoned_titles/paper_aied_multiagent_feedback.md
+research/papers/archived/old_drafts/paper_rl_adaptive_assessment.md
+research/papers/archived/old_drafts/paper_systems_agentic_architecture.md
+research/papers/archived/superseded_manuscripts/IEEE_TLT_MANUSCRIPT.md
+research/papers/archived/superseded_manuscripts/final_prepaired_ieee_paper.pdf
+research/papers/archived/superseded_manuscripts/paper_draft_ieee_access.md
+research/papers/archived/superseded_manuscripts/paper_draft_ieee_toE.md
+research/papers/paper1_systems/README.md
+research/papers/paper1_systems/evidence_map.md
+research/papers/paper1_systems/figures/sys_subsystem_latency.png
+research/papers/paper1_systems/outline.md
+research/papers/paper1_systems/tables/table_llm_adversarial_grounding.md
+research/papers/paper1_systems/tables/table_sys_architectural_ablation.md
+research/papers/paper1_systems/tables/table_sys_latency_benchmark.md
+research/papers/paper1_systems/tables/table_sys_security_boundary.md
+research/papers/paper2_evaluator/README.md
+research/papers/paper2_evaluator/evidence_map.md
+research/papers/paper2_evaluator/figures/eval_ablation_comparison.png
+research/papers/paper2_evaluator/figures/eval_threshold_sensitivity.png
+research/papers/paper2_evaluator/outline.md
+research/papers/paper2_evaluator/tables/metamorphic_results.md
+research/papers/paper2_evaluator/tables/table_eval_ablation.md
+research/papers/paper2_evaluator/tables/table_eval_adversarial.md
+research/papers/paper2_evaluator/tables/table_eval_error_analysis.md
+research/papers/paper2_evaluator/tables/table_eval_threshold.md
+research/papers/paper3_rl/README.md
+research/papers/paper3_rl/evidence_map.md
+research/papers/paper3_rl/figures/rl_speech_perturbation_stability.png
+research/papers/paper3_rl/figures/rl_trajectory_comparison.png
+research/papers/paper3_rl/outline.md
+research/papers/paper3_rl/tables/table_rl_dim4_analysis.md
+research/papers/paper3_rl/tables/table_rl_policy_comparison.md
+research/papers/paper3_rl/tables/table_rl_speech_perturbation.md
+research/prompts/MASTER_RESEARCH_EXECUTION_PROMPT.md
+research/raw/eval_ablation_raw.json
+research/raw/eval_adversarial_raw.json
+research/raw/eval_error_analysis_raw.json
+research/raw/eval_threshold_raw.json
+research/raw/llm_grounding_raw.json
+research/raw/metamorphic_raw.json
+research/raw/rl_dim4_impact_raw.json
+research/raw/rl_policy_comparison_raw.json
+research/raw/rl_state_ablation_raw.json
+research/raw/sys_arch_ablation_raw.json
+research/raw/sys_latency_benchmark_raw.json
+research/raw/sys_security_raw.json
+research/reproducibility/environment_manifest.json
+research/reproducibility/paper1_reproduce.md
+research/reproducibility/paper2_reproduce.md
+research/reproducibility/paper3_reproduce.md
+research/reproducibility/paper_1_reproduce.md
+research/reproducibility/paper_2_reproduce.md
+research/reproducibility/paper_3_reproduce.md
+research/results/engineering_tests.json
+research/results/fault_injection.csv
+research/results/metamorphic_tests.csv
+research/results/paper2_error_analysis.md
+research/results/paper2_final_results.csv
+research/results/paper2_final_results.md
+research/results/performance.csv
+research/results/rater_analysis.json
+research/results/rl_results.csv
+research/results/rl_results.md
+research/results/tests_current.md
+research/scripts/analyze_human_ratings.py
+research/scripts/build_comprehensive_benchmark.py
+research/scripts/build_documentation_inventory.py
+research/scripts/gen_all_audits.py
+research/scripts/gen_impl_map.py
+research/scripts/gen_manifest.py
+research/scripts/generate_benchmark_cases.py
+research/scripts/run_evaluator_experiments.py
+research/scripts/run_metamorphic_tests.py
+research/scripts/run_paper1_systems_study.py
+research/scripts/run_paper2_study.py
+research/scripts/run_paper3_study.py
+research/scripts/run_rl_experiments.py
+research/scripts/run_systems_experiments.py
+research/tables/metamorphic_results.md
+research/tables/table_eval_ablation.md
+research/tables/table_eval_adversarial.md
+research/tables/table_eval_error_analysis.md
+research/tables/table_eval_threshold.md
+research/tables/table_llm_adversarial_grounding.md
+research/tables/table_rl_dim4_analysis.md
+research/tables/table_rl_policy_comparison.md
+research/tables/table_rl_speech_perturbation.md
+research/tables/table_sys_architectural_ablation.md
+research/tables/table_sys_latency_benchmark.md
+research/tables/table_sys_security_boundary.md
+

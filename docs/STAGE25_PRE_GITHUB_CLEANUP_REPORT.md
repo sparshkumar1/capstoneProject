@@ -1,3 +1,15 @@
+# ARCHIVED / SUPERSEDED — NOT A SOURCE OF CURRENT FACTS
+> **Superseded by:** 
+esearch/CANONICAL_SCIENTIFIC_TRUTH.md and 
+esearch/audit/  
+> **Date Archived:** 2026-09-17  
+> **Reason:** Historical milestone report from earlier development stages. Contains superseded metrics, monolithic draft plans, or deprecated architecture references.  
+> **Current Authoritative Source:** Consult 
+esearch/README.md and 
+esearch/CANONICAL_SCIENTIFIC_TRUTH.md.
+
+---
+
 # Stage 25 — Master Final Pre-GitHub Cleanup & Hygiene Audit Report
 
 **Document ID:** `STAGE-25-PRE-GITHUB-CLEANUP-REPORT`

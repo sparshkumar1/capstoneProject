@@ -1,0 +1,91 @@
+[
+  {
+    "test_id": "SEC-01",
+    "name": "Pre-flight Static Dangerous Pattern Filter",
+    "description": "Block prohibited direct kernel ptrace invocation before compilation",
+    "expected_status": "policy_blocked",
+    "actual_status": "policy_blocked",
+    "passed": true,
+    "details": "Pre-flight safety check failed: Blocked dangerous pattern: Direct ptrace kernel inspection invocation"
+  },
+  {
+    "test_id": "SEC-02",
+    "name": "Pre-flight Dangerous Socket Header Filter",
+    "description": "Block restricted sys/socket.h network header inclusion in source",
+    "expected_status": "policy_blocked",
+    "actual_status": "accepted",
+    "passed": false,
+    "details": "Tests passed: 1/1"
+  },
+  {
+    "test_id": "SEC-03",
+    "name": "Compiler Error Trapping",
+    "description": "GCC compilation error is cleanly trapped without crashing host",
+    "expected_status": "compilation_error",
+    "actual_status": "compilation_error",
+    "passed": true,
+    "details": "Compilation failed (exit code 1)"
+  },
+  {
+    "test_id": "SEC-04",
+    "name": "Runtime Memory Corruption (SIGSEGV)",
+    "description": "Null-pointer dereference is captured as runtime_error (exit 139)",
+    "expected_status": "runtime_error",
+    "actual_status": "runtime_error",
+    "passed": true,
+    "details": "Tests passed: 0/1"
+  },
+  {
+    "test_id": "SEC-05",
+    "name": "Execution Wall-Clock Timeout Enforcement",
+    "description": "Infinite loop is terminated within strict timeout limit (1.0s)",
+    "expected_status": "timeout",
+    "actual_status": "timeout",
+    "passed": true,
+    "details": "Tests passed: 0/1"
+  },
+  {
+    "test_id": "SEC-06",
+    "name": "Memory Limit Enforcement (OOM Kill)",
+    "description": "Exceeding 128MB memory ceiling triggers OOM termination",
+    "expected_status": [
+      "memory_limit",
+      "runtime_error",
+      "wrong_answer"
+    ],
+    "actual_status": "memory_limit",
+    "passed": true,
+    "details": "Tests passed: 0/1"
+  },
+  {
+    "test_id": "SEC-07",
+    "name": "Network Isolation (--net=none)",
+    "description": "Outbound socket connection fails due to disabled networking",
+    "expected_status": "accepted",
+    "actual_status": "accepted",
+    "passed": true,
+    "details": "Tests passed: 1/1"
+  },
+  {
+    "test_id": "SEC-08",
+    "name": "Process Limit / Fork-Bomb Resistance",
+    "description": "Attempted fork bomb is capped by --pids-limit=32",
+    "expected_status": [
+      "accepted",
+      "runtime_error",
+      "wrong_answer"
+    ],
+    "actual_status": "accepted",
+    "passed": true,
+    "details": "Tests passed: 1/1"
+  },
+  {
+    "test_id": "SEC-09",
+    "name": "Root Filesystem Write Protection (--read-only)",
+    "description": "Attempt to write outside /workspace fails due to read-only rootfs",
+    "expected_status": "accepted",
+    "actual_status": "accepted",
+    "passed": true,
+    "details": "Tests passed: 1/1"
+  }
+]

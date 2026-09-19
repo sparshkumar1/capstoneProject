@@ -1,0 +1,231 @@
+{
+  "tests": [
+    {
+      "case_id": "META-01",
+      "qid": 1,
+      "relation": "MG-1_paraphrase",
+      "base_score": 0.6386,
+      "transformed_score": 0.6,
+      "delta": -0.0386,
+      "base_reasoning": 0.619,
+      "trans_reasoning": 0.577,
+      "passed": true,
+      "notes": "|Delta|=0.0386 <= 0.10"
+    },
+    {
+      "case_id": "META-01",
+      "qid": 1,
+      "relation": "MG-2_irrelevant_addition",
+      "base_score": 0.6386,
+      "transformed_score": 0.63,
+      "delta": -0.0086,
+      "base_reasoning": 0.619,
+      "trans_reasoning": 0.602,
+      "passed": true,
+      "notes": "Delta=-0.0086 <= +0.05"
+    },
+    {
+      "case_id": "META-01",
+      "qid": 1,
+      "relation": "MG-3_keyword_injection",
+      "base_score": 0.6386,
+      "transformed_score": 0.4185,
+      "delta": -0.2201,
+      "base_reasoning": 0.619,
+      "trans_reasoning": 0.388,
+      "passed": true,
+      "notes": "Score=0.4185 <= 0.50 (R=0.388, S2=0.500)"
+    },
+    {
+      "case_id": "META-01",
+      "qid": 1,
+      "relation": "MG-4_concept_deletion",
+      "base_score": 0.6386,
+      "transformed_score": 0.2914,
+      "delta": -0.3472,
+      "base_reasoning": 0.619,
+      "trans_reasoning": 0.284,
+      "passed": true,
+      "notes": "Delta=-0.3472 < 0"
+    },
+    {
+      "case_id": "META-01",
+      "qid": 1,
+      "relation": "MG-5_negation_inversion",
+      "base_score": 0.6386,
+      "transformed_score": 0.4171,
+      "delta": -0.2215,
+      "base_reasoning": 0.619,
+      "trans_reasoning": 0.364,
+      "passed": true,
+      "notes": "Delta=-0.2215 <= -0.20"
+    },
+    {
+      "case_id": "META-02",
+      "qid": 3,
+      "relation": "MG-1_paraphrase",
+      "base_score": 0.7016,
+      "transformed_score": 0.651,
+      "delta": -0.0506,
+      "base_reasoning": 0.721,
+      "trans_reasoning": 0.605,
+      "passed": true,
+      "notes": "|Delta|=0.0506 <= 0.10"
+    },
+    {
+      "case_id": "META-02",
+      "qid": 3,
+      "relation": "MG-2_irrelevant_addition",
+      "base_score": 0.7016,
+      "transformed_score": 0.6306,
+      "delta": -0.071,
+      "base_reasoning": 0.721,
+      "trans_reasoning": 0.707,
+      "passed": true,
+      "notes": "Delta=-0.0710 <= +0.05"
+    },
+    {
+      "case_id": "META-02",
+      "qid": 3,
+      "relation": "MG-3_keyword_injection",
+      "base_score": 0.7016,
+      "transformed_score": 0.5781,
+      "delta": -0.1235,
+      "base_reasoning": 0.721,
+      "trans_reasoning": 0.519,
+      "passed": false,
+      "notes": "Score=0.5781 <= 0.50 (R=0.519, S2=0.750)"
+    },
+    {
+      "case_id": "META-02",
+      "qid": 3,
+      "relation": "MG-4_concept_deletion",
+      "base_score": 0.7016,
+      "transformed_score": 0.5949,
+      "delta": -0.1067,
+      "base_reasoning": 0.721,
+      "trans_reasoning": 0.551,
+      "passed": true,
+      "notes": "Delta=-0.1067 < 0"
+    },
+    {
+      "case_id": "META-02",
+      "qid": 3,
+      "relation": "MG-5_negation_inversion",
+      "base_score": 0.7016,
+      "transformed_score": 0.4416,
+      "delta": -0.26,
+      "base_reasoning": 0.721,
+      "trans_reasoning": 0.429,
+      "passed": true,
+      "notes": "Delta=-0.2600 <= -0.20"
+    },
+    {
+      "case_id": "META-03",
+      "qid": 10,
+      "relation": "MG-1_paraphrase",
+      "base_score": 0.7827,
+      "transformed_score": 0.7396,
+      "delta": -0.0431,
+      "base_reasoning": 0.706,
+      "trans_reasoning": 0.628,
+      "passed": true,
+      "notes": "|Delta|=0.0431 <= 0.10"
+    },
+    {
+      "case_id": "META-03",
+      "qid": 10,
+      "relation": "MG-2_irrelevant_addition",
+      "base_score": 0.7827,
+      "transformed_score": 0.7872,
+      "delta": 0.0045,
+      "base_reasoning": 0.706,
+      "trans_reasoning": 0.715,
+      "passed": true,
+      "notes": "Delta=+0.0045 <= +0.05"
+    },
+    {
+      "case_id": "META-03",
+      "qid": 10,
+      "relation": "MG-3_keyword_injection",
+      "base_score": 0.7827,
+      "transformed_score": 0.6644,
+      "delta": -0.1183,
+      "base_reasoning": 0.706,
+      "trans_reasoning": 0.465,
+      "passed": false,
+      "notes": "Score=0.6644 <= 0.50 (R=0.465, S2=1.000)"
+    },
+    {
+      "case_id": "META-03",
+      "qid": 10,
+      "relation": "MG-4_concept_deletion",
+      "base_score": 0.7827,
+      "transformed_score": 0.4427,
+      "delta": -0.34,
+      "base_reasoning": 0.706,
+      "trans_reasoning": 0.374,
+      "passed": true,
+      "notes": "Delta=-0.3400 < 0"
+    },
+    {
+      "case_id": "META-03",
+      "qid": 10,
+      "relation": "MG-5_negation_inversion",
+      "base_score": 0.7827,
+      "transformed_score": 0.5014,
+      "delta": -0.2813,
+      "base_reasoning": 0.706,
+      "trans_reasoning": 0.344,
+      "passed": true,
+      "notes": "Delta=-0.2813 <= -0.20"
+    }
+  ],
+  "summary": {
+    "MG-1_paraphrase": {
+      "total": 3,
+      "passed": 3,
+      "deltas": [
+        0.0386,
+        0.0506,
+        0.0431
+      ]
+    },
+    "MG-2_irrelevant_addition": {
+      "total": 3,
+      "passed": 3,
+      "deltas": [
+        -0.0086,
+        -0.071,
+        0.0045
+      ]
+    },
+    "MG-3_keyword_injection": {
+      "total": 3,
+      "passed": 1,
+      "scores": [
+        0.4185,
+        0.5781,
+        0.6644
+      ]
+    },
+    "MG-4_concept_deletion": {
+      "total": 3,
+      "passed": 3,
+      "deltas": [
+        -0.3472,
+        -0.1067,
+        -0.34
+      ]
+    },
+    "MG-5_negation_inversion": {
+      "total": 3,
+      "passed": 3,
+      "deltas": [
+        -0.2215,
+        -0.26,
+        -0.2813
+      ]
+    }
+  }
+}

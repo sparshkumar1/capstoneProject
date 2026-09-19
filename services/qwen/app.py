@@ -565,12 +565,36 @@ def _validate_feedback_output(data: Optional[dict], req: FeedbackRequest) -> boo
     narrative = str(data.get("narrative_feedback", "")).strip()
     if len(narrative) < 20:
         return False
-    generic_fluff = ["good answer", "good job", "be more detailed", "keep practicing", "nice try"]
-    if narrative.lower() in generic_fluff:
+    generic_fluff = [
+        "good answer", "good job", "be more detailed",
+        "keep practicing", "nice try", "nice work", "well done", "good response"
+    ]
+    low_narrative = narrative.lower().strip()
+    if low_narrative in generic_fluff:
         return False
+    for fluff in generic_fluff:
+        if low_narrative.startswith(fluff) and len(low_narrative) < len(fluff) + 12:
+            return False
+
     how_to = str(data.get("how_to_answer", "")).strip()
     if len(how_to) < 15:
         return False
+
+    # Check for contradictions against authoritative evaluator structured facts
+    ev = req.structured_evaluation if isinstance(req.structured_evaluation, dict) else {}
+    missing = [str(m).lower().strip() for m in ev.get("missing_concepts", []) if m]
+    what_correct = [str(c).lower().strip() for c in data.get("what_was_correct", []) if c]
+
+    for m in missing:
+        if m in what_correct:
+            return False
+        if f"correctly explained {m}" in low_narrative or f"correctly covered {m}" in low_narrative:
+            return False
+
+    # Score leakage rejection
+    if re.search(r"\bScore:\s*\d+\.\d+", narrative) or re.search(r"\bSemantic\s+\d+%", narrative):
+        return False
+
     return True
 
 

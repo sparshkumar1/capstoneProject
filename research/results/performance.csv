@@ -1,0 +1,7 @@
+benchmark,condition,N,mean_ms,median_ms,p95_ms,p99_ms
+Cold Start Evaluator Initialization,Cold Start (unprimed model cache),1,102.22,102.22,102.22,102.22
+Warm Technical Evaluator (SBERT+FAISS+CrossEncoder),Warm Inference,10,79.41,79.55,88.36,91.19
+SQLite Write & Attempt History Indexing,WAL Mode (WAL),20,7.18,7.29,8.74,9.14
+Deterministic ScoreValidator Guardrail,In-Memory CPU Rule Engine,50,0.0,0.0,0.0,0.0
+Simulated 5-Session Concurrent Throughput,5 Concurrent Sessions,5,85.76,85.91,101.61,109.43
+Simulated 10-Session Concurrent Throughput,10 Concurrent Sessions,10,96.88,97.05,119.28,132.23

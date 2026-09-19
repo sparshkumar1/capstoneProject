@@ -1,0 +1,56 @@
+[
+  {
+    "config_id": "ARCH-01",
+    "name": "Full Multimodal Architecture",
+    "mean_turn_ms": 5037.81,
+    "median_turn_ms": 5040.28,
+    "p95_turn_ms": 5100.86,
+    "reliability_rate": 1.0,
+    "active_components": 6
+  },
+  {
+    "config_id": "ARCH-02",
+    "name": "Text-Only Interview (No Audio)",
+    "mean_turn_ms": 5009.1,
+    "median_turn_ms": 5001.19,
+    "p95_turn_ms": 5051.65,
+    "reliability_rate": 1.0,
+    "active_components": 5
+  },
+  {
+    "config_id": "ARCH-03",
+    "name": "Heuristic Orchestration (No PPO)",
+    "mean_turn_ms": 5025.06,
+    "median_turn_ms": 5014.39,
+    "p95_turn_ms": 5083.84,
+    "reliability_rate": 1.0,
+    "active_components": 5
+  },
+  {
+    "config_id": "ARCH-04",
+    "name": "Deterministic Grounded Feedback (No Qwen LLM)",
+    "mean_turn_ms": 5023.04,
+    "median_turn_ms": 5019.07,
+    "p95_turn_ms": 5064.96,
+    "reliability_rate": 1.0,
+    "active_components": 5
+  },
+  {
+    "config_id": "ARCH-05",
+    "name": "Non-Coding Technical Interview (No Docker)",
+    "mean_turn_ms": 5028.0,
+    "median_turn_ms": 5019.45,
+    "p95_turn_ms": 5083.08,
+    "reliability_rate": 1.0,
+    "active_components": 5
+  },
+  {
+    "config_id": "ARCH-06",
+    "name": "Stateless Volatile Session (No SQLite WAL)",
+    "mean_turn_ms": 5018.02,
+    "median_turn_ms": 5015.82,
+    "p95_turn_ms": 5051.34,
+    "reliability_rate": 1.0,
+    "active_components": 5
+  }
+]
