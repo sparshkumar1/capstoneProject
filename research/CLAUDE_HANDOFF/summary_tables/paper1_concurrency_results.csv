@@ -1,0 +1,5 @@
+concurrency_level,total_sessions,total_operations,elapsed_seconds,throughput_ops_sec,mean_latency_ms,median_latency_ms,p95_latency_ms,p99_latency_ms,lock_errors,isolation_violations
+1,1,7,0.136,51.61,16.303,16.819,17.938,18.105,0,0
+5,5,35,0.727,48.15,83.054,83.161,126.497,163.046,0,0
+10,10,70,1.491,46.96,181.23,186.151,263.788,401.753,0,0
+25,25,175,3.593,48.7,419.47,402.031,719.124,867.034,0,0

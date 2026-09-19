@@ -1,0 +1,7 @@
+condition,N_sessions,target_tracking_error,tracking_error_sd,tracking_error_95ci,volatility,volatility_sd,volatility_95ci,oscillation_rate,oscillation_95ci,overshoot,undershoot,mean_final_difficulty,mean_difficulty_changes,total_guardrail_interventions,total_constraint_violations
+Fixed,25,1.2,0.678,"[0.920, 1.440]",0.0,0.0,"[0.000, 0.000]",0.0,"[0.000, 0.000]",0.7,0.5,3.0,0.0,0,0
+Heuristic,25,0.473,0.31,"[0.349, 0.598]",0.16,0.08,"[0.128, 0.192]",0.0,"[0.000, 0.000]",0.336,0.136,3.0,1.6,0,0
+PPO Raw (Seed 123),25,0.804,0.513,"[0.605, 0.998]",0.088,0.114,"[0.048, 0.136]",0.027,"[0.000, 0.080]",0.224,0.58,2.2,0.88,0,60
+PPO+Guardrails (Seed 123),25,0.673,0.531,"[0.469, 0.882]",0.088,0.114,"[0.048, 0.136]",0.027,"[0.000, 0.080]",0.093,0.58,2.2,0.88,101,71
+PPO Raw (Historical Mismatch),25,0.666,0.5,"[0.475, 0.858]",0.188,0.253,"[0.096, 0.296]",0.226,"[0.093, 0.369]",0.147,0.518,2.48,1.88,0,52
+PPO+Guardrails (Historical Mismatch),25,0.64,0.501,"[0.446, 0.838]",0.192,0.28,"[0.092, 0.308]",0.187,"[0.067, 0.331]",0.12,0.52,2.36,1.92,112,46

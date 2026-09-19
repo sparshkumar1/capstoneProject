@@ -1,0 +1,6 @@
+condition,mean_tracking_error,tracking_error_95ci,volatility,oscillation_rate,guardrail_interventions,constraint_violations
+Fixed Baseline (d=3.0),1.2,"[1.200, 1.200]",0.0,0.0,0,0
+Heuristic Baseline,0.473,"[0.349, 0.598]",0.16,0.0,0,0
+"PPO Raw (Aligned, Seed 123)",0.804,"[0.605, 0.998]",0.088,0.027,0,60
+"PPO + Guardrails (Aligned, Seed 123)",0.673,"[0.469, 0.882]",0.088,0.027,101,0
+PPO + Guardrails (5-Seed Mean +/- SD),0.677 +/- 0.006,"[0.673, 0.687]",0.186 +/- 0.068,0.160,563,0

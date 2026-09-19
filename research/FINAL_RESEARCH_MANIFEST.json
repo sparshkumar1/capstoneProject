@@ -1,0 +1,187 @@
+{
+  "manifest_version": "1.0.0",
+  "generated_timestamp": "2026-09-19T17:30:00+05:30",
+  "project": "PREPAIred",
+  "repository_url": "https://github.com/sparshkumar1/capstoneProject",
+  "papers": [
+    {
+      "paper_id": "paper_1",
+      "title": "Architectural Resilience, Containment, and Concurrency in an Adaptive Multimodal Technical Assessment Framework",
+      "focus": "Systems architecture, security containment, concurrency, latency, and fault recovery",
+      "target_venue": "ATIS 2026 / IEEE Access",
+      "frozen_commit": "375f4f869c47907d7c222d27df3b4f9e09dc8941",
+      "frozen_tag": "pre-paper2-execution",
+      "result_directory": "research/results/paper1/",
+      "primary_report": "research/results/paper1/PAPER1_FINAL_REPORT.md",
+      "dataset_hashes": {
+        "final_human_gold.csv": "363dbe6d848a04fe18be5ef1d30b6bbf63b54248fe758e5e6bd4c27a26c06ce2"
+      },
+      "model_hashes": {
+        "tuned_model2_safetensors": "6a241a55bef24355378db16a6380f03226fc9394312122afa648ec9e03a94450"
+      },
+      "configuration_hashes": {
+        "paper2_frozen_config_yaml": "f057baf1b2b9608eb0eb34d9aef3a4a3571db868f9ee728dda180364cc4e90f1"
+      },
+      "primary_metrics": {
+        "security_containment_rate": "100% (9/9)",
+        "fault_recovery_rate": "100% (10/10)",
+        "concurrency_lock_errors": 0,
+        "concurrency_isolation_violations": 0,
+        "warm_evaluator_latency_mean_ms": 1960.839,
+        "warm_evaluator_latency_median_ms": 404.564,
+        "warm_evaluator_latency_p95_ms": 2098.607,
+        "sqlite_wal_write_latency_p95_ms": 20.994,
+        "sqlite_wal_read_latency_p95_ms": 8.462,
+        "score_validator_latency_mean_ms": 0.004,
+        "qwen_role_isolation_pass_rate": "100% (5/5)",
+        "multimodal_acoustic_insulation": "100% Insulated from technical score",
+        "engineering_tests_passed_at_snapshot": 213,
+        "engineering_tests_skipped_at_snapshot": 1,
+        "engineering_tests_failed_at_snapshot": 0
+      },
+      "experiment_counts": {
+        "negative_security_vectors": 9,
+        "fault_injection_scenarios": 10,
+        "concurrency_evaluation_levels": 4,
+        "qwen_isolation_invariants": 5,
+        "threat_model_categories": 7
+      },
+      "seed_counts": 1,
+      "known_limitations": [
+        "Docker containerization provides OS-level process containment sharing host kernel; microVMs (e.g. Firecracker) provide stronger hypervisor boundary against kernel zero-days",
+        "Empirical fault tolerance confirmed across 10 evaluated failure modes; guarantees do not extend to unforeseen distributed partition events",
+        "Concurrency behavior demonstrated up to 25 sessions on SQLite WAL; scaling beyond ~150-200 ops/s requires PostgreSQL",
+        "Evaluator latency requires warm model memory cache; Docker container cold-start adds ~1.2-1.5s per code turn"
+      ],
+      "reproduction_command": "python research/scripts/execute_paper1_study.py"
+    },
+    {
+      "paper_id": "paper_2",
+      "title": "Grounded Multi-Component Technical Interview Answer Evaluation with Entailment Dampening",
+      "focus": "Multi-component scoring alignment with educator judgment, concept coverage, reasoning entailment, and adversarial robustness",
+      "target_venue": "ICTCS 2026 / IEEE Transactions on Learning Technologies",
+      "frozen_commit": "375f4f869c47907d7c222d27df3b4f9e09dc8941",
+      "frozen_tag": "pre-paper2-execution",
+      "result_directory": "research/results/paper2/",
+      "primary_report": "research/results/paper2/PAPER2_FINAL_REPORT.md",
+      "dataset_hashes": {
+        "final_human_gold.csv": "363dbe6d848a04fe18be5ef1d30b6bbf63b54248fe758e5e6bd4c27a26c06ce2",
+        "RATER_1_COMPLETED.csv": "5c8086c6434a81100b5106c06a33dea23c30f8272b5cd4336ac3bade52ecc1ef",
+        "RATER_2_COMPLETED.csv": "b0d15a693dd68a15b0c694ee2a1815bece562c4f84813ed343b17fd1f984ebd0",
+        "RATER_3_COMPLETED.csv": "ce995d0e159053cb3ff46676b7844da2aab6335ecd47148eedb4c477737a9614"
+      },
+      "model_hashes": {
+        "tuned_model2_safetensors": "6a241a55bef24355378db16a6380f03226fc9394312122afa648ec9e03a94450"
+      },
+      "configuration_hashes": {
+        "paper2_frozen_config_yaml": "f057baf1b2b9608eb0eb34d9aef3a4a3571db868f9ee728dda180364cc4e90f1"
+      },
+      "primary_metrics": {
+        "spearman_rho": 0.3812,
+        "spearman_pvalue": 0.0018863,
+        "spearman_95ci": [0.1575, 0.5774],
+        "pearson_r": 0.4042,
+        "pearson_pvalue": 0.00092455,
+        "pearson_95ci": [0.1846, 0.596],
+        "kendall_tau": 0.2715,
+        "kendall_pvalue": 0.0017272,
+        "mae": 0.292,
+        "mae_95ci": [0.2431, 0.3457],
+        "rmse": 0.3601,
+        "rmse_95ci": [0.3008, 0.4184],
+        "human_committee_icc_2_1": 0.9528,
+        "human_committee_icc_2_k": 0.9838,
+        "human_committee_krippendorff_alpha": 0.9523,
+        "metamorphic_pass_rate": "90.5% (19/21)",
+        "adversarial_containment_rate": "84.6% (11/13)"
+      },
+      "ablation_results": {
+        "S1_only_semantic": {"spearman_rho": 0.207, "mae": 0.3171},
+        "S2_only_faiss": {"spearman_rho": 0.3021, "mae": 0.3251},
+        "R_only_cross_encoder": {"spearman_rho": 0.4832, "mae": 0.2763},
+        "S1_plus_S2": {"spearman_rho": 0.2894, "mae": 0.3042},
+        "S1_plus_R": {"spearman_rho": 0.4884, "mae": 0.279},
+        "S2_plus_R": {"spearman_rho": 0.4171, "mae": 0.2674},
+        "full_composite_pipeline": {"spearman_rho": 0.3812, "mae": 0.292}
+      },
+      "experiment_counts": {
+        "human_benchmark_cases": 64,
+        "mean_of_three_consensus_cases": 54,
+        "expert_adjudicated_cases": 10,
+        "ablation_configurations": 7,
+        "metamorphic_test_cases": 21,
+        "adversarial_attack_vectors": 13
+      },
+      "seed_counts": 1,
+      "known_limitations": [
+        "Evaluator was pre-specified and frozen before human annotation; CrossEncoder is off-the-shelf ms-marco-MiniLM-L6-v2 without PREPAIred fine-tuning",
+        "Full composite pipeline achieves lower rank correlation (rho=0.3812) than R-only (rho=0.4832) to enforce anti-keyword dampening and rubric constraints",
+        "Adversarial breaches occurred for subtle contradiction (ADV-10: 0.4617) and negation (ADV-11: 0.4328)",
+        "Benchmark covers core DSA algorithmic explanations; generalization to free-form system design whiteboard discussions remains unverified"
+      ],
+      "reproduction_command": "python research/scripts/execute_paper2_study.py"
+    },
+    {
+      "paper_id": "paper_3",
+      "title": "Guardrailed Multimodal Reinforcement Learning for Adaptive Technical Interview Difficulty",
+      "focus": "Reinforcement learning curriculum difficulty adaptation with deterministic pedagogical safety guardrails",
+      "target_venue": "SmartCom 2027 / ICMLSC 2027",
+      "frozen_commit": "b7cad49b6b7a54460f4eeb4ecb0292bfcb78e12f",
+      "frozen_tag": "v1.0-paper3-complete",
+      "result_directory": "research/results/paper3/",
+      "primary_report": "research/results/paper3/PAPER3_FINAL_REPORT.md",
+      "dataset_hashes": {
+        "final_human_gold.csv": "363dbe6d848a04fe18be5ef1d30b6bbf63b54248fe758e5e6bd4c27a26c06ce2"
+      },
+      "model_hashes": {
+        "seed_42_ppo_final.zip": "8395b6da753f5d272c46bfad018f7a7ae6e5508be58bcd732094771911b3d465",
+        "seed_123_ppo_final.zip": "299437ea0dcdd7a5eed51326e80854bd3bb55341194420b619c5da3d675e24e0",
+        "seed_456_ppo_final.zip": "f9799143aac6a2a67664caadbfa2ce55a113704632bbbe9cfbd1990724a40c55",
+        "seed_789_ppo_final.zip": "0ebb8800f71d453a48f4e307bea4e6cf18dbeb128a38707ac2029b38e757bbcb",
+        "seed_999_ppo_final.zip": "16494e754125443275f83b6868a964e1688f065976396e88f400de5f60776adf"
+      },
+      "configuration_hashes": {
+        "paper3_frozen_config_yaml": "d3da218479ef15f61d9f760e40b2398ee571b4672d1370954ead23ecb3104d9e"
+      },
+      "primary_metrics": {
+        "fixed_baseline_mae": 1.2,
+        "fixed_baseline_95ci": [0.92, 1.44],
+        "heuristic_baseline_mae": 0.473,
+        "heuristic_baseline_95ci": [0.349, 0.598],
+        "ppo_guarded_multiseed_mae_mean": 0.677,
+        "ppo_guarded_multiseed_mae_sd": 0.006,
+        "session_level_cohen_d_vs_fixed": 0.865,
+        "session_level_pvalue": "< 0.001",
+        "archived_seed_mean_t_stat": -195.46,
+        "archived_seed_mean_d_stat": 87.41,
+        "trajectory_volatility_ppo_seed_123": 0.088,
+        "trajectory_volatility_heuristic": 0.16,
+        "trajectory_volatility_multiseed_mean": 0.186,
+        "actual_out_of_bounds_violations": 0,
+        "total_guardrail_interventions_across_5seeds": 563
+      },
+      "ablation_results": {
+        "aligned_progress_canonical_t_over_T": {"tracking_error_mae": 0.673, "volatility": 0.088, "oscillation": 0.027},
+        "aligned_response_time": {"tracking_error_mae": 0.673, "volatility": 0.088, "oscillation": 0.027},
+        "zero_progress_ablated": {"tracking_error_mae": 0.673, "volatility": 0.088, "oscillation": 0.027},
+        "historical_mismatch_variant": {"tracking_error_mae": 0.64, "volatility": 0.192, "oscillation": 0.187}
+      },
+      "experiment_counts": {
+        "training_seeds": 5,
+        "evaluation_personas": 5,
+        "eval_seeds_per_persona": 5,
+        "sessions_per_condition": 25,
+        "total_evaluation_sessions": 125,
+        "coordinate_sensitivity_steps": 66
+      },
+      "seed_counts": 5,
+      "known_limitations": [
+        "PPO does not outperform the deterministic heuristic on tracking speed alone (MAE 0.677 vs 0.473); benefit is lower difficulty volatility (0.088 vs 0.160)",
+        "Dimension 4 variants yield identical aggregate tracking error (0.673) due to low policy sensitivity in neutral coordinates and guardrail override convergence",
+        "Acoustic prosody modulates pacing and guardrail triggers only; it possesses zero scoring authority",
+        "Evaluations conducted entirely on simulated synthetic candidate personas; no claims regarding human classroom learning gains"
+      ],
+      "reproduction_command": "python research/scripts/execute_paper3_study.py"
+    }
+  ]
+}

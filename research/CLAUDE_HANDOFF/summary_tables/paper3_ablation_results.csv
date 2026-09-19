@@ -1,0 +1,7 @@
+ablation_category,configuration,target_tracking_error,volatility,oscillation_rate,guardrail_interventions,constraint_violations
+Dimension 4 State Formulation,aligned_progress (Canonical),0.673,0.088,0.027,101,71
+Dimension 4 State Formulation,aligned_response_time,0.673,0.088,0.027,101,71
+Dimension 4 State Formulation,historical_mismatch,0.64,0.192,0.187,112,46
+Dimension 4 State Formulation,zero_progress (Ablated),0.673,0.088,0.027,101,71
+Safety Shield (Guardrails),"Raw PPO (No Guardrails, 5 Seeds)",0.958,0.078,0.187,0,46
+Safety Shield (Guardrails),PPO + Guardrails (5 Seeds),0.677,0.186,0.187,112,0

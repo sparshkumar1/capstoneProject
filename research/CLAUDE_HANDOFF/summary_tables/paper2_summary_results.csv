@@ -1,0 +1,6 @@
+metric,value,p_value,ci95_low,ci95_high,method,n
+Spearman_rho,0.3812,0.0018863,0.1575,0.5774,Percentile Bootstrap (B=2000),64
+Pearson_r,0.4042,0.00092455,0.1846,0.596,Percentile Bootstrap (B=2000),64
+Kendall_tau,0.2715,0.0017272,0.1168,0.4295,Percentile Bootstrap (B=2000),64
+MAE,0.292,N/A,0.2431,0.3457,Percentile Bootstrap (B=2000),64
+RMSE,0.3601,N/A,0.3008,0.4184,Percentile Bootstrap (B=2000),64

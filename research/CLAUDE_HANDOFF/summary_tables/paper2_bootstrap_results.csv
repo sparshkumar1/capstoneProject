@@ -1,0 +1,6 @@
+metric,point_estimate,ci95_low,ci95_high,b_samples,seed,resampling_unit
+Spearman_rho,0.3812,0.1575,0.5774,2000,42,paired_case_level
+Pearson_r,0.4042,0.1846,0.596,2000,42,paired_case_level
+Kendall_tau,0.2715,0.1168,0.4295,2000,42,paired_case_level
+MAE,0.292,0.2431,0.3457,2000,42,paired_case_level
+RMSE,0.3601,0.3008,0.4184,2000,42,paired_case_level
