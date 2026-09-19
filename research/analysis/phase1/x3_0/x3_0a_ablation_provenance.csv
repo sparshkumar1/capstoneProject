@@ -1,0 +1,11 @@
+ablation_row,field,stored_value,five_seed_value_from_seed_results,equals_five_seed_value,equals_stored_value_of
+"Raw PPO (No Guardrails, 5 Seeds)",target_tracking_error,0.958,n/a (raw five-seed not stored),n/a,none
+"Raw PPO (No Guardrails, 5 Seeds)",volatility,0.078,n/a (raw five-seed not stored),n/a,none
+"Raw PPO (No Guardrails, 5 Seeds)",oscillation_rate,0.187,n/a (raw five-seed not stored),n/a,PPO+Guardrails (Historical Mismatch):oscillation_rate
+"Raw PPO (No Guardrails, 5 Seeds)",guardrail_interventions,0.0,n/a (raw five-seed not stored),n/a,none
+"Raw PPO (No Guardrails, 5 Seeds)",constraint_violations,46.0,n/a (raw five-seed not stored),n/a,PPO+Guardrails (Historical Mismatch):total_constraint_violations
+PPO + Guardrails (5 Seeds),target_tracking_error,0.677,0.677,True,none
+PPO + Guardrails (5 Seeds),volatility,0.186,0.186,True,none
+PPO + Guardrails (5 Seeds),oscillation_rate,0.187,0.16,False,PPO+Guardrails (Historical Mismatch):oscillation_rate
+PPO + Guardrails (5 Seeds),guardrail_interventions,112.0,563,False,PPO+Guardrails (Historical Mismatch):total_guardrail_interventions
+PPO + Guardrails (5 Seeds),constraint_violations,0.0,232,False,none

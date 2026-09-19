@@ -1,0 +1,7 @@
+dimension,probes,Easier,Same,Harder,non_Same_probes
+s0_perf,11,0,11,0,0
+s1_avg_perf,11,2,9,0,2
+s2_conf,11,0,11,0,0
+s3_hes,11,0,11,0,0
+s4_progress,11,0,11,0,0
+s5_diff,11,0,5,6,6

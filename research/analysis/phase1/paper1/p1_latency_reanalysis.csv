@@ -1,0 +1,13 @@
+quantity,value_ms,kind,note
+stored median (n=20),404.564,STORED,warm-evaluator median; one question/answer; one machine
+stored mean (n=20),1960.839,STORED,contaminated by one sample
+stored P95 (n=20),2098.607,STORED,interpolates between the 19th and 20th ordered samples
+stored P99 (n=20),26369.422,STORED,same
+DERIVED largest sample,32437.1,DERIVED,"solved from stored P95/P99 assuming numpy linear interpolation (script line uses np.percentile default); rounding tolerance < 0.02 ms in the inversion, +-0.01 ms via the mean term"
+DERIVED second-largest sample,501.8,DERIVED,same
+DERIVED mean of the other 19 samples,356.8,DERIVED,(20*mean - largest)/19; a warm-only mean estimate
+DERIVED share of stored P95 caused by the outlier,1596.8,DERIVED,P95 = s18 + 0.05*(s19-s18)
+"stored SQLite write P95 (n=25, sequential, single connection)",20.994,STORED,this is the '21.0 ms' figure
+stored 1-session concurrency mean per op (n=7),16.303,STORED,consistent with the write median 17.2 ms
+stored 25-session concurrency mean per op (n=175),419.47,STORED,this is the '419.5 ms' figure
+stored 25-session concurrency P95 per op (n=175),719.124,STORED,this is the '719.1 ms' figure

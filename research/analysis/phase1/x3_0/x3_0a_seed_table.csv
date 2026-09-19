@@ -1,0 +1,7 @@
+training_seed,rule_activations_guarded,attempted_boundary_actions_guarded,tracking_mae,volatility,oscillation
+42,122,26,0.687,0.268,0.261
+123,101,71,0.673,0.088,0.027
+456,115,41,0.676,0.208,0.197
+789,120,33,0.673,0.24,0.178
+999,105,61,0.676,0.128,0.139
+TOTAL/MEAN,563,232,0.677,0.1864,0.1604

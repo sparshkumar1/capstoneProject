@@ -1,0 +1,10 @@
+attack_id,expected_outcome,observed_status,observed_equals_expected,stored_status,stored_host_safe
+SEC-01,policy_blocked,policy_blocked,True,PASS,True
+SEC-02,blocked_by_network_sandbox,wrong_answer,False,PASS,True
+SEC-03,compilation_error,compilation_error,True,PASS,True
+SEC-04,runtime_error,runtime_error,True,PASS,True
+SEC-05,timeout,timeout,True,PASS,True
+SEC-06,memory_limit_or_oom,wrong_answer,False,PASS,True
+SEC-07,network_unreachable,wrong_answer,False,PASS,True
+SEC-08,pids_limit_trapped,timeout,False,PASS,True
+SEC-09,read_only_blocked,wrong_answer,False,PASS,True

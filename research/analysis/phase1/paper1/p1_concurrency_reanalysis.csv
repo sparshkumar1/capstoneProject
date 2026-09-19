@@ -1,0 +1,5 @@
+concurrency_level,total_operations,throughput_ops_s,mean_latency_ms,p95_latency_ms,implied_service_time_ms_per_op(1/throughput),littles_law_ratio (mean_lat*throughput/(1000*c)),lock_errors,isolation_violations
+1,7,51.61,16.303,17.938,19.38,0.841,0,0
+5,35,48.15,83.054,126.497,20.77,0.8,0,0
+10,70,46.96,181.23,263.788,21.29,0.851,0,0
+25,175,48.7,419.47,719.124,20.53,0.817,0,0

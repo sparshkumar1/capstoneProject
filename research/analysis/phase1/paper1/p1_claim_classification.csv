@@ -1,0 +1,42 @@
+row_id,area,claim_as_stored,status,evidence_class,basis,check,x1_successor
+S01,security,Nine attack programs (SEC-01..09) were executed,VALID,A,paper1_security_results.csv has 9 rows; P0-6 forensic: all nine programs ran (1 static filter + 8 Docker),sec_nine_rows,X1-C
+S02,security,9/9 (100%) attack vectors contained,WITHDRAWN,C,expected_outcome is stored but never compared; host_safe is a hard-coded True; pass = any status in a fixed set,sec_expected_vs_observed,X1-C
+S03,security,Four outcomes match the intended containment mechanism (SEC-01/03/04/05); five do not discriminate (SEC-02/06/07/08/09),VALID,A,literal comparison of expected_outcome vs observed_status; agrees with P0-6 audit reading,sec_expected_vs_observed,X1-C
+S04,security,host_safe = True for all attacks,WITHDRAWN,C,literal True in the script (two lines); no host observable is measured,sec_host_safe_literal,X1-C
+S05,security,Sandbox launched with non-root/--net=none/--cap-drop=ALL/--read-only/no-new-privileges/memory+PID limits,DESIGN-ONLY,CODE,configuration in coding_executor.py; effectiveness not shown by the study,none,X1-C
+S06,security,Container shares the host kernel (stated limitation),VALID,CODE,limitation statement; design fact,none,X1-C
+F01,fault,10/10 fault scenarios recovered (all PASS),WITHDRAWN,C,literal status PASS in static dictionaries; no fault was injected in the study,flt_literal_pass,X1-A
+F02,fault,FLT-04 ScoreValidator sanitises NaN/Inf/out-of-range,VALID,A,four asserts executed in the study + tests/unit/test_score_validator.py; scoped to the validator,none,X1-A
+F03,fault,FLT-03 infrastructure failure is flagged and distinguished from a genuine 0.0,EXPLORATORY,B,assert executed on the flag; mocked-failure integration tests exist; retry-without-penalty behaviour unverified,none,X1-A
+F04,fault,FLT-01 Qwen unreachable -> deterministic feedback and score preserved,EXPLORATORY,B,mocked unreachable-port unit test exists; not a study measurement,none,X1-A
+F05,fault,FLT-05 Docker daemon unreachable -> structured sandbox_error,EXPLORATORY,B,patched-resolver unit test exists; not a study measurement,none,X1-A
+F06,fault,FLT-10 empty payload -> stt_unavailable ungraded turn,EXPLORATORY,B,unit test for empty transcript exists; user message unverified,none,X1-A
+F07,fault,FLT-02 Qwen generation timeout > 3000 ms recovers within SLA,DESIGN-ONLY,C,no timeout-injection test found (P0-6); design statement only,none,X1-A
+F08,fault,FLT-06 compiler hang > 10 s is killed and cleaned up,DESIGN-ONLY,C,no compiler-hang test found (P0-6),none,X1-A
+F09,fault,FLT-07 DB lock contention retry serialises writers (30 s busy timeout),DESIGN-ONLY,C,no lock was injected; the retry path was never exercised; the load result is registered separately (K02),none,X1-A
+F10,fault,FLT-08 abrupt WebSocket reset preserves the turn,DESIGN-ONLY,C,no disconnect test found (P0-6),none,X1-A
+F11,fault,FLT-09 audio-feature crash -> neutral prosody 0.5/0.5,DESIGN-ONLY,C,no Parselmouth-crash test found (P0-6),none,X1-A
+Q01,qwen,5/5 Qwen boundary invariants verified / zero authority,WITHDRAWN,C,verify_qwen_isolation calls no Qwen and inspects no output; static dictionaries with literal PASS,qwn_literal_pass,X1-B
+Q02,qwen,QWN-04 FeedbackValidator rejects empty/boilerplate output,WITHDRAWN,C,no class or function named FeedbackValidator exists in the source tree (mentioned only in the Paper 1 script text),qwn_no_feedbackvalidator,X1-B
+Q03,qwen,QWN-01 technical score derived only from SBERT+FAISS+CrossEncoder (no LLM input to evaluate()),EXPLORATORY,B,by construction (evaluate() signature) plus one unit test; no adversarial LLM output was run,none,X1-B
+Q04,qwen,QWN-02 difficulty cannot be altered by the LLM,DESIGN-ONLY,C,design statement only; no test found,none,X1-B
+Q05,qwen,QWN-03 is_best assigned deterministically in SQL,EXPLORATORY,B,persistence tests cover selection/tie-breaking; 'zero DB write access' is a design claim,none,X1-B
+Q06,qwen,QWN-05 offline Qwen -> deterministic fallback; < 50 ms,EXPLORATORY,B,offline part has unit tests; the < 50 ms figure and the timeout case are not measured anywhere,none,X1-B
+M01,multimodal,Evaluator function signature has no audio/prosody parameter,VALID,A,raw JSON evaluator_parameters = [qn candidate rubric]; static signature check only,mm_signature,none
+M02,multimodal,Acoustic prosody is 100 percent insulated from technical scoring,WITHDRAWN,B,only the signature was checked; transcript text (including hedging words) still reaches the evaluator,none,none
+K01,concurrency,0 lock errors and 0 isolation violations at 1/5/10/25 sessions (synthetic DB operations),VALID,A,stored values; scope: one machine; synthetic writes/reads only; no evaluator or LLM in the loop; no injected lock,conc_zero,X1-D
+K02,concurrency,Per-operation latency at 25 sessions: mean 419.5 ms / P95 719.1 ms (wall time in a 25-thread pool),VALID,A,stored values; n=175 operations,conc_values,X1-D
+K03,concurrency,Throughput is flat (47-52 ops/s) across 1-25 sessions and mean latency scales ~linearly (closed-loop saturation),VALID,DERIVED,recomputed from the four stored rows (Little's law check); DERIVED from stored data; interpretation (serialisation of the writer) is a hypothesis,conc_littles_law,X1-D
+K04,concurrency,SQLite single-file write ceiling is about 150-200 ops/sec (THR-07 limitation text),WITHDRAWN,D,no stored measurement supports it; measured throughput in this workload is 47-52 ops/s,conc_ceiling_text,X1-D
+K05,concurrency,lock_errors counter,EXPLORATORY,A,the counter is incremented only immediately before re-raising OperationalError; a completed run therefore cannot show a non-zero value; 0 means 'no OperationalError propagated',none,X1-D
+L01,latency,Warm evaluator median 404.6 ms (n=20; single question/answer; one machine),VALID,A,stored value; scope-limited,lat_values,X1-D
+L02,latency,Warm evaluator mean 1960.8 ms,HISTORICAL,A,recorded value; contaminated by one cold-start-scale sample (derived 32.4 s); not a warm statistic,lat_reconstruct,X1-D
+L03,latency,Warm evaluator P95 2098.6 ms / P99 26369.4 ms,HISTORICAL,A,recorded values; with n=20 both percentiles interpolate between the two largest samples so both are set by the outlier; not warm statistics,lat_reconstruct,X1-D
+L04,latency,SQLite write P95 21.0 ms (single connection; 25 sequential writes; uncontended),VALID,A,stored value; n=25 so the P95 is set by the top three samples; scope: single writer,lat_values,X1-D
+L05,latency,Warm evaluator ~40-60 ms (summary CSV key_finding),WITHDRAWN,D,no stored number supports it (stored median 404.6 ms),lat_summary_text,X1-D
+L06,latency,DB write < 15 ms P95 (summary CSV key_finding),WITHDRAWN,D,contradicted by the stored 21.0 ms,lat_summary_text,X1-D
+L07,latency,All subsystems < SLA,WITHDRAWN,D,no SLA is defined in the study,lat_summary_text,X1-D
+T01,threat,Seven-category threat-model mapping (tested = YES),DESIGN-ONLY,C,static table in the script; a design mapping not a test result,none,X1-C
+R01,report,213 tests passed / 0 failed,WITHDRAWN,D,no stored pytest output; recorded run is 204 passed / 1 skipped (STEP0); one known failing test in the current tree,none,X1-D
+R02,report,PASS column in paper1_systems_results.csv,WITHDRAWN,C,literal strings; no criterion defined,none,X1-D
+R03,report,The system is 'secure' (title/framing),WITHDRAWN,C,approved framing change: failure-aware and sandboxed,none,none

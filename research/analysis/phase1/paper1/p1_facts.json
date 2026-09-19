@@ -1,0 +1,68 @@
+{
+  "sec_rows": 9,
+  "sec_match_ids": [
+    "SEC-01",
+    "SEC-03",
+    "SEC-04",
+    "SEC-05"
+  ],
+  "sec_nomatch_ids": [
+    "SEC-02",
+    "SEC-06",
+    "SEC-07",
+    "SEC-08",
+    "SEC-09"
+  ],
+  "sec_status_all_pass": true,
+  "sec_host_safe_all_true": true,
+  "sec_host_safe_literal_lines": 2,
+  "flt_rows": 10,
+  "flt_all_pass": true,
+  "flt_literal_pass_lines_in_section": 1,
+  "flt_assert_count_in_section": 4,
+  "qwn_rows": 5,
+  "qwn_all_pass": true,
+  "qwn_literal_pass_lines_in_section": 5,
+  "qwn_network_or_llm_call_in_section": false,
+  "feedbackvalidator_hits_outside_research": [],
+  "conc_zero": true,
+  "conc_throughput_range": [
+    46.96,
+    51.61
+  ],
+  "conc_littles_ratio_range": [
+    0.8,
+    0.851
+  ],
+  "conc_25_mean_p95": [
+    419.47,
+    719.124
+  ],
+  "conc_lock_error_counter_reraise": true,
+  "conc_ceiling_text_in_threat_csv": true,
+  "lat_reconstruct": {
+    "n": 20,
+    "s_max_ms": 32437.1,
+    "s_second_max_ms": 501.8,
+    "mean_other19_ms": 356.8,
+    "stored_median_ms": 404.564,
+    "stored_mean_ms": 1960.839,
+    "max_over_median": 80.2,
+    "p95_share_from_outlier_ms": 1596.8,
+    "rounding_tolerance_on_s_max_ms": 0.011
+  },
+  "lat_write_p95": 20.994,
+  "lat_write_n": 25,
+  "summary_text_flags": {
+    "warm 40-60ms": true,
+    "write <15ms": true,
+    "All < SLA": true
+  },
+  "status_counts": {
+    "VALID": 10,
+    "WITHDRAWN": 13,
+    "DESIGN-ONLY": 8,
+    "EXPLORATORY": 8,
+    "HISTORICAL": 2
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "manifest_version": "1.0-phase1",
+  "analysis_id": "X3-0a",
+  "status": "completed",
+  "started_utc": "2026-09-19T17:16:10Z",
+  "finished_utc": "2026-09-19T17:16:17Z",
+  "protocol": {
+    "type": "phase1_preflight_note",
+    "note_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\analysis\\phase1\\x3_0\\X3_0_PRERUN_NOTE.md",
+    "note_sha256": "ceb25e1c29c5148ae9bc5452477204874884cdd4bc5eb575c4b9f27758155e58"
+  },
+  "code": {
+    "git_commit": "8641adfdc5a5a67413c1f62c8f1fcb566f3639cd",
+    "git_tags_at_head": [],
+    "git_dirty": true,
+    "dirty_diff_sha256": "7f36232d95cc1a631f1c6f074281dd43280eb9e910a1832db451150087be56f3",
+    "entrypoint": "research\\analysis\\phase1\\x3_0\\x3_0a_stored.py",
+    "entrypoint_sha256": "f66f7cd2ea442c6dabe54b9bf6734300c43a5be02fe30af014101ab7c119803a",
+    "command_line": "research/analysis/phase1/x3_0/x3_0a_stored.py"
+  },
+  "config": {},
+  "environment": {
+    "lock_id": null,
+    "env_lock_sha256": null,
+    "non_locked_reason": "unlocked .venv; see environment block",
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "executable": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Scripts\\python.exe",
+    "packages": {
+      "numpy": {
+        "metadata": "2.5.2",
+        "module_version": "2.5.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\numpy\\__init__.py"
+      },
+      "pandas": {
+        "metadata": "2.3.3",
+        "module_version": "2.3.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\pandas\\__init__.py"
+      },
+      "scipy": {
+        "metadata": "1.17.1",
+        "module_version": "1.17.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\scipy\\__init__.py"
+      },
+      "scikit-learn": {
+        "metadata": "1.8.0",
+        "module_version": "1.8.0",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\sklearn\\__init__.py"
+      },
+      "torch": {
+        "metadata": "2.11.0+cpu",
+        "module_version": "2.11.0+cpu",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\torch\\__init__.py"
+      },
+      "stable-baselines3": {
+        "metadata": "2.7.1",
+        "module_version": "2.7.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\stable_baselines3\\__init__.py"
+      },
+      "gymnasium": {
+        "metadata": "0.29.1",
+        "module_version": "0.29.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\gymnasium\\__init__.py"
+      },
+      "sentence-transformers": {
+        "metadata": "2.7.0",
+        "module_version": "2.7.0",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\sentence_transformers\\__init__.py"
+      },
+      "transformers": {
+        "metadata": "4.44.2",
+        "module_version": "4.44.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\transformers\\__init__.py"
+      },
+      "faiss-cpu": {
+        "metadata": "1.13.2",
+        "module_version": "1.13.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\faiss\\__init__.py"
+      },
+      "PyYAML": {
+        "metadata": "6.0.3",
+        "module_version": "6.0.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\yaml\\__init__.py"
+      }
+    },
+    "site_packages_listing_sha256_before": "9a9b26f10647042ce4e88baac092d6b69575a5dd46853422fc7edce4bb93117c",
+    "site_packages_listing_sha256_after": "9a9b26f10647042ce4e88baac092d6b69575a5dd46853422fc7edce4bb93117c",
+    "hardware": {
+      "cpu": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cores": 12,
+      "ram_gb": 15.7,
+      "gpu": null
+    },
+    "env_flags": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "HF_HUB_OFFLINE": "1",
+      "WANDB_MODE": "disabled"
+    }
+  },
+  "seeds": {
+    "none": "deterministic; no RNG"
+  },
+  "inputs": [
+    {
+      "path": "research\\results\\paper3\\paper3_seed_results.csv",
+      "sha256_before": "232ad964a22b342b9ce72be1013c8828e2b0995fddc5feecf678fbd363e1edf8",
+      "sha256_after": "232ad964a22b342b9ce72be1013c8828e2b0995fddc5feecf678fbd363e1edf8"
+    },
+    {
+      "path": "research\\results\\paper3\\paper3_summary_results.csv",
+      "sha256_before": "1e4e4392bca3603366209901a89f3575777cfe8c9b742343b1da2e04a603c6a9",
+      "sha256_after": "1e4e4392bca3603366209901a89f3575777cfe8c9b742343b1da2e04a603c6a9"
+    },
+    {
+      "path": "research\\results\\paper3\\paper3_baseline_results.csv",
+      "sha256_before": "50a184d3508d9879a579c7d7f01b98652dc8a96e7c2d0ff86f544d8fbce9fff9",
+      "sha256_after": "50a184d3508d9879a579c7d7f01b98652dc8a96e7c2d0ff86f544d8fbce9fff9"
+    },
+    {
+      "path": "research\\results\\paper3\\paper3_ablation_results.csv",
+      "sha256_before": "6b85a55020b0084558fe6d6f4dd366b6c772f85eb149ce49d134ba170129b459",
+      "sha256_after": "6b85a55020b0084558fe6d6f4dd366b6c772f85eb149ce49d134ba170129b459"
+    },
+    {
+      "path": "research\\results\\paper3\\paper3_guardrail_results.csv",
+      "sha256_before": "286729c1533387cad682039729ca3f9560c33184e61091db60629a6820c46609",
+      "sha256_after": "286729c1533387cad682039729ca3f9560c33184e61091db60629a6820c46609"
+    },
+    {
+      "path": "research\\results\\paper3\\paper3_sensitivity_results.csv",
+      "sha256_before": "2c948a6d5002f9415d95b8e75be7636afd56d6696b4e7cc6e1cc9b0daf48e632",
+      "sha256_after": "2c948a6d5002f9415d95b8e75be7636afd56d6696b4e7cc6e1cc9b0daf48e632"
+    },
+    {
+      "path": "research\\results\\paper3\\paper3_convergence_results.csv",
+      "sha256_before": "30858e47cbfb1fb9cdb31e63edaf8342e6986c38f692d9716b690a205d83419c",
+      "sha256_after": "30858e47cbfb1fb9cdb31e63edaf8342e6986c38f692d9716b690a205d83419c"
+    },
+    {
+      "path": "research\\results\\paper3\\paper3_training_curves.csv",
+      "sha256_before": "21a9843cd29f4d929b24231de191e4880d65a4e13ca0100259801b7a8818ba00",
+      "sha256_after": "21a9843cd29f4d929b24231de191e4880d65a4e13ca0100259801b7a8818ba00"
+    }
+  ],
+  "models": [],
+  "outputs": [
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0a_seed_table.csv",
+      "sha256": "fd3e710357510d7744794ad823fc462a111617ecfa5bc07ecbe37475e47d9cd2"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0a_spread_conventions.csv",
+      "sha256": "17b9f7df21b6cf150ad399608f42aa0bb18970adf5282c217845760fa88daec3"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0a_ablation_provenance.csv",
+      "sha256": "348032a74fc1abbd817a074e712d1659a9d1268e74c427c814b1da9aee1a8483"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0a_guardrail_activations_vs_overrides.csv",
+      "sha256": "e21fd69c2ef8b71a01d15f9fbb48c8c869e9cb9338f1b4c2f86e750f558439d1"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0a_sensitivity_probes.csv",
+      "sha256": "8e0718d8eb9e70571611c4f16e60a1cfecbe9afa7c08b67ae196caf098c8f615"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0a_training_action_shares.csv",
+      "sha256": "38e42b65d88c101cef68907a24e4b4d4b03512cb2500be3acd8933bbd2b89f80"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\x3_0a_facts.json",
+      "sha256": "1583831a367dc4a0a8ee8717dc8c1a48fa1dd6ee52d828b76d4141db896a2bd4"
+    },
+    {
+      "path": "research\\analysis\\phase1\\x3_0\\X3_0A_REPORT.md",
+      "sha256": "28e6a07796934702f6671feda184353e9e0643fe6687dd20bee74be86ad057e4"
+    }
+  ],
+  "gate": {},
+  "deviations": [],
+  "failures": []
+}

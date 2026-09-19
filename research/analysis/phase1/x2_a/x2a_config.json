@@ -1,0 +1,107 @@
+{
+  "analysis_id": "X2-A",
+  "label": "OLD-BENCHMARK exploratory/sensitivity analyses (64 constructed answers, 8 questions); none is confirmatory",
+  "inputs": {
+    "case_level": "research/results/paper2/paper2_case_level_results.csv",
+    "gold": "research/data/evaluator_benchmark/final_human_gold.csv",
+    "raters": [
+      "research/annotation/FROZEN_HUMAN_RATINGS/RATER_1_COMPLETED.csv",
+      "research/annotation/FROZEN_HUMAN_RATINGS/RATER_2_COMPLETED.csv",
+      "research/annotation/FROZEN_HUMAN_RATINGS/RATER_3_COMPLETED.csv"
+    ]
+  },
+  "rng": {
+    "generator": "numpy.random.default_rng",
+    "seed": 42,
+    "bootstrap_B": 10000
+  },
+  "cluster": {
+    "unit": "qid (8 questions)",
+    "primary_bootstrap": "two-level: resample 8 questions with replacement, then resample the 8 answers of each drawn question with replacement",
+    "secondary_bootstrap": "question-only: resample whole questions with replacement, keep all answers of a drawn question",
+    "interval": "percentile 95% (2.5, 97.5); replicates with undefined statistic are dropped and counted"
+  },
+  "correlation": {
+    "spearman": "scipy average ranks",
+    "kendall": "scipy tau-b"
+  },
+  "scorers": {
+    "composite": "final_score",
+    "R_only": "R",
+    "S1": "S1",
+    "S2_eff": "S2_eff",
+    "S1_plus_R": {
+      "S1": 0.23,
+      "R": 0.77
+    }
+  },
+  "category_sets": {
+    "adversarial": [
+      "keyword_stuffed",
+      "misconception",
+      "contradictory",
+      "incorrect",
+      "verbose_wrong"
+    ],
+    "correct_reference": [
+      "concise_correct",
+      "verbose_correct",
+      "suboptimal_correct",
+      "paraphrase"
+    ],
+    "excluded_from_both": [
+      "partial_incomplete"
+    ]
+  },
+  "false_accept": {
+    "fixed_tau_applies_to": "composite (final_score) only",
+    "tau_values": [
+      0.6,
+      0.75
+    ],
+    "tau_provenance": "services/evaluator/app.py grade boundaries: Good >= 0.60, Excellent >= 0.75 (no explicit accept threshold exists; both reported, none chosen post hoc)",
+    "definition": "false accept = adversarial-set item with score >= tau; accept-rate on correct-reference set reported alongside",
+    "threshold_free": "AUROC (correct_reference vs adversarial) for every scorer, two-level cluster bootstrap CI, paired difference composite minus R_only from the same draws",
+    "matched_operating_point": "for each non-composite scorer, threshold = the largest observed score value whose accept-rate on the correct-reference set is >= the composite's accept-rate at the same tau; false-accept then read off (rule, recomputed inside each bootstrap replicate)"
+  },
+  "rater_leave_one_out": {
+    "gold_r": "mean of the two remaining raters' raw scores for all 64 items",
+    "report": [
+      "all 64 items",
+      "54 non-adjudicated items only (gold_method == mean_of_three)"
+    ],
+    "note": "the frozen gold uses adjudication for 10 items; LOO gold does not"
+  },
+  "pilot_overlap": {
+    "pilot_qids": [
+      1,
+      3,
+      10,
+      41
+    ],
+    "other_qids": [
+      7,
+      15,
+      22,
+      50
+    ],
+    "source_of_pilot_qids": "ablation/results/ratings_rater1.csv (20 rows; qids 1,3,10,41)",
+    "report": "point estimates only (n=32 each); no CI, no test; not a held-out validation"
+  },
+  "per_category": {
+    "rho_computed_only_if_n_ge": 8,
+    "report": [
+      "n",
+      "mean_human",
+      "mean_model",
+      "signed_bias(model-human)"
+    ]
+  },
+  "length_bias": "Spearman(model - human, answer word count from the rater file candidate_answer)",
+  "agreement": [
+    "Lin CCC (composite vs gold)",
+    "Bland-Altman bias and 95% limits (composite - gold)"
+  ],
+  "run_rule": "all analyses computed in one run; no iteration or re-running after inspection; output directory research/analysis/phase1/x2_a/",
+  "no_leakage": "no parameter of X2-B or X2-C (tau, categories, rho_min, operating-point rule, sample size) is chosen from X2-A output"
+}

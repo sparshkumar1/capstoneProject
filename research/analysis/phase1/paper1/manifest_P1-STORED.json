@@ -1,0 +1,188 @@
+{
+  "manifest_version": "1.0-phase1",
+  "analysis_id": "P1-STORED",
+  "status": "completed",
+  "started_utc": "2026-09-19T17:11:51Z",
+  "finished_utc": "2026-09-19T17:11:58Z",
+  "protocol": {
+    "type": "phase1_preflight_note",
+    "note_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\audit\\PHASE1_PREFLIGHT_DECISION_MEMO.md",
+    "note_sha256": "c0dd4b2195a7d644ebc1dd7a751a24c07e581fa9b8ebfddfaca28c1865417378"
+  },
+  "code": {
+    "git_commit": "8641adfdc5a5a67413c1f62c8f1fcb566f3639cd",
+    "git_tags_at_head": [],
+    "git_dirty": true,
+    "dirty_diff_sha256": "7f36232d95cc1a631f1c6f074281dd43280eb9e910a1832db451150087be56f3",
+    "entrypoint": "research\\analysis\\phase1\\paper1\\p1_stored_analysis.py",
+    "entrypoint_sha256": "c634f4099321dce7ad648a27633f3bbb681c73787419580ea713c0823040cf9e",
+    "command_line": "research/analysis/phase1/paper1/p1_stored_analysis.py"
+  },
+  "config": {
+    "config_path": "research\\analysis\\phase1\\paper1\\p1_claim_classification.csv",
+    "config_sha256": "35b960053e0d3ce884067df7916eac39de1246b0a52816e1aea5e74a5b699344"
+  },
+  "environment": {
+    "lock_id": null,
+    "env_lock_sha256": null,
+    "non_locked_reason": "unlocked .venv; see environment block",
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "executable": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Scripts\\python.exe",
+    "packages": {
+      "numpy": {
+        "metadata": "2.5.2",
+        "module_version": "2.5.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\numpy\\__init__.py"
+      },
+      "pandas": {
+        "metadata": "2.3.3",
+        "module_version": "2.3.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\pandas\\__init__.py"
+      },
+      "scipy": {
+        "metadata": "1.17.1",
+        "module_version": "1.17.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\scipy\\__init__.py"
+      },
+      "scikit-learn": {
+        "metadata": "1.8.0",
+        "module_version": "1.8.0",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\sklearn\\__init__.py"
+      },
+      "torch": {
+        "metadata": "2.11.0+cpu",
+        "module_version": "2.11.0+cpu",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\torch\\__init__.py"
+      },
+      "stable-baselines3": {
+        "metadata": "2.7.1",
+        "module_version": "2.7.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\stable_baselines3\\__init__.py"
+      },
+      "gymnasium": {
+        "metadata": "0.29.1",
+        "module_version": "0.29.1",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\gymnasium\\__init__.py"
+      },
+      "sentence-transformers": {
+        "metadata": "2.7.0",
+        "module_version": "2.7.0",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\sentence_transformers\\__init__.py"
+      },
+      "transformers": {
+        "metadata": "4.44.2",
+        "module_version": "4.44.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\transformers\\__init__.py"
+      },
+      "faiss-cpu": {
+        "metadata": "1.13.2",
+        "module_version": "1.13.2",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\faiss\\__init__.py"
+      },
+      "PyYAML": {
+        "metadata": "6.0.3",
+        "module_version": "6.0.3",
+        "module_file": "C:\\Users\\spars\\Downloads\\PrepAIred\\.venv\\Lib\\site-packages\\yaml\\__init__.py"
+      }
+    },
+    "site_packages_listing_sha256_before": "9a9b26f10647042ce4e88baac092d6b69575a5dd46853422fc7edce4bb93117c",
+    "site_packages_listing_sha256_after": "9a9b26f10647042ce4e88baac092d6b69575a5dd46853422fc7edce4bb93117c",
+    "hardware": {
+      "cpu": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cores": 12,
+      "ram_gb": 15.7,
+      "gpu": null
+    },
+    "env_flags": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "HF_HUB_OFFLINE": "1",
+      "WANDB_MODE": "disabled"
+    }
+  },
+  "seeds": {
+    "none": "deterministic; no RNG"
+  },
+  "inputs": [
+    {
+      "path": "research\\results\\paper1\\paper1_security_results.csv",
+      "sha256_before": "397f4d349ab384e2e98ae3cec7a8a90b59f3d0358992089fa2f412f405724d4a",
+      "sha256_after": "397f4d349ab384e2e98ae3cec7a8a90b59f3d0358992089fa2f412f405724d4a"
+    },
+    {
+      "path": "research\\results\\paper1\\paper1_fault_injection_results.csv",
+      "sha256_before": "872731dc4ff2f26e7f450fd691b37073d3ad8dba9b9effb39e40fe9db68a3322",
+      "sha256_after": "872731dc4ff2f26e7f450fd691b37073d3ad8dba9b9effb39e40fe9db68a3322"
+    },
+    {
+      "path": "research\\results\\paper1\\paper1_qwen_isolation_results.csv",
+      "sha256_before": "60a7aaa9fe84378e4943ca39102a236e719072a48cb13c37317136b2edffac1d",
+      "sha256_after": "60a7aaa9fe84378e4943ca39102a236e719072a48cb13c37317136b2edffac1d"
+    },
+    {
+      "path": "research\\results\\paper1\\paper1_concurrency_results.csv",
+      "sha256_before": "aaa92a648f496dacba94f2f8e0ca7c5879bc77e3e70f4f8b1998531db3e976d8",
+      "sha256_after": "aaa92a648f496dacba94f2f8e0ca7c5879bc77e3e70f4f8b1998531db3e976d8"
+    },
+    {
+      "path": "research\\results\\paper1\\paper1_latency_results.csv",
+      "sha256_before": "3f5c9197bc4ec6f5667b62eabd4f0a171b5dda8c10094057085e23d67d128d0c",
+      "sha256_after": "3f5c9197bc4ec6f5667b62eabd4f0a171b5dda8c10094057085e23d67d128d0c"
+    },
+    {
+      "path": "research\\results\\paper1\\paper1_summary_results.csv",
+      "sha256_before": "528b92b7a590710133595644b7e59c6c4f71676f80a598f3bcdcf602ad2fa392",
+      "sha256_after": "528b92b7a590710133595644b7e59c6c4f71676f80a598f3bcdcf602ad2fa392"
+    },
+    {
+      "path": "research\\results\\paper1\\paper1_systems_results.csv",
+      "sha256_before": "686807166f040ace8692036a4acf2f7d3248b4c4e0fefca8e3fbde309b28e96d",
+      "sha256_after": "686807166f040ace8692036a4acf2f7d3248b4c4e0fefca8e3fbde309b28e96d"
+    },
+    {
+      "path": "research\\results\\paper1\\paper1_threat_model_results.csv",
+      "sha256_before": "78f6dae9cf86ed32e80164cacbfe92964bbd03085fac10248fa700bfe937272e",
+      "sha256_after": "78f6dae9cf86ed32e80164cacbfe92964bbd03085fac10248fa700bfe937272e"
+    },
+    {
+      "path": "research\\results\\paper1\\paper1_systems_raw.json",
+      "sha256_before": "ac9b105f5f981120c4a1e3a11e111b216ce038038d2ca7e16f001b40d46e0d78",
+      "sha256_after": "ac9b105f5f981120c4a1e3a11e111b216ce038038d2ca7e16f001b40d46e0d78"
+    },
+    {
+      "path": "research\\scripts\\execute_paper1_study.py",
+      "sha256_before": "c065a5728b9960cf4ecdca4153472f82562bf788e93ac5ec245d969c532f33d2",
+      "sha256_after": "c065a5728b9960cf4ecdca4153472f82562bf788e93ac5ec245d969c532f33d2"
+    }
+  ],
+  "models": [],
+  "outputs": [
+    {
+      "path": "research\\analysis\\phase1\\paper1\\p1_claim_survival.csv",
+      "sha256": "11dd17f1b2653ba5dc7e1df0a42e6888d95e944f1b36bf28820e09b472cc3f45"
+    },
+    {
+      "path": "research\\analysis\\phase1\\paper1\\p1_security_oracle_check.csv",
+      "sha256": "d3eb1f3c8cee671f080745c0cb8228d8f58d471afb3b41223a83824ccbe8673e"
+    },
+    {
+      "path": "research\\analysis\\phase1\\paper1\\p1_concurrency_reanalysis.csv",
+      "sha256": "bc385293f6ad3f7ecb436bd335866356a7a6bd1bec3f84d5a890df15f1828142"
+    },
+    {
+      "path": "research\\analysis\\phase1\\paper1\\p1_latency_reanalysis.csv",
+      "sha256": "9f2bbaef72598332e4dfcb97f07458a4f005617a490d9f56e1767e1ac9626036"
+    },
+    {
+      "path": "research\\analysis\\phase1\\paper1\\p1_facts.json",
+      "sha256": "0058717b150df7189ede70b2397f5ad7fa03e0dc1925eec1be08bff71ec81da5"
+    },
+    {
+      "path": "research\\analysis\\phase1\\paper1\\P1_STORED_ANALYSIS_REPORT.md",
+      "sha256": "a80dbf4b91676d7b925672746e7d390e1d378d20f67ad709cc50d291aa1f13cb"
+    }
+  ],
+  "gate": {},
+  "deviations": [],
+  "failures": []
+}

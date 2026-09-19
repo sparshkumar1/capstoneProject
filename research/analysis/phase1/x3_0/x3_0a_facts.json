@@ -1,0 +1,50 @@
+{
+  "totals": {
+    "activations": 563,
+    "attempted_boundary_guarded": 232,
+    "sessions_per_seed": 25,
+    "turns_per_seed": 250,
+    "activation_rate_per_turn_5seed": 0.4504
+  },
+  "spread": {
+    "mae_sd_ddof1": 0.0058,
+    "vol_sd_ddof0": 0.068,
+    "vol_sd_ddof1": 0.076
+  },
+  "ablation": {
+    "guarded_row_fields_matching_five_seed": [
+      "target_tracking_error",
+      "volatility"
+    ],
+    "guarded_row_fields_not_matching": [
+      "oscillation_rate",
+      "guardrail_interventions",
+      "constraint_violations"
+    ],
+    "dim4_three_rows_identical": true
+  },
+  "guardrail_file": {
+    "seed123_activations": 101,
+    "seed123_overrides": 12,
+    "mismatch_activations": 112,
+    "mismatch_overrides": 11,
+    "raw_seed123_attempted_boundary_stored": 60,
+    "guarded_seed123_attempted_boundary_stored": 71,
+    "raw_mismatch_attempted_boundary_stored": 52,
+    "guarded_mismatch_attempted_boundary_stored": 46
+  },
+  "sensitivity": {
+    "probes": 66,
+    "non_same": 8,
+    "dims_all_same": [
+      "s0_perf",
+      "s2_conf",
+      "s3_hes",
+      "s4_progress"
+    ]
+  },
+  "training_same_share_range": [
+    0.5069,
+    0.5345
+  ]
+}

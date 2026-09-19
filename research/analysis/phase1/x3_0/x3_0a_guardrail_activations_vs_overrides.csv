@@ -1,0 +1,23 @@
+condition,breakdown,key,activations,overrides,unchanged_activations,override_share
+PPO+Guardrails (Seed 123),TOTAL,-,101,12,89,0.1188
+PPO+Guardrails (Seed 123),rule,g1_overload_protection,11,0,11,0.0
+PPO+Guardrails (Seed 123),rule,g2_anxiety_stabilizer_same,16,7,9,0.4375
+PPO+Guardrails (Seed 123),rule,g4_stuck_easier,33,5,28,0.1515
+PPO+Guardrails (Seed 123),rule,g5_partial_same,41,0,41,0.0
+PPO+Guardrails (Seed 123),persona,normal,50,0,50,0.0
+PPO+Guardrails (Seed 123),persona,overconfident_fail,11,0,11,0.0
+PPO+Guardrails (Seed 123),persona,struggling_junior,40,12,28,0.3
+PPO+Guardrails (Seed 123),direction,Easier->Same,7,7,0,1.0
+PPO+Guardrails (Seed 123),direction,Same->Easier,5,5,0,1.0
+PPO+Guardrails (Seed 123),sessions,sessions_with_at_least_one_activation(of 25),15,5,,
+PPO+Guardrails (Historical Mismatch),TOTAL,-,112,11,101,0.0982
+PPO+Guardrails (Historical Mismatch),rule,g1_overload_protection,22,2,20,0.0909
+PPO+Guardrails (Historical Mismatch),rule,g2_anxiety_stabilizer_same,16,7,9,0.4375
+PPO+Guardrails (Historical Mismatch),rule,g4_stuck_easier,33,1,32,0.0303
+PPO+Guardrails (Historical Mismatch),rule,g5_partial_same,41,1,40,0.0244
+PPO+Guardrails (Historical Mismatch),persona,normal,50,1,49,0.02
+PPO+Guardrails (Historical Mismatch),persona,overconfident_fail,22,2,20,0.0909
+PPO+Guardrails (Historical Mismatch),persona,struggling_junior,40,8,32,0.2
+PPO+Guardrails (Historical Mismatch),direction,Easier->Same,8,8,0,1.0
+PPO+Guardrails (Historical Mismatch),direction,Harder->Easier,3,3,0,1.0
+PPO+Guardrails (Historical Mismatch),sessions,sessions_with_at_least_one_activation(of 25),15,5,,
