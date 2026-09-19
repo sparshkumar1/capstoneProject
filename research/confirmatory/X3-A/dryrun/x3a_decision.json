@@ -1,0 +1,18 @@
+{
+  "primary_stratum": "frozen",
+  "contrast": "PPO | G minus Constant-Same | G",
+  "endpoint": "persona-level tracking MAE difference",
+  "point": 0.005272719999999997,
+  "ci_low": -0.007272728000000015,
+  "ci_high": 0.026545423999999988,
+  "n_personas": 5,
+  "n_train_seeds": 5,
+  "sd_persona_level": 0.017325263655830758,
+  "cohen_dz": 0.30433707127022464,
+  "delta": 0.12,
+  "m": 0.2,
+  "classification": "Equivalent",
+  "x3b_trigger_fires": false,
+  "x3b_note": "if true, X3-B additionally requires decision D-N2 (user); otherwise no method-level PPO claim is made",
+  "interpretation_rule": "no detectable PPO contribution beyond the shield in these checkpoints (equivalence within +/-0.12 MAE)"
+}

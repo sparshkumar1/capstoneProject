@@ -1,0 +1,56 @@
+{
+  "experiment_id": "X3-A",
+  "title": "Controlled decomposition of shield, rules, heuristic/controller and learned policy on frozen PPO checkpoints (evaluation-only, simulation-only)",
+  "protocol_tag": "prereg/X3-A/v1",
+  "lock_id": "LOCK-X3-2026-09-19",
+  "lock_files": {"requirements": "research/locks/LOCK-X3-2026-09-19.requirements.txt", "lock_json": "research/locks/LOCK-X3-2026-09-19.lock.json"},
+  "max_steps": 10,
+  "training_seeds": [42, 123, 456, 789, 999],
+  "eval_seeds": [1001, 2002, 3003, 4004, 5005, 6006, 7007, 8008, 9009, 10010, 11011, 12012, 13013, 14014, 15015, 16016, 17017, 18018, 19019, 20020],
+  "persona_generator": {
+    "id": "G1", "type": "full factorial: SimulatedCandidate persona type x skill; target = round(10*skill)/2 (authored rule, not tuned per persona)",
+    "types": ["normal", "nervous_expert", "lucky_guesser", "overconfident_fail", "struggling_junior"],
+    "skills": [0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90],
+    "n_grid_personas": 40,
+    "frozen_stratum": "the 5 personas of the frozen study (skills 0.20/0.30/0.60/0.80/0.88; targets 1.0/1.5/3.0/4.0/4.5), reported separately, never part of the primary estimate",
+    "training_matched_persona": "normal@0.60 (the only persona equal to the single candidate used in the frozen training, see X3-0b N1)"
+  },
+  "conditions": {
+    "base_policies": ["const_same", "random", "heuristic", "oracle", "controller"],
+    "shield": ["off", "G"],
+    "ppo": {"modes": ["intact", "zero", "shuffle"], "shield": ["off", "G"], "ablation_rules": ["G4", "G1", "G2", "G5", "G6"]},
+    "ablation_on": ["const_same", "ppo"],
+    "definitions": {
+      "const_same": "always Same (identical to the frozen 'Fixed' policy without shield; verified equal in X3-0c)",
+      "random": "uniform over {Easier, Same, Harder}; RandomState((eval_seed*31 + persona_index) mod 2^31-1); the 20 evaluation seeds are the 20 draws",
+      "heuristic": "frozen definition: Harder if perf>0.75 and difficulty<5; Easier if perf<0.40 and difficulty>1; else Same",
+      "oracle": "InterviewEnv.oracle_action_from_obs (rules R1-R7) on the 6-D observation",
+      "controller": "gap = 5*avg_perf(last 5) - current difficulty; Harder if gap>=0.5; Easier if gap<=-0.5; else Same (documented as exploiting the persona-target rule; an upper REFERENCE, not a fair competitor)",
+      "ppo": "frozen checkpoints research/experiments/paper3/checkpoints/seed_{s}/ppo_final.zip + vecnormalize.pkl; deterministic=True",
+      "ppo_zero": "PPO receives the all-zero observation at every turn (does PPO use state?)",
+      "ppo_shuffle": "PPO receives the observation logged at the same turn of a different persona (partner = persona (i + n//3) mod n, same evaluation seed) from the intact PPO run with the same shield mode and training seed; the environment dynamics remain those of the true persona",
+      "shield_G": "canonical guardrails exactly as in the frozen evaluation call (consecutive_failures=0, no infrastructure failure), local copy validated against rl.guardrails",
+      "ablation": "shield with one rule (G4, G1, G2, G5 or G6) removed; the remaining rules keep their priority order"
+    }
+  },
+  "primary": {
+    "contrast": "PPO | G  minus  Constant-Same | G",
+    "endpoint": "persona-level tracking MAE difference; per persona: mean over 20 evaluation seeds of session MAE; PPO term = mean over the 5 training seeds",
+    "unit": "persona (grid, n=40); training seed = second random factor",
+    "inference": "two-way cluster bootstrap: resample 40 personas and 5 training seeds with replacement, mean of the resampled persona x seed cells; B=10000; numpy default_rng(seed=42); 95% percentile interval",
+    "delta_equivalence": 0.12, "m_superiority": 0.20,
+    "classification": {"Equivalent": "CI entirely inside (-0.12, +0.12)", "PPO-superior": "CI upper bound < -0.20", "PPO-adverse": "CI lower bound > +0.12", "Inconclusive": "none of the above"},
+    "x3b_trigger": "run X3-B iff class != Equivalent (Inconclusive, PPO-superior or PPO-adverse), i.e. inconclusive under the equivalence framework or a strong result whose method-level interpretation would need confirmation in a training-consistent environment; never triggered from an individual seed or persona; X3-B additionally requires decision D-N2 (user)"
+  },
+  "bootstrap": {"B": 10000, "seed": 42, "interval": "percentile 95%"},
+  "secondary_contrasts": [
+    ["PPO | G", "Heuristic | G"], ["PPO | G", "Oracle-rule | G"], ["PPO | G", "Controller | G"], ["PPO | off", "Constant-Same | off"],
+    ["PPO-state-zero | G", "PPO | G"], ["PPO-state-shuffle | G", "PPO | G"], ["Constant-Same | G", "Constant-Same | off"],
+    ["Random | G", "Constant-Same | G"], ["Heuristic | G", "Constant-Same | G"], ["Oracle-rule | G", "Constant-Same | G"], ["Controller | G", "Constant-Same | G"]
+  ],
+  "secondary_metrics": ["mae_x", "vol_x", "osc_x", "oracle_agreement", "guardrail_interventions", "overrides", "constraint_violations"],
+  "gate_harness": {
+    "description": "G-HARNESS: the new session loop must reproduce the frozen run_session_trajectory exactly on the 5 frozen personas x 5 frozen evaluation seeds for Fixed, Heuristic, PPO raw and PPO+G (5 seeds) and Constant-Same+G; the shield copy must equal the frozen shield on 200000 random states; each mutant (G5 removed; G4 threshold 0.31; heuristic threshold 0.76) must be DETECTED as a mismatch",
+    "random_state_tests": 200000, "random_state_seed": 0
+  }
+}

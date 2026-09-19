@@ -25,7 +25,8 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-ALLOWED_OUT = (REPO / "research" / "analysis").resolve()
+ALLOWED_ROOTS = [(REPO / "research" / "analysis").resolve(), (REPO / "research" / "confirmatory").resolve(), (REPO / "research" / "preregistration").resolve()]
+ALLOWED_OUT = ALLOWED_ROOTS[0]
 PKGS = ["numpy", "pandas", "scipy", "scikit-learn", "torch", "stable-baselines3",
         "gymnasium", "sentence-transformers", "transformers", "faiss-cpu", "PyYAML"]
 MODULE_OF = {"scikit-learn": "sklearn", "stable-baselines3": "stable_baselines3",
@@ -106,10 +107,10 @@ def hardware() -> dict:
 class Manifest:
     def __init__(self, analysis_id: str, out_dir, entrypoint: str, config_path=None,
                  note_path=None, seeds=None, non_locked_reason="unlocked .venv; see environment block",
-                 gate=None):
+                 gate=None, protocol=None, lock_id=None, env_lock_sha256=None):
         self.out_dir = Path(out_dir).resolve()
-        if ALLOWED_OUT not in self.out_dir.parents and self.out_dir != ALLOWED_OUT:
-            raise ValueError(f"outputs must be under {ALLOWED_OUT}: {self.out_dir}")
+        if not any(r in self.out_dir.parents or r == self.out_dir for r in ALLOWED_ROOTS):
+            raise ValueError(f"outputs must be under one of {[str(r) for r in ALLOWED_ROOTS]}: {self.out_dir}")
         self.path = self.out_dir / f"manifest_{analysis_id}.json"
         if self.path.exists():
             raise FileExistsError(f"refusing to overwrite {self.path}")
@@ -122,6 +123,8 @@ class Manifest:
                   "code": {}, "config": {}, "environment": {}, "seeds": seeds or {},
                   "inputs": [], "models": [], "outputs": [], "gate": gate or {}, "deviations": [],
                   "failures": []}
+        if protocol:
+            self.d["protocol"] = protocol
         ep = Path(entrypoint).resolve()
         status = _git("status", "--porcelain")
         self.d["code"] = {"git_commit": _git("rev-parse", "HEAD"),
@@ -134,7 +137,7 @@ class Manifest:
             cp = Path(config_path).resolve()
             self.d["config"] = {"config_path": str(cp.relative_to(REPO)), "config_sha256": sha256_file(cp)}
         self.d["environment"] = {
-            "lock_id": None, "env_lock_sha256": None, "non_locked_reason": non_locked_reason,
+            "lock_id": lock_id, "env_lock_sha256": env_lock_sha256, "non_locked_reason": (None if lock_id else non_locked_reason),
             "os": platform.platform(), "python": sys.version.replace("\n", " "),
             "executable": sys.executable, "packages": package_probe(),
             "site_packages_listing_sha256_before": site_packages_listing_sha256(),
@@ -191,7 +194,7 @@ class Manifest:
 def write_new(path, text: str, encoding="utf-8"):
     """Create a new file under research/analysis/; refuse to overwrite or to leave the allow-list."""
     p = Path(path).resolve()
-    if ALLOWED_OUT not in p.parents:
+    if not any(r in p.parents for r in ALLOWED_ROOTS):
         raise ValueError(f"outside allow-list: {p}")
     if p.exists():
         raise FileExistsError(f"refusing to overwrite {p}")
