@@ -1,0 +1,21 @@
+{
+  "experiment_id": "X1-D",
+  "title": "Paper 1 test-suite report and latency (SUT build A)",
+  "protocol_tag": "prereg/X1-D/v1",
+  "sut_tag": "sut/X1/build-A",
+  "environment": "the SUT's own project .venv (unlocked; read-only use; versions recorded in the run manifest); no lock is claimed",
+  "test_report": {
+    "command": ["-m", "pytest", "-q", "-p", "no:cacheprovider", "--junitxml={out}/junit.xml", "--tb=short"],
+    "env": {"EVALUATOR_MOCK_MODE": "1", "PYTHONDONTWRITEBYTECODE": "1"},
+    "no_early_stop": "no -x: every collected test runs; failures are reported, not fixed",
+    "disclosed_known_failure": "tests/unit/test_stage11_5_coding_adaptation.py::test_coding_turn_preserves_speech_confidence_and_does_not_fabricate_metrics"
+  },
+  "latency": {
+    "evaluator": "in-process services.evaluator.app.evaluate(question, candidate_answer, get_rubric(qid)) on the 64 stored benchmark (question, answer, qid) triples in stored order, request i uses triple i mod 64; latency measurement only, scores are not used",
+    "phases": "(1) asset load (_ensure_evaluator_assets_loaded) timed once; (2) first request timed once (cold); (3) N=100 warm requests timed individually",
+    "sqlite_write": "N=100 sequential services.storage.database.save_attempt writes on one connection to a fresh temporary database (as in the frozen Paper 1 script, uncontended)",
+    "statistics": "raw per-request values stored; median, P95, P99 (numpy linear interpolation) with iid bootstrap 95% percentile CIs (B=10000, default_rng(42)); with N=100 the P99 is set by the largest two samples and is reported with that caveat",
+    "no_sla": "no SLA is defined; results are not labelled pass/fail"
+  },
+  "interpretation": "only the stored, dated JUnit report and raw latency lists may be cited; a failing test is a finding; the scope of the latency numbers is one machine, one process, evaluation of stored benchmark answers, DB writes uncontended"
+}

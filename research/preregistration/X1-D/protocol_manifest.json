@@ -1,0 +1,15 @@
+{
+  "experiment": "X1-D",
+  "protocol": "research/preregistration/X1-D/PROTOCOL.md",
+  "environment": "project .venv (unlocked; recorded in run manifest)",
+  "files": {
+    "research/confirmatory/X1-D/x1d_config.json": "efdab894405180a1073dfbb3544215564d21921e49aa28b75d12e42f3050f8c0",
+    "research/confirmatory/X1-D/x1d_run.py": "aa1c9534a0b65809b36e5518067303a7bd8b33aa5aaa7ff72d1d4ad1a0ab5d9f",
+    "research/tools/run_manifest.py": "5f6283cbe73446e7fd7da885321c6350da6e0e66266120cf5e1e28c4ef6fed91",
+    "research/results/paper2/paper2_case_level_results.csv": "a89ba13888fbccf74287a4b8a5c008415c1c12e5793899156e59c42a1fa84e8a",
+    "research/annotation/FROZEN_HUMAN_RATINGS/RATER_1_COMPLETED.csv": "5c8086c6434a81100b5106c06a33dea23c30f8272b5cd4336ac3bade52ecc1ef",
+    "services/evaluator/app.py": "93cb3432a55e724e226a30debed8314c1eafab79690ace3d15a2a6a8096985ed",
+    "services/storage/database.py": "bfbb8629fecc7a2f5fae17631849664b420f75b2fc7468c5cebd0b454cf83e79",
+    "tests/unit/test_stage11_5_coding_adaptation.py": "224e8a7a7d5cb89ed84a830a8fed45165c374601857771c3fc2a8a5ab2064a6f"
+  }
+}
