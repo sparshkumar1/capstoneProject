@@ -1,0 +1,23 @@
+{
+  "experiment": "X2-B (old-benchmark exploratory arm)",
+  "protocol": "research/preregistration/X2-B/PROTOCOL.md",
+  "lock_id": "LOCK-X2-2026-09-19",
+  "env_lock_sha256": "3ea8d4d700a7d1c6354b712993cfbccc49f9e6c01e77a4a16b7bcd1dbd49ed6c",
+  "external_asset": {
+    "upstream_model": "cross-encoder/ms-marco-MiniLM-L-6-v2 snapshot c5ee24cb16019beea0893ab7796b1df96625c6b8 (HF cache); weights sha256 prefix 821d1aa6 checked at run time"
+  },
+  "files": {
+    "research/confirmatory/X2-B/x2b_config.json": "d3850846c0599a79ccbb3ac60b476e8334086f7936b009579138685f3f95c6ba",
+    "research/confirmatory/X2-B/x2b_run.py": "e1f503d4a5f2712d90905727027ef79714ba3e95d0b99bee862649245d506338",
+    "research/tools/run_manifest.py": "5f6283cbe73446e7fd7da885321c6350da6e0e66266120cf5e1e28c4ef6fed91",
+    "research/locks/LOCK-X2-2026-09-19.requirements.txt": "0e6d37512aa5dbbb288159750bd7b71828b5f99ecdcf506342c6b758741a036c",
+    "research/locks/LOCK-X2-2026-09-19.lock.json": "3ea8d4d700a7d1c6354b712993cfbccc49f9e6c01e77a4a16b7bcd1dbd49ed6c",
+    "research/locks/LOCK-X2-2026-09-19.sha256": "a515df1932d37008f0ce8aa8cbc3f259b27f6fc7ccf2de171d7ad91f4e0be66f",
+    "research/results/paper2/paper2_case_level_results.csv": "a89ba13888fbccf74287a4b8a5c008415c1c12e5793899156e59c42a1fa84e8a",
+    "research/data/evaluator_benchmark/final_human_gold.csv": "363dbe6d848a04fe18be5ef1d30b6bbf63b54248fe758e5e6bd4c27a26c06ce2",
+    "research/annotation/FROZEN_HUMAN_RATINGS/RATER_1_COMPLETED.csv": "5c8086c6434a81100b5106c06a33dea23c30f8272b5cd4336ac3bade52ecc1ef",
+    "services/evaluator/assets/rubrics.json": "c238e7d51f3e71e818b2bcb7c359baccf8ff51aa6e413b0fc5e94ae0a74eaeab",
+    "services/evaluator/models/tuned_model2/model.safetensors": "6a241a55bef24355378db16a6380f03226fc9394312122afa648ec9e03a94450",
+    "services/evaluator/models/tuned_model2/config.json": "29f6b1e61849e2381c197bd0d9beb5f09f7048955b47ad15e26739be4c5d220b"
+  }
+}

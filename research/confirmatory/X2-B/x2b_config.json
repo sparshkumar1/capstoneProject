@@ -1,0 +1,38 @@
+{
+  "experiment_id": "X2-B",
+  "title": "Upstream-checkpoint sensitivity and lexical/length baselines for the CrossEncoder component R (evaluation-only)",
+  "protocol_tag": "prereg/X2-B/v1",
+  "lock_id": "LOCK-X2-2026-09-19",
+  "lock_files": {"requirements": "research/locks/LOCK-X2-2026-09-19.requirements.txt", "lock_json": "research/locks/LOCK-X2-2026-09-19.lock.json"},
+  "arms": {
+    "old_benchmark_exploratory": "the frozen 64 constructed answers to 8 questions (EXPLORATORY/SENSITIVITY: results of the derived model on these items were already known)",
+    "x2c_confirmatory": "NOT RUN in this protocol version: blocked by the human/ethics gate (X2-C); the upstream arm on X2-C would run once after the X2-C gold is frozen (needs a new tagged amendment naming the item file hash)"
+  },
+  "inputs": {
+    "case_level": "research/results/paper2/paper2_case_level_results.csv",
+    "gold": "research/data/evaluator_benchmark/final_human_gold.csv",
+    "texts": "research/annotation/FROZEN_HUMAN_RATINGS/RATER_1_COMPLETED.csv",
+    "rubrics": "services/evaluator/assets/rubrics.json"
+  },
+  "models": {
+    "derived": {"dir": "services/evaluator/models/tuned_model2", "sha256_model": "6a241a55bef24355378db16a6380f03226fc9394312122afa648ec9e03a94450"},
+    "upstream": {"dir": "C:/Users/spars/.cache/huggingface/hub/models--cross-encoder--ms-marco-MiniLM-L-6-v2/snapshots/c5ee24cb16019beea0893ab7796b1df96625c6b8", "sha256_model_prefix": "821d1aa6", "id": "cross-encoder/ms-marco-MiniLM-L-6-v2"}
+  },
+  "pair_construction": "(question + ' ' + rubric reference answer).strip() as the first text and the candidate answer as the second, exactly as services/evaluator/app.py cross_encoder_verification; raw model output = sentence-transformers CrossEncoder.predict (default Sigmoid activation for one label), identical for both models; R mapping (raw-0.20)/0.70 clipped to [0,1] applies ONLY to the derived model and only for the reproduction gate",
+  "scorers": {
+    "derived_ce": "raw output of the derived CrossEncoder",
+    "upstream_ce": "raw output of the upstream CrossEncoder",
+    "tfidf": "sklearn TfidfVectorizer(lowercase=True, token_pattern=r'(?u)\\b\\w+\\b', norm='l2'), fitted on the 64 candidate texts plus the 8 distinct reference texts (label-free); cosine(reference, candidate)",
+    "bm25": "Okapi BM25 k1=1.5, b=0.75, idf=ln(1+(N-n+0.5)/(n+0.5)) with N=64 candidate documents (tokens: lowercase [a-z0-9]+); query = the unique tokens of the reference text; score of each candidate",
+    "token_overlap": "|unique candidate tokens intersect unique reference tokens| / |unique reference tokens| (tokens as bm25)",
+    "length_only": "number of whitespace-separated tokens of the candidate answer",
+    "reference_components_stored": ["S1", "S2_eff", "R (derived, mapped)", "final_score (deployed composite)"]
+  },
+  "labels": {"correct_reference": ["concise_correct", "verbose_correct", "suboptimal_correct", "paraphrase"], "adversarial": ["keyword_stuffed", "misconception", "contradictory", "incorrect", "verbose_wrong"], "excluded_from_AUROC": ["partial_incomplete"], "note": "construction labels, not derived from human scores or model outputs"},
+  "primary_metrics": ["spearman_vs_human_gold", "kendall_tau_b_vs_human_gold", "auroc_correct_vs_adversarial"],
+  "primary_comparison": "derived_ce vs upstream_ce on the mapping-independent metrics above (raw outputs; invariant to monotone rescaling). No composite is computed for the upstream arm; no MAE-type metric is reported for the upstream arm; no mapping may be invented or fitted.",
+  "secondary_comparisons": ["derived_ce vs each of tfidf, bm25, token_overlap, length_only (paired differences)", "stored components and the deployed composite as reference rows (derived arm only)"],
+  "inference": {"bootstrap": "two-level cluster bootstrap over the 8 questions (questions with replacement, then answers within question), B=10000, numpy default_rng(42), 95% percentile", "paired_differences": "same bootstrap draws for every scorer pair", "permutation_null": "10000 within-question permutations of the human gold (numpy default_rng(43)); reports the 95th percentile of the null Spearman and a one-sided permutation p, descriptive", "no_multiplicity_control": "all comparisons are descriptive on exploratory data"},
+  "gates": {"G-DERIVED-REPRO": "derived raw output mapped by (raw-0.20)/0.70 clipped reproduces the stored R column of paper2_case_level_results.csv within 0.002 for all 64 items (validates model loading and pair construction); the run aborts otherwise", "G-MODEL-HASH": "derived model.safetensors sha256 equals the frozen value and the upstream file sha256 starts with 821d1aa6", "G-METRIC-CONTROLS": "positive controls on synthetic data: a perfectly monotone score gives rho=1 and AUROC=1; a reversed score gives rho=-1; a constant score gives NaN/0.5 handling as coded"},
+  "seeds": {"bootstrap": 42, "permutation": 43}
+}
