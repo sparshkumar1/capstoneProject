@@ -190,7 +190,8 @@ class FeedbackAgent:
                 "narrative_feedback":       qwen_res.get("narrative_feedback", ""),
                 "transcript":               transcript or "",
                 "decision_source":          qwen_res.get("decision_source", "qwen_feedback"),
-                "llm_status":               "available",
+                # truthful pass-through: the service reports "llm_unavailable" when it returned its deterministic template
+                "llm_status":               qwen_res.get("llm_status", "available"),
                 "vague_points":             qwen_res.get("actionable_improvements", [])[:3],
                 "attempt_number":           attempt_number,
                 "comparison":               comparison or qwen_res.get("comparison"),

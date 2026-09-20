@@ -409,6 +409,7 @@ async def test_baseline_question_counting_ignores_followups():
             "interview_mode": "demo_rl",
             "baseline_questions": None,
         },
+        evaluator_fn=lambda t, q: {"final_score": 0.6, "grade": "Average", "decision_source": "mock_eval"},
     )
     orch._question_queue = [_q("q0"), _q("q1"), _q("q2"), _q("q3")]
     orch._state["questions"] = list(orch._question_queue)

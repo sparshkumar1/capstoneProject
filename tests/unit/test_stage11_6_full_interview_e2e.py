@@ -48,7 +48,9 @@ def orchestrator():
         "dsa_topics": ["arrays", "hash_tables"],
         "interview_mode": "standard",
     }
-    return InterviewOrchestrator("sess_e2e_test", candidate_profile, interview_config)
+    # A stub evaluator: without one the answer path is an evaluator outage, which (correctly) records no score.
+    return InterviewOrchestrator("sess_e2e_test", candidate_profile, interview_config,
+                                 evaluator_fn=lambda t, q: {"final_score": 0.7, "grade": "Good", "decision_source": "mock_eval"})
 
 
 @pytest.mark.asyncio

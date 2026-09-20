@@ -17,6 +17,7 @@ import shutil
 import subprocess
 import tempfile
 import time
+import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -91,6 +92,25 @@ class DockerCSandbox:
 
 
         return None
+
+    @staticmethod
+    def _new_container_name() -> str:
+        return f"prepaired-sbx-{uuid.uuid4().hex[:12]}"
+
+    @staticmethod
+    def _force_remove_container(docker_prefix: List[str], name: str) -> bool:
+        """Best-effort `docker rm -f <name>` after a client-side timeout; returns True if the command reported success."""
+        try:
+            res = subprocess.run(
+                docker_prefix + ["rm", "-f", name],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=15.0,
+                text=True,
+            )
+            return res.returncode == 0
+        except Exception:
+            return False
 
     def is_docker_available(self) -> bool:
         """Check if a functional Docker daemon is reachable."""
@@ -190,8 +210,9 @@ class DockerCSandbox:
             mount_src = self._to_mount_path(tmppath)
 
             # 4. Phase 1: Compile inside isolated Docker container
+            compile_name = self._new_container_name()
             compile_cmd = docker_prefix + [
-                "run", "--rm",
+                "run", "--rm", "--name", compile_name,
                 "--user", "1001:1001",
                 "--net=none",
                 "--cap-drop=ALL",
@@ -219,6 +240,8 @@ class DockerCSandbox:
                 )
                 comp_duration_ms = round((time.monotonic() - comp_start) * 1000, 2)
             except subprocess.TimeoutExpired:
+                # subprocess.run kills only the docker client; the container keeps running unless removed here.
+                self._force_remove_container(docker_prefix, compile_name)
                 return {
                     "status": "compilation_error",
                     "passed": False,
@@ -297,8 +320,9 @@ class DockerCSandbox:
                     mandatory_total += 1
 
                 # Execute inside isolated container with stdin piped
+                run_name = self._new_container_name()
                 run_test_cmd = docker_prefix + [
-                    "run", "--rm", "-i",
+                    "run", "--rm", "-i", "--name", run_name,
                     "--user", "1001:1001",
                     "--net=none",
                     "--cap-drop=ALL",
@@ -354,6 +378,7 @@ class DockerCSandbox:
                             case_status = "runtime_error"
 
                 except subprocess.TimeoutExpired:
+                    self._force_remove_container(docker_prefix, run_name)
                     t_dur_ms = round(float(timeout) * 1000, 2)
                     total_exec_time_ms += t_dur_ms
                     actual_stdout = ""

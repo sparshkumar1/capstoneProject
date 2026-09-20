@@ -233,6 +233,8 @@ class ModelRegistry:
 
 
 MOCK_MODE = False
+# The nine-field feedback JSON does not fit in 256 tokens (truncated JSON silently became the deterministic template).
+FEEDBACK_MAX_NEW_TOKENS = int(os.getenv("QWEN_FEEDBACK_MAX_NEW_TOKENS", "512"))
 WARMUP_EXECUTOR = ThreadPoolExecutor(max_workers=1, thread_name_prefix="qwen_warmup")
 WARMUP_TASK: Optional[asyncio.Task] = None
 
@@ -788,7 +790,7 @@ async def generate_feedback(req: FeedbackRequest):
             prompt = _build_feedback_prompt(req)
             loop = asyncio.get_running_loop()
             raw = await loop.run_in_executor(
-                None, registry.generate_full, active_key, prompt, 256
+                None, registry.generate_full, active_key, prompt, FEEDBACK_MAX_NEW_TOKENS
             )
             data = _extract_json_from_llm(raw)
             if _validate_feedback_output(data, req):

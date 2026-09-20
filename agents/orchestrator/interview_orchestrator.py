@@ -62,6 +62,7 @@ except ImportError:
     pass
 
 _FEEDBACK_READY = False
+_UNSET = object()  # sentinel: state key was absent
 FEEDBACK_AGENT = None
 try:
     from agents.orchestrator.feedback_agent import FEEDBACK_AGENT as _FA
@@ -309,6 +310,7 @@ class InterviewOrchestrator:
         """
         async with self._lock:
             current_q = self._get_current_question(question_id)
+            prior_timing = {k: self._state.get(k, _UNSET) for k in ("last_time_norm", "last_time_overrun")}
 
             # Stop timer
             timing_data = {
@@ -342,6 +344,8 @@ class InterviewOrchestrator:
                 }
             else:
                 eval_result = await self._evaluate_verbal(transcript, current_q or {})
+                if eval_result.get("decision_source") == "evaluator_unavailable" or eval_result.get("status") == "evaluator_unavailable":
+                    return self._fail_closed_evaluator_unavailable(transcript, qid, attempts, eval_result, prior_timing)
             eval_result["transcript"] = transcript
 
             # Update confidence from audio if available
@@ -534,6 +538,53 @@ class InterviewOrchestrator:
             }
 
 
+
+    def _fail_closed_evaluator_unavailable(self, transcript: str, qid: str, attempts: int, eval_result: dict, prior_timing: dict) -> dict:
+        """The authoritative evaluator produced no result (outage/timeout): this is an infrastructure failure, not a candidate score.
+
+        Nothing is scored: no score/answer is appended, difficulty is not adapted, no attempt is persisted, the attempt is not
+        counted and the timer restarts so the candidate can retry. The failure is recorded in `infrastructure_errors` and the log.
+        Called with the session lock held.
+        """
+        remaining = self._attempt_counts.get(qid, 0) - attempts
+        if remaining > 0:
+            self._attempt_counts[qid] = remaining
+        else:
+            self._attempt_counts.pop(qid, None)
+        for key, val in prior_timing.items():
+            if val is _UNSET:
+                self._state.pop(key, None)
+            else:
+                self._state[key] = val
+        if self._timer:
+            dur_min = float(self._state.get("duration_minutes", 30))
+            max_q = int(self._state.get("num_questions", 15))
+            self._timer_snapshot = self._timer.start(allowed_time_sec=dur_min * 60.0 / max(max_q, 1))
+        reason = eval_result.get("justification") or "Authoritative verbal evaluation service is unavailable."
+        self._state.setdefault("infrastructure_errors", []).append({
+            "question_id": qid,
+            "type": "evaluator_unavailable",
+            "error": reason,
+        })
+        self._log_turn({"question_id": qid, "infrastructure_error": "evaluator_unavailable", "transcript": transcript, "scored": False})
+        feedback = {
+            "status": "evaluator_unavailable",
+            "decision_source": "evaluator_unavailable",
+            "infrastructure_failure": True,
+            "final_score": None,
+            "raw_evaluator_score": None,
+            "grade": "Unscored",
+            "score_breakdown": {},
+            "justification": reason,
+            "narrative_feedback": "The evaluation service is unavailable, so this answer was not scored and does not count against you. Please try again.",
+            "transcript": transcript or "",
+            "covered_concepts": [],
+            "missing_concepts": [],
+            "llm_status": "llm_skipped",
+            "is_best": False,
+            "authoritative_best_answer": False,
+        }
+        return {"feedback": feedback, "difficulty_update": None, "next_action": "retry_answer"}
 
     async def handle_code_submission(
         self,

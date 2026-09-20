@@ -16,7 +16,7 @@ from agents.coding_executor.coding_executor import DockerCSandbox, evaluate_c_su
 
 @pytest.mark.asyncio
 async def test_evaluator_failure_produces_structured_failure_without_fabrication():
-    """Evaluator failure returns explicit evaluator_unavailable state with score 0.0."""
+    """Evaluator failure returns an explicit evaluator_unavailable state, no score, and records nothing as a candidate score."""
     orch = InterviewOrchestrator(
         "sess_eval_fail_test",
         {"id": "cand_fail_01"},
@@ -29,8 +29,13 @@ async def test_evaluator_failure_produces_structured_failure_without_fabrication
 
     # Must NOT fabricate a score or canned feedback
     feedback = resp["feedback"]
-    assert feedback["final_score"] == 0.0
-    assert "unavailable" in feedback["justification"].lower() or feedback["decision_source"] in {"evaluator_unavailable", "evaluator_structured"}
+    assert feedback["final_score"] is None
+    assert feedback["status"] == "evaluator_unavailable" and feedback["infrastructure_failure"] is True
+    assert feedback["decision_source"] == "evaluator_unavailable"
+    assert "unavailable" in feedback["justification"].lower()
+    assert orch._state["scores"] == [] and orch._state.get("raw_scores", []) == []
+    assert resp["difficulty_update"] is None and resp["next_action"] == "retry_answer"
+    assert orch._state["infrastructure_errors"][0]["type"] == "evaluator_unavailable"
 
 
 @pytest.mark.asyncio
