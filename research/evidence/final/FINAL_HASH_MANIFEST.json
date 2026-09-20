@@ -1,0 +1,161 @@
+{
+  "generated_utc": "2026-09-20T13:38:46.374769+00:00",
+  "head": "2768f4986541e7ac25d5bfdfc3bc2267da0a016e",
+  "branch": "workspace/human-eval-clean-push",
+  "categories_note": "keys are evidence-lineage categories: A frozen/pre-existing, E secondary sensitivity, F engineering validation, H simulation/preparation; D registered primary and B/C/G are represented by A/E/F and the per-paper packages",
+  "files_sha256": {
+    "A_frozen_preexisting": {
+      "research/data/evaluator_benchmark/final_human_gold.csv": "363dbe6d848a04fe18be5ef1d30b6bbf63b54248fe758e5e6bd4c27a26c06ce2",
+      "research/data/evaluator_benchmark/benchmark_dataset.csv": "824ee6c961ddb31c3652bbe90e7f395c1019021eae4dd6378f6437d97c1d13be",
+      "research/confirmatory/X3-A/results/sessions.csv": "dd7eb669e1ffc60957f254e330185d69edf276d578b0b0029efdcf3880f1bcd8",
+      "research/confirmatory/X3-A/results/x3a_decision.json": "dfa9c0f7a205cfb89cb736a08b3acf47716b1f5b1fbe120791004589bf73a0ad",
+      "research/confirmatory/X3-A/results/manifest_X3-A-run.json": "17ca8a4aef2d30afe27356332ebfafab01ae8d226df496d4629e2b03d64c9a45",
+      "research/confirmatory/X3-A/results/manifest_X3-A-analysis.json": "203506d17d95ad7ca80c46978b76eff4b46c324c4a588c684d75ce1550755ba7",
+      "research/locks/LOCK-X3-2026-09-19.lock.json": "c8fdfda1f5034c1d56a27f756907fcb64c3a2b1cdd6e5142b8722a62b658aa03",
+      "research/locks/LOCK-X3-2026-09-19.requirements.txt": "caca8dbf03e7d5dbc9b45b0e314a464c32beccf3768d79b0bd5137c92b7ecb51",
+      "research/analysis/RESULT_HASHES_phase3.txt": "6e9581811abb6154c6a18645164b85891649dca269b655b3bdf970adc9558031",
+      "research/claims/CLAIM_REGISTRY.csv": "cc2a58e921d3b72b2e792ec53cc15448a7bfa61b970b535f9b529c3ce2ec90e3"
+    },
+    "E_secondary_sensitivity_O7": {
+      "research/analysis/x3a_o7/x3a_o7.py": "ddf95d4fdfd3bb7827bc6844bd30a215a04ac7f5823d66ac88d133270d9a4485",
+      "research/analysis/x3a_o7/O7_REGISTRATION.json": "ad1403eed35bed110aa21041db079772c73c85c59e9ecfa852abdc07d0545c40",
+      "research/audit/X3A_O7_SENSITIVITY_SPEC.md": "d785b9d9f7404b64d3c98801782682408e13c3dd17dbae08c5349b38a77523a5",
+      "research/analysis/x3a_o7/results/r0_record.json": "f4680d400c01c9637b3c9c49bbb91f2d97b479c68d896756618040657e9d5acf",
+      "research/analysis/x3a_o7/results/x3a_o7_results.json": "2ec3d45af02dd25fb47fa538f76be5a565542baf814e98fbd203e851f09ab377",
+      "research/analysis/x3a_o7/results/x3a_o7_report.md": "eacce9de96fadbb0f257e6e3b8084af0ab45a332ce4453a81a65fb6c3dffcb1d",
+      "research/analysis/x3a_o7/run_record/O7_RUN_RECORD.json": "65c9b8bb47787b09ea5b9416ff5ff17e6164f270737ebd3a206c042b57ea450d",
+      "research/analysis/x3a_o7/O7_INTERPRETATION.md": "8c78d419ef8d65c7ccbc55f960a46f2f7da12832338eead7233f49c71f5ff066"
+    },
+    "F_engineering_validation_X1": {
+      "research/confirmatory/X1/PROTOCOL_X1-A.md": "3b08554979405ec45a8a8f007b29debd1a2ebddf6c31fa12c2435350ab5e4717",
+      "research/confirmatory/X1/x1a_harness.py": "a074ee9d7d8689d0e6cb09d5923792b1b7c73d962cb215618d09b9f3609ac061",
+      "research/confirmatory/X1/results/x1a/runs.jsonl": "f6109a7543cd0b29546e98d402e7633114964ceb5c8debd8ac4714b542c6cb2d",
+      "research/confirmatory/X1/results/x1a/verdicts.json": "e3b46224efa2c3135c51f31b861e6e47ea9e762736dbd31e9b058c8e4fc50b7b",
+      "research/confirmatory/X1/run_records/x1a/RUN_RECORD.json": "2211b89f5b5187899bc8c7aecbb5e8832c1d26c771ee15c08d669e4cf4acd27d",
+      "research/confirmatory/X1/X1A_RESULT_NOTE.md": "fe09c50033e78b2d2c53c3e94657fd8be21c112a674a92247071017044b132f6",
+      "research/confirmatory/X1/PROTOCOL_X1-B.md": "0ea5327cd744aec766f5b4d769b85d9495cb475fccee748b5ef4ac3d6221e9dd",
+      "research/confirmatory/X1/x1b_harness.py": "5466b2312cdbc189a9a365a9b65f24ef06a6c6c7896d8784a1759956967fb388",
+      "research/confirmatory/X1/x1b_prompts.json": "b7067bef79f9d4ebea8dbc4bbbe9e9ebf3569a3397ddb81b2ab5247fb8bdda69",
+      "research/confirmatory/X1/run_records/x1b_v1_aborted/x1b_v1_aborted_stdout.txt": "87781cf6ed0886e44c1d59b11701bd2e8b1593da6d98fe664897fcc287374b96",
+      "research/confirmatory/X1/PROTOCOL_X1-C.md": "80578b25599a3a4daad3df9b705edcebfda5db3c584ca9dc0a9d52a8254b6db3",
+      "research/confirmatory/X1/x1c_harness.py": "b278da771c9df0ea568144ec4eb9e6a68c0185920275f9ff176ebc07a2b01784",
+      "research/confirmatory/X1/results/x1c/runs.jsonl": "10c7d7bee07d0c85ea0e4174fd78f907599645c7490b4699cfecf47b6ccb979d",
+      "research/confirmatory/X1/results/x1c/results.csv": "34fc62852c701a829cf6bf849d6d77d4349e3f9191abee98e22c08a2ff50680f",
+      "research/confirmatory/X1/results/x1c/junit.xml": "5bbbe53c193f1c2ba405008efe28f6512bfdf2aaef9450be39e894128963e67b",
+      "research/confirmatory/X1/results/x1c/environment_and_verdicts.json": "c01ec11668c49d5fafc208768f5aab6f8cea8921b9e8cb19a320b13246b2171a",
+      "research/confirmatory/X1/run_records/x1c/RUN_RECORD.json": "af319617f6122640b722973d940419ab12389c3c4c3a9442a3a9f6bfa9a1e222",
+      "research/confirmatory/X1/X1C_RESULT_NOTE.md": "ff4552eb9a93fc01526678775f33e6e68dc12836b57663bcbfdfa356d7da6a30",
+      "research/confirmatory/X1/results/x1b/summary.json": "2eb8dd20b5229656da7c5ae04857971a98ba5c9906d922a154f127b8eb38ce14",
+      "research/confirmatory/X1/results/x1b/pairs.jsonl": "626eaeef03c3d710c7bb1f12e9259a51b21e9ddd5b079c07a87d466cf548d81e",
+      "research/confirmatory/X1/results/x1b/pairs.csv": "b512e508c386e4d61e5bf98e4970a5439b78f5bd517491ac4a8557606230b7e9",
+      "research/confirmatory/X1/results/x1b/channel_enumeration.json": "88935f5d241bfaf7a2d81c7602c8eb8cd15b3c40ef24373c6261ac1106f28831",
+      "research/confirmatory/X1/run_records/x1b/RUN_RECORD.json": "e11e8ca1236e1ab6c18edea8bad2bb8b034174eb1165a6c6303889b43daeae24",
+      "research/confirmatory/X1/X1B_RESULT_NOTE.md": "7b21cab5b5f583e216555dacdd8e05cffe3ef194601d297c7f7a132696335643"
+    },
+    "H_simulation_and_preparation": {
+      "research/confirmatory/X2C/precision_simulation.py": "748062afd2521193b548cbcb67321f8131908f3cd70ed76d44aa6fc16f343c58",
+      "research/confirmatory/X2C/precision_simulation_results.json": "2efb612e218f4e820b35987d4fe422901fb2f5c20966ccb04f5fefb0ebe6907e",
+      "research/confirmatory/X2C/X2C_GATE_STATUS_AND_PREPARATION.md": "305b3da287e220d54a5d8958398ae0bbc6fce636c84fc4cccff2fc5b6a4f37ea",
+      "research/evidence/final/PAPER3_FINAL_EVIDENCE.md": "253772277d84a6e3372428bd7bd6e0b4de87d21f2771c0aa122f4d33c7428455"
+    }
+  },
+  "missing_files": [],
+  "tags": {
+    "freeze/X1-A/v1": {
+      "object_type": "tag",
+      "commit": "68a0bf5e95e6a2778b1b01cb2cd8f9b79b605ade"
+    },
+    "freeze/X1-B/v2": {
+      "object_type": "tag",
+      "commit": "2768f4986541e7ac25d5bfdfc3bc2267da0a016e"
+    },
+    "freeze/X1-C/v1": {
+      "object_type": "tag",
+      "commit": "77614eb7e86137682296b067036c75240d2ebfb5"
+    },
+    "freeze/X1-D/v1": {
+      "object_type": "tag",
+      "commit": "dde2ddf962cc144416a7961afc98b7521d274548"
+    },
+    "freeze/X2-B/v1": {
+      "object_type": "tag",
+      "commit": "dde2ddf962cc144416a7961afc98b7521d274548"
+    },
+    "freeze/X3-A-O7/v1": {
+      "object_type": "tag",
+      "commit": "4bcb96949602a255569bd60e758173d21075d058"
+    },
+    "freeze/X3-A/v1": {
+      "object_type": "tag",
+      "commit": "dde2ddf962cc144416a7961afc98b7521d274548"
+    },
+    "paper-v1.0": {
+      "object_type": "tag",
+      "commit": "ea15e3c682dddd2d1e64a76cc68bbe0adb10d7ff"
+    },
+    "pre-human-annotation": {
+      "object_type": "tag",
+      "commit": "45845a97a136529c7a740cd68954be8260cdb656"
+    },
+    "pre-p1-human-eval-baseline": {
+      "object_type": "tag",
+      "commit": "f5f6dfe81adde0d7839d085c5d1f40681f34ba75"
+    },
+    "pre-paper2-execution": {
+      "object_type": "commit",
+      "commit": "375f4f869c47907d7c222d27df3b4f9e09dc8941"
+    },
+    "prereg/X1-A/v1": {
+      "object_type": "tag",
+      "commit": "80ac60447c7fe7cc1c2facd86f9819f3efbfb20b"
+    },
+    "prereg/X1-B/v1": {
+      "object_type": "tag",
+      "commit": "c7ab5852e9e7ac46b3da0b99775c6105b1272f6a"
+    },
+    "prereg/X1-B/v2": {
+      "object_type": "tag",
+      "commit": "424894ff74587c6048ea3b9b9d35d67be55088aa"
+    },
+    "prereg/X1-C/v1": {
+      "object_type": "tag",
+      "commit": "21a4c9c4e456a7f25136bc1d3573879094bfc7eb"
+    },
+    "prereg/X1-D/v1": {
+      "object_type": "tag",
+      "commit": "39047498d6459d59912338bfce2d4da543b1d4d6"
+    },
+    "prereg/X2-B/v1": {
+      "object_type": "tag",
+      "commit": "51cd2941780fbc2ce59b43310437e1580c8983c9"
+    },
+    "prereg/X2-B/v2": {
+      "object_type": "tag",
+      "commit": "d84b91388929bd3b70455cde94ef8720232114af"
+    },
+    "prereg/X3-A-O7/v1": {
+      "object_type": "tag",
+      "commit": "5217542e13f8c556a3e3b884e47299a6380b2128"
+    },
+    "prereg/X3-A/v1": {
+      "object_type": "tag",
+      "commit": "b00541f66c05e48512968fa9cd46b536e76f676a"
+    },
+    "release/app-repair/v1": {
+      "object_type": "tag",
+      "commit": "980747ffcc4c60dc1f79e1ee21f9622645bdbd85"
+    },
+    "step0-complete": {
+      "object_type": "tag",
+      "commit": "1b11c1ab48d774a5d2db34df50834b07e0fd0810"
+    },
+    "sut/X1/build-A": {
+      "object_type": "tag",
+      "commit": "39047498d6459d59912338bfce2d4da543b1d4d6"
+    },
+    "v1.0-paper3-complete": {
+      "object_type": "tag",
+      "commit": "b7cad49529c335317ad284dba700f770d1964f6a"
+    }
+  }
+}
