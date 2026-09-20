@@ -1,0 +1,56 @@
+{
+  "registration_version": "1",
+  "experiment": "X3-A-O7 (frozen-data sensitivity analysis; secondary robustness evidence)",
+  "specification": "research/audit/X3A_O7_SENSITIVITY_SPEC.md",
+  "note": "Expected hashes below were copied from the pre-existing frozen record research/analysis/RESULT_HASHES_phase3.txt and from research/locks/*.sha256-tracked lock files, and are NOT computed from mutable files at run time. This artifact must be committed and tagged together with x3a_o7.py before any official run; the script refuses to run officially unless both are clean against HEAD.",
+  "registration_tag": {
+    "name": "prereg/X3-A-O7/v1",
+    "annotated_required": true,
+    "tag_message_format": [
+      "registration-commit: <full 40-hex commit SHA that the tag points to>",
+      "registration-sha256: <SHA-256 of this file's bytes at the tagged commit>",
+      "script-sha256: <SHA-256 of research/analysis/x3a_o7/x3a_o7.py bytes at the tagged commit>"
+    ],
+    "note": "A commit cannot contain its own SHA, so the registered full commit SHA is recorded in the immutable annotated tag message and must also be supplied at run time with --registered-commit. An official run requires: tag exists, is annotated, resolves to that commit, HEAD equals that commit exactly, and this file and x3a_o7.py are byte-identical to their blobs at the tag."
+  },
+  "sessions": {
+    "path": "research/confirmatory/X3-A/results/sessions.csv",
+    "sha256": "dd7eb669e1ffc60957f254e330185d69edf276d578b0b0029efdcf3880f1bcd8"
+  },
+  "decision": {
+    "path": "research/confirmatory/X3-A/results/x3a_decision.json",
+    "sha256": "dfa9c0f7a205cfb89cb736a08b3acf47716b1f5b1fbe120791004589bf73a0ad"
+  },
+  "lock": {
+    "lock_json": {
+      "path": "research/locks/LOCK-X3-2026-09-19.lock.json",
+      "sha256": "c8fdfda1f5034c1d56a27f756907fcb64c3a2b1cdd6e5142b8722a62b658aa03"
+    },
+    "requirements": {
+      "path": "research/locks/LOCK-X3-2026-09-19.requirements.txt",
+      "sha256": "caca8dbf03e7d5dbc9b45b0e314a464c32beccf3768d79b0bd5137c92b7ecb51"
+    }
+  },
+  "upstream_manifests": [
+    {
+      "role": "X3-A run manifest (harness gate)",
+      "path": "research/confirmatory/X3-A/results/manifest_X3-A-run.json",
+      "sha256": "17ca8a4aef2d30afe27356332ebfafab01ae8d226df496d4629e2b03d64c9a45",
+      "required_status": "completed",
+      "required_gate": {"name": "G-HARNESS", "passed": true},
+      "must_list_outputs": {
+        "research/confirmatory/X3-A/results/sessions.csv": "dd7eb669e1ffc60957f254e330185d69edf276d578b0b0029efdcf3880f1bcd8"
+      }
+    },
+    {
+      "role": "X3-A analysis manifest (produced x3a_decision.json; its legacy gate object is empty, finding M3, so no gate can be required)",
+      "path": "research/confirmatory/X3-A/results/manifest_X3-A-analysis.json",
+      "sha256": "203506d17d95ad7ca80c46978b76eff4b46c324c4a588c684d75ce1550755ba7",
+      "required_status": "completed",
+      "required_gate": null,
+      "must_list_outputs": {
+        "research/confirmatory/X3-A/results/x3a_decision.json": "dfa9c0f7a205cfb89cb736a08b3acf47716b1f5b1fbe120791004589bf73a0ad"
+      }
+    }
+  ]
+}
