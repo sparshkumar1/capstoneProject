@@ -235,9 +235,14 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext, onRetry }
   const attemptNum = typeof feedback.attempt_number === "number" ? feedback.attempt_number : 1;
   const hasPreviousComparable = Boolean(comparison && comparison.has_previous_best);
 
-  const authoritativeBestAnswer = feedback.is_best
-    ? (typeof feedback.transcript === "string" && feedback.transcript ? feedback.transcript : (feedback.code_submitted || feedback.code || ""))
-    : (comparison?.previous_best_answer || feedback.transcript || "");
+  // Best-answer status is backend-authoritative: the backend reports an eligible (correct / partially correct)
+  // best attempt via `authoritative_best_answer` + `best_answer`. Nothing is inferred from the current answer.
+  const backendBest =
+    feedback.authoritative_best_answer === true && feedback.best_answer && typeof feedback.best_answer === "object"
+      ? feedback.best_answer
+      : null;
+  const isNewBest = feedback.is_best === true && backendBest !== null;
+  const authoritativeBestAnswer = backendBest && typeof backendBest.answer === "string" ? backendBest.answer : "";
 
   return (
     <div className="feedback-card-rich fade-up">
@@ -375,16 +380,16 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext, onRetry }
       )}
 
       {/* ── Retry / Best-Answer Status Section ──────────────── */}
-      {hasPreviousComparable && (
-        <div className="fc-section fc-best-status-section" style={{ background: "rgba(255,255,255,0.02)", borderLeft: feedback.is_best ? "3px solid var(--success)" : "3px solid var(--warn)" }}>
+      {hasPreviousComparable && backendBest && (
+        <div className="fc-section fc-best-status-section" style={{ background: "rgba(255,255,255,0.02)", borderLeft: isNewBest ? "3px solid var(--success)" : "3px solid var(--warn)" }}>
           <SectionHeader
-            icon={feedback.is_best ? "🏆" : "🔄"}
+            icon={isNewBest ? "🏆" : "🔄"}
             title="Retry / Best-Answer Status"
-            color={feedback.is_best ? "var(--success)" : "var(--warn)"}
+            color={isNewBest ? "var(--success)" : "var(--warn)"}
           />
 
           <div style={{ marginTop: "8px" }}>
-            {feedback.is_best ? (
+            {isNewBest ? (
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
                   <span className="badge badge-success" style={{ fontWeight: 700, fontSize: "12px", padding: "3px 10px" }}>
@@ -424,7 +429,7 @@ export default function FeedbackCard({ feedback, onNext, awaitingNext, onRetry }
             )}
 
             {/* Still to improve (if not best and remaining concepts exist) */}
-            {!feedback.is_best && comparison?.remaining_concepts && comparison.remaining_concepts.length > 0 && (
+            {!isNewBest && comparison?.remaining_concepts && comparison.remaining_concepts.length > 0 && (
               <div style={{ marginTop: "10px" }}>
                 <span style={{ fontSize: "12px", color: "var(--warn)", fontWeight: 600 }}>Still to improve:</span>
                 <div className="fc-pills" style={{ marginTop: "4px" }}>

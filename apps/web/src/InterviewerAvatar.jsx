@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "./InterviewerAvatar.css";
+import { questionProgressLabel } from "./questionProgress";
 
 /**
  * InterviewerAvatar — unified top question card component for PrepAIred.
@@ -15,6 +16,7 @@ export default function InterviewerAvatar({
   totalQuestions,
   difficulty,
   followUpQueued = false,
+  isFollowup = false,
   session = null,
   baselineDone = true,
   stageHint = "",
@@ -32,8 +34,10 @@ export default function InterviewerAvatar({
 
   // Trigger animation sequence whenever a new question arrives
   useEffect(() => {
-    if (!question || questionIndex === prevIndexRef.current) return;
-    prevIndexRef.current = questionIndex;
+    // key on the question itself: a follow-up shares its parent's primary index but is a new question
+    const questionKey = question?.id ?? questionIndex;
+    if (!question || questionKey === prevIndexRef.current) return;
+    prevIndexRef.current = questionKey;
 
     clearTimeout(animTimerRef.current);
     setPhase("idle");
@@ -147,16 +151,11 @@ export default function InterviewerAvatar({
           {/* Question Metadata chips */}
           <div className="question-meta" style={{ marginBottom: "12px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
             <span className="badge badge-accent">
-              Q{questionIndex}{totalQuestions ? ` of ${totalQuestions}` : ""}
+              {questionProgressLabel({ isFollowup: isFollowup || followUpQueued, questionIndex, totalQuestions }, true)}
             </span>
             {question.topic && (
               <span className="badge badge-neutral">
                 {question.topic.replace(/_/g, " ")}
-              </span>
-            )}
-            {followUpQueued && (
-              <span className="badge badge-accent" style={{ background: "rgba(0,229,200,0.14)", color: "var(--accent-2)" }}>
-                Follow-up
               </span>
             )}
             {session?.interview_mode === "demo_rl" && !baselineDone && (

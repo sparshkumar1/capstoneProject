@@ -225,6 +225,8 @@ describe("Stage 11.8 UI Fixes Verification", () => {
       grade: "B",
       attempt_number: 2,
       is_best: true,
+      authoritative_best_answer: true,
+      best_answer: { attempt_number: 2, answer: "We iterate through the array once and check the map." },
       trend: "improving",
       trend_note: "Noticeable improvement over attempt 1",
       covered_concepts: ["Single pass iteration"],
@@ -302,6 +304,8 @@ describe("Stage 11.8 UI Fixes Verification", () => {
       grade: "C",
       attempt_number: 2,
       is_best: false,
+      authoritative_best_answer: true,
+      best_answer: { attempt_number: 1, answer: "Previous high-quality explanation of hash tables." },
       covered_concepts: ["Basic syntax"],
       missing_concepts: ["Optimal time complexity", "Edge cases"],
       comparison: {

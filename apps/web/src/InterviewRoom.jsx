@@ -7,6 +7,7 @@ import FeedbackCard from "./FeedbackCard";
 import { useInterviewWS } from "./useInterviewWS";
 import { useVoiceRecorder } from "./useVoiceRecorder";
 import { api } from "./api";
+import { isFollowupPayload, primaryIndexFromPayload, questionProgressLabel } from "./questionProgress";
 import InterviewerAvatar from "./InterviewerAvatar";
 import "./InterviewRoom.css";
 
@@ -43,6 +44,7 @@ export default function InterviewRoom({ navigate }) {
   const [showStartScreen, setShowStartScreen] = useState(true);
   const [startStep, setStartStep]         = useState(0);
   const [followUpQueued, setFollowUpQueued] = useState(false);
+  const [isFollowup, setIsFollowup]       = useState(false);
   const timerRef      = useRef(null);
   const feedbackRef   = useRef(null);
   const evalTimeoutRef = useRef(null);
@@ -69,10 +71,11 @@ export default function InterviewRoom({ navigate }) {
       setAwaitingNext(false);
       setTranscript("");
       setAudioAnalysis(null);
-      setFollowUpQueued(payload.source === "qwen_followup");
-      if (payload.turn_index) {
-        setQuestionIndex(payload.turn_index);
-      }
+      const followup = isFollowupPayload(payload);
+      setFollowUpQueued(followup);
+      setIsFollowup(followup);
+      // primary-question numbering only: a follow-up shows "Follow-up to Question N", never "Question N+1"
+      setQuestionIndex((prev) => primaryIndexFromPayload(payload, prev));
       if (payload.total_questions) {
         setTotalQuestions(payload.total_questions);
       }
@@ -299,7 +302,7 @@ export default function InterviewRoom({ navigate }) {
           <div className="progress-bar" style={{ width: 200 }}>
             <div className="progress-fill" style={{ width: `${progress}%` }} />
           </div>
-          <span style={{ fontSize: 12, color: "var(--text-2)" }}>Question {questionIndex} of {totalQuestions}</span>
+          <span style={{ fontSize: 12, color: "var(--text-2)" }}>{questionProgressLabel({ isFollowup, questionIndex, totalQuestions })}</span>
         </div>
 
         <div className="interview-topbar-right">
@@ -325,6 +328,7 @@ export default function InterviewRoom({ navigate }) {
             totalQuestions={totalQuestions}
             difficulty={difficulty}
             followUpQueued={followUpQueued}
+            isFollowup={isFollowup}
             session={session}
             baselineDone={baselineDone}
             stageHint={stageHint}
@@ -503,7 +507,9 @@ export default function InterviewRoom({ navigate }) {
                 <div className="progress-fill" style={{ width: `${progress}%` }} />
               </div>
               <div style={{ fontSize: 12, color: "var(--text-2)" }}>
-                {questionIndex} of {totalQuestions} questions
+                {isFollowup
+                  ? questionProgressLabel({ isFollowup, questionIndex, totalQuestions })
+                  : `${questionIndex} of ${totalQuestions} questions`}
               </div>
               {!baselineDone && session?.interview_mode === "demo_rl" && (
                 <div style={{ fontSize: 11, color: "var(--warn)", marginTop: 6 }}>

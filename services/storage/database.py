@@ -18,6 +18,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+from services.storage.best_answer import select_best
+
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 DEFAULT_DB_PATH = ROOT_DIR / "data" / "prepaired.db"
 
@@ -266,6 +268,26 @@ def save_session(session_data: Dict[str, Any], db_path: Optional[Path | str] = N
 
 # ── Attempt Recording & Deterministic Best-Answer Selection ───────────────────
 
+def _decode_attempt_row(row: sqlite3.Row) -> Dict[str, Any]:
+    d = dict(row)
+    for key in ("covered_concepts", "missing_concepts", "incorrect_claims", "strong_points"):
+        d[key] = json.loads(d.get(key) or "[]")
+    d["feedback_json"] = json.loads(d.get("feedback_json") or "{}")
+    return d
+
+
+def _authoritative_best(conn: sqlite3.Connection, cid: str, qid: str) -> Optional[Dict[str, Any]]:
+    """Authoritative best primary attempt, derived from the stored evaluations (never from the stored flag).
+
+    Only attempts classified correct/partial are eligible (services/storage/best_answer.py); None if there are
+    none. Deriving it here also corrects any legacy `is_best` flag that points at an incorrect attempt."""
+    rows = conn.execute(
+        "SELECT * FROM question_attempts WHERE candidate_id = ? AND question_id = ? AND attempt_type = 'primary';",
+        (cid, qid),
+    ).fetchall()
+    return select_best([_decode_attempt_row(r) for r in rows])
+
+
 def save_attempt(
     attempt_data: Dict[str, Any],
     db_path: Optional[Path | str] = None,
@@ -274,11 +296,14 @@ def save_attempt(
     Record an attempt and deterministically recalculate `is_best` for this question.
 
     Best-Answer Invariant:
+    0. Only attempts the authoritative evaluation classifies correct or partially correct are eligible
+       (services/storage/best_answer.py). An incorrect attempt is never best; if no attempt is eligible,
+       no attempt has is_best = 1 and current_best is None.
     1. Filtered by (candidate_id, question_id, attempt_type='primary').
     2. Highest validated_score wins.
     3. Tie-breaker 1: Fewest missing concepts.
     4. Tie-breaker 2: Most recent attempt (attempt_number DESC).
-    5. Exactly ONE attempt has is_best = 1.
+    5. At most ONE attempt has is_best = 1 (exactly one when any attempt is eligible).
     6. Follow-up attempts NEVER overwrite primary question best answer.
     """
     aid = str(attempt_data.get("id") or uuid.uuid4())
@@ -323,19 +348,7 @@ def save_attempt(
                 sess_attempt = int(sess_count_row["cnt"]) + 1
 
                 # 3. Retrieve previous best before this insertion
-                prev_best_row = conn.execute(
-                    """
-                    SELECT * FROM question_attempts 
-                    WHERE candidate_id = ? AND question_id = ? AND attempt_type = 'primary' AND is_best = 1;
-                    """,
-                    (cid, qid),
-                ).fetchone()
-                prev_best = dict(prev_best_row) if prev_best_row else None
-                if prev_best:
-                    prev_best["covered_concepts"] = json.loads(prev_best.get("covered_concepts") or "[]")
-                    prev_best["missing_concepts"] = json.loads(prev_best.get("missing_concepts") or "[]")
-                    prev_best["incorrect_claims"] = json.loads(prev_best.get("incorrect_claims") or "[]")
-                    prev_best["strong_points"] = json.loads(prev_best.get("strong_points") or "[]")
+                prev_best = _authoritative_best(conn, cid, qid)
 
                 # 4. Insert new attempt
                 conn.execute(
@@ -379,40 +392,21 @@ def save_attempt(
                 new_is_best = False
                 current_best = None
                 if atype == "primary":
-                    all_attempts = conn.execute(
-                        """
-                        SELECT id, validated_score, missing_concepts, attempt_number
-                        FROM question_attempts
-                        WHERE candidate_id = ? AND question_id = ? AND attempt_type = 'primary';
-                        """,
-                        (cid, qid),
-                    ).fetchall()
-
-                    def attempt_sort_key(r):
-                        miss_list = json.loads(r["missing_concepts"] or "[]")
-                        # Highest validated_score, fewest missing concepts, highest attempt_number
-                        return (float(r["validated_score"]), -len(miss_list), int(r["attempt_number"]))
-
-                    sorted_attempts = sorted(all_attempts, key=attempt_sort_key, reverse=True)
-                    winner_id = sorted_attempts[0]["id"] if sorted_attempts else aid
+                    current_best = _authoritative_best(conn, cid, qid)
+                    winner_id = current_best["id"] if current_best else None   # None: nothing eligible
 
                     conn.execute(
                         """
-                        UPDATE question_attempts 
+                        UPDATE question_attempts
                         SET is_best = CASE WHEN id = ? THEN 1 ELSE 0 END
                         WHERE candidate_id = ? AND question_id = ? AND attempt_type = 'primary';
                         """,
                         (winner_id, cid, qid),
                     )
 
-                    new_is_best = (winner_id == aid)
-                    best_row = conn.execute("SELECT * FROM question_attempts WHERE id = ?;", (winner_id,)).fetchone()
-                    if best_row:
-                        current_best = dict(best_row)
-                        current_best["covered_concepts"] = json.loads(current_best.get("covered_concepts") or "[]")
-                        current_best["missing_concepts"] = json.loads(current_best.get("missing_concepts") or "[]")
-                        current_best["incorrect_claims"] = json.loads(current_best.get("incorrect_claims") or "[]")
-                        current_best["strong_points"] = json.loads(current_best.get("strong_points") or "[]")
+                    new_is_best = winner_id is not None and winner_id == aid
+                    if current_best is not None:
+                        current_best["is_best"] = 1
                 else:
                     current_best = prev_best
 
@@ -433,24 +427,12 @@ def get_best_attempt(
     question_id: str,
     db_path: Optional[Path | str] = None,
 ) -> Optional[Dict[str, Any]]:
-    """Retrieve the single authoritative best attempt for a candidate and question."""
+    """Retrieve the single authoritative best attempt, or None when no attempt is correct/partially correct."""
     conn = get_connection(db_path)
     try:
-        row = conn.execute(
-            """
-            SELECT * FROM question_attempts
-            WHERE candidate_id = ? AND question_id = ? AND attempt_type = 'primary' AND is_best = 1;
-            """,
-            (str(candidate_id), str(question_id)),
-        ).fetchone()
-        if not row:
-            return None
-        res = dict(row)
-        res["covered_concepts"] = json.loads(res.get("covered_concepts") or "[]")
-        res["missing_concepts"] = json.loads(res.get("missing_concepts") or "[]")
-        res["incorrect_claims"] = json.loads(res.get("incorrect_claims") or "[]")
-        res["strong_points"] = json.loads(res.get("strong_points") or "[]")
-        res["feedback_json"] = json.loads(res.get("feedback_json") or "{}")
+        res = _authoritative_best(conn, str(candidate_id), str(question_id))
+        if res is not None:
+            res["is_best"] = 1
         return res
     finally:
         conn.close()

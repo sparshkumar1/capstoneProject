@@ -160,7 +160,6 @@ class InterviewOrchestrator:
         self._defer_rl: bool = bool(config.get("defer_rl", False))
         self._in_retry_turn: Dict[str, bool] = {}
         self._rl_adapted_turns: set = set()
-        self._evicted_by_followup: Dict[str, dict] = {}
 
         # Build session state from config
         sid = session_id
@@ -430,30 +429,35 @@ class InterviewOrchestrator:
             if comparison:
                 feedback["comparison"] = comparison
 
-            # Save attempt to SQLite
-            is_best_flag = 1
+            # Save attempt to SQLite; best-answer status is decided by the backend rule only
+            # (eligible = authoritatively correct/partially correct), never defaulted to True.
+            save_res = None
+            attempt_payload = {
+                "candidate_id": cid,
+                "session_id": sid,
+                "question_id": qid,
+                "parent_question_id": parent_qid,
+                "attempt_type": "followup" if is_followup else "primary",
+                "answer_type": "verbal",
+                "transcript": transcript,
+                "raw_score": raw_score,
+                "validated_score": raw_score,
+                "covered_concepts": eval_result.get("correct_claims", []) or eval_result.get("covered_concepts", []),
+                "missing_concepts": eval_result.get("missing_concepts", []),
+                "incorrect_claims": eval_result.get("incorrect_claims", []),
+                "feedback_json": feedback,
+                "attempt_number": lifetime_attempt_num,
+            }
             if cid:
                 try:
                     from services.storage.database import save_attempt
-                    save_res = save_attempt({
-                        "candidate_id": cid,
-                        "session_id": sid,
-                        "question_id": qid,
-                        "parent_question_id": parent_qid,
-                        "attempt_type": "followup" if is_followup else "primary",
-                        "answer_type": "verbal",
-                        "transcript": transcript,
-                        "raw_score": raw_score,
-                        "validated_score": raw_score,
-                        "covered_concepts": eval_result.get("correct_claims", []) or eval_result.get("covered_concepts", []),
-                        "missing_concepts": eval_result.get("missing_concepts", []),
-                        "incorrect_claims": eval_result.get("incorrect_claims", []),
-                        "feedback_json": feedback,
-                    })
-                    is_best_flag = 1 if save_res.get("is_best") else 0
+                    save_res = save_attempt(attempt_payload)
                 except Exception:
-                    pass
+                    save_res = None
+            is_best_flag, best_answer = self._resolve_best_answer(qid, save_res, attempt_payload, is_followup)
             feedback["is_best"] = bool(is_best_flag)
+            feedback["authoritative_best_answer"] = best_answer is not None
+            feedback["best_answer"] = best_answer
 
             attempt_rec = {
                 "question": current_q or {},
@@ -474,6 +478,10 @@ class InterviewOrchestrator:
                 "answers_len": len(self._state["answers"]),
                 "current_difficulty": self._state.get("current_difficulty"),
                 "difficulty_history_len": len(self._state.get("difficulty_history", [])),
+                "main_questions_count": int(self._state.get("main_questions_count", 0)),
+                "followups_count": int(self._state.get("followups_count", 0)),
+                "consecutive_followups": int(self._state.get("consecutive_followups", 0)),
+                "followup_history_len": len(self._state.get("followup_history", [])),
             }
 
             # Update state first (so _adapt_difficulty sees correct answered count)
@@ -513,12 +521,7 @@ class InterviewOrchestrator:
 
             self._state["pending_next"] = True
 
-            max_q = int(self._state.get("num_questions", 15))
-            completed_turns = len(self._state.get("scores", []))
-            all_done = (
-                completed_turns >= max_q
-                or self._current_q_index >= len(self._question_queue) - 1
-            )
+            all_done = self._no_further_turn()
 
             return {
                 "feedback": feedback,
@@ -632,29 +635,34 @@ class InterviewOrchestrator:
             if comparison:
                 result["comparison"] = comparison
 
-            # Save attempt to SQLite
-            is_best_flag = 1
+            # Save attempt to SQLite; best-answer status is decided by the backend rule only
+            # (eligible = authoritatively correct/partially correct), never defaulted to True.
+            save_res = None
+            attempt_payload = {
+                "candidate_id": cid,
+                "session_id": sid,
+                "question_id": qid,
+                "parent_question_id": parent_qid,
+                "attempt_type": "followup" if is_followup else "primary",
+                "answer_type": "code",
+                "code_submitted": code,
+                "raw_score": raw_score,
+                "validated_score": raw_score,
+                "covered_concepts": result.get("strong_points", []),
+                "missing_concepts": result.get("missing_concepts", []),
+                "feedback_json": result,
+                "attempt_number": lifetime_attempt_num,
+            }
             if cid:
                 try:
                     from services.storage.database import save_attempt
-                    save_res = save_attempt({
-                        "candidate_id": cid,
-                        "session_id": sid,
-                        "question_id": qid,
-                        "parent_question_id": parent_qid,
-                        "attempt_type": "followup" if is_followup else "primary",
-                        "answer_type": "code",
-                        "code_submitted": code,
-                        "raw_score": raw_score,
-                        "validated_score": raw_score,
-                        "covered_concepts": result.get("strong_points", []),
-                        "missing_concepts": result.get("missing_concepts", []),
-                        "feedback_json": result,
-                    })
-                    is_best_flag = 1 if save_res.get("is_best") else 0
+                    save_res = save_attempt(attempt_payload)
                 except Exception:
-                    pass
+                    save_res = None
+            is_best_flag, best_answer = self._resolve_best_answer(qid, save_res, attempt_payload, is_followup)
             result["is_best"] = bool(is_best_flag)
+            result["authoritative_best_answer"] = best_answer is not None
+            result["best_answer"] = best_answer
 
             attempt_rec = {
                 "question": current_q or {},
@@ -675,6 +683,10 @@ class InterviewOrchestrator:
                 "answers_len": len(self._state["answers"]),
                 "current_difficulty": self._state.get("current_difficulty"),
                 "difficulty_history_len": len(self._state.get("difficulty_history", [])),
+                "main_questions_count": int(self._state.get("main_questions_count", 0)),
+                "followups_count": int(self._state.get("followups_count", 0)),
+                "consecutive_followups": int(self._state.get("consecutive_followups", 0)),
+                "followup_history_len": len(self._state.get("followup_history", [])),
             }
 
             # Update state
@@ -711,12 +723,7 @@ class InterviewOrchestrator:
 
             self._state["pending_next"] = True
 
-            max_q = int(self._state.get("num_questions", 15))
-            completed_turns = len(self._state.get("scores", []))
-            all_done = (
-                completed_turns >= max_q
-                or self._current_q_index >= len(self._question_queue) - 1
-            )
+            all_done = self._no_further_turn()
 
             return {
                 "feedback": result,
@@ -751,7 +758,107 @@ class InterviewOrchestrator:
             self._state["difficulty_history"].pop()
         if self._pre_attempt_state.get("current_difficulty") is not None:
             self._state["current_difficulty"] = self._pre_attempt_state["current_difficulty"]
+        # A retried attempt must not consume a primary-question slot (or leave follow-up counters inflated).
+        for key in ("main_questions_count", "followups_count", "consecutive_followups"):
+            if key in self._pre_attempt_state:
+                self._state[key] = self._pre_attempt_state[key]
+        if "followup_history_len" in self._pre_attempt_state:
+            del self._state.setdefault("followup_history", [])[self._pre_attempt_state["followup_history_len"]:]
 
+
+    # ── Primary-question budget (num_questions counts PRIMARY questions only) ──────────────────────────
+    # Follow-ups are continuations of a primary question: they are queued in addition to the primary questions,
+    # never displace one, and do not consume the budget. `main_questions_count` (incremented in
+    # _update_session_state for non-follow-up turns, restored on retry rollback) is the authoritative counter.
+
+    @staticmethod
+    def _is_followup_q(q: Optional[dict]) -> bool:
+        q = q or {}
+        return bool(
+            str(q.get("id", "")).startswith("fu_")
+            or q.get("parent_question_id")
+            or q.get("source") in {"qwen_followup", "non_llm_structured_recovery", "qwen_1.5b_llm"}
+            or q.get("is_followup")
+        )
+
+    def _primary_budget(self) -> int:
+        return int(self._state.get("num_questions", 15))
+
+    def _primary_budget_exhausted(self) -> bool:
+        return int(self._state.get("main_questions_count", 0)) >= self._primary_budget()
+
+    def _no_further_turn(self) -> bool:
+        """True when nothing will be delivered after the current turn.
+
+        Policy: once the primary budget is spent, only a follow-up already queued for the just-answered question
+        is still delivered (this includes a follow-up to the final primary question, subject to the same
+        consecutive-follow-up cap as everywhere else); the session ends after it is answered. Otherwise the
+        session ends only when the queue is exhausted."""
+        nxt = self._current_q_index + 1
+        if nxt >= len(self._question_queue):
+            return True
+        if self._primary_budget_exhausted():
+            return not self._is_followup_q(self._question_queue[nxt])
+        return False
+
+    def _decorate_question_payload(self, q: dict, idx: int) -> dict:
+        """Add turn/primary/follow-up numbering to a question payload copy.
+
+        `turn_index` is kept (position in the delivered sequence, follow-ups included) for API compatibility;
+        `primary_question_index` counts primary questions only; a follow-up carries the index of the primary
+        question it continues in `parent_question_index`."""
+        is_fu = self._is_followup_q(q)
+        primaries = sum(1 for x in self._question_queue[:idx + 1] if not self._is_followup_q(x))
+        q["turn_index"] = idx + 1
+        q["total_questions"] = self._primary_budget()
+        q["is_followup"] = is_fu
+        q["primary_question_index"] = max(primaries, 1)
+        q["parent_question_index"] = max(primaries, 1) if is_fu else None
+        return q
+
+    def _count_skipped_turn(self, q: Optional[dict]) -> None:
+        """A skipped question is a consumed turn: it counts toward the primary budget (or the follow-up count)."""
+        if self._is_followup_q(q):
+            self._state["followups_count"] = int(self._state.get("followups_count", 0)) + 1
+            self._state["consecutive_followups"] = int(self._state.get("consecutive_followups", 0)) + 1
+        else:
+            self._state["main_questions_count"] = int(self._state.get("main_questions_count", 0)) + 1
+            self._state["consecutive_followups"] = 0
+
+    def _resolve_best_answer(self, qid, save_res, this_attempt, is_followup):
+        """Backend-authoritative best-answer fields for the feedback payload.
+
+        Only attempts classified correct/partially correct by the authoritative evaluation can be best
+        (services/storage/best_answer.py). `save_res` is the SQLite result when persistence worked; otherwise the
+        same rule is applied to this session's in-memory attempts. Returns (is_best, best_answer|None)."""
+        from services.storage.best_answer import select_best
+        if save_res is not None:
+            best = save_res.get("current_best")
+            is_best = bool(save_res.get("is_best")) and best is not None
+        elif is_followup:
+            best, is_best = None, False
+        else:
+            pool = [this_attempt]
+            for rec in self._active_question_attempts.get(qid, []):
+                pool.append({
+                    "attempt_type": "primary",
+                    "answer_type": "code" if "code" in rec else "verbal",
+                    "validated_score": rec.get("validated_score", rec.get("raw_score", 0.0)),
+                    "feedback_json": rec.get("feedback") or {},
+                    "missing_concepts": (rec.get("eval_result") or {}).get("missing_concepts", []),
+                    "attempt_number": rec.get("attempt_number", 0),
+                    "transcript": rec.get("transcript", ""),
+                    "code_submitted": rec.get("code", ""),
+                })
+            best = select_best(pool)
+            is_best = best is not None and best is this_attempt
+        if best is None:
+            return False, None
+        return is_best, {
+            "attempt_number": best.get("attempt_number"),
+            "answer": best.get("transcript") or best.get("code_submitted") or "",
+            "validated_score": best.get("validated_score"),
+        }
 
     @staticmethod
     def _select_best_attempt(attempts: List[dict]) -> dict:
@@ -803,11 +910,7 @@ class InterviewOrchestrator:
                     if nxt.get("parent_question_id") == qid or (
                         str(nxt.get("id", "")).startswith("fu_") and not nxt.get("answered")
                     ):
-                        popped_fu = self._question_queue.pop(self._current_q_index + 1)
-                        fu_id = popped_fu.get("id")
-                        if fu_id and fu_id in self._evicted_by_followup:
-                            restored_q = self._evicted_by_followup.pop(fu_id)
-                            self._question_queue.append(restored_q)
+                        self._question_queue.pop(self._current_q_index + 1)
 
             # Restart timer
             if self._timer:
@@ -816,9 +919,7 @@ class InterviewOrchestrator:
                 allowed = dur_min * 60.0 / max(max_q, 1)
                 self._timer_snapshot = self._timer.start(allowed_time_sec=allowed)
 
-            q_payload = dict(current_q)
-            q_payload["turn_index"] = self._current_q_index + 1
-            q_payload["total_questions"] = int(self._state.get("num_questions", 15))
+            q_payload = self._decorate_question_payload(dict(current_q), self._current_q_index)
             attempts_list = self._active_question_attempts.get(qid, [])
             q_payload["current_attempt_count"] = len(attempts_list)
 
@@ -834,22 +935,19 @@ class InterviewOrchestrator:
         Returns: {type: "question", payload: q} | {type: "session_end", payload: {...}}
         """
         async with self._lock:
-            max_q = int(self._state.get("num_questions", 15))
-            if len(self._state.get("scores", [])) >= max_q:
-                report = await self._finalize_session()
+            if self._cached_report is not None:
+                # Session already finalized: duplicate event
                 return {"type": "session_end", "payload": {
-                    "report_id": report["id"],
-                    "overall_score": report.get("overall_score", 0.0),
+                    "report_id": self._cached_report["id"],
+                    "overall_score": self._cached_report.get("overall_score", 0.0),
                 }}
 
             if not self._state.get("pending_next", False):
                 # Duplicate event — return current question unchanged
-                if self._current_q_index < min(len(self._question_queue), max_q):
+                if self._current_q_index < len(self._question_queue):
                     raw_q = self._question_queue[self._current_q_index]
-                    q = dict(raw_q)
-                    q["turn_index"] = self._current_q_index + 1
-                    q["total_questions"] = max_q
-                    return {"type": "question", "payload": q}
+                    return {"type": "question",
+                            "payload": self._decorate_question_payload(dict(raw_q), self._current_q_index)}
                 report = await self._finalize_session()
                 return {"type": "session_end", "payload": {
                     "report_id": report["id"],
@@ -880,13 +978,7 @@ class InterviewOrchestrator:
             self._pre_attempt_state = None
             self._state["pending_next"] = False
             self._current_q_index += 1
-            if self._current_q_index >= max_q:
-                report = await self._finalize_session()
-                return {"type": "session_end", "payload": {
-                    "report_id": report["id"],
-                    "overall_score": report.get("overall_score", 0.0),
-                }}
-
+            # None when the queue is exhausted, or the primary budget is spent and no follow-up is pending
             q = self._select_and_send_question()
             if q is None:
                 report = await self._finalize_session()
@@ -914,18 +1006,14 @@ class InterviewOrchestrator:
         Returns: {type: "question"} | {type: "session_end"}
         """
         async with self._lock:
-            max_q = int(self._state.get("num_questions", 15))
+            skipped = (self._question_queue[self._current_q_index]
+                       if self._current_q_index < len(self._question_queue) else None)
             self._state["scores"].append(0.0)
             self._state.setdefault("raw_scores", []).append(0.0)
             self._state.setdefault("timing_scores", []).append(0.0)
             self._state.setdefault("timing_modifiers", []).append(0.0)
+            self._count_skipped_turn(skipped)
             self._current_q_index += 1
-            if self._current_q_index >= max_q or len(self._state["scores"]) >= max_q:
-                report = await self._finalize_session()
-                return {"type": "session_end", "payload": {
-                    "report_id": report["id"],
-                    "overall_score": report.get("overall_score", 0.0),
-                }}
 
             q = self._select_and_send_question()
 
@@ -961,9 +1049,11 @@ class InterviewOrchestrator:
         Ensures the initial question (index 0) is Easy/Easy-Medium (difficulty <= 2).
         Starts the question timer. Returns the question dict or None (session done).
         """
-        max_q = int(self._state.get("num_questions", 15))
-        if self._current_q_index >= min(len(self._question_queue), max_q):
+        max_q = self._primary_budget()
+        if self._current_q_index >= len(self._question_queue):
             return None
+        if self._primary_budget_exhausted() and not self._is_followup_q(self._question_queue[self._current_q_index]):
+            return None     # primary budget spent; only a pending follow-up may still be delivered
 
         # The initial question must be Easy / Easy-Medium (difficulty <= 2)
         target_diff = 2 if self._current_q_index == 0 else int(self._state.get("current_difficulty", 3))
@@ -973,9 +1063,7 @@ class InterviewOrchestrator:
             str(self._state.get("next_question_type", "")),
         )
         raw_q = self._question_queue[self._current_q_index]
-        q = dict(raw_q)
-        q["turn_index"] = self._current_q_index + 1
-        q["total_questions"] = max_q
+        q = self._decorate_question_payload(dict(raw_q), self._current_q_index)
         self._state["question_index"] = self._current_q_index
 
         cid = self._state.get("candidate_id")
@@ -1699,11 +1787,8 @@ class InterviewOrchestrator:
             "common_mistakes": question.get("common_mistakes", []),
             "reference_answer": question.get("reference_answer", ""),
         }
+        # The queue holds primary questions + follow-ups; no primary question is ever evicted to make room.
         self._question_queue.insert(self._current_q_index + 1, fu_q)
-        max_q = int(self._state.get("num_questions", 15))
-        if len(self._question_queue) > max_q:
-            evicted = self._question_queue.pop()
-            self._evicted_by_followup[fu_q["id"]] = evicted
         return True
 
 

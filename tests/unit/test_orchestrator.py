@@ -205,7 +205,7 @@ async def test_guardrail_g3_cap():
 
 @pytest.mark.asyncio
 async def test_followup_injection():
-    """_inject_followup_question inserts a fu_ question after current index."""
+    """_inject_followup_question inserts a fu_ question after current index without evicting a primary question."""
     o = _orch(n=3)
     o._current_q_index = 0
     initial_len = len(o._question_queue)
@@ -226,7 +226,9 @@ async def test_followup_injection():
         )
 
     assert injected is True
-    assert len(o._question_queue) == initial_len, "Follow-up replaces scheduled question and caps queue at max_q"
+    # The follow-up is queued IN ADDITION to the primary questions; no primary question is evicted.
+    assert len(o._question_queue) == initial_len + 1
+    assert [q["id"] for q in o._question_queue if not q["id"].startswith("fu_")] == ["q0", "q1", "q2"]
     injected_q = o._question_queue[1]
     assert injected_q["id"].startswith("fu_")
     assert injected_q["source"] == "qwen_followup"
