@@ -1,0 +1,26 @@
+{
+  "record_type": "executor-written execution record (written after the run; the harness writes its own outputs)",
+  "campaign": "x1b",
+  "command": ".venv/Scripts/python.exe -B research/confirmatory/X1/x1b_harness.py --run --registered-commit 424894ff74587c6048ea3b9b9d35d67be55088aa   (real Qwen service started separately: python -m uvicorn services.qwen.app:app --port 8001)",
+  "exit_code": 0,
+  "start_local": "2026-09-20T17:39:18+05:30",
+  "end_local": "2026-09-20T18:55:13+05:30",
+  "head_at_run": "424894ff74587c6048ea3b9b9d35d67be55088aa",
+  "protocol_tag": "prereg/X1-B/v2",
+  "protocol_tag_commit": "424894ff74587c6048ea3b9b9d35d67be55088aa",
+  "registered_commit": "424894ff74587c6048ea3b9b9d35d67be55088aa",
+  "sut_tag": "release/app-repair/v1",
+  "sut_commit": "980747ffcc4c60dc1f79e1ee21f9622645bdbd85",
+  "unrelated_tracked_modification_at_run": ".env.example (W&B placeholders; not an input)",
+  "outputs": {
+    "channel_enumeration.json": "88935f5d241bfaf7a2d81c7602c8eb8cd15b3c40ef24373c6261ac1106f28831",
+    "pairs.csv": "b512e508c386e4d61e5bf98e4970a5439b78f5bd517491ac4a8557606230b7e9",
+    "pairs.jsonl": "626eaeef03c3d710c7bb1f12e9259a51b21e9ddd5b079c07a87d466cf548d81e",
+    "summary.json": "2eb8dd20b5229656da7c5ae04857971a98ba5c9906d922a154f127b8eb38ce14"
+  },
+  "logs": {
+    "stdout.txt": "82fe8a7a1d5c6abca208cbd8479cdf6bf381130d14dfdb328d45ce32d6a5f7a9",
+    "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "retries": "none; single execution"
+}

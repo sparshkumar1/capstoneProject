@@ -1,0 +1,284 @@
+[
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 360,
+    "pattern": "qwen_followup",
+    "text": "or (current_q or {}).get(\"source\") in {\"qwen_followup\", \"non_llm_structured_recovery\", \"qwen_1.5b_llm\"}"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 780,
+    "pattern": "qwen_followup",
+    "text": "or q.get(\"source\") in {\"qwen_followup\", \"non_llm_structured_recovery\", \"qwen_1.5b_llm\"}"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1109,
+    "pattern": "qwen_followup",
+    "text": "or curr.get(\"source\") == \"qwen_followup\""
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1172,
+    "pattern": "qwen_followup",
+    "text": "or cand.get(\"source\") == \"qwen_followup\""
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1456,
+    "pattern": "/api/qwen/hint",
+    "text": "for ep in (\"/api/qwen/hint\", \"/hint\"):"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1457,
+    "pattern": "localhost:8001",
+    "text": "resp = await client.post(f\"http://localhost:8001{ep}\", json=payload)"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1714,
+    "pattern": "qwen_followup",
+    "text": "prev_followups = [str(q.get(\"text\", \"\")) for q in self._question_queue if q.get(\"source\") == \"qwen_followup\"]"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1735,
+    "pattern": "fu_data",
+    "text": "fu_data = None"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1742,
+    "pattern": "localhost:8001",
+    "text": "resp = await client.post(f\"http://localhost:8001{ep}\", json=payload)"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1746,
+    "pattern": "fu_data",
+    "text": "fu_data = data"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1748,
+    "pattern": "fu_data",
+    "text": "if fu_data:"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1756,
+    "pattern": "fu_data",
+    "text": "if not fu_data:"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1758,
+    "pattern": "_synthesize_structured_followup",
+    "text": "from services.qwen.app import _synthesize_structured_followup, FollowupRequest"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1760,
+    "pattern": "_synthesize_structured_followup",
+    "text": "res = _synthesize_structured_followup(req)"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1761,
+    "pattern": "fu_data",
+    "text": "fu_data = res.model_dump() if hasattr(res, \"model_dump\") else res.dict()"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1765,
+    "pattern": "fu_data",
+    "text": "fu_text = fu_data.get(\"followup\", \"\").strip()"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1769,
+    "pattern": "qwen_followup",
+    "text": "dec_source = fu_data.get(\"decision_source\", \"qwen_followup\")"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1769,
+    "pattern": "fu_data",
+    "text": "dec_source = fu_data.get(\"decision_source\", \"qwen_followup\")"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1770,
+    "pattern": "fu_data",
+    "text": "llm_stat = fu_data.get(\"llm_status\", \"available\" if (\"qwen\" in str(dec_source).lower() and \"non_llm\" not in str(dec_source).lower()) else \"llm_unavailable\")"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1778,
+    "pattern": "qwen_followup",
+    "text": "\"source\": \"qwen_followup\","
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1781,
+    "pattern": "fu_data",
+    "text": "\"reason\": fu_data.get(\"reason\", \"Targeted probe on candidate performance gap\"),"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1782,
+    "pattern": "fu_data",
+    "text": "\"target_concepts\": fu_data.get(\"target_concepts\", []),"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1782,
+    "pattern": "target_concepts",
+    "text": "\"target_concepts\": fu_data.get(\"target_concepts\", []),"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1785,
+    "pattern": "fu_data",
+    "text": "\"expected_concepts\": fu_data.get(\"target_concepts\") or question.get(\"expected_concepts\", []),"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1785,
+    "pattern": "target_concepts",
+    "text": "\"expected_concepts\": fu_data.get(\"target_concepts\") or question.get(\"expected_concepts\", []),"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1831,
+    "pattern": "qwen_followup",
+    "text": "or question.get(\"source\") in {\"qwen_followup\", \"non_llm_structured_recovery\", \"qwen_1.5b_llm\"}"
+  },
+  {
+    "file": "agents/orchestrator/interview_orchestrator.py",
+    "line": 1861,
+    "pattern": "target_concepts",
+    "text": "\"target_concepts\": question.get(\"target_concepts\", []),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 29,
+    "pattern": "localhost:8001",
+    "text": "QWEN_URL = \"http://localhost:8001\""
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 160,
+    "pattern": "_query_qwen_feedback",
+    "text": "qwen_res = await self._query_qwen_feedback("
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 160,
+    "pattern": "qwen_res",
+    "text": "qwen_res = await self._query_qwen_feedback("
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 170,
+    "pattern": "qwen_res",
+    "text": "if qwen_res:"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 175,
+    "pattern": "qwen_res",
+    "text": "\"what_candidate_said\":      qwen_res.get(\"what_candidate_said\", transcript[:150]),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 176,
+    "pattern": "qwen_res",
+    "text": "\"what_was_correct\":         qwen_res.get(\"what_was_correct\", covered_concepts[:5]),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 177,
+    "pattern": "qwen_res",
+    "text": "\"what_was_incorrect\":       qwen_res.get(\"what_was_incorrect\", incorrect_claims[:4]),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 178,
+    "pattern": "qwen_res",
+    "text": "\"what_was_incomplete\":      qwen_res.get(\"what_was_incomplete\", missing_concepts[:4]),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 179,
+    "pattern": "qwen_res",
+    "text": "\"missing_concepts\":         qwen_res.get(\"missing_concepts\", missing_concepts[:6]),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 180,
+    "pattern": "qwen_res",
+    "text": "\"how_to_answer\":            qwen_res.get(\"how_to_answer\", \"\"),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 181,
+    "pattern": "qwen_res",
+    "text": "\"stronger_answer_guide\":    qwen_res.get(\"stronger_answer_guide\", \"\"),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 182,
+    "pattern": "qwen_res",
+    "text": "\"how_to_improve\":           qwen_res.get(\"actionable_improvements\", []),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 183,
+    "pattern": "qwen_res",
+    "text": "\"actionable_improvements\":  qwen_res.get(\"actionable_improvements\", []),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 184,
+    "pattern": "qwen_res",
+    "text": "\"strong_points\":            qwen_res.get(\"what_was_correct\", covered_concepts[:5]),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 189,
+    "pattern": "qwen_res",
+    "text": "\"justification\":            qwen_res.get(\"narrative_feedback\", \"\"),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 190,
+    "pattern": "qwen_res",
+    "text": "\"narrative_feedback\":       qwen_res.get(\"narrative_feedback\", \"\"),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 192,
+    "pattern": "qwen_res",
+    "text": "\"decision_source\":          qwen_res.get(\"decision_source\", \"qwen_feedback\"),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 194,
+    "pattern": "qwen_res",
+    "text": "\"vague_points\":             qwen_res.get(\"actionable_improvements\", [])[:3],"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 196,
+    "pattern": "qwen_res",
+    "text": "\"comparison\":               comparison or qwen_res.get(\"comparison\"),"
+  },
+  {
+    "file": "agents/orchestrator/feedback_agent.py",
+    "line": 524,
+    "pattern": "_query_qwen_feedback",
+    "text": "async def _query_qwen_feedback("
+  }
+]
