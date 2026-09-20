@@ -1,0 +1,24 @@
+{
+  "record_type": "executor-written execution record (written after the run; the harness writes its own outputs)",
+  "campaign": "x1a",
+  "command": ".venv/Scripts/python.exe -B research/confirmatory/X1/x1a_harness.py --run --registered-commit 80ac60447c7fe7cc1c2facd86f9819f3efbfb20b",
+  "exit_code": 0,
+  "start_local": "2026-09-20T16:54:30+05:30",
+  "end_local": "2026-09-20T17:02:08+05:30",
+  "head_at_run": "80ac60447c7fe7cc1c2facd86f9819f3efbfb20b",
+  "protocol_tag": "prereg/X1-A/v1",
+  "protocol_tag_commit": "80ac60447c7fe7cc1c2facd86f9819f3efbfb20b",
+  "registered_commit": "80ac60447c7fe7cc1c2facd86f9819f3efbfb20b",
+  "sut_tag": "release/app-repair/v1",
+  "sut_commit": "980747ffcc4c60dc1f79e1ee21f9622645bdbd85",
+  "unrelated_tracked_modification_at_run": ".env.example (W&B placeholders; not an input)",
+  "outputs": {
+    "runs.jsonl": "f6109a7543cd0b29546e98d402e7633114964ceb5c8debd8ac4714b542c6cb2d",
+    "verdicts.json": "e3b46224efa2c3135c51f31b861e6e47ea9e762736dbd31e9b058c8e4fc50b7b"
+  },
+  "logs": {
+    "stdout.txt": "e78b868d28552d632d2845cac1871edaaff1973d05697b57a45482093a138406",
+    "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "retries": "none; single execution"
+}

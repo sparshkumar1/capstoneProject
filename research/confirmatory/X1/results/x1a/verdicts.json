@@ -1,0 +1,392 @@
+{
+  "sut": {
+    "sut_tag": "release/app-repair/v1",
+    "sut_commit": "980747ffcc4c60dc1f79e1ee21f9622645bdbd85",
+    "head": "80ac60447c7fe7cc1c2facd86f9819f3efbfb20b",
+    "agents_clean": true,
+    "services_clean": true,
+    "constants": {
+      "QWEN_TIMEOUT": 6.0,
+      "SLA_QWEN_DOWN_S": 5.0,
+      "SLA_QWEN_SLOW_S": 15.0,
+      "SLA_DOCKER_DOWN_S": 2.0,
+      "COMPILE_TIMEOUT_S": 10.0,
+      "DB_BUSY_TIMEOUT_S": 30.0
+    },
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "not_executed": {
+      "FLT-08": "WebSocket reset mid-evaluation: requires the full backend + WebSocket client harness; not built in this campaign, so no claim about it is supported",
+      "FLT-09": "Audio/feature-extractor crash: requires the audio pipeline; not executed, so no claim about it is supported"
+    }
+  },
+  "verdicts": {
+    "FLT-01": {
+      "description": "Qwen service unavailable (port closed)",
+      "criteria_met": "5/5",
+      "failed_criteria": [],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "claims_llm_available",
+          "oracle_rejects": true,
+          "failed": [
+            "llm_status_unavailable",
+            "source_not_llm"
+          ]
+        },
+        {
+          "perturbation": "too_slow",
+          "oracle_rejects": true,
+          "failed": [
+            "returns_within_sla"
+          ]
+        },
+        {
+          "perturbation": "score_changed",
+          "oracle_rejects": true,
+          "failed": [
+            "score_equals_no_fault"
+          ]
+        },
+        {
+          "perturbation": "exception",
+          "oracle_rejects": true,
+          "failed": [
+            "no_exception"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "FLT-02": {
+      "description": "Qwen service slower than the client timeout",
+      "criteria_met": "5/5",
+      "failed_criteria": [],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "claims_llm_available",
+          "oracle_rejects": true,
+          "failed": [
+            "llm_status_unavailable",
+            "source_not_llm"
+          ]
+        },
+        {
+          "perturbation": "too_slow",
+          "oracle_rejects": true,
+          "failed": [
+            "returns_within_sla"
+          ]
+        },
+        {
+          "perturbation": "score_changed",
+          "oracle_rejects": true,
+          "failed": [
+            "score_equals_no_fault"
+          ]
+        },
+        {
+          "perturbation": "exception",
+          "oracle_rejects": true,
+          "failed": [
+            "no_exception"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "FLT-03": {
+      "description": "Evaluator service unavailable (exception on call)",
+      "criteria_met": "0/5",
+      "failed_criteria": [
+        "infrastructure_failure_flagged",
+        "no_zero_score_recorded_as_candidate_failure"
+      ],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "infra_not_flagged",
+          "oracle_rejects": true,
+          "failed": [
+            "infrastructure_failure_flagged",
+            "no_zero_score_recorded_as_candidate_failure"
+          ]
+        },
+        {
+          "perturbation": "zero_recorded",
+          "oracle_rejects": true,
+          "failed": [
+            "infrastructure_failure_flagged",
+            "no_zero_score_recorded_as_candidate_failure"
+          ]
+        },
+        {
+          "perturbation": "fabricated_score",
+          "oracle_rejects": true,
+          "failed": [
+            "infrastructure_failure_flagged",
+            "no_fabricated_score"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "FLT-04[nan]": {
+      "description": "Evaluator returns an invalid score (nan)",
+      "criteria_met": "5/5",
+      "failed_criteria": [],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "raw_invalid_stored",
+          "oracle_rejects": true,
+          "failed": [
+            "feedback_score_finite_in_unit_interval",
+            "state_scores_finite_in_unit_interval"
+          ]
+        },
+        {
+          "perturbation": "exception",
+          "oracle_rejects": true,
+          "failed": [
+            "no_exception"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "FLT-04[inf]": {
+      "description": "Evaluator returns an invalid score (inf)",
+      "criteria_met": "5/5",
+      "failed_criteria": [],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "raw_invalid_stored",
+          "oracle_rejects": true,
+          "failed": [
+            "feedback_score_finite_in_unit_interval",
+            "state_scores_finite_in_unit_interval"
+          ]
+        },
+        {
+          "perturbation": "exception",
+          "oracle_rejects": true,
+          "failed": [
+            "no_exception"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "FLT-04[999.0]": {
+      "description": "Evaluator returns an invalid score (999.0)",
+      "criteria_met": "5/5",
+      "failed_criteria": [],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "raw_invalid_stored",
+          "oracle_rejects": true,
+          "failed": [
+            "feedback_score_finite_in_unit_interval",
+            "state_scores_finite_in_unit_interval"
+          ]
+        },
+        {
+          "perturbation": "exception",
+          "oracle_rejects": true,
+          "failed": [
+            "no_exception"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "FLT-04[-3.0]": {
+      "description": "Evaluator returns an invalid score (-3.0)",
+      "criteria_met": "5/5",
+      "failed_criteria": [],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "raw_invalid_stored",
+          "oracle_rejects": true,
+          "failed": [
+            "feedback_score_finite_in_unit_interval",
+            "state_scores_finite_in_unit_interval"
+          ]
+        },
+        {
+          "perturbation": "exception",
+          "oracle_rejects": true,
+          "failed": [
+            "no_exception"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "FLT-05": {
+      "description": "Docker daemon unreachable (docker and wsl CLIs not found)",
+      "criteria_met": "5/5",
+      "failed_criteria": [],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "false_accepted",
+          "oracle_rejects": true,
+          "failed": [
+            "status_sandbox_error",
+            "not_accepted"
+          ]
+        },
+        {
+          "perturbation": "hang",
+          "oracle_rejects": true,
+          "failed": [
+            "no_hang"
+          ]
+        },
+        {
+          "perturbation": "container_created",
+          "oracle_rejects": true,
+          "failed": [
+            "no_container_created"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "FLT-06": {
+      "description": "Compiler outlives the compile timeout (compile step replaced by `sleep 60`)",
+      "criteria_met": "0/5",
+      "failed_criteria": [
+        "no_orphan_container_3s_after_return"
+      ],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "hang",
+          "oracle_rejects": true,
+          "failed": [
+            "terminated_by_compile_timeout",
+            "no_orphan_container_3s_after_return"
+          ]
+        },
+        {
+          "perturbation": "orphan",
+          "oracle_rejects": true,
+          "failed": [
+            "no_orphan_container_3s_after_return"
+          ]
+        },
+        {
+          "perturbation": "accepted",
+          "oracle_rejects": true,
+          "failed": [
+            "status_reflects_timeout",
+            "not_accepted",
+            "no_orphan_container_3s_after_return"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "FLT-10": {
+      "description": "Empty transcript / whitespace transcript / empty code",
+      "criteria_met": "5/5",
+      "failed_criteria": [],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "exception",
+          "oracle_rejects": true,
+          "failed": [
+            "no_exception_empty_transcript"
+          ]
+        },
+        {
+          "perturbation": "scored_as_real",
+          "oracle_rejects": true,
+          "failed": [
+            "structured_no_input_outcome"
+          ]
+        },
+        {
+          "perturbation": "empty_code_accepted",
+          "oracle_rejects": true,
+          "failed": [
+            "empty_code_structured"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "FLT-07a": {
+      "description": "SQLite write lock held 2 s (busy timeout 30 s)",
+      "criteria_met": "5/5",
+      "failed_criteria": [],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "silent_loss",
+          "oracle_rejects": true,
+          "failed": [
+            "rows_equal_acknowledged_writes",
+            "writes_succeed_after_release"
+          ]
+        },
+        {
+          "perturbation": "partial_row",
+          "oracle_rejects": true,
+          "failed": [
+            "rows_equal_acknowledged_writes",
+            "no_partial_rows",
+            "writes_succeed_after_release"
+          ]
+        },
+        {
+          "perturbation": "stuck_after_release",
+          "oracle_rejects": true,
+          "failed": [
+            "writes_succeed_after_release"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "FLT-07b": {
+      "description": "SQLite write lock held 34 s (busy timeout 30 s)",
+      "criteria_met": "4/5",
+      "failed_criteria": [
+        "fails_near_busy_timeout"
+      ],
+      "oracle_perturbation_controls": [
+        {
+          "perturbation": "silent_loss",
+          "oracle_rejects": true,
+          "failed": [
+            "rows_equal_acknowledged_writes",
+            "fails_visibly"
+          ]
+        },
+        {
+          "perturbation": "partial_row",
+          "oracle_rejects": true,
+          "failed": [
+            "rows_equal_acknowledged_writes",
+            "no_partial_rows",
+            "writes_succeed_after_release"
+          ]
+        },
+        {
+          "perturbation": "stuck_after_release",
+          "oracle_rejects": true,
+          "failed": [
+            "writes_succeed_after_release"
+          ]
+        }
+      ],
+      "oracle_valid": true
+    },
+    "_run": {
+      "protocol_tag": "prereg/X1-A/v1",
+      "registered_commit": "80ac60447c7fe7cc1c2facd86f9819f3efbfb20b",
+      "started_utc": "2026-09-20T11:24:31.653371+00:00",
+      "finished_utc": "2026-09-20T11:32:07.954671+00:00",
+      "harness_sha256": "a074ee9d7d8689d0e6cb09d5923792b1b7c73d962cb215618d09b9f3609ac061",
+      "reps": 5
+    }
+  }
+}
