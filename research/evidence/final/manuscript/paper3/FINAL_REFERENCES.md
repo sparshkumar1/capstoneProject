@@ -1,0 +1,2 @@
+# Paper 3 - references (verified in research/literature/FINAL_REFERENCE_GAP_MATRIX.md; V-meta unless stated)
+Agarwal2021; Henderson2018; Schuirmann1987; Lakens2018; Pelanek2016; AusinBarnesChi2020 (V-read); Alshiekh2018. First-pass items (Axak 2025, Olukola 2026, Ion 2025, CodeGENCAT 2026, Riedmann 2025, Carr 2023) are cited only after their SN labels are upgraded by reading. Any further reference must come from Zotero or another verified source (project rule).

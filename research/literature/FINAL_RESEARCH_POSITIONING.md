@@ -1,0 +1,25 @@
+# PREPAIred — Final research positioning (2026-09-20, second pass; supersedes `FINAL_RESEARCH_POSITIONING_pass1_2026-09-20.md` in emphasis, not in content)
+
+**Not a novelty claim.** No sentence here says PREPAIred is first, novel or state-of-the-art. Positioning = "what the closest work establishes, what it does not, and how our evidence differs". Sources and their verification status: `FINAL_REFERENCE_GAP_MATRIX.md`. The Google literature tools (Literature Insights / Gemini Notebook / Deep Research) were **not available here and not used**; the web-search tool and page fetch were. Absence findings are "not found by these queries".
+
+## Paper 1 — failure-aware, containment-tested assessment orchestration
+- **Closest lines of work.** Fault-injection/chaos-engineering practice (Basiri 2016) supplies the method lineage; container-security reviews (Sultan 2019) supply the threat context; assessment-sandbox and grader-hijack work (first-pass matrix: SandboxEval, APAC, CaMeL, Cai/Li/Sahoo 2026) supplies the closest comparisons.
+- **What the evidence adds (scoped).** On one Docker Desktop machine, nine attack programs against the shipped sandbox configuration with permissive controls showing the oracles can fail; a named-fault campaign that found two real defects, which were repaired and re-tested on a new build (see the X1 old-vs-new files); an invariance test of LLM feedback vs score/difficulty observables (build A: 16 of 72 pairs valid, below the registered minimum of 30; build B revision: 72 of 72 valid, no compared observable differed) with the follow-up-question channel documented but untested.
+- **What must not be claimed.** Secure, isolated, fault-tolerant, "authority separation proven", first/novel measurement of degradation (a search found no scholarly precedent, which is not evidence that none exists), anything about follow-up-question generation (a documented LLM→evaluator dependency), WebSocket/audio faults.
+
+## Paper 2 — exploratory diagnostic of technical-answer scoring
+- **Closest lines of work.** ASAG/AES validity and robustness (Powers 2002; Kabra 2020), behavioural testing (Ribeiro 2020), grader-attack and LLM-judge bias papers from the first pass (Filighera, Condor & Pardos, Dubois), cluster-aware resampling (Field & Welsh 2007), ICC conventions (Koo & Li 2016).
+- **What the evidence adds (scoped).** On a 64-answer, 8-question exploratory benchmark with incomplete rater provenance: moderate, wide-interval alignment (ρ 0.3812 [0.1575, 0.5774]); strong rater–rater agreement; concise-correct and paraphrase under-scoring; verbose-wrong over-scoring; a length-only baseline competitive with the learned component; the full composite below simpler components.
+- **Reading of the literature.** Overstability, gameability by length/feature mirroring, and the value of invariance tests are established phenomena for automated essay scorers; the paper should present its findings as *consistent with* that class of behaviour on a new, small, technical-answer benchmark, not as new discoveries. Whether non-LLM length dependence and question clustering have been reported for short technical answers was **not resolved**.
+- **What must not be claimed.** Validated, human-equivalent, superior, confirmatory, "independent experts".
+
+## Paper 3 — controlled decomposition of a guardrailed RL difficulty controller
+- **Closest lines of work.** RL-evaluation methodology (Agarwal 2021; Henderson 2018), equivalence testing (Schuirmann 1987; Lakens 2018), RL tutoring vs expert/fixed policies with mixed outcomes (Ausin et al. 2020), Elo-based adaptive difficulty (Pelánek 2016), shielding (Alshiekh 2018) and the first-pass educational-RL items (Axak 2025, Olukola 2026, Ion 2025, CodeGENCAT 2026, Riedmann 2025).
+- **What the evidence adds (scoped).** A persona-level, multi-seed simulation comparison in which PPO+guardrails is equivalent to a state-blind constant-same+guardrails control within ±0.12 (Δ −0.0350 [−0.0818, +0.0021]), no superiority under the registered margin, classification unchanged under three registered sensitivity analyses (O7), and higher volatility for PPO. No instance of the same control-under-same-constraint design was found (absence is not proof).
+- **Gaps a reviewer can name.** No Elo/IRT/CAT baseline was run; the ±0.12 margin has no literature justification found; the simulator's reward contains oracle-alignment components; simulation only; PPO's inferiority outside this environment is not shown.
+
+## Cross-paper boundaries
+Unchanged from the first pass: P1 owns sandbox/authority/fault evidence; P2 owns evaluator agreement and diagnostics; P3 owns the simulator and persona-level policy comparison. Each paper cites the others' scope rather than restating results.
+
+## Remaining literature work (owed, not blocking the evidence freeze)
+Independent verification of every first-pass record labelled SN before citation; the open categories in the gap matrix §3; running Google Literature Insights / Gemini tools outside this environment if desired and merging leads, each verified.

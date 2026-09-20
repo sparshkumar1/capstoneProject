@@ -66,3 +66,6 @@
 
 ## 5. Not audited / still owed
 Independent review by a person or a separate tool; FLT-08/09; B2; any adversarial-effectiveness measurement of the injections; a real-daemon-unreachable scenario for Docker.
+
+## 6. Addendum — exploratory probe of the FLT-05 wording gap (unregistered; single run; not evidence for any claim)
+After the audit above, one unregistered probe was run to see what the FLT-05 wording gap hides: the Docker CLI present but the daemon unreachable (`DOCKER_HOST=tcp://127.0.0.1:1`, real `DockerCSandbox`, build B, run while the Qwen service was busy with the X1-B v3 campaign). The executor returned a structured `sandbox_error` ("Docker sandbox daemon is unreachable. Untrusted code execution blocked to protect host."), `passed = False`, no code executed — the failure mode is safe — but it took **16.85 s**, against the 2.0 s SLA used for the CLI-not-found scenario in X1-A, because the executor's daemon probes wait for their own timeouts (5 s and 15 s constants in `_resolve_docker_prefix`). So "Docker outage handled in ~0 s" holds only for the CLI-absent injection; for an unresponsive daemon the candidate waits on the order of 17 s before a structured error. Single run, loaded machine, not repeated: report as a limitation/observation, not as a measured latency.

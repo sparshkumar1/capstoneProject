@@ -1,0 +1,41 @@
+# Paper 2 — final claim matrix (2026-09-20)
+
+**Frame.** Exploratory diagnostic / measurement-validity study of an evidence-grounded technical-answer scorer on a small author-constructed benchmark. **Confirmatory human round = BLOCKED** (no valid institutional/ethics route, consent records or rater provenance; nothing collected, authored, simulated as human or backdated). No claim of validation. Categories: **S** supported exploratory finding · **G** suggestive diagnostic finding · **L** limitation · **U** unsupported claim. All numbers are from frozen artifacts (registry row in brackets) except P2-R1, whose category means were computed in this sprint from the frozen case-level file (read-only, descriptive); no frozen file was altered.
+
+## 1. Data and provenance (what the reader must know first)
+| ID | Statement | Cat. | Evidence / N | Artifact (sha256 prefix) | Limitation |
+|---|---|---|---|---|---|
+| P2-D1 | The benchmark has 64 author-constructed answers to 8 questions in 10 answer categories; three raters; final human gold frozen. [P2-C005, P2-C001] | S | n=64, 8 questions | `final_human_gold.csv` 363dbe6d…; `paper2_case_level_results.csv` a89ba138… | Answers written by the study team; questions/answers not independent; rater provenance/ethics records incomplete — never write "independent experts", "committee", "approved". |
+| P2-D2 | The R component is a partially fine-tuned derivative of `cross-encoder/ms-marco-MiniLM-L-6-v2` (16.28% of parameters changed; training data/provenance incomplete). [P2-C003, P2-C002] | S (audit) | model file hash 6a241a55… | `services/evaluator/models/tuned_model2/model.safetensors` | Not "off-the-shelf"; training-data overlap with the benchmark cannot be excluded from the record. |
+
+## 2. Agreement with humans
+| ID | Statement (permitted wording) | Cat. | Evidence / N | Artifact | Limitation |
+|---|---|---|---|---|---|
+| P2-A1 | Composite vs consensus human score: Spearman ρ = 0.3812, 95% case-bootstrap CI [0.1575, 0.5774] (B=2000). [P2-C006] | S | n=64 | `paper2_summary_results.csv` 5c745112… | Case bootstrap treats answers as independent; exploratory. |
+| P2-A2 | Question-aware intervals are wider: two-level cluster bootstrap [0.1529, 0.6490]; question-only [0.3066, 0.5888] (8 questions, B=10000, seed 42). [X2A-C001, C002] | S | 64 answers / 8 questions | `x2a_bootstrap_rho.csv` 4371dd80… | Only 8 clusters; interval is a rough guide. |
+| P2-A3 | Within-question ρ (0.5796) exceeds pooled ρ; composite bias −0.1338, Bland–Altman limits [−0.7943, 0.5267], Lin's CCC 0.3297; residual vs answer length ρ −0.3077. [X2A-C007] | G | n=64 | `x2a_agreement.csv` 84687dda… | Descriptive; one benchmark. |
+| P2-A4 | Leave-one-question-out ρ 0.3517–0.4341; leave-one-rater-out 0.3552–0.3815 (all 64) and 0.4147–0.4618 (54 non-adjudicated). [X2A-C004, C005] | S | 8 / 3 leave-outs | `x2a_loqo.csv` 343e3627…; `x2a_rater_loo.csv` 8ba4db9e… | Sensitivity only. |
+| P2-A5 | Human-human reliability: ICC(2,1)=0.9528, ICC(2,k)=0.9838, Krippendorff α (interval)=0.9523. [P2-C008] | S | 64 items, 3 raters | audit | Reliability of raters who are not independently documented; a high ICC does not establish validity. |
+| P2-A6 | Pilot-overlap questions ρ 0.7092 vs other questions 0.4249. [X2A-C006] | G | 32 vs 32 | `x2a_overlap.csv` f2ed42a5… | Point estimates; not a held-out validation. The older 0.6975 (1 rater, N=20) pilot is superseded and must not be cited as the current human result. |
+
+## 3. Composite vs simpler components and baselines
+| ID | Statement | Cat. | Evidence / N | Artifact | Limitation |
+|---|---|---|---|---|---|
+| P2-B1 | The full composite correlates below R-only (0.4832 [0.2501, 0.6762]) and S1+R (0.4884). [P2-C007] | S | n=64 | `paper2_ablation_results.csv` d789bd59… | Frame the composite as safety-hardened with a measured agreement cost; never "composite improves evaluation". |
+| P2-B2 | Composite − R-only Spearman = −0.102, two-level 95% interval [−0.2849, 0.1174] (includes zero: the data neither establish nor exclude a difference). [X2A-C003] | S | 8 questions | `x2a_bootstrap_rho_diff.csv` bc0115f7… | Do not write "significantly lower". |
+| P2-B3 | A length-only baseline (word count) matches or exceeds the derived CrossEncoder: ρ 0.4897 [0.2186, 0.708] vs 0.4825; AUROC 0.8864 vs 0.7821. [X2B-C003] | S (exploratory) | 64 / 8 | `metrics_point_ci.csv` f934d5f3… | Benchmark answer categories are length-structured; result is about this benchmark. |
+| P2-B4 | Derived CrossEncoder agrees better with human gold than the upstream checkpoint: Spearman difference 0.337 [0.0418, 0.6057]; upstream ρ 0.1454 [−0.1532, 0.4535]. [X2B-C001, C002] | G | 64 / 8 | `paired_differences.csv` f395f56a… | Possible training/benchmark overlap; exploratory. |
+| P2-B5 | Lexical baselines: BM25 0.3812, TF-IDF 0.245, reference-token overlap 0.4301. [X2B-C004] | S (exploratory) | 64 / 8 | `metrics_point_ci.csv` | BM25 equals the composite's ρ to four decimals — report as observed, do not interpret as equivalence. |
+
+## 4. Bias / robustness diagnostics
+| ID | Statement | Cat. | Evidence | Artifact | Limitation |
+|---|---|---|---|---|---|
+| P2-R1 | **Category means (descriptive; computed in this sprint from the frozen case-level file, not previously registered).** Model score minus human gold, mean per category: concise_correct −0.515 (n=8; human 0.912, model 0.397); paraphrase −0.483 (n=4); suboptimal_correct −0.421 (n=2); verbose_correct −0.393 (n=8; human 0.984, model 0.591); partial_incomplete −0.312 (n=8); verbose_wrong **+0.219** (n=8; human 0.105, model 0.324); contradictory +0.128 (n=4); misconception +0.120 (n=8); incorrect +0.072 (n=6); keyword_stuffed +0.040 (n=8). | G | 64 answers, 10 categories (2–8 per category) | `paper2_case_level_results.csv` a89ba138… | Category means only, no intervals; 2–8 cases per category. **Correct answers are under-scored in every correct/partial category, including verbose_correct (−0.393), so the pattern is a compressed score scale, not a concise-only penalty**; concise_correct is 0.194 below verbose_correct in model score against 0.072 below in human score. Verbose-wrong is over-scored relative to human. Consistent with known scorer behaviour (Kabra 2020; Powers 2002), not a new phenomenon. |
+| P2-R2 | Metamorphic relations 19/21 passed (3 base cases × 7 relations); adversarial attacks 11/13 contained against author-set score ceilings. [P2-C013] | G | descriptive | `paper2_metamorphic_results.csv` e7a0d5ec… | Author-set ceilings; tiny N; "contained" only relative to those ceilings. |
+| P2-R3 | Adversarial vs correct-reference AUROC: composite 0.7206 [0.5836, 0.8926], R-only 0.7821; difference −0.0615 [−0.1676, 0.0659]. At τ=0.60 the composite accepts 2 of 34 adversarial answers. [X2A-C008, C009] | G (exploratory) | 34 adversarial / 22 correct | `x2a_auroc.csv` 6e4ee074…; `x2a_false_accept.csv` 488a297d… | No explicit accept threshold exists; thresholds are documented grade boundaries. |
+
+## 5. Explicitly unsupported (do not write)
+Validated / human-equivalent evaluator; confirmatory or generalisable agreement; composite superior (to R-only, S1+R, length-only or lexical baselines); safety-hardening "costs nothing"; "independent raters"; ethics approval; any statement about real candidates; ρ 0.7400 / 0.9152 / 0.8358 / 0.6975 as current results.
+
+## 6. Blocked confirmatory work (record)
+Round X2-C requires an institutional/venue determination, consent/compensation records, confirmation of the precision target (draft 0.12 half-width, unconfirmed) and CrossEncoder provenance wording. The precision simulation (`research/confirmatory/X2C/`) is a synthetic draft that fixes no N. Readiness of Paper 2 as a validation paper: NOT READY; as an exploratory diagnostic: see `FINAL_PUBLICATION_READINESS.md`.

@@ -1,0 +1,4 @@
+# Paper 3 - reproducibility
+Tags: prereg/X3-A/v1, freeze/X3-A/v1, prereg/X3-A-O7/v1 (5217542e13f8c556a3e3b884e47299a6380b2128), freeze/X3-A-O7/v1 (4bcb96949602a255569bd60e758173d21075d058), freeze/EVIDENCE/2026-09-20 (provisional) and the final freeze tag named in research/evidence/final/FINAL_EVIDENCE_FREEZE_FINAL.md.
+Environment: locked env envs/LOCK-X3-2026-09-19 (Python 3.12.7, numpy 2.5.2, scipy 1.17.1; lock file research/locks/LOCK-X3-2026-09-19.lock.json). O7: x3a_o7.py --registered-commit 5217542e... with HEAD equal to the tag commit and a write-once output directory. Data: research/confirmatory/X3-A/results/sessions.csv. Hash manifest: FINAL_HASH_MANIFEST_FINAL.json.
+Not reproducible: retraining PPO from the frozen seeds (unseeded candidate noise). The checkpoints are frozen artifacts, not regenerated.

@@ -1,0 +1,5 @@
+# Paper 3 - figure plan (no figure fabricated; every figure from a stored artifact)
+F1 Forest plot of delta MAE. x: delta tracking MAE (PPO+G minus Constant-Same+G); y: analysis (Registered, O7-A, O7-B, O7-C1..C5). Uncertainty: 95% intervals (C: points only). Vertical lines at -0.20, -0.12, 0, +0.12. Source: x3a_decision.json, x3a_o7_results.json. Caption meaning: all intervals lie inside +/-0.12 or touch only the zero line; none approaches -0.20.
+F2 Per-seed delta (5 training seeds) as dots with persona-level spread. x: seed; y: delta MAE. Source: x3a_o7_results.json. Shows seed 123 slightly positive, seed 42 most favourable.
+F3 Volatility by policy under the same guardrails. x: policy (PPO+G, Constant-Same+G, heuristic+G); y: volatility; uncertainty: bootstrap intervals of the contrasts in Table 2. Source: x3a_primary_and_secondary_metrics.csv.
+F4 Guardrail accounting (five-persona study): bars of activations, overrides, attempted out-of-range actions. Source: paper3_seed_results.csv, x3_0c_replay_summary.csv. Descriptive.
