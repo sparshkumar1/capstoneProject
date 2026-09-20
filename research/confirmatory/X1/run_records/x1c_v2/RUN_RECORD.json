@@ -1,0 +1,26 @@
+{
+  "record_type": "executor-written execution record (written after the run; the harness writes its own outputs)",
+  "campaign": "x1c_v2",
+  "command": "python research/confirmatory/X1/x1c_harness_v2.py --run --registered-commit 77cf3a57296fe256722596507b76488ad7eb6e1f",
+  "exit_code": 0,
+  "start_utc": "2026-09-20T14:51:51Z",
+  "end_utc": "2026-09-20T15:00:34Z",
+  "head_at_run": "77cf3a57296fe256722596507b76488ad7eb6e1f",
+  "protocol_tag": "prereg/X1-C/v2",
+  "protocol_tag_commit": "77cf3a57296fe256722596507b76488ad7eb6e1f",
+  "registered_commit": "77cf3a57296fe256722596507b76488ad7eb6e1f",
+  "sut_tag": "sut/X1/build-B",
+  "sut_commit": "beb374f37c533fc8875b6c38e19b2b578a4d8c8d",
+  "unrelated_tracked_modification_at_run": ".env.example (W&B placeholders; not an input)",
+  "outputs": {
+    "environment_and_verdicts.json": "86713f0ae816a68d41e6f5a9b98e99d6dcb3921eaa33c279fbe510fdd60349c4",
+    "junit.xml": "5bbbe53c193f1c2ba405008efe28f6512bfdf2aaef9450be39e894128963e67b",
+    "results.csv": "a44b436478f3c66dcfce7d54c71bf433af820bb25d102797fff868c6ca0b1a49",
+    "runs.jsonl": "1340fb7fe0b2266ff97cc351cd1ed7f605aa834d3b3feeab000d395c95af89df"
+  },
+  "logs": {
+    "stdout.txt": "f8f529d0eee475041940dedd37568cb7fc6460ebfd5556c968a7b442c9494c86",
+    "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "retries": "none; single execution"
+}

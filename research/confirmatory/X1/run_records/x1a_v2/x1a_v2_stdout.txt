@@ -1,0 +1,516 @@
+[INFO] Authoritative production evaluator loaded from services.evaluator.app
+[INFO] Evaluator source: services_evaluator
+[INFO] Loaded question bank from C:\Users\spars\Downloads\PrepAIred\data\questions\qns.json (125 questions, 125 rubrics)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-01         r1 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-01         r2 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-01         r3 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-01         r4 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-01         r5 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-02         r1 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-02         r2 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-02         r3 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-02         r4 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-02         r5 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-03         r1 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-03         r2 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-03         r3 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-03         r4 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-03         r5 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[nan]    r1 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[nan]    r2 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[nan]    r3 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[nan]    r4 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[nan]    r5 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[inf]    r1 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[inf]    r2 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[inf]    r3 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[inf]    r4 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[inf]    r5 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[999.0]  r1 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[999.0]  r2 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[999.0]  r3 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[999.0]  r4 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[999.0]  r5 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[-3.0]   r1 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[-3.0]   r2 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[-3.0]   r3 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[-3.0]   r4 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-04[-3.0]   r5 met=True 
+FLT-05         r1 met=True 
+FLT-05         r2 met=True 
+FLT-05         r3 met=True 
+FLT-05         r4 met=True 
+FLT-05         r5 met=True 
+FLT-06         r1 met=True 
+FLT-06         r2 met=True 
+FLT-06         r3 met=True 
+FLT-06         r4 met=True 
+FLT-06         r5 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-10         r1 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-10         r2 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-10         r3 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-10         r4 met=True 
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+[HybridOrchestrator] PPO loaded successfully (dim=6, actions=3)
+FLT-10         r5 met=True 
+FLT-07a        r1 met=True 
+FLT-07a        r2 met=True 
+FLT-07a        r3 met=True 
+FLT-07a        r4 met=True 
+FLT-07a        r5 met=True 
+FLT-07b        r1 met=True 
+FLT-07b        r2 met=True 
+FLT-07b        r3 met=True 
+FLT-07b        r4 met=True 
+FLT-07b        r5 met=True 
+{
+ "FLT-01": {
+  "description": "Qwen service unavailable (port closed)",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "claims_llm_available",
+    "oracle_rejects": true,
+    "failed": [
+     "llm_status_unavailable",
+     "source_not_llm"
+    ]
+   },
+   {
+    "perturbation": "too_slow",
+    "oracle_rejects": true,
+    "failed": [
+     "returns_within_sla"
+    ]
+   },
+   {
+    "perturbation": "score_changed",
+    "oracle_rejects": true,
+    "failed": [
+     "score_equals_no_fault"
+    ]
+   },
+   {
+    "perturbation": "exception",
+    "oracle_rejects": true,
+    "failed": [
+     "no_exception"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "FLT-02": {
+  "description": "Qwen service slower than the client timeout",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "claims_llm_available",
+    "oracle_rejects": true,
+    "failed": [
+     "llm_status_unavailable",
+     "source_not_llm"
+    ]
+   },
+   {
+    "perturbation": "too_slow",
+    "oracle_rejects": true,
+    "failed": [
+     "returns_within_sla"
+    ]
+   },
+   {
+    "perturbation": "score_changed",
+    "oracle_rejects": true,
+    "failed": [
+     "score_equals_no_fault"
+    ]
+   },
+   {
+    "perturbation": "exception",
+    "oracle_rejects": true,
+    "failed": [
+     "no_exception"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "FLT-03": {
+  "description": "Evaluator service unavailable (exception on call)",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "infra_not_flagged",
+    "oracle_rejects": true,
+    "failed": [
+     "infrastructure_failure_flagged"
+    ]
+   },
+   {
+    "perturbation": "zero_recorded",
+    "oracle_rejects": true,
+    "failed": [
+     "no_zero_score_recorded_as_candidate_failure"
+    ]
+   },
+   {
+    "perturbation": "fabricated_score",
+    "oracle_rejects": true,
+    "failed": [
+     "no_fabricated_score"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "FLT-04[nan]": {
+  "description": "Evaluator returns an invalid score (nan)",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "raw_invalid_stored",
+    "oracle_rejects": true,
+    "failed": [
+     "feedback_score_finite_in_unit_interval",
+     "state_scores_finite_in_unit_interval"
+    ]
+   },
+   {
+    "perturbation": "exception",
+    "oracle_rejects": true,
+    "failed": [
+     "no_exception"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "FLT-04[inf]": {
+  "description": "Evaluator returns an invalid score (inf)",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "raw_invalid_stored",
+    "oracle_rejects": true,
+    "failed": [
+     "feedback_score_finite_in_unit_interval",
+     "state_scores_finite_in_unit_interval"
+    ]
+   },
+   {
+    "perturbation": "exception",
+    "oracle_rejects": true,
+    "failed": [
+     "no_exception"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "FLT-04[999.0]": {
+  "description": "Evaluator returns an invalid score (999.0)",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "raw_invalid_stored",
+    "oracle_rejects": true,
+    "failed": [
+     "feedback_score_finite_in_unit_interval",
+     "state_scores_finite_in_unit_interval"
+    ]
+   },
+   {
+    "perturbation": "exception",
+    "oracle_rejects": true,
+    "failed": [
+     "no_exception"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "FLT-04[-3.0]": {
+  "description": "Evaluator returns an invalid score (-3.0)",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "raw_invalid_stored",
+    "oracle_rejects": true,
+    "failed": [
+     "feedback_score_finite_in_unit_interval",
+     "state_scores_finite_in_unit_interval"
+    ]
+   },
+   {
+    "perturbation": "exception",
+    "oracle_rejects": true,
+    "failed": [
+     "no_exception"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "FLT-05": {
+  "description": "Docker daemon unreachable (docker and wsl CLIs not found)",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "false_accepted",
+    "oracle_rejects": true,
+    "failed": [
+     "status_sandbox_error",
+     "not_accepted"
+    ]
+   },
+   {
+    "perturbation": "hang",
+    "oracle_rejects": true,
+    "failed": [
+     "no_hang"
+    ]
+   },
+   {
+    "perturbation": "container_created",
+    "oracle_rejects": true,
+    "failed": [
+     "no_container_created"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "FLT-06": {
+  "description": "Compiler outlives the compile timeout (compile step replaced by `sleep 60`)",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "hang",
+    "oracle_rejects": true,
+    "failed": [
+     "terminated_by_compile_timeout"
+    ]
+   },
+   {
+    "perturbation": "orphan",
+    "oracle_rejects": true,
+    "failed": [
+     "no_orphan_container_3s_after_return"
+    ]
+   },
+   {
+    "perturbation": "accepted",
+    "oracle_rejects": true,
+    "failed": [
+     "status_reflects_timeout",
+     "not_accepted"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "FLT-10": {
+  "description": "Empty transcript / whitespace transcript / empty code",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "exception",
+    "oracle_rejects": true,
+    "failed": [
+     "no_exception_empty_transcript"
+    ]
+   },
+   {
+    "perturbation": "scored_as_real",
+    "oracle_rejects": true,
+    "failed": [
+     "structured_no_input_outcome"
+    ]
+   },
+   {
+    "perturbation": "empty_code_accepted",
+    "oracle_rejects": true,
+    "failed": [
+     "empty_code_structured"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "FLT-07a": {
+  "description": "SQLite write lock held 2 s (busy timeout 30 s)",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "silent_loss",
+    "oracle_rejects": true,
+    "failed": [
+     "rows_equal_acknowledged_writes",
+     "writes_succeed_after_release"
+    ]
+   },
+   {
+    "perturbation": "partial_row",
+    "oracle_rejects": true,
+    "failed": [
+     "rows_equal_acknowledged_writes",
+     "no_partial_rows",
+     "writes_succeed_after_release"
+    ]
+   },
+   {
+    "perturbation": "stuck_after_release",
+    "oracle_rejects": true,
+    "failed": [
+     "writes_succeed_after_release"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "FLT-07b": {
+  "description": "SQLite write lock held 34 s (busy timeout 30 s)",
+  "criteria_met": "5/5",
+  "failed_criteria": [],
+  "oracle_perturbation_controls": [
+   {
+    "perturbation": "silent_loss",
+    "oracle_rejects": true,
+    "failed": [
+     "rows_equal_acknowledged_writes",
+     "fails_visibly"
+    ]
+   },
+   {
+    "perturbation": "partial_row",
+    "oracle_rejects": true,
+    "failed": [
+     "rows_equal_acknowledged_writes",
+     "no_partial_rows",
+     "writes_succeed_after_release"
+    ]
+   },
+   {
+    "perturbation": "stuck_after_release",
+    "oracle_rejects": true,
+    "failed": [
+     "writes_succeed_after_release"
+    ]
+   }
+  ],
+  "oracle_valid": true
+ },
+ "_run": {
+  "protocol_tag": "prereg/X1-A/v2",
+  "registered_commit": "77cf3a57296fe256722596507b76488ad7eb6e1f",
+  "started_utc": "2026-09-20T15:00:48.981443+00:00",
+  "finished_utc": "2026-09-20T15:08:16.892674+00:00",
+  "harness_sha256": "74be10f519c18854a25a8f9a4c2c162e848a00bcfbf9e05a3720ca8de50d2f26",
+  "reps": 5
+ }
+}

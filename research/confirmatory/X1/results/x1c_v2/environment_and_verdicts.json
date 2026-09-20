@@ -1,0 +1,146 @@
+{
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "docker_client": "29.7.2",
+    "docker_server": "29.7.2",
+    "kernel": "6.6.87.2-microsoft-standard-WSL2",
+    "os_docker": "Docker Desktop",
+    "cgroup": [
+      "2",
+      "cgroupfs"
+    ],
+    "security_options": [
+      "name=seccomp,profile=builtin",
+      "name=cgroupns"
+    ],
+    "runtime": "runc",
+    "mem_total": 8154980352,
+    "ncpu": 12,
+    "image": "prepaired-c-sandbox:latest",
+    "image_id": "sha256:1e8e861c8a5d797c1402bb298ae44301ab1f47139de373bf1977b102f3629c39",
+    "image_repo_digests": [
+      "prepaired-c-sandbox@sha256:1e8e861c8a5d797c1402bb298ae44301ab1f47139de373bf1977b102f3629c39"
+    ],
+    "image_user": "sandbox",
+    "gcc": "gcc (Alpine 13.2.1_git20231014) 13.2.1 20231014",
+    "shipped_flags_note": "read from the recorded docker_commands of every shipped-configuration run (user 1001:1001, --net=none, --cap-drop=ALL, no-new-privileges, --read-only, tmpfs /workspace, memory/swap 128m, pids 32, cpus 1.0, seccomp = Docker default profile)",
+    "host_gateway_ipv4": "192.168.65.254",
+    "canary_listener_port": 57983,
+    "psutil": "7.2.2"
+  },
+  "sut": {
+    "sut_tag": "sut/X1/build-B",
+    "sut_commit": "beb374f37c533fc8875b6c38e19b2b578a4d8c8d",
+    "head": "77cf3a57296fe256722596507b76488ad7eb6e1f",
+    "executor_clean_vs_sut_tag": true,
+    "executor_sha256": {
+      "__init__.py": "a37865dca3f85b898e8b1e3dfd5b08cade6d74cb586795ab15760a857c883b3f",
+      "coding_executor.py": "970a75954940bb4fedce42b15b275a59a8a6240232e28ec86f4793467a79a8f4",
+      "sandbox_policy.py": "596045475b8949103a61c4cc01699298d8def727e6ee692737f171d37c25c09e"
+    }
+  },
+  "verdicts": {
+    "SEC-01": {
+      "name": "ptrace (static pre-flight layer)",
+      "control": "static pre-flight disabled (validate_source_safety patched to accept); the program then reaches the sandbox",
+      "shipped_criteria_met": "5/5",
+      "permissive_breach_detected": "5/5",
+      "benign_cross_oracle_false_positives": "0/5",
+      "shipped_failed_criteria": [],
+      "oracle_valid": true,
+      "shipped_contained_in_this_harness": true
+    },
+    "SEC-02": {
+      "name": "socket + connect to host canary",
+      "control": "--net=none removed and host-gateway alias added (default bridge network)",
+      "shipped_criteria_met": "5/5",
+      "permissive_breach_detected": "5/5",
+      "benign_cross_oracle_false_positives": "0/5",
+      "shipped_failed_criteria": [],
+      "oracle_valid": true,
+      "shipped_contained_in_this_harness": true
+    },
+    "SEC-03": {
+      "name": "syntax error / compiler boundary",
+      "control": "not applicable (not a configurable containment control); oracle validity by benign negative control",
+      "shipped_criteria_met": "5/5",
+      "permissive_breach_detected": "n/a",
+      "benign_cross_oracle_false_positives": "0/5",
+      "shipped_failed_criteria": [],
+      "oracle_valid": true,
+      "shipped_contained_in_this_harness": true
+    },
+    "SEC-04": {
+      "name": "SIGSEGV null dereference",
+      "control": "not applicable (process-level crash); oracle validity by benign negative control",
+      "shipped_criteria_met": "5/5",
+      "permissive_breach_detected": "n/a",
+      "benign_cross_oracle_false_positives": "0/5",
+      "shipped_failed_criteria": [],
+      "oracle_valid": true,
+      "shipped_contained_in_this_harness": true
+    },
+    "SEC-05": {
+      "name": "infinite CPU loop",
+      "control": "program timeout raised from 2 s to 12 s",
+      "shipped_criteria_met": "5/5",
+      "permissive_breach_detected": "5/5",
+      "benign_cross_oracle_false_positives": "0/5",
+      "shipped_failed_criteria": [],
+      "oracle_valid": true,
+      "shipped_contained_in_this_harness": true
+    },
+    "SEC-06": {
+      "name": "RAM exhaustion (touch 256 MB under a 128 MB cap)",
+      "control": "--memory/--memory-swap raised from 128m to 1024m",
+      "shipped_criteria_met": "5/5",
+      "permissive_breach_detected": "5/5",
+      "benign_cross_oracle_false_positives": "0/5",
+      "shipped_failed_criteria": [],
+      "oracle_valid": true,
+      "shipped_contained_in_this_harness": true
+    },
+    "SEC-07": {
+      "name": "exfiltration of a canary token",
+      "control": "--net=none removed and host-gateway alias added (default bridge network)",
+      "shipped_criteria_met": "5/5",
+      "permissive_breach_detected": "5/5",
+      "benign_cross_oracle_false_positives": "0/5",
+      "shipped_failed_criteria": [],
+      "oracle_valid": true,
+      "shipped_contained_in_this_harness": true
+    },
+    "SEC-08": {
+      "name": "fork attempts (bounded at 100)",
+      "control": "--pids-limit raised from 32 to 256",
+      "shipped_criteria_met": "5/5",
+      "permissive_breach_detected": "5/5",
+      "benign_cross_oracle_false_positives": "0/5",
+      "shipped_failed_criteria": [],
+      "oracle_valid": true,
+      "shipped_contained_in_this_harness": true
+    },
+    "SEC-09": {
+      "name": "filesystem write (/etc and host canary dir)",
+      "control": "--read-only removed and the host canary directory bind-mounted read-write at /canary",
+      "shipped_criteria_met": "5/5",
+      "permissive_breach_detected": "5/5",
+      "benign_cross_oracle_false_positives": "0/5",
+      "shipped_failed_criteria": [],
+      "oracle_valid": true,
+      "shipped_contained_in_this_harness": true
+    },
+    "BEN": {
+      "benign_criteria_met": "10/10"
+    },
+    "_run": {
+      "protocol_tag": "prereg/X1-C/v2",
+      "registered_commit": "77cf3a57296fe256722596507b76488ad7eb6e1f",
+      "started_utc": "2026-09-20T14:52:04.062594+00:00",
+      "finished_utc": "2026-09-20T15:00:34.490775+00:00",
+      "harness_sha256": "fe32d453d4eb10d6f00926aec9180b6cad519c2b32bfd6577b8e4af7eddcad4c",
+      "reps": 5
+    }
+  }
+}

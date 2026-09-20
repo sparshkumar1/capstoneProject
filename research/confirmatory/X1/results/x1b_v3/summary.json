@@ -1,0 +1,112 @@
+{
+  "sut": {
+    "sut_tag": "sut/X1/build-B",
+    "sut_commit": "beb374f37c533fc8875b6c38e19b2b578a4d8c8d",
+    "head": "a9c6a2099eb2d172892eac567ced598756d709b5",
+    "agents_clean_vs_sut_tag": true,
+    "services_clean_vs_sut_tag": true,
+    "prompts_sha256": "b7067bef79f9d4ebea8dbc4bbbe9e9ebf3569a3397ddb81b2ab5247fb8bdda69",
+    "model_file": "models/gguf/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "model_sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "decoding": "service defaults: temperature 0.1, top_p 0.9, max_new_tokens 512 (QWEN_FEEDBACK_MAX_NEW_TOKENS default), no fixed seed (llama.cpp default)"
+  },
+  "summary": {
+    "pairs_total": 72,
+    "pairs_valid_llm_sourced": 72,
+    "invariant_all_pairs": "72/72",
+    "invariant_valid_pairs": "72/72",
+    "pairs_where_llm_text_changed": "72/72",
+    "mutant_detected_pairs": "72/72",
+    "static_guard_real_sources_flagged": 0,
+    "static_guard_mutant_detected": true,
+    "qwen_health": {
+      "status": "ok",
+      "service": "prepaired-qwen-microservice",
+      "version": "2.1.0",
+      "mock_mode": false,
+      "models_loaded": [
+        "qwen_1b"
+      ],
+      "model_types": {
+        "qwen_1b": "gguf"
+      },
+      "models_loading": {
+        "qwen_1b": false
+      },
+      "model_errors": {},
+      "primary_demo_engine": "llama.cpp (CPU)"
+    },
+    "minimum_valid_pairs_required": 30,
+    "meets_minimum": true,
+    "run": {
+      "protocol_tag": "prereg/X1-B/v3",
+      "registered_commit": "a9c6a2099eb2d172892eac567ced598756d709b5",
+      "started_utc": "2026-09-20T15:09:15.287556+00:00",
+      "finished_utc": "2026-09-20T16:27:51.708668+00:00",
+      "harness_sha256": "e1d7ffc5f5f51606f09703d3a14c3ec41d1941744b019e3b6c327045914691a1"
+    }
+  },
+  "static_guard": {
+    "real_sources": [
+      {
+        "file": "agents/orchestrator/interview_orchestrator.py",
+        "protected_writes_scanned": 72,
+        "flagged": []
+      },
+      {
+        "file": "agents/orchestrator/feedback_agent.py",
+        "protected_writes_scanned": 3,
+        "flagged": []
+      },
+      {
+        "file": "services/storage/best_answer.py",
+        "protected_writes_scanned": 0,
+        "flagged": []
+      },
+      {
+        "file": "services/storage/database.py",
+        "protected_writes_scanned": 3,
+        "flagged": []
+      }
+    ],
+    "mutant_detected": true,
+    "mutant": {
+      "file": "MUTANT(agents/orchestrator/interview_orchestrator.py)",
+      "protected_writes_scanned": 73,
+      "flagged": [
+        {
+          "file": "MUTANT(agents/orchestrator/interview_orchestrator.py)",
+          "line": 2303,
+          "protected_key": "final_score",
+          "tainted_names": [
+            "narrative_feedback",
+            "qwen_res"
+          ]
+        }
+      ]
+    }
+  },
+  "fixed_evaluator_result": {
+    "final_score": 0.9,
+    "raw_evaluator_score": 0.9,
+    "grade": "Excellent",
+    "score_breakdown": {
+      "semantic_similarity": 0.8,
+      "concept_coverage": 0.9,
+      "reasoning_quality": 0.95,
+      "overall": 0.9
+    },
+    "covered_concepts": [
+      "pointer dereference"
+    ],
+    "correct_claims": [
+      "pointer dereference"
+    ],
+    "missing_concepts": [],
+    "incorrect_claims": [],
+    "weakest_gap": "None - comprehensive answer",
+    "decision_source": "evaluator_cross_encoder",
+    "mandatory_pass": true,
+    "mistake_penalty": 0.0
+  }
+}
