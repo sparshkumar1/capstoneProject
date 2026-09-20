@@ -1,0 +1,193 @@
+BEN     shipped         r1 met=True 
+BEN     shipped         r2 met=True 
+BEN     shipped         r3 met=True 
+BEN     shipped         r4 met=True 
+BEN     shipped         r5 met=True 
+BEN     permissive-all  r1 met=True 
+BEN     permissive-all  r2 met=True 
+BEN     permissive-all  r3 met=True 
+BEN     permissive-all  r4 met=True 
+BEN     permissive-all  r5 met=True 
+SEC-01  shipped         r1 met=True 
+SEC-01  shipped         r2 met=True 
+SEC-01  shipped         r3 met=True 
+SEC-01  shipped         r4 met=True 
+SEC-01  shipped         r5 met=True 
+SEC-01  permissive      r1 met=False 
+SEC-01  permissive      r2 met=False 
+SEC-01  permissive      r3 met=False 
+SEC-01  permissive      r4 met=False 
+SEC-01  permissive      r5 met=False 
+SEC-02  shipped         r1 met=True 
+SEC-02  shipped         r2 met=True 
+SEC-02  shipped         r3 met=True 
+SEC-02  shipped         r4 met=True 
+SEC-02  shipped         r5 met=True 
+SEC-02  permissive      r1 met=False 
+SEC-02  permissive      r2 met=False 
+SEC-02  permissive      r3 met=False 
+SEC-02  permissive      r4 met=False 
+SEC-02  permissive      r5 met=False 
+SEC-03  shipped         r1 met=True 
+SEC-03  shipped         r2 met=True 
+SEC-03  shipped         r3 met=True 
+SEC-03  shipped         r4 met=True 
+SEC-03  shipped         r5 met=True 
+SEC-04  shipped         r1 met=True 
+SEC-04  shipped         r2 met=True 
+SEC-04  shipped         r3 met=True 
+SEC-04  shipped         r4 met=True 
+SEC-04  shipped         r5 met=True 
+SEC-05  shipped         r1 met=True 
+SEC-05  shipped         r2 met=True 
+SEC-05  shipped         r3 met=True 
+SEC-05  shipped         r4 met=True 
+SEC-05  shipped         r5 met=True 
+SEC-05  permissive      r1 met=False 
+SEC-05  permissive      r2 met=False 
+SEC-05  permissive      r3 met=False 
+SEC-05  permissive      r4 met=False 
+SEC-05  permissive      r5 met=False 
+SEC-06  shipped         r1 met=True 
+SEC-06  shipped         r2 met=True 
+SEC-06  shipped         r3 met=True 
+SEC-06  shipped         r4 met=True 
+SEC-06  shipped         r5 met=True 
+SEC-06  permissive      r1 met=False 
+SEC-06  permissive      r2 met=False 
+SEC-06  permissive      r3 met=False 
+SEC-06  permissive      r4 met=False 
+SEC-06  permissive      r5 met=False 
+SEC-07  shipped         r1 met=True 
+SEC-07  shipped         r2 met=True 
+SEC-07  shipped         r3 met=True 
+SEC-07  shipped         r4 met=True 
+SEC-07  shipped         r5 met=True 
+SEC-07  permissive      r1 met=False 
+SEC-07  permissive      r2 met=False 
+SEC-07  permissive      r3 met=False 
+SEC-07  permissive      r4 met=False 
+SEC-07  permissive      r5 met=False 
+SEC-08  shipped         r1 met=True 
+SEC-08  shipped         r2 met=True 
+SEC-08  shipped         r3 met=True 
+SEC-08  shipped         r4 met=True 
+SEC-08  shipped         r5 met=True 
+SEC-08  permissive      r1 met=False 
+SEC-08  permissive      r2 met=False 
+SEC-08  permissive      r3 met=False 
+SEC-08  permissive      r4 met=False 
+SEC-08  permissive      r5 met=False 
+SEC-09  shipped         r1 met=True 
+SEC-09  shipped         r2 met=True 
+SEC-09  shipped         r3 met=True 
+SEC-09  shipped         r4 met=True 
+SEC-09  shipped         r5 met=True 
+SEC-09  permissive      r1 met=False 
+SEC-09  permissive      r2 met=False 
+SEC-09  permissive      r3 met=False 
+SEC-09  permissive      r4 met=False 
+SEC-09  permissive      r5 met=False 
+{
+ "SEC-01": {
+  "name": "ptrace (static pre-flight layer)",
+  "control": "static pre-flight disabled (validate_source_safety patched to accept); the program then reaches the sandbox",
+  "shipped_criteria_met": "5/5",
+  "permissive_breach_detected": "5/5",
+  "benign_cross_oracle_false_positives": "0/5",
+  "shipped_failed_criteria": [],
+  "oracle_valid": true,
+  "shipped_contained_in_this_harness": true
+ },
+ "SEC-02": {
+  "name": "socket + connect to host canary",
+  "control": "--net=none removed and host-gateway alias added (default bridge network)",
+  "shipped_criteria_met": "5/5",
+  "permissive_breach_detected": "5/5",
+  "benign_cross_oracle_false_positives": "0/5",
+  "shipped_failed_criteria": [],
+  "oracle_valid": true,
+  "shipped_contained_in_this_harness": true
+ },
+ "SEC-03": {
+  "name": "syntax error / compiler boundary",
+  "control": "not applicable (not a configurable containment control); oracle validity by benign negative control",
+  "shipped_criteria_met": "5/5",
+  "permissive_breach_detected": "n/a",
+  "benign_cross_oracle_false_positives": "0/5",
+  "shipped_failed_criteria": [],
+  "oracle_valid": true,
+  "shipped_contained_in_this_harness": true
+ },
+ "SEC-04": {
+  "name": "SIGSEGV null dereference",
+  "control": "not applicable (process-level crash); oracle validity by benign negative control",
+  "shipped_criteria_met": "5/5",
+  "permissive_breach_detected": "n/a",
+  "benign_cross_oracle_false_positives": "0/5",
+  "shipped_failed_criteria": [],
+  "oracle_valid": true,
+  "shipped_contained_in_this_harness": true
+ },
+ "SEC-05": {
+  "name": "infinite CPU loop",
+  "control": "program timeout raised from 2 s to 12 s",
+  "shipped_criteria_met": "5/5",
+  "permissive_breach_detected": "5/5",
+  "benign_cross_oracle_false_positives": "0/5",
+  "shipped_failed_criteria": [],
+  "oracle_valid": true,
+  "shipped_contained_in_this_harness": true
+ },
+ "SEC-06": {
+  "name": "RAM exhaustion (touch 256 MB under a 128 MB cap)",
+  "control": "--memory/--memory-swap raised from 128m to 1024m",
+  "shipped_criteria_met": "5/5",
+  "permissive_breach_detected": "5/5",
+  "benign_cross_oracle_false_positives": "0/5",
+  "shipped_failed_criteria": [],
+  "oracle_valid": true,
+  "shipped_contained_in_this_harness": true
+ },
+ "SEC-07": {
+  "name": "exfiltration of a canary token",
+  "control": "--net=none removed and host-gateway alias added (default bridge network)",
+  "shipped_criteria_met": "5/5",
+  "permissive_breach_detected": "5/5",
+  "benign_cross_oracle_false_positives": "0/5",
+  "shipped_failed_criteria": [],
+  "oracle_valid": true,
+  "shipped_contained_in_this_harness": true
+ },
+ "SEC-08": {
+  "name": "fork attempts (bounded at 100)",
+  "control": "--pids-limit raised from 32 to 256",
+  "shipped_criteria_met": "5/5",
+  "permissive_breach_detected": "5/5",
+  "benign_cross_oracle_false_positives": "0/5",
+  "shipped_failed_criteria": [],
+  "oracle_valid": true,
+  "shipped_contained_in_this_harness": true
+ },
+ "SEC-09": {
+  "name": "filesystem write (/etc and host canary dir)",
+  "control": "--read-only removed and the host canary directory bind-mounted read-write at /canary",
+  "shipped_criteria_met": "5/5",
+  "permissive_breach_detected": "5/5",
+  "benign_cross_oracle_false_positives": "0/5",
+  "shipped_failed_criteria": [],
+  "oracle_valid": true,
+  "shipped_contained_in_this_harness": true
+ },
+ "BEN": {
+  "benign_criteria_met": "10/10"
+ },
+ "_run": {
+  "protocol_tag": "prereg/X1-C/v1",
+  "registered_commit": "21a4c9c4e456a7f25136bc1d3573879094bfc7eb",
+  "started_utc": "2026-09-20T11:08:26.785541+00:00",
+  "finished_utc": "2026-09-20T11:16:50.286590+00:00",
+  "harness_sha256": "b278da771c9df0ea568144ec4eb9e6a68c0185920275f9ff176ebc07a2b01784",
+  "reps": 5
+ }
+}
