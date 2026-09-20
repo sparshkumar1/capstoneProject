@@ -1,0 +1,87 @@
+{
+  "stage": "R0",
+  "status": "PASS",
+  "abs_tol": 1e-12,
+  "computed": {
+    "point": -0.03504548324999993,
+    "ci_low": -0.0817733424749999,
+    "ci_high": 0.002138055112500022
+  },
+  "registered": {
+    "point": -0.03504548324999993,
+    "ci_low": -0.0817733424749999,
+    "ci_high": 0.002138055112500022
+  },
+  "abs_diff": {
+    "point": 0.0,
+    "ci_low": 0.0,
+    "ci_high": 0.0
+  },
+  "key_set_record": {
+    "csv_rows": 63000,
+    "ppo_keys": 4000,
+    "cs_keys": 800,
+    "personas": 40,
+    "train_seeds": [
+      42,
+      123,
+      456,
+      789,
+      999
+    ],
+    "eval_seeds": 20
+  },
+  "provenance": {
+    "decision": {
+      "path": "research/confirmatory/X3-A/results/x3a_decision.json",
+      "sha256": "dfa9c0f7a205cfb89cb736a08b3acf47716b1f5b1fbe120791004589bf73a0ad"
+    },
+    "sessions": {
+      "path": "research/confirmatory/X3-A/results/sessions.csv",
+      "sha256": "dd7eb669e1ffc60957f254e330185d69edf276d578b0b0029efdcf3880f1bcd8"
+    },
+    "manifests": [
+      {
+        "path": "research/confirmatory/X3-A/results/manifest_X3-A-run.json",
+        "sha256": "17ca8a4aef2d30afe27356332ebfafab01ae8d226df496d4629e2b03d64c9a45",
+        "status": "completed",
+        "gate": {
+          "name": "G-HARNESS",
+          "passed": true,
+          "details": "9/9 gating checks passed"
+        },
+        "outputs_verified": 3
+      },
+      {
+        "path": "research/confirmatory/X3-A/results/manifest_X3-A-analysis.json",
+        "sha256": "203506d17d95ad7ca80c46978b76eff4b46c324c4a588c684d75ce1550755ba7",
+        "status": "completed",
+        "gate": {},
+        "outputs_verified": 6
+      }
+    ]
+  },
+  "started_utc": "2026-09-20T10:49:48.237454+00:00",
+  "official": true,
+  "B": 10000,
+  "registered_commit": "5217542e13f8c556a3e3b884e47299a6380b2128",
+  "registration_tag": {
+    "tag": "prereg/X3-A-O7/v1",
+    "tag_object": "157598a2ca42cf1bf912b3023766f90929e0c8ad",
+    "commit": "5217542e13f8c556a3e3b884e47299a6380b2128",
+    "registration-sha256": "ad1403eed35bed110aa21041db079772c73c85c59e9ecfa852abdc07d0545c40",
+    "script-sha256": "ddf95d4fdfd3bb7827bc6844bd30a215a04ac7f5823d66ac88d133270d9a4485"
+  },
+  "environment": {
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "numpy": "2.5.2",
+    "scipy": "1.17.1",
+    "executable": "C:\\Users\\spars\\Downloads\\PrepAIred\\envs\\LOCK-X3-2026-09-19\\Scripts\\python.exe"
+  },
+  "registration_sha256": "ad1403eed35bed110aa21041db079772c73c85c59e9ecfa852abdc07d0545c40",
+  "script_sha256": "ddf95d4fdfd3bb7827bc6844bd30a215a04ac7f5823d66ac88d133270d9a4485",
+  "git": {
+    "head": "5217542e13f8c556a3e3b884e47299a6380b2128",
+    "status_short_o7_and_x3a": ""
+  }
+}

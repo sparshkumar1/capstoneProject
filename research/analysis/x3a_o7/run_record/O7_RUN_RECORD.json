@@ -1,0 +1,42 @@
+{
+  "record_type": "X3-A-O7 official execution record (written by the executor AFTER the run; the analysis script itself writes no manifest)",
+  "not_a_run_manifest_v2": "run_manifest_v2 requires a protocol manifest and tag-message fields that the O7 registration tag does not carry; it was therefore not used. Provenance is carried by r0_record.json (written by the script) plus this record.",
+  "command": "envs/LOCK-X3-2026-09-19/Scripts/python.exe research/analysis/x3a_o7/x3a_o7.py --registered-commit 5217542e13f8c556a3e3b884e47299a6380b2128",
+  "working_directory": "C:/Users/spars/Downloads/PrepAIred",
+  "official": true,
+  "exit_code": 0,
+  "start_local": "2026-09-20T16:19:45+05:30",
+  "end_local": "2026-09-20T16:19:53+05:30",
+  "head": "5217542e13f8c556a3e3b884e47299a6380b2128",
+  "tag": "prereg/X3-A-O7/v1",
+  "tag_object": "157598a2ca42cf1bf912b3023766f90929e0c8ad",
+  "tag_commit": "5217542e13f8c556a3e3b884e47299a6380b2128",
+  "branch": "workspace/human-eval-clean-push",
+  "preflight_notes": [
+    "HEAD == tag commit; zero commits since the tag; results directory absent before the run",
+    "one unrelated tracked modification existed (.env.example, W&B placeholder lines); it is not an O7 input or gate and was left unstaged",
+    "read-only gate preflight (tag, locked-to-HEAD, environment, provenance hashes, output isolation) passed immediately before the run"
+  ],
+  "environment": {
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "numpy": "2.5.2",
+    "scipy": "1.17.1",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "interpreter": "envs/LOCK-X3-2026-09-19/Scripts/python.exe",
+    "pip_freeze": "unavailable (pip not present in the locked environment); environment identity carried by the registered lock.json and requirements.txt hashes verified by the script"
+  },
+  "registered_hashes_verified_by_script": "see results/r0_record.json provenance and environment sections",
+  "outputs": {
+    "r0_record.json": "f4680d400c01c9637b3c9c49bbb91f2d97b479c68d896756618040657e9d5acf",
+    "x3a_o7_report.md": "eacce9de96fadbb0f257e6e3b8084af0ab45a332ce4453a81a65fb6c3dffcb1d",
+    "x3a_o7_results.json": "2ec3d45af02dd25fb47fa538f76be5a565542baf814e98fbd203e851f09ab377"
+  },
+  "logs": {
+    "o7_official_stdout.txt": "24762aa294214a5053e9ec3c3b74eda64972f3629aee2669b64f69d81cea5beb",
+    "o7_official_stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_empty": true
+  },
+  "script_sha256": "ddf95d4fdfd3bb7827bc6844bd30a215a04ac7f5823d66ac88d133270d9a4485",
+  "registration_sha256": "ad1403eed35bed110aa21041db079772c73c85c59e9ecfa852abdc07d0545c40",
+  "retries": "none; single execution; no parameter was changed"
+}

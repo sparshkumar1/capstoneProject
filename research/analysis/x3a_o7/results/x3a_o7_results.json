@@ -1,0 +1,90 @@
+{
+  "A": {
+    "point": -0.03504548324999993,
+    "ci_low": -0.0672500586124999,
+    "ci_high": -0.00522668333124994,
+    "class": "Equivalent",
+    "sd_persona_level": 0.10154503788277301,
+    "B": 10000,
+    "seed": 42
+  },
+  "B": {
+    "point": -0.03504548324999993,
+    "ci_low": -0.07577937417916564,
+    "ci_high": 0.005688407679165779,
+    "class": "Equivalent",
+    "t_0.975_df4": 2.7764451051977934,
+    "sd_seed_level": 0.032805888701043784,
+    "delta_s": [
+      -0.08159099124999988,
+      0.010000017499999958,
+      -0.04113639874999992,
+      -0.026590967499999917,
+      -0.0359090762499999
+    ],
+    "min": -0.08159099124999988,
+    "max": 0.010000017499999958,
+    "note": "conditional seed-level sensitivity interval; five aggregates, df=4; normality cannot be assessed; NOT a replacement CI for the registered estimand"
+  },
+  "C": {
+    "rows": [
+      {
+        "removed_seed": 42,
+        "point": -0.023409106249999943,
+        "ci_low": -0.06136437380468739,
+        "ci_high": 0.009205273234374993,
+        "class": "Equivalent",
+        "abs_change_from_registered_point": 0.01163637699999999
+      },
+      {
+        "removed_seed": 123,
+        "point": -0.046306858437499904,
+        "ci_low": -0.09483532752343732,
+        "ci_high": -0.004317439953124978,
+        "class": "Equivalent",
+        "abs_change_from_registered_point": 0.011261375187499971
+      },
+      {
+        "removed_seed": 456,
+        "point": -0.033522754374999936,
+        "ci_low": -0.08736226760156242,
+        "ci_high": 0.007017044984375046,
+        "class": "Equivalent",
+        "abs_change_from_registered_point": 0.001522728874999997
+      },
+      {
+        "removed_seed": 789,
+        "point": -0.03715911218749993,
+        "ci_low": -0.0873317011328124,
+        "ci_high": -0.000510644531250012,
+        "class": "Equivalent",
+        "abs_change_from_registered_point": 0.0021136289375000006
+      },
+      {
+        "removed_seed": 999,
+        "point": -0.03482958499999994,
+        "ci_low": -0.0898303401484374,
+        "ci_high": 0.007784079367187534,
+        "class": "Equivalent",
+        "abs_change_from_registered_point": 0.00021589824999999202
+      }
+    ],
+    "point_range": [
+      -0.046306858437499904,
+      -0.023409106249999943
+    ],
+    "max_abs_change": 0.01163637699999999,
+    "classes": [
+      "Equivalent"
+    ],
+    "jackknife_se_cross_reference": 0.014671239439565234
+  },
+  "registered_REG": {
+    "point": -0.03504548324999993,
+    "ci_low": -0.0817733424749999,
+    "ci_high": 0.002138055112500022,
+    "class": "Equivalent",
+    "note": "unchanged result of record"
+  },
+  "r0_status": "PASS"
+}
