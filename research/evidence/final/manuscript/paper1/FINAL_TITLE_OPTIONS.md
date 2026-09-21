@@ -1,4 +1,5 @@
-# Paper 1 - title options (working; none final; no "secure"/"fault-tolerant"/"trustworthy")
-1. Failure-Aware Orchestration of an LLM-Assisted Technical Interview System: A Fault-Injection and Containment Evaluation
-2. Testing the Boundaries of an AI Interview-Practice System: Sandbox Containment, Fault Injection and Invariance of Technical Scores to LLM Feedback
-3. What Broke and What Held: A Controlled Evaluation of Failure Handling, Code-Sandbox Containment and Score Authority in an LLM-Assisted Assessment Pipeline
+# Paper 1 - title (LOCKED positioning 2026-09-21; venue TBD; still a working title until the authors confirm)
+RECOMMENDED: Scoped Evaluation of Containment, Authority Boundaries, and Failure Handling in an LLM-Assisted Technical-Assessment System
+Type: systems / empirical dependability evaluation. The title must not imply formal security, universal isolation, general fault tolerance, or guaranteed score authority (words to avoid: secure, fault-tolerant, trustworthy, proven, robust).
+Retired options (superseded by the locked title; do not use): (1) "Failure-Aware Orchestration of an LLM-Assisted Technical Interview System: A Fault-Injection and Containment Evaluation" (presents orchestration as the object of contribution); (2) "Testing the Boundaries of an AI Interview-Practice System: Sandbox Containment, Fault Injection and Invariance of Technical Scores to LLM Feedback" (broader than the fixed-turn invariance result); (3) "What Broke and What Held: ... Failure Handling, Code-Sandbox Containment and Score Authority ..." (implied guaranteed score authority).
+Source of the framing: the locked three-paper positioning of 2026-09-21; the narrowed wording follows research/evidence/final/PAPER1_FINAL_CLAIM_MATRIX.md and the Antigravity verdict METHODOLOGICALLY SOUND ONLY AFTER CLAIM NARROWING.

@@ -1,0 +1,26 @@
+# reference_audit_p2.md — Paper 2 reference audit (2026-09-21)
+
+Verification in this pass: arXiv API (existence, title, authors, date, journal reference/comments), Crossref (DOI, venue, volume, issue, pages). Claim support was not re-read in full text; the "claim check" column cites the earlier level in `research/literature/claude_web_research/QUOTE_AUDIT.md` (QA). No DOI, venue or page was invented.
+
+| # | Reference as cited | Exists / metadata (this pass) | Type | Claim attributed | Claim check | Placement | Action |
+|---|---|---|---|---|---|---|---|
+| 1 | Kabra *et al.*, toolkit for robustness testing of automatic essay scoring, arXiv:2007.06796, 2020 | Yes; 5 authors; 2020-07-14 | PP | scorers can be insensitive to content changes / gamed | abstract read (earlier) | Yes | keep |
+| 2 | Powers *et al.*, "Stumping e-rater…", Comput. Hum. Behav. 18(2):103–134, 2002 | Yes; Crossref DOI 10.1016/S0747-5632(01)00052-8 (also an ETS report 2001) | PR | scorers can be fooled by content-free answers | standard reference | Yes | DOI and issue added |
+| 3 | Moon *et al.*, Findings of EACL 2026, pp. 1364–1389 | Yes; DOI 10.18653/v1/2026.findings-eacl.70; 6 authors | PR | LLM code judges show positive and negative bias from surface variation | QA 2.1 VERIFIED | Yes | keep |
+| 4 | Schleifer *et al.*, quality-conditioned agreement, arXiv:2605.07647, 2026 | Yes; 5 authors; 2026-05-08; arXiv comment: "Accepted to … BEA26" | PP (accepted to BEA 2026 per arXiv comment) | degradation on mid-range responses | QA 2.2 VERIFIED | Yes | v2 states what is verified; proceedings entry not verified |
+| 5 | Norman *et al.*, "Reliability without validity", arXiv:2606.19544, 2026 | Yes; 3 authors; 2026-06-17 | PP | one study reports verbosity bias < 0.011 for 21 judge models under its protocol | QA 2.3 VERIFIED; scope pairwise chat-style; not generalised | Yes (with scope sentence) | keep |
+| 6 | Zheng *et al.*, MT-Bench, NeurIPS D&B 2023, arXiv:2306.05685 | Yes; 13 authors; 2023-06-09 | PR (venue per manuscript; arXiv record has no journal_ref; not re-verified) | verbosity named as a judge bias | standard reference | Yes | venue statement not re-verified here |
+| 7 | Deng *et al.*, rubric-conditioned LLM grading, arXiv:2601.08843, 2025 | Yes; 4 authors; 2025-12-21 | PP | sensitivity to synonym substitution | abstract level | Yes | keep |
+| 8 | Willis & Third, AMATI at BEA 2026 Shared Task 2, pp. 1217–1223 | Yes; DOI 10.18653/v1/2026.bea-1.89; 2 authors; Proc. 21st BEA workshop | PR (workshop) | hybrid symbolic + LLM short-answer grading | title/abstract level | Yes | keep |
+| 9 | Filighera, Steuer & Rensing, "Fooling automatic short answer grading systems," AIED 2020, LNCS | Yes; DOI 10.1007/978-3-030-52237-7_15; pp. 177–190 | PR | scorers can be fooled by adversarial answers | QA 2.10 UNVERIFIED at quote level; title-level use only | Yes (general statement) | pages added; no quote used |
+| 10 | Yarmohammadtoosky *et al.*, arXiv:2505.00061, 2025 | Yes; 7 authors; 2025-04-30 | PP | attacks/defenses exist for short-answer grading | title-level | Yes (general statement) | keep; title-level (stated) |
+| 11 | Ribeiro *et al.*, CheckList, ACL 2020 | Yes; DOI 10.18653/v1/2020.acl-main.442; pp. 4902–4912 | PR | invariance/directional behavioural tests | standard reference | Yes | DOI/pages added |
+| 12 | Cho, Ruberto & Terragni, "Metamorphic testing of LLMs for NLP" | Yes; arXiv:2511.02108 lists journal ref ICSME 2025 and DOI 10.1109/ICSME64153.2025.00025; Crossref: 2025 IEEE ICSME, pp. 174–186 | PR (ICSME 2025) | metamorphic-testing lineage for LLMs | QA 2.6 (v1 scale; version-dependent — no scale numbers used in manuscript) | Yes | upgraded from preprint to the peer-reviewed record |
+| 13 | Field & Welsh, "Bootstrapping clustered data," JRSS-B 69(3):369–390, 2007 | Yes; DOI 10.1111/j.1467-9868.2007.00593.x | PR | cluster-aware resampling; manuscript states it concerns one-way clustered data | standard reference; scope stated | Yes | DOI added |
+| 14 | Koo & Li, ICC guideline, J. Chiropr. Med. 15(2):155–163, 2016 | Yes; DOI 10.1016/j.jcm.2016.02.012 | PR | ICC form must be specified | standard reference | Yes | DOI added |
+| 15 | Li *et al.*, LLM–human agreement in essay scoring, arXiv:2512.14561, 2025 | Yes; 6 authors; 2025-12-16 | PP | agreement is context-dependent | abstract level | Yes | keep |
+| 16 (new) | Li *et al.*, "Important You should give me full credits!…", arXiv:2606.03090, 2026 | Yes; 9 authors | PP | injected instructions can change LLM-based grades | QA 1.17 VERIFIED (abstract) | Yes (Sec. II, gaming/adversarial) | added as the deliberate shared foundational citation with Paper 1 [12] |
+
+**Summary:** 16 entries; 9 peer-reviewed records (2, 3, 6*, 8, 9, 11, 12, 13, 14), 7 preprints (1, 4, 5, 7, 10, 15, 16). *[6] venue statement from the manuscript, not re-verified. Only [5] supplies a number (0.011) and is scoped to its protocol. No unverified or do-not-cite item is cited beyond title-level use of [9] and [10], which supports only the general statement "adversarial attacks and defenses for automatic short-answer grading exist".
+
+**Gaps (not filled, by rule):** no verified LLM-judge-baseline reference for short technical answers is cited; no source on length-controlled benchmarks was added beyond the general judge-bias literature.

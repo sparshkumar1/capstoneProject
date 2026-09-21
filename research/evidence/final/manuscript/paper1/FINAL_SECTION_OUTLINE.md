@@ -1,10 +1,10 @@
 # Paper 1 - section outline (IEEE style; venue TBD)
-1 Introduction (LLM-assisted assessment pipelines; why failure behaviour and score authority matter; scope)
-2 Related work (chaos engineering / fault injection: Basiri 2016; container security context: Sultan 2019; sandbox and grader-hijack work from the first-pass matrix after verification; no novelty claim)
+1 Introduction (LLM-assisted assessment pipelines; the locked research question: "Which containment, authority-boundary, and failure-handling properties of an LLM-assisted technical-assessment pipeline can be demonstrated through controlled tests under a specified execution environment?"; scope: systems / empirical dependability evaluation, one environment, tested properties only; not a formal-security or universal fault-tolerance claim)
+2 Related work (chaos engineering / fault injection: Basiri 2016; container security context: Sultan 2019; sandbox and grader-hijack work from the first-pass matrix after verification; sandbox-evaluation methodology comparison in research/literature/claude_web_research/P1_SANDBOX_METHODOLOGY_COMPARISON.md; no novelty claim)
 3 System (orchestrator, evaluator, Qwen feedback service, Docker C sandbox, storage; authority boundaries as implemented)
-4 Method (threat and fault model; registered protocols X1-A/B/C, their oracles and controls; what "registered" means here: local tags, author-written, self-audited; build A vs build B)
+4 Method (threat and fault model; registered protocols X1-A/B/C, their oracles and controls; what "registered" means here: local unpushed tags, author-written, then independently reviewed by Antigravity with the verdict "sound only after claim narrowing"; build A (baseline SUT) vs build B (repaired SUT))
 5 Results (5.1 containment; 5.2 fault injection on build A and build B; 5.3 Qwen invariance; 5.4 defects and repairs)
-6 Discussion (what the negative and positive controls show; layered facts; latency of the LLM path vs shipped timeouts)
-7 Threats to validity and limitations
-8 Conclusion
+6 Discussion (what the negative and positive controls show; layered facts (pre-flight filter vs container behaviour; executor status vs host observables); the shipped 6 s Qwen timeout versus local generation time as a stated limitation, not a latency result)
+7 Threats to validity and limitations (the four HIGH limitations stated explicitly; independent-review findings; single-environment scope; deterministic repetitions, no inferential statistics)
+8 Conclusion (scoped to the tested containment, authority-boundary and failure-handling properties under the specified harness and environment)
 Appendix: build hashes, environment record, per-run command lines, artifact hashes.

@@ -1,0 +1,3 @@
+# Experiment tracking (optional; not required by the app, CI, or frozen Paper 1-3 code).
+# Installed version verified in .venv: wandb 0.30.0 (wandb.integration.sb3 imports).
+wandb>=0.30.0,<1.0.0

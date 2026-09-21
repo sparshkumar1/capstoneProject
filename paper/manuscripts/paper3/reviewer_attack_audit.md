@@ -1,0 +1,26 @@
+# Paper 3 — adversarial reviewer-attack audit (draft v1, 2026-09-21)
+
+Sentences quoted from `manuscript.md`. Risk = residual risk in the current draft.
+
+| # | Vulnerable sentence | Attack | Risk | Stronger, truthful wording | Evidence |
+|---|---|---|---|---|---|
+| 1 margin | "The margins were fixed by the study team before the analysis; no literature justification for ±0.12 was found." | "A margin of 0.12 difficulty levels is arbitrary; equivalence is then meaningless." | HIGH | Keep. Do not add a practical-significance interpretation of ±0.12 (none was evaluated). The manuscript states that tracking error is in difficulty levels and reports the full interval, so a reader can apply a different margin. | `x3a_config.json`; `FINAL_REFERENCE_GAP_MATRIX.md` P3-b |
+| 2 baseline validity | "a policy that never moves is a strong reference in this simulator" | "Constant-Same is an artificially strong null because the start is at the target-range centre." | MEDIUM | Already stated and framed as a property of the simulator; that is the point of a matched null. Retain. | `x3a_condition_summary.csv`: CS off 1.000 |
+| 3 reward coupling | "The reward includes an oracle-alignment term and the target is an authored rule, and the coupling was not re-audited" | "PPO is optimised for the authors' oracle, not for tracking; the comparison is unfair to PPO or rigged." | HIGH | Retain the disclosure; add that PPO was evaluated on a metric it was not trained to minimise (already in VI). Do not claim either direction of bias. | `interview_env.py:341-395`; frozen config |
+| 4 simulation realism | "Simulated candidate outputs are not calibrated to real candidates." | "Nothing here concerns real interviews." | LOW | Stated in abstract and IX. | matrix |
+| 5 target construction | "an authored rule not tuned per persona" | "Targets are made up." | MEDIUM | Retain "authored". | `x3a_config.json` |
+| 6 training/evaluation mismatch | "each trained against a single candidate, so 39 of the 40 grid personas were unseen" | "Equivalence is trivial for an out-of-distribution policy." | HIGH | The manuscript says the result concerns these checkpoints and that X3-B (training across personas) was not run. Do not extrapolate to PPO in general. | `X3_0B_STATIC_CODE_NOTE.md` N1 |
+| 7 runtime state mismatch | "The demonstration policy deployed in the application differs from the training state definition" | "Which policy does the application use?" | MEDIUM | Retained; no application claim. | matrix P3-F5 |
+| 8 no Elo/IRT | "none was run here" | "Standard adaptive baselines are missing." | MEDIUM | Stated in II and VII; future work names rating-system baselines. | `FINAL_REFERENCE_GAP_MATRIX.md` P3-d |
+| 9 PPO distribution | "The evaluation-time Same share was not stored ... not quantified here." | "A mostly-Same policy is trivially equivalent to Constant-Same." | HIGH | The manuscript states the training-time share and the probe sweep, and says that a mostly-Same policy is close to the comparator by construction; the divergence counts (50/125, 25/125, 5/125) and volatility show non-identical behaviour. Quantifying evaluation-time Same share would be a new computation from `sessions.csv` — recommend the author decide. | `x3_0a_training_action_shares.csv`; `x3_0c_followup.json` |
+| 10 guardrail interpretation | "The 563 activations are not interventions" | "Guardrails do most of the work; PPO adds nothing." | MEDIUM | Both policies share the layer; the manuscript reports activations, overrides and directions separately and does not attribute tracking to either. | `P0_4_GUARDRAIL_FORENSIC.md` |
+| 11 no real candidates | "It supports no claim of learned-policy benefit or of benefit to real learners." | — | LOW | Retained. | — |
+| 12 volatility framing | "The guarded policy is therefore not smoother than the unguarded one in these data." | "Guardrails are meant to smooth; report says opposite." | LOW | Reported exactly (0.2463 vs 0.0804 grid; 0.1864 vs 0.0776 five-persona). | stored |
+| 13 undertrained PPO | "Each checkpoint was trained for 24,576 timesteps against one candidate" | "PPO is undertrained." | HIGH | Disclosed; effect of longer training untested. Do not claim adequate training. | frozen config |
+| 14 publishability | "Why an equivalence result is informative" | "Negative result; not a contribution." | MEDIUM | Framed as controlled decomposition with registered equivalence, sensitivity and behavioural accounting. | `FINAL_CONTRIBUTIONS.md` |
+| 15 registration | "the repository was not pushed to a public registry, so registration is author-controlled" | "Not preregistered." | MEDIUM | The word "registered" is qualified; "preregistered" is not used. | matrix |
+| 16 five-persona vs grid | "reported separately from the grid" | "You cherry-pick the grid where PPO beats the heuristic." | MEDIUM | Both directions reported (heuristic 0.473 vs 0.677 five-persona; PPO better on grid). | stored |
+
+## Author decisions needed
+- Whether to compute the evaluation-time Same share from `confirmatory/X3-A/results/sessions.csv` (a read-only descriptive count of stored actions; it would be new, and would need the same labelling as other (D) items).
+- Whether the ±0.12 margin should be accompanied by a second, more conservative reading in the text.

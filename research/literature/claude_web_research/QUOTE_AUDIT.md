@@ -1,0 +1,96 @@
+# Quote and source audit (gap-closure pass, 2026-09-21)
+
+Method. For each quotation or number intended for possible manuscript use, I reopened the underlying source and compared the text. Where a PDF was available the PDF was downloaded (public arXiv or ACL Anthology PDF, no API, no credentials) and converted to text, then matched after normalising whitespace, ligatures and case. Publisher pages were read in the in-app browser or in the fetched page text. Summaries returned by the fetch tool were never accepted as quotations. A "context" check was made for each result so that the source actually supports the claim it is used for.
+
+Status codes. **VERIFIED** = exact text found in the source and it supports the stated claim. **VERIFIED-CORRECTED** = the earlier package text was wrong or loose and is replaced below. **UNVERIFIED** = not rechecked; do not treat as manuscript-ready. Source type: PR = peer-reviewed venue (as stated by the source itself), PP = preprint, OD = official documentation, PUB = publisher landing page.
+
+Every VERIFIED row still needs a final check against the exact page and version cited in the manuscript, because arXiv versions differ.
+
+## Paper 1
+| # | Source (type, URL) | Exact text | Claim supported | Status |
+|---|---|---|---|---|
+| 1.1 | Marchand et al., SandboxEscapeBench (PP; PR venue per its own header "43rd ICML ... PMLR 306, 2026"); https://arxiv.org/abs/2603.02277 | "a nested sandbox architecture with the outer layer containing the flag and no known vulnerabilities" | benchmark design | VERIFIED (abstract) |
+| 1.2 | same | "a motivated adversarial agent with shell access inside a container" | threat model | VERIFIED (abstract) |
+| 1.3 | same, Sec. 7 | "intentionally introduced weaknesses" (context: benchmark focuses on container-to-host escapes "under a motivated-adversary threat model with intentionally introduced weaknesses") | benchmark uses deliberately weakened configurations | VERIFIED |
+| 1.4 | same, Sec. 3.3 | "retrieval of a flag string from /flag.txt on the host filesystem" | host-side success signal | VERIFIED |
+| 1.5 | same, Sec. 3.2 | "verifies that each task is solvable and that the evaluation harness functions correctly" | reference-solution positive control | VERIFIED |
+| 1.6 | same, Sec. 8 | recommendation to treat "plain Docker isolation" as insufficient by default (the source has the phrase in typographic quotes) | motivates scoped claims | VERIFIED |
+| 1.7 | same, Sec. 2.1 | "No prior benchmark systematically evaluates container escape" | the authors' own novelty claim; not to be echoed for PrepAIred | VERIFIED as their statement |
+| 1.8 | Andronchik and Lokhmakov, Part 1 (PP; https://arxiv.org/abs/2606.08433) | earlier package text "Rather than proposing an overall ranking" is NOT in the source. Correct: "no overall ranking is proposed" | no composite ranking | VERIFIED-CORRECTED |
+| 1.9 | same, abstract | "separate cleanly on every architectural axis" (engine classes microVM, userspace kernel, OCI container) | class-level differences | VERIFIED |
+| 1.10 | same, methodology | "inconclusive ≠ pass and ≠ fail" | verdict discipline | VERIFIED |
+| 1.11 | Yan, Fault-Tolerant Sandboxing (PP; https://arxiv.org/abs/2512.12806) | "a 100% interception rate for high-risk commands and a 100% success rate in rolling back failed states"; "14.5% performance overhead (approx. 1.8s)" | authors' self-reported results (their own testbed) | VERIFIED (abstract). Attribute to the author; do not present as independent evidence |
+| 1.12 | Rabin et al., SandboxEval (PP; https://arxiv.org/abs/2504.00018) | "SandboxEval tests 51 properties" ; statuses: "Accessed if the code executed successfully and returns the expected outcome" | scale and oracle style | VERIFIED |
+| 1.13 | same | "we implemented alternative proxy operations to signify the possibility of these operations" | proxies, not real damage | VERIFIED |
+| 1.14 | same | earlier package claim that the authors call it a "preliminary version, working paper" | none | UNVERIFIED (not found in the PDF text); removed from the package |
+| 1.15 | Jia et al., MAS-FIRE (PP; https://arxiv.org/abs/2602.19843) | earlier text "Iterative, closed-loop designs neutralize over 40% of faults". Source wording: "iterative, closed-loop designs neutralizing over 40% of faults" | fault-injection result (authors) | VERIFIED-CORRECTED |
+| 1.16 | Gupta, ReliabilityBench (PP; https://arxiv.org/abs/2601.06112) | numbers 96.9%, 88.1% and 1,280 present in the text | success under stress | VERIFIED (numbers only; context sentence not re-read) |
+| 1.17 | Li et al., prompt injection on LLM graders (PP, v3 Sep 2026; https://arxiv.org/abs/2606.03090) | "current LLM-based AG systems remain highly vulnerable to PI attacks" | LLM graders are injection-vulnerable | VERIFIED (abstract). Earlier fragment "remain highly vulnerable" is a correct substring |
+| 1.18 | Sahoo et al., Compliance Paradox (PP; https://arxiv.org/abs/2601.21360) | "catastrophic failure rates (>95%) in high-capacity open-weights models like DeepSeek-V3" | injection-like failure of academic code evaluation | VERIFIED (abstract fragment) |
+| 1.19 | Rashidi, SoK (PP; https://arxiv.org/abs/2607.05743) | "policy-enforcement studies report failure rates from 69% to 98% of real denylists yet no isolation paper re-evaluates its own defense under that adversarial setting" | gap statement | VERIFIED (abstract). Context: the 69.0%-98.6% figure comes from a third-party study of 1,709 scraped denylists that the SoK cites; attribute it to that study |
+| 1.20 | Docker Docs, seccomp (OD; https://docs.docker.com/engine/security/seccomp/) | "ptrace ... Tracing/profiling syscall. Blocked in Linux kernel versions before 4.8 to avoid seccomp bypass. Tracing/profiling arbitrary processes is already blocked by dropping CAP_SYS_PTRACE ..." and "disables around 44 system calls out of 300+" | default profile behaviour for ptrace | VERIFIED (page HTML, accessed Sep 21 2026). Use the whole sentence, not "blocked before 4.8" alone |
+| 1.21 | Guo et al., RedCode (PP; venue not verified; https://arxiv.org/abs/2411.07781) | "evaluation scripts tailored to each test case for deterministic risk assessments" (Sec. 3.2 evaluation pipeline) | deterministic environment-state oracles | VERIFIED |
+| 1.22 | Abdelnabi et al. (PP; https://arxiv.org/abs/2605.22568) | "its score must not be trusted" (context: an agent reproducing a hidden canary has reached infrastructure it was never meant to access) | canary-based integrity check | VERIFIED |
+| 1.23 | Singh et al. (PP; https://arxiv.org/abs/2606.18532) | "weakest-link rule for composing per-dimension evidence into a bounded deployment claim" | scoped claims | VERIFIED (abstract) |
+| 1.24 | Debenedetti et al., CaMeL (PP; https://arxiv.org/abs/2503.18813) | "77% of AgentDojo tasks with provable security vs 84% undefended" | authority separation | UNVERIFIED (PDF not retrievable this pass; earlier abstract-level extraction only) |
+| 1.25 | Bhattarai and Vu (PP; https://arxiv.org/abs/2602.09947) | any quote | | UNVERIFIED (not reopened) |
+
+## Paper 2
+| # | Source | Exact text | Claim supported | Status |
+|---|---|---|---|---|
+| 2.1 | Moon et al., Findings of EACL 2026 (PR; https://aclanthology.org/2026.findings-eacl.70/; PDF header shows "Findings of the Association for Computational Linguistics: EACL 2026, pages 1364-1389") | "all tested LLM judges are susceptible to both positive and negative biases, resulting in inflated or unfairly low scores" (the two fragments are present; six bias types, five programming languages confirmed) | surface-variation bias of code judges | VERIFIED. DOI 10.18653/v1/2026.findings-eacl.70 comes from the Anthology page through the fetch tool, not from the PDF text |
+| 2.2 | Schleifer et al., BEA 2026 (PP on arXiv; https://arxiv.org/abs/2605.07647) | "All AI models perform well on fully correct and fully incorrect responses, but exhibit substantial degradation on mid-range responses" | quality-conditioned error | VERIFIED. Scope: two open-ended biology items, several hundred responses |
+| 2.3 | Norman et al. (PP; https://arxiv.org/abs/2606.19544) | "all 21 models register <0.011" for verbosity bias, under a stated protocol | verbosity effect is small for these judges | VERIFIED. Scope: pairwise chat-style benchmarks; do not generalise |
+| 2.4 | Li et al., research synthesis (PP; https://arxiv.org/abs/2512.14561) | "highly context-dependent" | agreement varies with context | VERIFIED as a phrase. The earlier statement of a "0.30-0.80" range was never verified: UNVERIFIED, remove |
+| 2.5 | Fujinuma, Findings of ACL 2026 (PR; https://aclanthology.org/2026.findings-acl.657/) | "highly sensitive to pre-defined score ranges" | score-range sensitivity of LLM judges | VERIFIED (arXiv text matches the Anthology abstract wording) |
+| 2.6 | Cho et al. (PP v1; https://arxiv.org/abs/2511.02108) | v1 text: 191 relations, 36 implemented, three LLMs, about 560K tests. A later listing reports 38 relations, four LLMs, about 550K tests | scale of the catalogue | VERIFIED for v1 only; version-dependent, cite one version |
+| 2.7 | Zheng et al., MT-Bench (PR: NeurIPS 2023 D&B; https://arxiv.org/abs/2306.05685) | "over 80% agreement" phrase present in text; verbosity bias named | judge biases | VERIFIED (phrase found; context not re-read) |
+| 2.8 | Ye et al., CALM (PP; https://arxiv.org/abs/2410.02736) | none | | UNVERIFIED (PDF corrupt on download) |
+| 2.9 | Williamson, Xi, Breyer 2012 | list of framework elements | | UNVERIFIED (paywalled; snippet only) |
+| 2.10 | Yarmohammadtoosky et al.; Filighera et al.; J. Educ. Meas. 2025 | any quote | | UNVERIFIED |
+
+## Paper 3
+| # | Source | Exact text | Claim supported | Status |
+|---|---|---|---|---|
+| 3.1 | Kadam et al. 2026 (PR; PUB landing page https://www.sciencedirect.com/science/article/pii/S1569190X26000651, read in the in-app browser) | "The novelty of the work lies in the integrated benchmarking setup rather than in proposing a new generic reinforcement learning algorithm" (the sentence continues after a colon; do not end the quote with a period) | their novelty claim | VERIFIED against page text |
+| 3.2 | same | "The tutoring process is formulated as a finite-horizon Markov decision process where actions jointly determine question difficulty, learning outcome, and remediation modality." | formulation | VERIFIED |
+| 3.3 | same | "we evaluate several policy classes including rule-based heuristics, model-free reinforcement learning methods (DQN, PPO), and model-based approaches (PETS, MBPO)" | policies compared | VERIFIED |
+| 3.4 | same, discussion snippet | "PPO consistently achieves higher cumulative rewards while maintaining relatively stable question accuracy across different random seeds." | reported PPO result (snippet level; numbers unread) | VERIFIED (snippet). The snippet is cut after this sentence; the full context and numbers are unread |
+| 3.5 | same | "the simulator is used here as a controlled policy-comparison environment rather than as a fully validated model of human learning behaviour" | simulation-only | VERIFIED |
+| 3.6 | same, limitations snippet | "The learner model used in this study is assumption-based: responses are generated using an IRT-inspired model, mastery evolves through probabilistic update rules, and remediation effects are simulated" (source continues "rather than estimated ..."; end this quote with an ellipsis, not a period) | learner model | VERIFIED-CORRECTED (earlier text ended with a period) |
+| 3.7 | same, highlights | "PPO demonstrates stable learning under limited interactions." "Constrained MDP formulation for mock interview tutoring." | | VERIFIED |
+| 3.8 | Che et al., Sci. Rep. 2025 (PR; PMC page https://pmc.ncbi.nlm.nih.gov/articles/PMC12774889/, read in the browser) | "its trained policy demonstrates a strong bias towards one action, and the choice is 99.9% in favor of Repeat." ; "Its performance is almost equal to the best-performing baseline, which is the Heuristic (Repeat) agent (mean 6.564, median 10.854)"; PPO mean 6.563; random mean 5.231; the no-signals ablation "performs dismally with a mean of 5.213" | PPO policy collapse to one action; constant heuristic matches | VERIFIED. Correction: 5.213 is the ablation; the random agent is 5.231. The text gives the 99.9% figure both as "its ultimate action choices" and as "in 99.9% of training", so cite the first only. No seed count appears in the text |
+| 3.9 | Axak et al., CEUR-WS Vol. 4048, paper 37 (PR-workshop proceedings; PDF text) | "a fixed random seed was used across all runs"; "50,000 timesteps"; "+17 % improvement in NDCG"; "+4.4 % increase in inverse-propensity-scored reward" | single-seed PPO claim | VERIFIED |
+| 3.10 | Schmucker et al. (PP; https://arxiv.org/abs/2508.00270) | "effect sizes may often be too small for CB policies to provide significant improvements beyond what well-optimized MAB policies that deliver the same action to all students already achieve" | uniform policy close to contextual policy in a large deployment | VERIFIED |
+| 3.11 | Jiang et al. (PP; https://arxiv.org/abs/2511.15032) | "they provide different solutions, but with similar results" | RL and greedy heuristics similar in a simulated classroom | VERIFIED |
+| 3.12 | Olukola and Rahimi (PP; https://arxiv.org/abs/2604.04237) | numbers 0.317, 0.102, 120, 18,000 present | reward-hacking index reduction | VERIFIED (numbers only; context not re-read) |
+| 3.13 | Alshiekh et al. 2018, shield definition | any quote | | UNVERIFIED (never opened) |
+| 3.14 | Lakens 2017; Agarwal et al. 2021; Pelanek 2016 | any quote | | UNVERIFIED (metadata only) |
+| 3.15 | Tang et al., Sci. Rep. 2026; Qiu and Chen, COLING 2025; Li et al., DRAKT 2026 | any quote | | UNVERIFIED (fetch-tool summaries only; not manuscript-ready) |
+
+## Rules to carry forward
+- Unverified items may be cited as background leads only after a fresh read; none of the UNVERIFIED quotes may enter a manuscript.
+- Do not quote from the fetch-tool summaries. Quote from the PDF or the publisher page.
+- Preprints are labelled as preprints; the peer-review status of PR items rests on the source's own header or the publisher.
+
+## 5. Final-closure pass additions (2026-09-21)
+Quotes below were matched against the source text after whitespace normalisation (PDFs) or read in page text (browser). No item previously marked UNVERIFIED (rows 3.13-3.15, CaMeL, CALM, Williamson, Alshiekh, Tang/Qiu/DRAKT summaries) was promoted or reintroduced.
+
+| # | Source (type, URL) | Exact text | Claim supported | Status |
+|---|---|---|---|---|
+| 5.1 | Kadam et al. (PR; https://www.sciencedirect.com/science/article/pii/S1569190X26000651; page text via browser) | "Using the same simulator, reward specification, state representation, and seed protocol, we compare a rule-based heuristic, model-free RL methods (DQN and PPO), and model-based RL methods (PETS and MBPO)." | common comparison framework | VERIFIED (page text; not the article body) |
+| 5.2 | same | "an Item Response Theory-based response model together with simulated remediation effects from heterogeneous learning resources" | IRT-based learner model | VERIFIED (abstract) |
+| 5.3 | same, discussion snippet | "Under the current simulator configuration, policy-gradient methods appear to provide a good balance between learning performance and training stability. In particular, PPO consistently achieves higher cumulative rewards while maintaining relatively stable question accuracy across different random seeds." | qualitative PPO finding only; the comparison set is not stated in the snippet | VERIFIED as text; do not use to state PPO beat the heuristic |
+| 5.4 | same, contributions | "We evaluate policies using educational and operational metrics including time-to-mastery, question accuracy, post-content gain, mean frustration, blueprint adherence, seed stability, and computational cost." | metric names | VERIFIED |
+| 5.5 | same, abstract | "The novelty of the work lies in the integrated benchmarking setup rather than in proposing a new generic reinforcement learning algorithm" | Kadam's own novelty claim | VERIFIED (matches earlier rows) |
+| 5.6 | Riedmann et al. (PR; https://link.springer.com/article/10.1007/s40593-025-00494-6; page text via browser, extract cut at 60,000 characters) | "surveys and evaluates 89 manuscripts from three databases (IEEE Xplore, Google Scholar, and ACM) published between 2000 and 2024" | scope of the review | VERIFIED |
+| 5.7 | same | "based on real interaction datasets (n = 23), or with simulated users (n = 24)" (with "live", n = 41) | evaluation modes | VERIFIED (counts as extracted; recheck against print) |
+| 5.8 | same | "random baselines were used by one-third of all reviewed papers (n = 31)" ; "Some papers also used heuristic policies (n = 4)" | baseline usage | VERIFIED |
+| 5.9 | same | "only 20% of the reviewed papers were able to demonstrate that at least one RL policy significantly outperformed all baselines, this rises to 51% if only papers with statistical tests for significance are considered" ; "Among the studies that were accompanied by statistical testing (n = 35)" | outcome and testing rates | VERIFIED |
+| 5.10 | same | "only 36% of DRL approaches significantly outperformed the baseline" ; "61% of papers utilizing classical RL methods" | deep versus classical RL | VERIFIED |
+| 5.11 | same, abstract | "the need for broader and more large-scale deployments and evaluations with actual users relative to only using simulated data" | simulation-only limitation | VERIFIED |
+| 5.12 | Doroudi et al. (PR; author version PDF from the first author's university page; https://faculty.sites.uci.edu/doroudis/) | "over half of the studies found that RL-induced policies significantly outperform baselines" ; "reinforcement learning has been most successful in cases where it has been constrained with ideas and theories from cognitive psychology and the learning sciences" | review findings | VERIFIED (author version) |
+| 5.13 | same | "the heuristic policy can be approximately as good as the optimal policy according to two different cognitive models (ACT-R and MCM)" | Doroudi et al. report this of Lindsey/Khajah work; the underlying studies were not opened | VERIFIED as the review's sentence; attribute to the review |
+| 5.14 | Olukola and Rahimi, MC-CPO (PP; https://arxiv.org/abs/2604.04251; PDF text) | "strict dominance over post-hoc filtering" (abstract); "Reward shaping and post-hoc filtering fail to separate from unconstrained baselines in all settings" ; "Post-hoc filtering exhibits identical training behavior, as filtering is applied only during evaluation" ; "All tabular experiments use 10 independent random seeds" | filter-versus-constraint comparison in tutoring RL | VERIFIED |
+| 5.15 | Olukola and Rahimi, arXiv:2604.04237 (PP; PDF text) | "The non-significant p-value should not be read as evidence of equivalence" | authors' own caution about non-significance versus equivalence | VERIFIED |
+| 5.16 | Shaikh et al., IJRPR 2025 (student review; PDF text) | list entry "Kaur P. et al. 2024 Adaptive Interview Scoring with BERT & Reinforcement Learning" | none: the underlying paper was not found | UNVERIFIED (do not cite) |

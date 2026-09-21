@@ -1,0 +1,7 @@
+{"paper": 1, "query": "fault-aware AI orchestration", "source": "semanticscholar", "status": "failed", "detail": "Semantic Scholar: gave up after 4 attempts (rate limited)", "ts": "2026-09-20T18:25:03+00:00"}
+{"paper": 1, "query": "graceful degradation in AI systems", "source": "semanticscholar", "status": "failed", "detail": "Semantic Scholar: gave up after 4 attempts (rate limited)", "ts": "2026-09-20T18:27:12+00:00"}
+{"paper": 1, "query": "failure isolation in interactive AI systems", "source": "semanticscholar", "status": "failed", "detail": "Semantic Scholar: gave up after 4 attempts (rate limited)", "ts": "2026-09-20T18:29:18+00:00"}
+{"paper": 1, "query": "sandboxed code execution security dependability", "source": "semanticscholar", "status": "failed", "detail": "Semantic Scholar: gave up after 4 attempts (rate limited)", "ts": "2026-09-20T18:31:26+00:00"}
+{"paper": 1, "query": "runtime containment for untrusted code", "source": "semanticscholar", "status": "aborted_persistent_rate_limit", "ts": "2026-09-20T18:31:26+00:00"}
+{"paper": 2, "query": "automatic short answer grading", "source": "semanticscholar", "status": "aborted_persistent_rate_limit", "ts": "2026-09-20T18:31:26+00:00"}
+{"paper": 3, "query": "computerized adaptive testing", "source": "semanticscholar", "status": "aborted_persistent_rate_limit", "ts": "2026-09-20T18:31:26+00:00"}

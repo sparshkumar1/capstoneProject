@@ -1,0 +1,48 @@
+# VENUE FIT MATRIX (2026-09-21)
+
+Method: each venue's official page was fetched on 2026-09-21 where it loaded; anything not read from an official page is marked **UNVERIFIED**. Statements about indexing, IEEE Xplore inclusion and Scopus are the conferences' own claims and were not independently confirmed. No acceptance predictions are made. No registration fee was found on any page read; all fees are **UNVERIFIED**. Scientific content was not changed to fit a venue.
+
+Sources read (official unless noted): icetc.org (home, submission page); easychair.org/cfp/ICETC2026; 2027.hci.international (home, /ais, /deadlines.html, /papers.html); atis2026.com/call-for-papers; sigapp.org/sac/sac2027; icmlsc.org; smartcomconference.com. Not retrievable (certificate or fetch failure): mlnlp2026.net, aiengineering-conference.org, the SAC 2027 AI-for-education track page. Third-party search snippets (not official) are labelled.
+
+## 1. Venue facts
+
+| Venue | Dates / place | Deadline(s) | Format / length | Series / indexing (conference's own claim) | Review type | Fees |
+|---|---|---|---|---|---|---|
+| **ICETC 2026** (18th Int. Conf. on Education Technology and Computers) | 14–17 Dec 2026, Porto, Portugal | **10 Oct 2026** (submission) | IEEE format: "no less than 5 pages in two columns"; extra pages charged 70 USD per page beyond 6 pages; Springer format also offered (≥ 8 pages, one column; 40 USD per page beyond 12). The home page mentions a Word template; the submission page mentions Word and LaTeX templates | IEEE proceedings "submitted for inclusion into IEEE Xplore and indexed by Ei Compendex & Scopus"; selected papers to Springer LNET; extended versions may be invited to IEEE Trans. Learning Technologies (all conference claims; UNVERIFIED independently) | "peer reviewed by program committees and technical committee"; double-blind **UNVERIFIED** (a search snippet said so; the official pages read do not) | **UNVERIFIED** |
+| **HCI International 2027** (AIS: 9th Int. Conf. on Adaptive Instructional Systems) | 25–30 Jul 2027, Berlin (on-site with online option) | **9 Oct 2026**: 800-word proposal; notification 20 Nov 2026; full paper **29 Jan 2027**; registration deadline 12 Feb 2027 | Regular paper "Typically 12 pages, but no less than 10 and no more than 20"; Springer templates (LaTeX or DOCX) | Springer LNCS/LNAI; "Google Scholar H5-Index: 45" stated; other indexing **UNVERIFIED** | **Single-blind** (authors visible); at least two referees for proposals | One registration per accepted paper required; amount **UNVERIFIED** |
+| **ATIS 2026** (16th Int. Conf. on **Applications and Techniques in Information Security**) | 14–15 Dec 2026, Bengaluru, India | **7 Nov 2026**; notification 30 Nov | Springer CCIS format, up to 12 pages | Springer CCIS; "indexed in the Scopus database" (claim) | Double-blind; three reviewers and one meta-reviewer | **UNVERIFIED** |
+| **ACM SAC 2027** (Symposium on Applied Computing) | 5–9 Apr 2027, Gwangju, South Korea | **2 Oct 2026** (regular papers); notification 13 Nov 2026 | Page limit **UNVERIFIED** (not on the page read) | ACM Digital Library; open-access model with APC or ACM Open (official statement); paper registration mandatory for inclusion | **UNVERIFIED** | **UNVERIFIED** |
+| **ICMLSC 2027** (11th Int. Conf. on Machine Learning and Soft Computing) | 29–31 Jan 2027, Tokyo | **30 Sep 2026**; notification 10 Nov 2026 | Springer CCIS templates; page limit not stated on page | Springer CCIS; "indexed in Scopus, EI Compendex, SCImago"; ISI submission (claims) | "stringent peer review by at least three experts" | **UNVERIFIED** |
+| **SmartCom 2027** (11th Int. Conf. on Smart Trends in Computing and Communications) | 27–30 Jan 2027, Goa, India | Early bird 11 Sep 2026 (passed); regular **12 Oct 2026** | not stated on the page read | Scopus, SpringerLink, Google Scholar, Engineering Village, ISI Proceedings (claims) | **UNVERIFIED** | **UNVERIFIED** |
+| **IEEE MLNLP 2026** (9th Int. Conf. on Machine Learning and Natural Language Processing) | 26–28 Dec 2026, Xiamen, China (third-party snippets) | third-party snippets give 20 Nov or 30 Nov 2026; **official page not retrievable — UNVERIFIED** | UNVERIFIED | IEEE Xplore, EI, Scopus, CPCI-S per third-party snippets — **UNVERIFIED** | UNVERIFIED | UNVERIFIED |
+| **IEEE AIEI 2027** (Int. Conf. on AI Engineering and Innovations) | 21–23 Jan 2027, Bengaluru (search snippet) | **UNVERIFIED** | UNVERIFIED | "submitted to IEEE Xplore for possible publication subject to ... eligibility criteria" (snippet) | UNVERIFIED | UNVERIFIED |
+| **ICMETE 2026** | no conference with this name found | **UNVERIFIED** | — | — | — | — |
+| **ICTCS 2026** | 7–9 Sep 2026; this is the 27th *Italian Conference on Theoretical Computer Science* (search results); already held | closed | — | — | — | — |
+
+Discrepancies with earlier working notes:
+- ICETC: the working note said "IEEE full-paper template ... at least 5 pages; more than 6 pages incurs extra-page charges" — **confirmed** on the submission page. The home page alone mentions a Word template only.
+- HCII 2027: the working note gave "9 October 2026 for the 800-word proposal and 29 January 2027 for the full paper" and 12 pages typical, 10–20 — **confirmed**. Paper 3 was described as a "later-cycle" target; the proposal deadline is in 18 days.
+- ACM SAC 2027 AIED track: the AI-for-Education track page found is for the **41st SAC (SAC 2026, 23–27 Mar 2026)**. That SAC 2027 has an AIED track was **not** verified; only the general SAC 2027 deadline (2 Oct 2026) was.
+- ICTCS: not a viable current venue and not an education/AI venue.
+
+## 2. Fit by paper
+
+| Venue | Paper | Scientific fit | Audience fit | Main reviewer expectation | Main risk | Required framing (no content change) | Status |
+|---|---|---|---|---|---|---|---|
+| ICETC 2026 | 1 | Moderate: an assessment pipeline with execution and failure-handling properties; the venue is education technology, not systems security | Educators and ed-tech engineers; will want an assessment-system framing | Relevance to educational technology; clear method | Perceived as engineering, not education; 5–6 page limit versus ~4,000-word draft plus 4 tables; extra-page charges beyond 6 pages | Frame around the operator's need to know what an LLM-assisted assessment pipeline demonstrably does; keep all scope statements | **PRIMARY** (as in the working position) |
+| ATIS 2026 | 1 | Moderate–good on topic (containment, injection, authority); the paper is scoped dependability evidence, not a security contribution | Security practitioners; expect adversary models | Depth of threat model; stronger attacks | Reviewers may judge the scoped, non-adaptive attack set as weak security work | State plainly that it is not an adaptive-attacker study (already in draft) | **SECONDARY** (fallback) |
+| ICETC 2026 | 2 | Reasonable: educational assessment technology | Ed-tech audience; exploratory measurement is acceptable if labelled | Ethics/provenance statement; clarity | Rater ethics/provenance not documented; two submissions to one conference (policy UNVERIFIED) | Keep "exploratory"; provide ethics statement only if records exist | **CONDITIONAL — candidate** (decision needed) |
+| IEEE MLNLP 2026 | 2 | Plausible (NLP evaluation), venue unverified | NLP/ML researchers; may expect stronger baselines (LLM judge) | Baselines, statistics | Official page not retrievable; the missing LLM-judge baseline | Only after venue verification | **SECONDARY — UNVERIFIED** |
+| ICMLSC 2027 | 2 | Weak–moderate (ML/soft computing) | ML audience | Novel method | Deadline 30 Sep 2026 (9 days); exploratory diagnostics not a method | — | **PARKED** |
+| HCII 2027 / AIS | 3 | Good: adaptive instructional systems and evaluation of adaptive systems (AIS scope names "Evaluating the Effectiveness of Adaptive Instructional Systems") | HCI/AIS audience; interest in adaptive systems, less in RL statistics | Relevance to learners; would ask for user evidence | Simulation only; 10–20 pages; single-blind; proposal due 9 Oct 2026 | Present as controlled-decomposition study in simulation; no learner claims | **PRIMARY** |
+| ACM SAC 2027 (AIED track) | 3 | Good if the track exists | Applied computing/AIED | Empirical rigor | Track and page limit UNVERIFIED; deadline 2 Oct 2026 | — | **SECONDARY — conditional on verifying the track** |
+| IEEE AIEI 2027 | 3 | Plausible | AI engineering | — | Deadline and details UNVERIFIED | — | **PARKED — UNVERIFIED** |
+| SmartCom 2027 | 2 / 3 | Generic | Broad | — | Fit weak; regular deadline 12 Oct 2026 | — | **PARKED** |
+| ICMETE 2026 | any | Unknown | — | — | Not found | — | **DROPPED pending a URL from the user** |
+| ICTCS 2026 | any | None (theoretical CS; held Sep 2026) | — | — | Closed | — | **DROPPED** |
+
+## 3. Notes
+- Dates within the next three weeks: ICMLSC 30 Sep; SAC 2 Oct; HCII proposal 9 Oct; ICETC 10 Oct; SmartCom 12 Oct.
+- Paper 2 must not be submitted anywhere that requires an ethics or rater-consent statement it cannot supply, and the draft makes no such statement.
+- Anonymity: ICETC and HCII double/single-blind status differs (ICETC UNVERIFIED; HCII single-blind); the drafts withhold author information pending each venue's rule.
+- Page budgets: Paper 1 ≈ 4,300 body words plus four tables and (planned) one or two figures is likely 6–8 IEEE two-column pages; Paper 2 ≈ 4,500 words plus five tables likely 8–10; Paper 3 ≈ 4,300 words plus four tables likely 7–9. Only HCII (10–20 pages) and ATIS (≤ 12 pages) accommodate the current lengths without trimming; ICETC would require trimming to about 6 pages to avoid extra charges (70 USD per extra page).

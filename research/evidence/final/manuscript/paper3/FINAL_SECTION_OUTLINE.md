@@ -1,10 +1,10 @@
 # Paper 3 - section outline (IEEE style; venue TBD)
-1 Introduction (adaptive difficulty; why separate policy from guardrail; scope: simulation)
-2 Related work (RL evaluation methodology: Agarwal 2021, Henderson 2018; equivalence testing: Schuirmann 1987, Lakens 2018; RL tutoring vs expert policies: Ausin 2020; Elo: Pelanek 2016; shielding: Alshiekh 2018; first-pass educational-RL items after verification)
+1 Introduction (adaptive difficulty; why separate policy from guardrail; the locked research question: "Under an identical rule-based guardrail layer, what does a learned PPO difficulty controller add beyond a simpler state-blind Constant-Same policy in simulated technical-interview trajectories?"; scope: simulation only; the contribution is the controlled decomposition/equivalence question, not RL, PPO, a simulator or a benchmark for mock interviews)
+2 Related work (adaptive mock-interview tutoring: Kadam 2026 as direct prior art - establishes simulation-based benchmarking with an IRT learner model, finite-horizon MDP, heuristic, DQN, PPO, PETS and MBPO; state that this paper does not compare against their simulator or policies and that their body was not read; RL-in-education reviews: Riedmann 2025, Doroudi 2019 (simulation-only limitation; inconsistent baselines and testing); constraint layers in tutoring RL: Olukola and Rahimi 2026 (MC-CPO, context not competitor); RL evaluation methodology: Agarwal 2021, Henderson 2018; equivalence testing: Schuirmann 1987, Lakens 2018; RL tutoring vs expert policies: Ausin 2020; Elo: Pelanek 2016; shielding: Alshiekh 2018; first-pass educational-RL items after verification)
 3 System and simulator (6-D state, Discrete(3) action, guardrail rules G1-G6, personas, reward including oracle components)
 4 Study design (registered X3-A: units, contrasts, margins, bootstrap, seeds; O7 sensitivity; registration chronology; tags are local)
 5 Results (primary; O7; volatility/oscillation; observation use and comparators; guardrail accounting and rule ablation)
-6 Discussion (what equivalence means; MAE blindness to path shape; guardrail vs shield)
+6 Discussion (what equivalence means; MAE blindness to path shape; terminology: application-level rule-based guardrail; no formal safety specification, no safety guarantee)
 7 Threats to validity and limitations
-8 Conclusion (negative-equivalence; no superiority claim)
+8 Conclusion (equivalence within the registered margin; no superiority claim)
 Appendix: registration chronology, artifact hashes, environment lock.
