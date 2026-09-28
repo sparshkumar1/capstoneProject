@@ -1,0 +1,25 @@
+{
+  "experiment": "E1-Improve-V2",
+  "parent_experiment": "E1-Improve-V1",
+  "status": "exploratory, development-only, bounded gate-extension iteration",
+  "protocol": "research/paper_strengthening/E1_IMPROVE_V2_PROTOCOL.md",
+  "protocol_sha256": "ab4d6d08855a6861e25c0894f1f43d3b506fe7e34c745049a3a007be4f4114b7",
+  "config_reused_unchanged": "research/paper_strengthening/scripts/e1_config.json (sha256 75dda898ecd03bb95bf68a0610408c2a479a66e1275daf011c740b17a1727553)",
+  "lock_id": "LOCK-X3-2026-09-19",
+  "read_only_dependencies_reverified_unchanged": {
+    "research/confirmatory/X3-A/x3a_lib.py": "3badbb39dbf4974a53899ab013c9d0091f40aad718d34fc1b7502e6d4771e506",
+    "rl/guardrails.py": "c4198975227a03f9a672e982d0a3aa62ea60c41331c51ef55285410c409666ba"
+  },
+  "files": {
+    "research/paper_strengthening/scripts/e1improve_v2_gates.py": "23604761efa63a0be44a5ba6834536eb25ad61d294b5c3512107462c3172dfd5",
+    "research/paper_strengthening/scripts/e1improve_v2_eval.py": "328111244dce028945802d59d5d3307719761b1018e15d411b47a5be2cc63c9c",
+    "research/paper_strengthening/scripts/tests/test_e1improve_v2_gates.py": "79168a0ef292ea990d941f9b560970ee3a52a06b51a4f94b73823fe4e70a74d0"
+  },
+  "predeclared_theorem": "G4-full/G1-full/G2-full/G5-full/G6-full gates are predicted to be no-ops on final MAE because x3a_lib.shield() returns a constant action independent of the raw proposal whenever each rule's own predicate is true; verified empirically against the live shield() by test_e1improve_v2_gates.py::test_shield_forces_action_independent_of_raw_proposal (28/28 tests passed, including this one) BEFORE the full grid evaluation was run.",
+  "selection_rule": "A new gate (or combo-all) is preferred over G6-nervous only if, for >=2 of {ConditionA, B2@16384, B2@24576}, it has strictly lower pooled dev MAE AND zero per-cell regressions >=0.05 vs that checkpoint's ungated baseline. Otherwise G6-nervous is retained unchanged.",
+  "decision_notes": [
+    "No confirmatory seed or held-out profile touched",
+    "No retraining; reuses existing E1/E1-Improve-V1 checkpoints unmodified",
+    "No new threshold introduced anywhere; every gate predicate is copied verbatim from rl/guardrails.py / x3a_lib.py"
+  ]
+}
