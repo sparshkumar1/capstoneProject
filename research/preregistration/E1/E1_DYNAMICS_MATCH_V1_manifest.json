@@ -1,0 +1,42 @@
+{
+  "experiment": "E1-Dynamics-Match-V1",
+  "parent_experiments": ["E1", "E1-Improve-V1", "E1-Improve-V2"],
+  "status": "exploratory, development-only, approved bounded factorial experiment",
+  "protocol": "research/paper_strengthening/E1_DYNAMICS_MATCH_V1_PROTOCOL.md",
+  "protocol_sha256": "8beae2d83d43cffd5308ca6378a90dface8bd1be5753877d592b6ea8b1da75e1",
+  "config_reused_unchanged": "research/paper_strengthening/scripts/e1_config.json (sha256 75dda898ecd03bb95bf68a0610408c2a479a66e1275daf011c740b17a1727553)",
+  "lock_id": "LOCK-X3-2026-09-19",
+  "read_only_dependencies_reverified_unchanged": {
+    "rl/env/interview_env.py": "117af6c8a7dea0cda90cc28aead0796a25f6332a329670bbe1215a412256e4b1",
+    "rl/guardrails.py": "c4198975227a03f9a672e982d0a3aa62ea60c41331c51ef55285410c409666ba",
+    "research/confirmatory/X3-A/x3a_lib.py": "3badbb39dbf4974a53899ab013c9d0091f40aad718d34fc1b7502e6d4771e506",
+    "research/scripts/execute_paper3_study.py": "29aa61d6231eacdc70f4b191c88a72ef874071782471df412d3184dfc723c0a7"
+  },
+  "files": {
+    "research/paper_strengthening/scripts/e1dynmatch_env_variant.py": "73c18e080166abfa5ba4dcaac7fcb6308e51621f1b6419396540885924c57fc4",
+    "research/paper_strengthening/scripts/tests/test_e1dynmatch_env_variant.py": "9f622f1fe9591543f883641f560860f1447caf67d1ea2d71dc12ba2a3f469f23",
+    "research/paper_strengthening/scripts/audit_intermediate_vs_fresh_budget.py": "b56a88d85a4542f0cc848c8ce1f8208491d28dda9f9b2b331471479d45d72765"
+  },
+  "shared_training_log_baseline": {
+    "path": "rl/env/training_logs/interview_data.csv",
+    "sha256_before_run": "9937d8a8e61434ac2aac4218d485b5f903ed3a1609c51b55f951a770f2138852"
+  },
+  "design": {
+    "arms": ["OOO", "OOM", "OMO", "OMM", "MOO", "MOM", "MMO", "MMM"],
+    "training_seeds": [42, 123, 456, 789, 999],
+    "development_eval_seeds": [1001, 2002, 3003, 4004, 5005],
+    "primary_budget_steps": 24576,
+    "intermediate_checkpoint_steps": [8192, 16384],
+    "primary_comparison": "MMM vs OOO at 24576 steps, paired by training seed",
+    "extended_budget_trigger": "MMM pooled dev MAE >= 0.02 lower than OOO's at 24576 steps AND zero per-cell regressions >=0.05 vs OOO",
+    "extended_budget_steps": 98304,
+    "practical_improvement_criterion": "strictly lower pooled dev MAE AND zero per-cell regressions >=0.05 vs the OOO control"
+  },
+  "decision_notes": [
+    "Design not to be altered after this registration",
+    "No confirmatory seed or held-out profile touched",
+    "No reward/state/action/evaluator/target-formula/guardrail-semantics change",
+    "Factor A folds the newly-found floor-bound mismatch (0.1 vs 0.2) into its 'matched' level rather than adding a 4th orthogonal factor",
+    "Intermediate checkpoints (8192/16384) are snapshots of the single 24576-step schedule per arm/seed, not independently-budgeted models -- explicitly distinguished in reporting"
+  ]
+}
