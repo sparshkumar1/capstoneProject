@@ -1,0 +1,46 @@
+{
+  "protocol": "E1_PPO_PERSONA_DIVERSITY_PROTOCOL_V4.md",
+  "protocol_sha256": "22ee4b744f4d3d4212b8c02d0ed551c0cc9da0186b41e67a0185245577ef0d6b",
+  "arms": ["B0", "B2"],
+  "skill_grid": [0.20, 0.35, 0.50, 0.65, 0.80, 0.90],
+  "k_grid_B0": [0.0],
+  "k_grid_B2": [0.0, 0.30, 0.45, 0.60],
+  "episode_seed_formula": "training_seed * 100000 + episode_index",
+  "training_seeds": [42, 123, 456, 789, 999],
+  "development_eval_seeds": [1001, 2002, 3003, 4004, 5005],
+  "confirmatory_eval_seeds": [21021, 22022, 23023, 24024, 25025, 26026, 27027, 28028, 29029, 30030,
+                              31031, 32032, 33033, 34034, 35035, 36036, 37037, 38038, 39039, 40040],
+  "held_out_profiles": [
+    {"profile_id": "HOLDOUT-1", "skill": 0.27, "k": 0.20, "target_difficulty": 1.5},
+    {"profile_id": "HOLDOUT-2", "skill": 0.58, "k": 0.38, "target_difficulty": 3.0},
+    {"profile_id": "HOLDOUT-3", "skill": 0.83, "k": 0.52, "target_difficulty": 4.0}
+  ],
+  "ppo_hyperparameters": {
+    "policy": "MlpPolicy",
+    "learning_rate": 3e-4,
+    "n_steps": 2048,
+    "batch_size": 64,
+    "n_epochs": 10,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_range": 0.2
+  },
+  "timesteps_primary": 24576,
+  "timesteps_extended_budget": 98304,
+  "dim4_mode": "aligned_progress",
+  "max_steps": 10,
+  "guardrails_enabled_in_training": true,
+  "source_files_imported_unmodified": [
+    "rl/env/interview_env.py",
+    "rl/guardrails.py",
+    "rl/training/simulated_candidate.py",
+    "research/scripts/execute_paper3_study.py",
+    "research/confirmatory/X3-A/x3a_lib.py"
+  ],
+  "output_paths": {
+    "training_checkpoints": "research/paper_strengthening/results/e1_training/<arm>/seed_<seed>/",
+    "per_step_training_logs": "research/paper_strengthening/results/e1_training_logs/<arm>_seed<seed>.csv",
+    "confirmatory_results": "research/paper_strengthening/results/e1_confirmatory/"
+  },
+  "note": "This file is read by e1_train_condition_b.py; no hyperparameter is hard-coded separately from this config. Not executed as part of this implementation pass -- see the accompanying report."
+}
