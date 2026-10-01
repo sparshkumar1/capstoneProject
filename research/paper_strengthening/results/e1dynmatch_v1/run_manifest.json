@@ -1,0 +1,63 @@
+{
+  "manifest_version": "1.0",
+  "experiment_id": "E1-Dynamics-Match-V1",
+  "run_id": "E1DynMatch-2026-09-28-001",
+  "status": "completed",
+  "started_utc": "2026-09-28T08:58:06Z",
+  "finished_utc": "2026-09-28T10:03:03Z",
+  "protocol": {
+    "protocol_file": "research/paper_strengthening/E1_DYNAMICS_MATCH_V1_PROTOCOL.md",
+    "protocol_sha256": "8beae2d83d43cffd5308ca6378a90dface8bd1be5753877d592b6ea8b1da75e1",
+    "protocol_git_tag": "explore/E1-dynamics-match/v1",
+    "protocol_tag_commit": "8e6cea8"
+  },
+  "code": {
+    "git_commit": "8e6cea8",
+    "git_tag": "explore/E1-dynamics-match/v1",
+    "git_dirty": false,
+    "entrypoint": "research/paper_strengthening/scripts/e1dynmatch_run_factorial.py",
+    "e1dynmatch_env_variant_sha256": "73c18e080166abfa5ba4dcaac7fcb6308e51621f1b6419396540885924c57fc4",
+    "command_line": "python e1dynmatch_run_factorial.py (primary, 8 arms x 5 seeds x 24576 steps)"
+  },
+  "config": {
+    "config_path": "research/paper_strengthening/scripts/e1_config.json",
+    "config_sha256": "75dda898ecd03bb95bf68a0610408c2a479a66e1275daf011c740b17a1727553"
+  },
+  "environment": {
+    "lock_id": "LOCK-X3-2026-09-19",
+    "env_lock_sha256": "c8fdfda1f5034c1d56a27f756907fcb64c3a2b1cdd6e5142b8722a62b658aa03",
+    "os": "Windows", "os_version": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7", "packages": {"numpy": "2.5.2", "torch": "2.11.0+cpu", "stable_baselines3": "2.7.1", "gymnasium": "0.29.1"},
+    "hardware": {"cpu": "12th Gen Intel(R) Core(TM) i5-1235U", "cores": 12, "ram_gb": 15.7, "gpu": null}
+  },
+  "seeds": {
+    "training": [42, 123, 456, 789, 999],
+    "evaluation": [1001, 2002, 3003, 4004, 5005],
+    "env_seed_policy": "development phase only; confirmatory seeds 21021-40040 and 3 held-out profiles are locked and not touched"
+  },
+  "design": {
+    "arms": ["OOO", "OOM", "OMO", "OMM", "MOO", "MOM", "MMO", "MMM"],
+    "primary_budget_steps": 24576,
+    "intermediate_checkpoint_steps": [8192, 16384],
+    "n_runs": 40
+  },
+  "shared_training_log_protection": {
+    "path": "rl/env/training_logs/interview_data.csv",
+    "sha256_before_run": "9937d8a8e61434ac2aac4218d485b5f903ed3a1609c51b55f951a770f2138852",
+    "sha256_after_run": "9937d8a8e61434ac2aac4218d485b5f903ed3a1609c51b55f951a770f2138852",
+    "integrity_verified": true
+  },
+  "training_result": {"n_runs": 40, "n_failed": 0},
+  "extended_budget_run": {"triggered": false, "reason": "MMM pooled MAE at 24576 steps (0.3903) is WORSE than OOO's (0.2735) by 0.1168, not better by >=0.02; trigger not met, extension not run"},
+  "outputs": [
+    "research/paper_strengthening/results/e1dynmatch_v1/e1dynmatch_eval_raw.json",
+    "research/paper_strengthening/results/e1dynmatch_v1/e1dynmatch_eval_summary.json",
+    "research/paper_strengthening/results/e1dynmatch_v1/e1dynmatch_per_seed_results.csv",
+    "research/paper_strengthening/results/e1dynmatch_v1/e1dynmatch_per_cell_results.csv",
+    "research/paper_strengthening/results/e1dynmatch_v1/e1dynmatch_factorial_contrasts.csv",
+    "research/paper_strengthening/results/e1dynmatch_v1/e1dynmatch_decision_summary.json"
+  ],
+  "deviations": [],
+  "failures": [],
+  "operator": "claude-code-session"
+}

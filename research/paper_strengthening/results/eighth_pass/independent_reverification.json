@@ -1,0 +1,701 @@
+{
+  "data_integrity": {
+    "n_bench_rows": 64,
+    "n_gold_rows": 64,
+    "duplicate_case_ids_in_bench": [],
+    "per_qid_case_counts": {
+      "1": 8,
+      "3": 8,
+      "7": 8,
+      "10": 8,
+      "15": 8,
+      "22": 8,
+      "41": 8,
+      "50": 8
+    },
+    "case_ids_bench_minus_gold": [],
+    "case_ids_gold_minus_bench": [],
+    "malformed_or_empty_rubric_concepts": [],
+    "cases_with_missing_or_empty_candidate_answer": [],
+    "gold_scores_out_of_range_or_non_numeric": []
+  },
+  "qid_mapping": {
+    "1": {
+      "n_cases": 8,
+      "bench_question_texts_all_identical": true,
+      "bench_question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "live_qns_json_question_for_this_qid": [
+        "Explain your logic to find the two indices in an array that sum up to a target value."
+      ],
+      "live_rubrics_json_answer_snippet": "Use a hash map that stores each element's value mapped to its index as you iterate through the array once. For every ele",
+      "live_rubrics_json_topic": "Arrays",
+      "exact_question_text_match_vs_live_bank": true,
+      "flagged_mismatch": false,
+      "weak_word_overlap_heuristic_agreed_with_exact_match": true
+    },
+    "3": {
+      "n_cases": 8,
+      "bench_question_texts_all_identical": true,
+      "bench_question": "Describe the approach to reverse a singly linked list in-place.",
+      "live_qns_json_question_for_this_qid": [
+        "Describe the approach to reverse a singly linked list in-place."
+      ],
+      "live_rubrics_json_answer_snippet": "Use three pointers: prev initialized to null, curr initialized to head, and next. In each iteration: first save next as ",
+      "live_rubrics_json_topic": "LinkedLists",
+      "exact_question_text_match_vs_live_bank": true,
+      "flagged_mismatch": false,
+      "weak_word_overlap_heuristic_agreed_with_exact_match": true
+    },
+    "7": {
+      "n_cases": 8,
+      "bench_question_texts_all_identical": true,
+      "bench_question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+      "live_qns_json_question_for_this_qid": [
+        "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place."
+      ],
+      "live_rubrics_json_answer_snippet": "A 90-degree clockwise in-place rotation is achieved in two steps. Step 1 \u2014 Transpose: swap matrix[i][j] with matrix[j][i",
+      "live_rubrics_json_topic": "Matrix",
+      "exact_question_text_match_vs_live_bank": false,
+      "flagged_mismatch": true,
+      "weak_word_overlap_heuristic_agreed_with_exact_match": false
+    },
+    "10": {
+      "n_cases": 8,
+      "bench_question_texts_all_identical": true,
+      "bench_question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+      "live_qns_json_question_for_this_qid": [
+        "Explain the BFS (Level Order) traversal logic for a binary tree."
+      ],
+      "live_rubrics_json_answer_snippet": "Initialize a queue and enqueue the root node. While the queue is not empty, dequeue the front node, process it (record o",
+      "live_rubrics_json_topic": "Trees",
+      "exact_question_text_match_vs_live_bank": true,
+      "flagged_mismatch": false,
+      "weak_word_overlap_heuristic_agreed_with_exact_match": false
+    },
+    "15": {
+      "n_cases": 8,
+      "bench_question_texts_all_identical": true,
+      "bench_question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+      "live_qns_json_question_for_this_qid": [
+        "Describe the Three-Way Partition logic used in the Dutch National Flag problem."
+      ],
+      "live_rubrics_json_answer_snippet": "Initialize three pointers: low = 0, mid = 0, high = n minus 1. Iterate while mid is less than or equal to high. If array",
+      "live_rubrics_json_topic": "Arrays",
+      "exact_question_text_match_vs_live_bank": false,
+      "flagged_mismatch": true,
+      "weak_word_overlap_heuristic_agreed_with_exact_match": true
+    },
+    "22": {
+      "n_cases": 8,
+      "bench_question_texts_all_identical": true,
+      "bench_question": "Explain the binary search algorithm and its preconditions.",
+      "live_qns_json_question_for_this_qid": [
+        "Explain the logic to detect a cycle in an undirected graph using BFS."
+      ],
+      "live_rubrics_json_answer_snippet": "Initialize a visited array and a parent array for all nodes. For each unvisited node (to handle disconnected components)",
+      "live_rubrics_json_topic": "Graphs",
+      "exact_question_text_match_vs_live_bank": false,
+      "flagged_mismatch": true,
+      "weak_word_overlap_heuristic_agreed_with_exact_match": true
+    },
+    "41": {
+      "n_cases": 8,
+      "bench_question_texts_all_identical": true,
+      "bench_question": "What is a pointer in C and how do you declare one?",
+      "live_qns_json_question_for_this_qid": [
+        "What is a pointer in C and how do you declare one?"
+      ],
+      "live_rubrics_json_answer_snippet": "A pointer is a variable whose value is the memory address of another variable, not the variable's data value itself. It ",
+      "live_rubrics_json_topic": "C_Programming",
+      "exact_question_text_match_vs_live_bank": true,
+      "flagged_mismatch": false,
+      "weak_word_overlap_heuristic_agreed_with_exact_match": true
+    },
+    "50": {
+      "n_cases": 8,
+      "bench_question_texts_all_identical": true,
+      "bench_question": "What is a race condition in multithreading and how do you prevent it?",
+      "live_qns_json_question_for_this_qid": [
+        "What is a segmentation fault and how is it caused?"
+      ],
+      "live_rubrics_json_answer_snippet": "A segmentation fault is a runtime error raised by the operating system when a program attempts to access a memory region",
+      "live_rubrics_json_topic": "C_Programming",
+      "exact_question_text_match_vs_live_bank": false,
+      "flagged_mismatch": true,
+      "weak_word_overlap_heuristic_agreed_with_exact_match": true
+    }
+  },
+  "correlations": {
+    "full_64_stale": {
+      "n": 64,
+      "spearman_rho_scipy": 0.3728,
+      "spearman_rho_from_scratch_numpy": 0.3728,
+      "methods_agree_to_4dp": true,
+      "p_value_scipy": 0.0024140985514260476,
+      "mean_signed_diff": -0.1419,
+      "mean_abs_diff": 0.2951
+    },
+    "matched_subset_stale": {
+      "n": 32,
+      "spearman_rho_scipy": 0.655,
+      "spearman_rho_from_scratch_numpy": 0.655,
+      "methods_agree_to_4dp": true,
+      "p_value_scipy": 4.736322735155105e-05,
+      "mean_signed_diff": -0.006,
+      "mean_abs_diff": 0.2524
+    },
+    "mismatched_subset_stale": {
+      "n": 32,
+      "spearman_rho_scipy": 0.4249,
+      "spearman_rho_from_scratch_numpy": 0.4249,
+      "methods_agree_to_4dp": true,
+      "p_value_scipy": 0.015338006662311762,
+      "mean_signed_diff": -0.2778,
+      "mean_abs_diff": 0.3378
+    },
+    "mismatched_subset_adhoc_rescored": {
+      "n": 32,
+      "spearman_rho_scipy": 0.7098,
+      "spearman_rho_from_scratch_numpy": 0.7098,
+      "methods_agree_to_4dp": true,
+      "p_value_scipy": 5.387578231713463e-06,
+      "mean_signed_diff": 0.0388,
+      "mean_abs_diff": 0.2021
+    }
+  },
+  "tie_and_missing_check": {
+    "n_distinct_stale_scores_full_64": 57,
+    "n_distinct_gold_scores_full_64": 47,
+    "n_nan_or_inf_stale_scores": 0,
+    "n_nan_or_inf_gold_scores": 0,
+    "max_tied_stale_score_group_size": 7
+  },
+  "qid_mapping_summary": {
+    "mismatched_qids_independently_confirmed": [
+      7,
+      15,
+      22,
+      50
+    ],
+    "matched_qids_independently_confirmed": [
+      1,
+      3,
+      10,
+      41
+    ]
+  },
+  "per_case": [
+    {
+      "case_id": "BM-001",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.6,
+      "rescored_score": null,
+      "gold_score": 0.9167
+    },
+    {
+      "case_id": "BM-002",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.8359,
+      "rescored_score": null,
+      "gold_score": 0.98
+    },
+    {
+      "case_id": "BM-003",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.4173,
+      "rescored_score": null,
+      "gold_score": 0.73
+    },
+    {
+      "case_id": "BM-004",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.0097,
+      "rescored_score": null,
+      "gold_score": 0.5267
+    },
+    {
+      "case_id": "BM-005",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.386,
+      "rescored_score": null,
+      "gold_score": 0.1433
+    },
+    {
+      "case_id": "BM-006",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.408,
+      "rescored_score": null,
+      "gold_score": 0.28
+    },
+    {
+      "case_id": "BM-007",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.203,
+      "rescored_score": null,
+      "gold_score": 0.06
+    },
+    {
+      "case_id": "BM-008",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.3707,
+      "rescored_score": null,
+      "gold_score": 0.1867
+    },
+    {
+      "case_id": "BM-009",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.6,
+      "rescored_score": null,
+      "gold_score": 0.92
+    },
+    {
+      "case_id": "BM-010",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.8709,
+      "rescored_score": null,
+      "gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-011",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.4041,
+      "rescored_score": null,
+      "gold_score": 0.5067
+    },
+    {
+      "case_id": "BM-012",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.2333,
+      "rescored_score": null,
+      "gold_score": 0.0833
+    },
+    {
+      "case_id": "BM-013",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.542,
+      "rescored_score": null,
+      "gold_score": 0.1667
+    },
+    {
+      "case_id": "BM-014",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.5937,
+      "rescored_score": null,
+      "gold_score": 0.3
+    },
+    {
+      "case_id": "BM-015",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.4499,
+      "rescored_score": null,
+      "gold_score": 0.1167
+    },
+    {
+      "case_id": "BM-016",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.5601,
+      "rescored_score": null,
+      "gold_score": 0.86
+    },
+    {
+      "case_id": "BM-017",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.7396,
+      "rescored_score": null,
+      "gold_score": 0.9067
+    },
+    {
+      "case_id": "BM-018",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.8185,
+      "rescored_score": null,
+      "gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-019",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.4479,
+      "rescored_score": null,
+      "gold_score": 0.55
+    },
+    {
+      "case_id": "BM-020",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.0,
+      "rescored_score": null,
+      "gold_score": 0.1167
+    },
+    {
+      "case_id": "BM-021",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.4088,
+      "rescored_score": null,
+      "gold_score": 0.1133
+    },
+    {
+      "case_id": "BM-022",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.6024,
+      "rescored_score": null,
+      "gold_score": 0.3
+    },
+    {
+      "case_id": "BM-023",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.297,
+      "rescored_score": null,
+      "gold_score": 0.1367
+    },
+    {
+      "case_id": "BM-024",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.437,
+      "rescored_score": null,
+      "gold_score": 0.14
+    },
+    {
+      "case_id": "BM-025",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.4074,
+      "rescored_score": null,
+      "gold_score": 0.9033
+    },
+    {
+      "case_id": "BM-026",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.7227,
+      "rescored_score": null,
+      "gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-027",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.3281,
+      "rescored_score": null,
+      "gold_score": 0.6333
+    },
+    {
+      "case_id": "BM-028",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.304,
+      "rescored_score": null,
+      "gold_score": 0.06
+    },
+    {
+      "case_id": "BM-029",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.442,
+      "rescored_score": null,
+      "gold_score": 0.0567
+    },
+    {
+      "case_id": "BM-030",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.5234,
+      "rescored_score": null,
+      "gold_score": 0.28
+    },
+    {
+      "case_id": "BM-031",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.3216,
+      "rescored_score": null,
+      "gold_score": 0.1567
+    },
+    {
+      "case_id": "BM-032",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.3862,
+      "rescored_score": null,
+      "gold_score": 0.7833
+    },
+    {
+      "case_id": "BM-033",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.2142,
+      "rescored_score": 0.7243,
+      "gold_score": 0.9233
+    },
+    {
+      "case_id": "BM-034",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.4151,
+      "rescored_score": 0.8869,
+      "gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-035",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.1901,
+      "rescored_score": 0.4986,
+      "gold_score": 0.72
+    },
+    {
+      "case_id": "BM-036",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.1831,
+      "gold_score": 0.51
+    },
+    {
+      "case_id": "BM-037",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.1882,
+      "rescored_score": 0.2527,
+      "gold_score": 0.0967
+    },
+    {
+      "case_id": "BM-038",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.1115,
+      "rescored_score": 0.6407,
+      "gold_score": 0.33
+    },
+    {
+      "case_id": "BM-039",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.1706,
+      "rescored_score": 0.4179,
+      "gold_score": 0.0567
+    },
+    {
+      "case_id": "BM-040",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.0977,
+      "rescored_score": 0.5868,
+      "gold_score": 0.1667
+    },
+    {
+      "case_id": "BM-041",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.2346,
+      "rescored_score": 0.6737,
+      "gold_score": 0.9033
+    },
+    {
+      "case_id": "BM-042",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.3941,
+      "rescored_score": 0.7793,
+      "gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-043",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.1999,
+      "rescored_score": 0.2861,
+      "gold_score": 0.37
+    },
+    {
+      "case_id": "BM-044",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.2007,
+      "rescored_score": 0.1016,
+      "gold_score": 0.1167
+    },
+    {
+      "case_id": "BM-045",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.2066,
+      "rescored_score": 0.2292,
+      "gold_score": 0.09
+    },
+    {
+      "case_id": "BM-046",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.2079,
+      "rescored_score": 0.5478,
+      "gold_score": 0.3
+    },
+    {
+      "case_id": "BM-047",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.1859,
+      "rescored_score": 0.3187,
+      "gold_score": 0.16
+    },
+    {
+      "case_id": "BM-048",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.2126,
+      "rescored_score": 0.3489,
+      "gold_score": 0.8533
+    },
+    {
+      "case_id": "BM-049",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.2573,
+      "rescored_score": 0.5402,
+      "gold_score": 0.91
+    },
+    {
+      "case_id": "BM-050",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.3781,
+      "rescored_score": 0.8619,
+      "gold_score": 0.99
+    },
+    {
+      "case_id": "BM-051",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.1891,
+      "rescored_score": 0.4529,
+      "gold_score": 0.45
+    },
+    {
+      "case_id": "BM-052",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.2156,
+      "rescored_score": 0.2944,
+      "gold_score": 0.0867
+    },
+    {
+      "case_id": "BM-053",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.2278,
+      "rescored_score": 0.2167,
+      "gold_score": 0.11
+    },
+    {
+      "case_id": "BM-054",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.2291,
+      "rescored_score": 0.6391,
+      "gold_score": 0.35
+    },
+    {
+      "case_id": "BM-055",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.199,
+      "rescored_score": 0.1709,
+      "gold_score": 0.0667
+    },
+    {
+      "case_id": "BM-056",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.2194,
+      "rescored_score": 0.1856,
+      "gold_score": 0.12
+    },
+    {
+      "case_id": "BM-057",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.8933,
+      "gold_score": 0.9133
+    },
+    {
+      "case_id": "BM-058",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.2917,
+      "rescored_score": 0.8908,
+      "gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-059",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.586,
+      "gold_score": 0.61
+    },
+    {
+      "case_id": "BM-060",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.3001,
+      "gold_score": 0.0567
+    },
+    {
+      "case_id": "BM-061",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.1133,
+      "rescored_score": 0.5654,
+      "gold_score": 0.0633
+    },
+    {
+      "case_id": "BM-062",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.6683,
+      "gold_score": 0.3
+    },
+    {
+      "case_id": "BM-063",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.2812,
+      "gold_score": 0.11
+    },
+    {
+      "case_id": "BM-064",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.1238,
+      "rescored_score": 0.783,
+      "gold_score": 0.88
+    }
+  ]
+}

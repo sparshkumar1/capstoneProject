@@ -1,0 +1,314 @@
+{
+  "budget": "primary",
+  "ent_coef": 0.01,
+  "n_rows_total": 600,
+  "pooled": [
+    {
+      "condition": "B2ent",
+      "n": 600,
+      "mae_mean": 0.275,
+      "mae_sd": 0.22880167528138917,
+      "oracle_agreement_mean": 0.6513333333333334,
+      "volatility_mean": 0.12716666666666665
+    }
+  ],
+  "per_seed": [
+    {
+      "condition": "B2ent",
+      "training_seed": 42,
+      "n": 120,
+      "mae_mean": 0.26439393939393935,
+      "mae_sd": 0.21735824148702623,
+      "oracle_agreement_mean": 0.6858333333333334,
+      "volatility_mean": 0.12250000000000003
+    },
+    {
+      "condition": "B2ent",
+      "training_seed": 123,
+      "n": 120,
+      "mae_mean": 0.281060606060606,
+      "mae_sd": 0.23633328282180158,
+      "oracle_agreement_mean": 0.5883333333333334,
+      "volatility_mean": 0.12416666666666672
+    },
+    {
+      "condition": "B2ent",
+      "training_seed": 456,
+      "n": 120,
+      "mae_mean": 0.26818181818181813,
+      "mae_sd": 0.21411937660570687,
+      "oracle_agreement_mean": 0.6691666666666668,
+      "volatility_mean": 0.13833333333333334
+    },
+    {
+      "condition": "B2ent",
+      "training_seed": 789,
+      "n": 120,
+      "mae_mean": 0.2651515151515151,
+      "mae_sd": 0.21627427914576056,
+      "oracle_agreement_mean": 0.7158333333333334,
+      "volatility_mean": 0.1316666666666667
+    },
+    {
+      "condition": "B2ent",
+      "training_seed": 999,
+      "n": 120,
+      "mae_mean": 0.29621212121212115,
+      "mae_sd": 0.25551650098832884,
+      "oracle_agreement_mean": 0.5975000000000001,
+      "volatility_mean": 0.11916666666666668
+    }
+  ],
+  "per_cell": [
+    {
+      "condition": "B2ent",
+      "skill": 0.2,
+      "k": 0.0,
+      "n": 25,
+      "mae_mean": 0.2727272727272727,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.156,
+      "volatility_mean": 0.20000000000000004
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.2,
+      "k": 0.3,
+      "n": 25,
+      "mae_mean": 0.2727272727272727,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.152,
+      "volatility_mean": 0.20000000000000004
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.2,
+      "k": 0.45,
+      "n": 25,
+      "mae_mean": 0.2727272727272727,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.14400000000000002,
+      "volatility_mean": 0.20000000000000004
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.2,
+      "k": 0.6,
+      "n": 25,
+      "mae_mean": 0.2727272727272727,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.14,
+      "volatility_mean": 0.20000000000000004
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.35,
+      "k": 0.0,
+      "n": 25,
+      "mae_mean": 0.1090909090909091,
+      "mae_sd": 0.03636363636363636,
+      "oracle_agreement_mean": 0.6639999999999999,
+      "volatility_mean": 0.14
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.35,
+      "k": 0.3,
+      "n": 25,
+      "mae_mean": 0.0909090909090909,
+      "mae_sd": 1.3877787807814457e-17,
+      "oracle_agreement_mean": 0.38,
+      "volatility_mean": 0.10000000000000002
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.35,
+      "k": 0.45,
+      "n": 25,
+      "mae_mean": 0.0909090909090909,
+      "mae_sd": 1.3877787807814457e-17,
+      "oracle_agreement_mean": 0.37200000000000005,
+      "volatility_mean": 0.10000000000000002
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.35,
+      "k": 0.6,
+      "n": 25,
+      "mae_mean": 0.0909090909090909,
+      "mae_sd": 1.3877787807814457e-17,
+      "oracle_agreement_mean": 0.37200000000000005,
+      "volatility_mean": 0.10000000000000002
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.5,
+      "k": 0.0,
+      "n": 25,
+      "mae_mean": 0.5,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.38,
+      "volatility_mean": 0.41600000000000004
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.5,
+      "k": 0.3,
+      "n": 25,
+      "mae_mean": 0.5,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.516,
+      "volatility_mean": 0.316
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.5,
+      "k": 0.45,
+      "n": 25,
+      "mae_mean": 0.5,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.6679999999999999,
+      "volatility_mean": 0.15600000000000003
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.5,
+      "k": 0.6,
+      "n": 25,
+      "mae_mean": 0.5,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.652,
+      "volatility_mean": 0.10000000000000002
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.65,
+      "k": 0.0,
+      "n": 25,
+      "mae_mean": 0.021818181818181816,
+      "mae_sd": 0.046568176272238894,
+      "oracle_agreement_mean": 0.9080000000000001,
+      "volatility_mean": 0.04800000000000001
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.65,
+      "k": 0.3,
+      "n": 25,
+      "mae_mean": 0.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9719999999999999,
+      "volatility_mean": 0.0
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.65,
+      "k": 0.45,
+      "n": 25,
+      "mae_mean": 0.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9359999999999999,
+      "volatility_mean": 0.0
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.65,
+      "k": 0.6,
+      "n": 25,
+      "mae_mean": 0.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9279999999999999,
+      "volatility_mean": 0.0
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.8,
+      "k": 0.0,
+      "n": 25,
+      "mae_mean": 0.3090909090909091,
+      "mae_sd": 0.38825739098295675,
+      "oracle_agreement_mean": 0.8959999999999998,
+      "volatility_mean": 0.07600000000000001
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.8,
+      "k": 0.3,
+      "n": 25,
+      "mae_mean": 0.0909090909090909,
+      "mae_sd": 1.3877787807814457e-17,
+      "oracle_agreement_mean": 0.92,
+      "volatility_mean": 0.10000000000000002
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.8,
+      "k": 0.45,
+      "n": 25,
+      "mae_mean": 0.16363636363636364,
+      "mae_sd": 0.06803013430498074,
+      "oracle_agreement_mean": 0.8200000000000002,
+      "volatility_mean": 0.10000000000000002
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.8,
+      "k": 0.6,
+      "n": 25,
+      "mae_mean": 0.16363636363636364,
+      "mae_sd": 0.06803013430498074,
+      "oracle_agreement_mean": 0.8280000000000001,
+      "volatility_mean": 0.10000000000000002
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.9,
+      "k": 0.0,
+      "n": 25,
+      "mae_mean": 0.6054545454545456,
+      "mae_sd": 0.04209395237378261,
+      "oracle_agreement_mean": 0.968,
+      "volatility_mean": 0.10000000000000002
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.9,
+      "k": 0.3,
+      "n": 25,
+      "mae_mean": 0.590909090909091,
+      "mae_sd": 1.1102230246251565e-16,
+      "oracle_agreement_mean": 0.98,
+      "volatility_mean": 0.10000000000000002
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.9,
+      "k": 0.45,
+      "n": 25,
+      "mae_mean": 0.590909090909091,
+      "mae_sd": 1.1102230246251565e-16,
+      "oracle_agreement_mean": 0.9399999999999998,
+      "volatility_mean": 0.10000000000000002
+    },
+    {
+      "condition": "B2ent",
+      "skill": 0.9,
+      "k": 0.6,
+      "n": 25,
+      "mae_mean": 0.590909090909091,
+      "mae_sd": 1.1102230246251565e-16,
+      "oracle_agreement_mean": 0.9399999999999998,
+      "volatility_mean": 0.10000000000000002
+    }
+  ],
+  "lucky_guesser_cell": [
+    {
+      "condition": "B2ent",
+      "n": 25,
+      "mae_mean": 0.16363636363636364,
+      "mae_sd": 0.06803013430498074,
+      "oracle_agreement_mean": 0.8280000000000001,
+      "volatility_mean": 0.10000000000000002
+    }
+  ]
+}

@@ -1,0 +1,763 @@
+{
+  "n_cases": 64,
+  "overall_mean_abs_diff": 0.2951,
+  "overall_spearman_rho": 0.3728,
+  "by_category": {
+    "concise_correct": {
+      "n": 8,
+      "mean_signed_diff_eval_minus_gold": -0.5304,
+      "mean_abs_diff": 0.5304,
+      "abs_diff_95pct_bootstrap_ci": [
+        0.3689,
+        0.6939
+      ],
+      "ci_note": null,
+      "case_ids": [
+        "BM-001",
+        "BM-009",
+        "BM-017",
+        "BM-025",
+        "BM-033",
+        "BM-041",
+        "BM-049",
+        "BM-057"
+      ]
+    },
+    "contradictory": {
+      "n": 4,
+      "mean_signed_diff_eval_minus_gold": 0.1278,
+      "mean_abs_diff": 0.1624,
+      "abs_diff_95pct_bootstrap_ci": null,
+      "ci_note": "n=4 too small for an informative bootstrap CI; point estimate only",
+      "case_ids": [
+        "BM-008",
+        "BM-024",
+        "BM-040",
+        "BM-056"
+      ]
+    },
+    "incorrect": {
+      "n": 6,
+      "mean_signed_diff_eval_minus_gold": 0.0722,
+      "mean_abs_diff": 0.13,
+      "abs_diff_95pct_bootstrap_ci": [
+        0.0878,
+        0.1824
+      ],
+      "ci_note": null,
+      "case_ids": [
+        "BM-012",
+        "BM-020",
+        "BM-028",
+        "BM-044",
+        "BM-052",
+        "BM-060"
+      ]
+    },
+    "keyword_stuffed": {
+      "n": 8,
+      "mean_signed_diff_eval_minus_gold": 0.0295,
+      "mean_abs_diff": 0.2124,
+      "abs_diff_95pct_bootstrap_ci": [
+        0.1573,
+        0.2673
+      ],
+      "ci_note": null,
+      "case_ids": [
+        "BM-006",
+        "BM-014",
+        "BM-022",
+        "BM-030",
+        "BM-038",
+        "BM-046",
+        "BM-054",
+        "BM-062"
+      ]
+    },
+    "misconception": {
+      "n": 8,
+      "mean_signed_diff_eval_minus_gold": 0.1204,
+      "mean_abs_diff": 0.1479,
+      "abs_diff_95pct_bootstrap_ci": [
+        0.0962,
+        0.2107
+      ],
+      "ci_note": null,
+      "case_ids": [
+        "BM-007",
+        "BM-015",
+        "BM-023",
+        "BM-031",
+        "BM-039",
+        "BM-047",
+        "BM-055",
+        "BM-063"
+      ]
+    },
+    "paraphrase": {
+      "n": 4,
+      "mean_signed_diff_eval_minus_gold": -0.5235,
+      "mean_abs_diff": 0.5235,
+      "abs_diff_95pct_bootstrap_ci": null,
+      "ci_note": "n=4 too small for an informative bootstrap CI; point estimate only",
+      "case_ids": [
+        "BM-016",
+        "BM-032",
+        "BM-048",
+        "BM-064"
+      ]
+    },
+    "partial_incomplete": {
+      "n": 8,
+      "mean_signed_diff_eval_minus_gold": -0.3222,
+      "mean_abs_diff": 0.3222,
+      "abs_diff_95pct_bootstrap_ci": [
+        0.1984,
+        0.4529
+      ],
+      "ci_note": null,
+      "case_ids": [
+        "BM-004",
+        "BM-011",
+        "BM-019",
+        "BM-027",
+        "BM-036",
+        "BM-043",
+        "BM-051",
+        "BM-059"
+      ]
+    },
+    "suboptimal_correct": {
+      "n": 2,
+      "mean_signed_diff_eval_minus_gold": -0.4213,
+      "mean_abs_diff": 0.4213,
+      "abs_diff_95pct_bootstrap_ci": null,
+      "ci_note": "n=2 too small for an informative bootstrap CI; point estimate only",
+      "case_ids": [
+        "BM-003",
+        "BM-035"
+      ]
+    },
+    "verbose_correct": {
+      "n": 8,
+      "mean_signed_diff_eval_minus_gold": -0.3929,
+      "mean_abs_diff": 0.3929,
+      "abs_diff_95pct_bootstrap_ci": [
+        0.2366,
+        0.5494
+      ],
+      "ci_note": null,
+      "case_ids": [
+        "BM-002",
+        "BM-010",
+        "BM-018",
+        "BM-026",
+        "BM-034",
+        "BM-042",
+        "BM-050",
+        "BM-058"
+      ]
+    },
+    "verbose_wrong": {
+      "n": 8,
+      "mean_signed_diff_eval_minus_gold": 0.2093,
+      "mean_abs_diff": 0.2093,
+      "abs_diff_95pct_bootstrap_ci": [
+        0.1232,
+        0.2981
+      ],
+      "ci_note": null,
+      "case_ids": [
+        "BM-005",
+        "BM-013",
+        "BM-021",
+        "BM-029",
+        "BM-037",
+        "BM-045",
+        "BM-053",
+        "BM-061"
+      ]
+    }
+  },
+  "per_case": [
+    {
+      "case_id": "BM-001",
+      "qid": 1,
+      "category": "concise_correct",
+      "eval_score": 0.6,
+      "gold_score": 0.9167,
+      "signed_diff": -0.3167,
+      "abs_diff": 0.3167
+    },
+    {
+      "case_id": "BM-002",
+      "qid": 1,
+      "category": "verbose_correct",
+      "eval_score": 0.8359,
+      "gold_score": 0.98,
+      "signed_diff": -0.1441,
+      "abs_diff": 0.1441
+    },
+    {
+      "case_id": "BM-003",
+      "qid": 1,
+      "category": "suboptimal_correct",
+      "eval_score": 0.4173,
+      "gold_score": 0.73,
+      "signed_diff": -0.3127,
+      "abs_diff": 0.3127
+    },
+    {
+      "case_id": "BM-004",
+      "qid": 1,
+      "category": "partial_incomplete",
+      "eval_score": 0.0097,
+      "gold_score": 0.5267,
+      "signed_diff": -0.517,
+      "abs_diff": 0.517
+    },
+    {
+      "case_id": "BM-005",
+      "qid": 1,
+      "category": "verbose_wrong",
+      "eval_score": 0.386,
+      "gold_score": 0.1433,
+      "signed_diff": 0.2427,
+      "abs_diff": 0.2427
+    },
+    {
+      "case_id": "BM-006",
+      "qid": 1,
+      "category": "keyword_stuffed",
+      "eval_score": 0.408,
+      "gold_score": 0.28,
+      "signed_diff": 0.128,
+      "abs_diff": 0.128
+    },
+    {
+      "case_id": "BM-007",
+      "qid": 1,
+      "category": "misconception",
+      "eval_score": 0.203,
+      "gold_score": 0.06,
+      "signed_diff": 0.143,
+      "abs_diff": 0.143
+    },
+    {
+      "case_id": "BM-008",
+      "qid": 1,
+      "category": "contradictory",
+      "eval_score": 0.3707,
+      "gold_score": 0.1867,
+      "signed_diff": 0.184,
+      "abs_diff": 0.184
+    },
+    {
+      "case_id": "BM-009",
+      "qid": 3,
+      "category": "concise_correct",
+      "eval_score": 0.6,
+      "gold_score": 0.92,
+      "signed_diff": -0.32,
+      "abs_diff": 0.32
+    },
+    {
+      "case_id": "BM-010",
+      "qid": 3,
+      "category": "verbose_correct",
+      "eval_score": 0.8709,
+      "gold_score": 0.9833,
+      "signed_diff": -0.1124,
+      "abs_diff": 0.1124
+    },
+    {
+      "case_id": "BM-011",
+      "qid": 3,
+      "category": "partial_incomplete",
+      "eval_score": 0.4041,
+      "gold_score": 0.5067,
+      "signed_diff": -0.1026,
+      "abs_diff": 0.1026
+    },
+    {
+      "case_id": "BM-012",
+      "qid": 3,
+      "category": "incorrect",
+      "eval_score": 0.2333,
+      "gold_score": 0.0833,
+      "signed_diff": 0.15,
+      "abs_diff": 0.15
+    },
+    {
+      "case_id": "BM-013",
+      "qid": 3,
+      "category": "verbose_wrong",
+      "eval_score": 0.542,
+      "gold_score": 0.1667,
+      "signed_diff": 0.3753,
+      "abs_diff": 0.3753
+    },
+    {
+      "case_id": "BM-014",
+      "qid": 3,
+      "category": "keyword_stuffed",
+      "eval_score": 0.5937,
+      "gold_score": 0.3,
+      "signed_diff": 0.2937,
+      "abs_diff": 0.2937
+    },
+    {
+      "case_id": "BM-015",
+      "qid": 3,
+      "category": "misconception",
+      "eval_score": 0.4499,
+      "gold_score": 0.1167,
+      "signed_diff": 0.3332,
+      "abs_diff": 0.3332
+    },
+    {
+      "case_id": "BM-016",
+      "qid": 3,
+      "category": "paraphrase",
+      "eval_score": 0.5601,
+      "gold_score": 0.86,
+      "signed_diff": -0.2999,
+      "abs_diff": 0.2999
+    },
+    {
+      "case_id": "BM-017",
+      "qid": 10,
+      "category": "concise_correct",
+      "eval_score": 0.7396,
+      "gold_score": 0.9067,
+      "signed_diff": -0.1671,
+      "abs_diff": 0.1671
+    },
+    {
+      "case_id": "BM-018",
+      "qid": 10,
+      "category": "verbose_correct",
+      "eval_score": 0.8185,
+      "gold_score": 0.9833,
+      "signed_diff": -0.1648,
+      "abs_diff": 0.1648
+    },
+    {
+      "case_id": "BM-019",
+      "qid": 10,
+      "category": "partial_incomplete",
+      "eval_score": 0.4479,
+      "gold_score": 0.55,
+      "signed_diff": -0.1021,
+      "abs_diff": 0.1021
+    },
+    {
+      "case_id": "BM-020",
+      "qid": 10,
+      "category": "incorrect",
+      "eval_score": 0.0,
+      "gold_score": 0.1167,
+      "signed_diff": -0.1167,
+      "abs_diff": 0.1167
+    },
+    {
+      "case_id": "BM-021",
+      "qid": 10,
+      "category": "verbose_wrong",
+      "eval_score": 0.4088,
+      "gold_score": 0.1133,
+      "signed_diff": 0.2955,
+      "abs_diff": 0.2955
+    },
+    {
+      "case_id": "BM-022",
+      "qid": 10,
+      "category": "keyword_stuffed",
+      "eval_score": 0.6024,
+      "gold_score": 0.3,
+      "signed_diff": 0.3024,
+      "abs_diff": 0.3024
+    },
+    {
+      "case_id": "BM-023",
+      "qid": 10,
+      "category": "misconception",
+      "eval_score": 0.297,
+      "gold_score": 0.1367,
+      "signed_diff": 0.1603,
+      "abs_diff": 0.1603
+    },
+    {
+      "case_id": "BM-024",
+      "qid": 10,
+      "category": "contradictory",
+      "eval_score": 0.437,
+      "gold_score": 0.14,
+      "signed_diff": 0.297,
+      "abs_diff": 0.297
+    },
+    {
+      "case_id": "BM-025",
+      "qid": 41,
+      "category": "concise_correct",
+      "eval_score": 0.4074,
+      "gold_score": 0.9033,
+      "signed_diff": -0.4959,
+      "abs_diff": 0.4959
+    },
+    {
+      "case_id": "BM-026",
+      "qid": 41,
+      "category": "verbose_correct",
+      "eval_score": 0.7227,
+      "gold_score": 0.9833,
+      "signed_diff": -0.2606,
+      "abs_diff": 0.2606
+    },
+    {
+      "case_id": "BM-027",
+      "qid": 41,
+      "category": "partial_incomplete",
+      "eval_score": 0.3281,
+      "gold_score": 0.6333,
+      "signed_diff": -0.3052,
+      "abs_diff": 0.3052
+    },
+    {
+      "case_id": "BM-028",
+      "qid": 41,
+      "category": "incorrect",
+      "eval_score": 0.304,
+      "gold_score": 0.06,
+      "signed_diff": 0.244,
+      "abs_diff": 0.244
+    },
+    {
+      "case_id": "BM-029",
+      "qid": 41,
+      "category": "verbose_wrong",
+      "eval_score": 0.442,
+      "gold_score": 0.0567,
+      "signed_diff": 0.3853,
+      "abs_diff": 0.3853
+    },
+    {
+      "case_id": "BM-030",
+      "qid": 41,
+      "category": "keyword_stuffed",
+      "eval_score": 0.5234,
+      "gold_score": 0.28,
+      "signed_diff": 0.2434,
+      "abs_diff": 0.2434
+    },
+    {
+      "case_id": "BM-031",
+      "qid": 41,
+      "category": "misconception",
+      "eval_score": 0.3216,
+      "gold_score": 0.1567,
+      "signed_diff": 0.1649,
+      "abs_diff": 0.1649
+    },
+    {
+      "case_id": "BM-032",
+      "qid": 41,
+      "category": "paraphrase",
+      "eval_score": 0.3862,
+      "gold_score": 0.7833,
+      "signed_diff": -0.3971,
+      "abs_diff": 0.3971
+    },
+    {
+      "case_id": "BM-033",
+      "qid": 7,
+      "category": "concise_correct",
+      "eval_score": 0.2142,
+      "gold_score": 0.9233,
+      "signed_diff": -0.7091,
+      "abs_diff": 0.7091
+    },
+    {
+      "case_id": "BM-034",
+      "qid": 7,
+      "category": "verbose_correct",
+      "eval_score": 0.4151,
+      "gold_score": 0.9833,
+      "signed_diff": -0.5682,
+      "abs_diff": 0.5682
+    },
+    {
+      "case_id": "BM-035",
+      "qid": 7,
+      "category": "suboptimal_correct",
+      "eval_score": 0.1901,
+      "gold_score": 0.72,
+      "signed_diff": -0.5299,
+      "abs_diff": 0.5299
+    },
+    {
+      "case_id": "BM-036",
+      "qid": 7,
+      "category": "partial_incomplete",
+      "eval_score": 0.0,
+      "gold_score": 0.51,
+      "signed_diff": -0.51,
+      "abs_diff": 0.51
+    },
+    {
+      "case_id": "BM-037",
+      "qid": 7,
+      "category": "verbose_wrong",
+      "eval_score": 0.1882,
+      "gold_score": 0.0967,
+      "signed_diff": 0.0915,
+      "abs_diff": 0.0915
+    },
+    {
+      "case_id": "BM-038",
+      "qid": 7,
+      "category": "keyword_stuffed",
+      "eval_score": 0.1115,
+      "gold_score": 0.33,
+      "signed_diff": -0.2185,
+      "abs_diff": 0.2185
+    },
+    {
+      "case_id": "BM-039",
+      "qid": 7,
+      "category": "misconception",
+      "eval_score": 0.1706,
+      "gold_score": 0.0567,
+      "signed_diff": 0.1139,
+      "abs_diff": 0.1139
+    },
+    {
+      "case_id": "BM-040",
+      "qid": 7,
+      "category": "contradictory",
+      "eval_score": 0.0977,
+      "gold_score": 0.1667,
+      "signed_diff": -0.069,
+      "abs_diff": 0.069
+    },
+    {
+      "case_id": "BM-041",
+      "qid": 15,
+      "category": "concise_correct",
+      "eval_score": 0.2346,
+      "gold_score": 0.9033,
+      "signed_diff": -0.6687,
+      "abs_diff": 0.6687
+    },
+    {
+      "case_id": "BM-042",
+      "qid": 15,
+      "category": "verbose_correct",
+      "eval_score": 0.3941,
+      "gold_score": 0.9833,
+      "signed_diff": -0.5892,
+      "abs_diff": 0.5892
+    },
+    {
+      "case_id": "BM-043",
+      "qid": 15,
+      "category": "partial_incomplete",
+      "eval_score": 0.1999,
+      "gold_score": 0.37,
+      "signed_diff": -0.1701,
+      "abs_diff": 0.1701
+    },
+    {
+      "case_id": "BM-044",
+      "qid": 15,
+      "category": "incorrect",
+      "eval_score": 0.2007,
+      "gold_score": 0.1167,
+      "signed_diff": 0.084,
+      "abs_diff": 0.084
+    },
+    {
+      "case_id": "BM-045",
+      "qid": 15,
+      "category": "verbose_wrong",
+      "eval_score": 0.2066,
+      "gold_score": 0.09,
+      "signed_diff": 0.1166,
+      "abs_diff": 0.1166
+    },
+    {
+      "case_id": "BM-046",
+      "qid": 15,
+      "category": "keyword_stuffed",
+      "eval_score": 0.2079,
+      "gold_score": 0.3,
+      "signed_diff": -0.0921,
+      "abs_diff": 0.0921
+    },
+    {
+      "case_id": "BM-047",
+      "qid": 15,
+      "category": "misconception",
+      "eval_score": 0.1859,
+      "gold_score": 0.16,
+      "signed_diff": 0.0259,
+      "abs_diff": 0.0259
+    },
+    {
+      "case_id": "BM-048",
+      "qid": 15,
+      "category": "paraphrase",
+      "eval_score": 0.2126,
+      "gold_score": 0.8533,
+      "signed_diff": -0.6407,
+      "abs_diff": 0.6407
+    },
+    {
+      "case_id": "BM-049",
+      "qid": 22,
+      "category": "concise_correct",
+      "eval_score": 0.2573,
+      "gold_score": 0.91,
+      "signed_diff": -0.6527,
+      "abs_diff": 0.6527
+    },
+    {
+      "case_id": "BM-050",
+      "qid": 22,
+      "category": "verbose_correct",
+      "eval_score": 0.3781,
+      "gold_score": 0.99,
+      "signed_diff": -0.6119,
+      "abs_diff": 0.6119
+    },
+    {
+      "case_id": "BM-051",
+      "qid": 22,
+      "category": "partial_incomplete",
+      "eval_score": 0.1891,
+      "gold_score": 0.45,
+      "signed_diff": -0.2609,
+      "abs_diff": 0.2609
+    },
+    {
+      "case_id": "BM-052",
+      "qid": 22,
+      "category": "incorrect",
+      "eval_score": 0.2156,
+      "gold_score": 0.0867,
+      "signed_diff": 0.1289,
+      "abs_diff": 0.1289
+    },
+    {
+      "case_id": "BM-053",
+      "qid": 22,
+      "category": "verbose_wrong",
+      "eval_score": 0.2278,
+      "gold_score": 0.11,
+      "signed_diff": 0.1178,
+      "abs_diff": 0.1178
+    },
+    {
+      "case_id": "BM-054",
+      "qid": 22,
+      "category": "keyword_stuffed",
+      "eval_score": 0.2291,
+      "gold_score": 0.35,
+      "signed_diff": -0.1209,
+      "abs_diff": 0.1209
+    },
+    {
+      "case_id": "BM-055",
+      "qid": 22,
+      "category": "misconception",
+      "eval_score": 0.199,
+      "gold_score": 0.0667,
+      "signed_diff": 0.1323,
+      "abs_diff": 0.1323
+    },
+    {
+      "case_id": "BM-056",
+      "qid": 22,
+      "category": "contradictory",
+      "eval_score": 0.2194,
+      "gold_score": 0.12,
+      "signed_diff": 0.0994,
+      "abs_diff": 0.0994
+    },
+    {
+      "case_id": "BM-057",
+      "qid": 50,
+      "category": "concise_correct",
+      "eval_score": 0.0,
+      "gold_score": 0.9133,
+      "signed_diff": -0.9133,
+      "abs_diff": 0.9133
+    },
+    {
+      "case_id": "BM-058",
+      "qid": 50,
+      "category": "verbose_correct",
+      "eval_score": 0.2917,
+      "gold_score": 0.9833,
+      "signed_diff": -0.6916,
+      "abs_diff": 0.6916
+    },
+    {
+      "case_id": "BM-059",
+      "qid": 50,
+      "category": "partial_incomplete",
+      "eval_score": 0.0,
+      "gold_score": 0.61,
+      "signed_diff": -0.61,
+      "abs_diff": 0.61
+    },
+    {
+      "case_id": "BM-060",
+      "qid": 50,
+      "category": "incorrect",
+      "eval_score": 0.0,
+      "gold_score": 0.0567,
+      "signed_diff": -0.0567,
+      "abs_diff": 0.0567
+    },
+    {
+      "case_id": "BM-061",
+      "qid": 50,
+      "category": "verbose_wrong",
+      "eval_score": 0.1133,
+      "gold_score": 0.0633,
+      "signed_diff": 0.05,
+      "abs_diff": 0.05
+    },
+    {
+      "case_id": "BM-062",
+      "qid": 50,
+      "category": "keyword_stuffed",
+      "eval_score": 0.0,
+      "gold_score": 0.3,
+      "signed_diff": -0.3,
+      "abs_diff": 0.3
+    },
+    {
+      "case_id": "BM-063",
+      "qid": 50,
+      "category": "misconception",
+      "eval_score": 0.0,
+      "gold_score": 0.11,
+      "signed_diff": -0.11,
+      "abs_diff": 0.11
+    },
+    {
+      "case_id": "BM-064",
+      "qid": 50,
+      "category": "paraphrase",
+      "eval_score": 0.1238,
+      "gold_score": 0.88,
+      "signed_diff": -0.7562,
+      "abs_diff": 0.7562
+    }
+  ],
+  "bootstrap_seed": 20270101,
+  "bootstrap_reps": 5000,
+  "note": "Evaluated with the evaluator as it stands after the sixth pass's negation-filter fix (justified independently of this analysis). This is a diagnostic breakdown of an already-existing regression check, not a new tuning target; no evaluator parameter was chosen by looking at this output."
+}

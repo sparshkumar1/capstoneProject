@@ -1,0 +1,111 @@
+{
+  "status": "MEASURED",
+  "env": {
+    "MOCK_MODE": false,
+    "gguf_model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\models\\gguf\\qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "gguf_model_exists": true,
+    "models_loaded": [
+      "qwen_1b"
+    ],
+    "load_status": "loaded_this_run"
+  },
+  "n_cases": 5,
+  "summary": {
+    "n_llm_path_used": 5,
+    "n_fallback_path_used": 0,
+    "n_with_keyword_overlap_on_probe_target": 4,
+    "n_flagged_possibly_repeating_original_question": 2
+  },
+  "cases": [
+    {
+      "case_id": "misconception",
+      "probe_target": "linear search misconception / O(1) average case",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain how a hash map uses a hash function to achieve average O(1) lookup time?",
+      "generated_reason": "This question directly probes the candidate's understanding of the hash function and how it contributes to the average O(1) time complexity.",
+      "generated_target_concepts": [
+        "hash function",
+        "average-case constant time"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "average"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": true
+    },
+    {
+      "case_id": "missing_concept",
+      "probe_target": "visited set / cycle avoidance",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain how the visited set helps in avoiding revisiting nodes during BFS?",
+      "generated_reason": "This question directly probes the concept of the visited set, which is crucial for avoiding revisiting nodes in BFS.",
+      "generated_target_concepts": [
+        "visited set",
+        "avoiding revisiting nodes"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "set",
+        "visited"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": false
+    },
+    {
+      "case_id": "below_threshold_score",
+      "probe_target": "base case / stack frames (answer too shallow)",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you provide an example of a problem where recursion is not the most efficient solution, and explain why?",
+      "generated_reason": "This question addresses the candidate's gap by asking about a scenario where recursion is not optimal, which requires understanding of the base case and call stack.",
+      "generated_target_concepts": [
+        "base case",
+        "call stack / stack frames"
+      ],
+      "keyword_overlap_with_probe_target": [],
+      "has_keyword_overlap": false,
+      "coarse_repeats_original_question_flag": false
+    },
+    {
+      "case_id": "weakest_gap",
+      "probe_target": "reasoning depth / mechanistic explanation",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Could you explain the reasoning behind each step in the reversal process, and how the reversal affects the structure of the linked list?",
+      "generated_reason": "This question addresses the candidate's gap by asking for a detailed explanation of the reversal process and its effects on the linked list structure.",
+      "generated_target_concepts": [
+        "pointer manipulation",
+        "list reversal"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "reasoning"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": false
+    },
+    {
+      "case_id": "combined_missing_and_misconception",
+      "probe_target": "mutual exclusion/locking; global-variable misconception",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain how mutual exclusion and critical sections help prevent race conditions in multithreading?",
+      "generated_reason": "This question directly addresses the candidate's misconception by focusing on the mechanisms of mutual exclusion and critical sections, which are crucial for preventing race conditions.",
+      "generated_target_concepts": [
+        "mutual exclusion",
+        "critical section"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "exclusion",
+        "mutual"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": true
+    }
+  ],
+  "method_caveats": [
+    "Keyword overlap is a coarse, disclosed heuristic (shared content words between the generated follow-up and a hand-written description of the probed gap), not a semantic or human-judged groundedness measurement. It can under-detect true grounding (a follow-up can be well-grounded while using none of the same words) but cannot over-detect it beyond incidental word overlap.",
+    "N=5, one real-model call per case, no repetition per case -- indicative of current qualitative behavior, not a powered or statistically analyzed study.",
+    "This probe tests generate_followup() directly; it does not exercise the orchestrator-level strong-answer skip condition, which is a separate gate upstream of this function and is not itself an LLM call."
+  ]
+}

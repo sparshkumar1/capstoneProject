@@ -1,0 +1,3842 @@
+[
+  {
+    "seed": 999,
+    "timestep": 256,
+    "episode": 17,
+    "latest_reward": -0.439,
+    "mean_reward_rolling": 0.1106,
+    "action_easier_pct": 0.2969,
+    "action_same_pct": 0.3555,
+    "action_harder_pct": 0.3477
+  },
+  {
+    "seed": 999,
+    "timestep": 512,
+    "episode": 34,
+    "latest_reward": 0.2611,
+    "mean_reward_rolling": 0.1848,
+    "action_easier_pct": 0.3047,
+    "action_same_pct": 0.3398,
+    "action_harder_pct": 0.3555
+  },
+  {
+    "seed": 999,
+    "timestep": 768,
+    "episode": 51,
+    "latest_reward": 0.2784,
+    "mean_reward_rolling": 0.0604,
+    "action_easier_pct": 0.3177,
+    "action_same_pct": 0.3411,
+    "action_harder_pct": 0.3411
+  },
+  {
+    "seed": 999,
+    "timestep": 1024,
+    "episode": 68,
+    "latest_reward": 0.1822,
+    "mean_reward_rolling": 0.0313,
+    "action_easier_pct": 0.3291,
+    "action_same_pct": 0.332,
+    "action_harder_pct": 0.3389
+  },
+  {
+    "seed": 999,
+    "timestep": 1280,
+    "episode": 85,
+    "latest_reward": 0.2255,
+    "mean_reward_rolling": 0.0878,
+    "action_easier_pct": 0.3281,
+    "action_same_pct": 0.3359,
+    "action_harder_pct": 0.3359
+  },
+  {
+    "seed": 999,
+    "timestep": 1536,
+    "episode": 102,
+    "latest_reward": 0.2515,
+    "mean_reward_rolling": 0.1888,
+    "action_easier_pct": 0.3359,
+    "action_same_pct": 0.3307,
+    "action_harder_pct": 0.3333
+  },
+  {
+    "seed": 999,
+    "timestep": 1792,
+    "episode": 119,
+    "latest_reward": 0.2017,
+    "mean_reward_rolling": 0.0142,
+    "action_easier_pct": 0.3348,
+    "action_same_pct": 0.3276,
+    "action_harder_pct": 0.3376
+  },
+  {
+    "seed": 999,
+    "timestep": 2048,
+    "episode": 136,
+    "latest_reward": -0.2641,
+    "mean_reward_rolling": 0.0724,
+    "action_easier_pct": 0.3369,
+    "action_same_pct": 0.3301,
+    "action_harder_pct": 0.333
+  },
+  {
+    "seed": 999,
+    "timestep": 2304,
+    "episode": 153,
+    "latest_reward": 0.2863,
+    "mean_reward_rolling": 0.1259,
+    "action_easier_pct": 0.3368,
+    "action_same_pct": 0.3316,
+    "action_harder_pct": 0.3316
+  },
+  {
+    "seed": 999,
+    "timestep": 2560,
+    "episode": 170,
+    "latest_reward": 0.2803,
+    "mean_reward_rolling": 0.1108,
+    "action_easier_pct": 0.3324,
+    "action_same_pct": 0.3391,
+    "action_harder_pct": 0.3285
+  },
+  {
+    "seed": 999,
+    "timestep": 2816,
+    "episode": 187,
+    "latest_reward": -0.2126,
+    "mean_reward_rolling": 0.0423,
+    "action_easier_pct": 0.3246,
+    "action_same_pct": 0.3438,
+    "action_harder_pct": 0.3317
+  },
+  {
+    "seed": 999,
+    "timestep": 3072,
+    "episode": 204,
+    "latest_reward": 0.2019,
+    "mean_reward_rolling": 0.1318,
+    "action_easier_pct": 0.3275,
+    "action_same_pct": 0.3395,
+    "action_harder_pct": 0.333
+  },
+  {
+    "seed": 999,
+    "timestep": 3328,
+    "episode": 221,
+    "latest_reward": 0.2582,
+    "mean_reward_rolling": 0.1957,
+    "action_easier_pct": 0.3254,
+    "action_same_pct": 0.3438,
+    "action_harder_pct": 0.3308
+  },
+  {
+    "seed": 999,
+    "timestep": 3584,
+    "episode": 238,
+    "latest_reward": 0.3117,
+    "mean_reward_rolling": 0.0519,
+    "action_easier_pct": 0.3248,
+    "action_same_pct": 0.3463,
+    "action_harder_pct": 0.329
+  },
+  {
+    "seed": 999,
+    "timestep": 3840,
+    "episode": 256,
+    "latest_reward": 0.2165,
+    "mean_reward_rolling": 0.0713,
+    "action_easier_pct": 0.3253,
+    "action_same_pct": 0.3461,
+    "action_harder_pct": 0.3286
+  },
+  {
+    "seed": 999,
+    "timestep": 4096,
+    "episode": 273,
+    "latest_reward": -0.1249,
+    "mean_reward_rolling": 0.1283,
+    "action_easier_pct": 0.3235,
+    "action_same_pct": 0.3489,
+    "action_harder_pct": 0.3276
+  },
+  {
+    "seed": 999,
+    "timestep": 4352,
+    "episode": 290,
+    "latest_reward": 0.2935,
+    "mean_reward_rolling": 0.1068,
+    "action_easier_pct": 0.3176,
+    "action_same_pct": 0.3529,
+    "action_harder_pct": 0.3295
+  },
+  {
+    "seed": 999,
+    "timestep": 4608,
+    "episode": 307,
+    "latest_reward": 0.3013,
+    "mean_reward_rolling": 0.0611,
+    "action_easier_pct": 0.3149,
+    "action_same_pct": 0.357,
+    "action_harder_pct": 0.3281
+  },
+  {
+    "seed": 999,
+    "timestep": 4864,
+    "episode": 324,
+    "latest_reward": 0.2266,
+    "mean_reward_rolling": 0.0872,
+    "action_easier_pct": 0.3125,
+    "action_same_pct": 0.3571,
+    "action_harder_pct": 0.3304
+  },
+  {
+    "seed": 999,
+    "timestep": 5120,
+    "episode": 341,
+    "latest_reward": 0.3064,
+    "mean_reward_rolling": 0.1657,
+    "action_easier_pct": 0.3086,
+    "action_same_pct": 0.3592,
+    "action_harder_pct": 0.3322
+  },
+  {
+    "seed": 999,
+    "timestep": 5376,
+    "episode": 358,
+    "latest_reward": -0.2234,
+    "mean_reward_rolling": 0.0346,
+    "action_easier_pct": 0.3101,
+    "action_same_pct": 0.3575,
+    "action_harder_pct": 0.3324
+  },
+  {
+    "seed": 999,
+    "timestep": 5632,
+    "episode": 375,
+    "latest_reward": -0.2635,
+    "mean_reward_rolling": 0.1034,
+    "action_easier_pct": 0.3091,
+    "action_same_pct": 0.3571,
+    "action_harder_pct": 0.3338
+  },
+  {
+    "seed": 999,
+    "timestep": 5888,
+    "episode": 392,
+    "latest_reward": 0.361,
+    "mean_reward_rolling": 0.1312,
+    "action_easier_pct": 0.3077,
+    "action_same_pct": 0.3578,
+    "action_harder_pct": 0.3344
+  },
+  {
+    "seed": 999,
+    "timestep": 6144,
+    "episode": 409,
+    "latest_reward": 0.2251,
+    "mean_reward_rolling": 0.0801,
+    "action_easier_pct": 0.3058,
+    "action_same_pct": 0.36,
+    "action_harder_pct": 0.3341
+  },
+  {
+    "seed": 999,
+    "timestep": 6400,
+    "episode": 426,
+    "latest_reward": 0.3608,
+    "mean_reward_rolling": 0.0879,
+    "action_easier_pct": 0.3045,
+    "action_same_pct": 0.3616,
+    "action_harder_pct": 0.3339
+  },
+  {
+    "seed": 999,
+    "timestep": 6656,
+    "episode": 443,
+    "latest_reward": 0.2754,
+    "mean_reward_rolling": 0.1527,
+    "action_easier_pct": 0.303,
+    "action_same_pct": 0.3642,
+    "action_harder_pct": 0.3328
+  },
+  {
+    "seed": 999,
+    "timestep": 6912,
+    "episode": 460,
+    "latest_reward": 0.1332,
+    "mean_reward_rolling": 0.1765,
+    "action_easier_pct": 0.3001,
+    "action_same_pct": 0.367,
+    "action_harder_pct": 0.3329
+  },
+  {
+    "seed": 999,
+    "timestep": 7168,
+    "episode": 477,
+    "latest_reward": 0.2563,
+    "mean_reward_rolling": 0.0778,
+    "action_easier_pct": 0.2988,
+    "action_same_pct": 0.368,
+    "action_harder_pct": 0.3331
+  },
+  {
+    "seed": 999,
+    "timestep": 7424,
+    "episode": 494,
+    "latest_reward": 0.1867,
+    "mean_reward_rolling": 0.1199,
+    "action_easier_pct": 0.299,
+    "action_same_pct": 0.3673,
+    "action_harder_pct": 0.3336
+  },
+  {
+    "seed": 999,
+    "timestep": 7680,
+    "episode": 512,
+    "latest_reward": 0.2151,
+    "mean_reward_rolling": 0.1481,
+    "action_easier_pct": 0.2984,
+    "action_same_pct": 0.3681,
+    "action_harder_pct": 0.3335
+  },
+  {
+    "seed": 999,
+    "timestep": 7936,
+    "episode": 529,
+    "latest_reward": 0.286,
+    "mean_reward_rolling": 0.1153,
+    "action_easier_pct": 0.2981,
+    "action_same_pct": 0.3691,
+    "action_harder_pct": 0.3328
+  },
+  {
+    "seed": 999,
+    "timestep": 8192,
+    "episode": 546,
+    "latest_reward": 0.2965,
+    "mean_reward_rolling": 0.0983,
+    "action_easier_pct": 0.2972,
+    "action_same_pct": 0.3707,
+    "action_harder_pct": 0.332
+  },
+  {
+    "seed": 999,
+    "timestep": 8448,
+    "episode": 563,
+    "latest_reward": 0.2394,
+    "mean_reward_rolling": 0.1708,
+    "action_easier_pct": 0.2956,
+    "action_same_pct": 0.3724,
+    "action_harder_pct": 0.332
+  },
+  {
+    "seed": 999,
+    "timestep": 8704,
+    "episode": 580,
+    "latest_reward": 0.2685,
+    "mean_reward_rolling": 0.2295,
+    "action_easier_pct": 0.2926,
+    "action_same_pct": 0.3764,
+    "action_harder_pct": 0.331
+  },
+  {
+    "seed": 999,
+    "timestep": 8960,
+    "episode": 597,
+    "latest_reward": 0.1551,
+    "mean_reward_rolling": 0.1147,
+    "action_easier_pct": 0.2913,
+    "action_same_pct": 0.3785,
+    "action_harder_pct": 0.3302
+  },
+  {
+    "seed": 999,
+    "timestep": 9216,
+    "episode": 614,
+    "latest_reward": 0.2157,
+    "mean_reward_rolling": 0.119,
+    "action_easier_pct": 0.2909,
+    "action_same_pct": 0.3783,
+    "action_harder_pct": 0.3308
+  },
+  {
+    "seed": 999,
+    "timestep": 9472,
+    "episode": 631,
+    "latest_reward": 0.3109,
+    "mean_reward_rolling": 0.1731,
+    "action_easier_pct": 0.2886,
+    "action_same_pct": 0.3801,
+    "action_harder_pct": 0.3313
+  },
+  {
+    "seed": 999,
+    "timestep": 9728,
+    "episode": 648,
+    "latest_reward": -0.6427,
+    "mean_reward_rolling": 0.1019,
+    "action_easier_pct": 0.2864,
+    "action_same_pct": 0.384,
+    "action_harder_pct": 0.3296
+  },
+  {
+    "seed": 999,
+    "timestep": 9984,
+    "episode": 665,
+    "latest_reward": 0.2951,
+    "mean_reward_rolling": 0.0852,
+    "action_easier_pct": 0.2861,
+    "action_same_pct": 0.383,
+    "action_harder_pct": 0.3309
+  },
+  {
+    "seed": 999,
+    "timestep": 10240,
+    "episode": 682,
+    "latest_reward": 0.2393,
+    "mean_reward_rolling": 0.1483,
+    "action_easier_pct": 0.2845,
+    "action_same_pct": 0.383,
+    "action_harder_pct": 0.3325
+  },
+  {
+    "seed": 999,
+    "timestep": 10496,
+    "episode": 699,
+    "latest_reward": 0.2859,
+    "mean_reward_rolling": 0.1807,
+    "action_easier_pct": 0.2812,
+    "action_same_pct": 0.3876,
+    "action_harder_pct": 0.3313
+  },
+  {
+    "seed": 999,
+    "timestep": 10752,
+    "episode": 716,
+    "latest_reward": 0.2016,
+    "mean_reward_rolling": 0.1195,
+    "action_easier_pct": 0.279,
+    "action_same_pct": 0.3903,
+    "action_harder_pct": 0.3306
+  },
+  {
+    "seed": 999,
+    "timestep": 11008,
+    "episode": 733,
+    "latest_reward": 0.2932,
+    "mean_reward_rolling": 0.1789,
+    "action_easier_pct": 0.2776,
+    "action_same_pct": 0.3909,
+    "action_harder_pct": 0.3315
+  },
+  {
+    "seed": 999,
+    "timestep": 11264,
+    "episode": 750,
+    "latest_reward": 0.294,
+    "mean_reward_rolling": 0.233,
+    "action_easier_pct": 0.2761,
+    "action_same_pct": 0.3927,
+    "action_harder_pct": 0.3312
+  },
+  {
+    "seed": 999,
+    "timestep": 11520,
+    "episode": 768,
+    "latest_reward": 0.1445,
+    "mean_reward_rolling": 0.1287,
+    "action_easier_pct": 0.2737,
+    "action_same_pct": 0.3964,
+    "action_harder_pct": 0.3299
+  },
+  {
+    "seed": 999,
+    "timestep": 11776,
+    "episode": 785,
+    "latest_reward": 0.2982,
+    "mean_reward_rolling": 0.1183,
+    "action_easier_pct": 0.2726,
+    "action_same_pct": 0.3972,
+    "action_harder_pct": 0.3302
+  },
+  {
+    "seed": 999,
+    "timestep": 12032,
+    "episode": 802,
+    "latest_reward": 0.2764,
+    "mean_reward_rolling": 0.1961,
+    "action_easier_pct": 0.2721,
+    "action_same_pct": 0.3969,
+    "action_harder_pct": 0.331
+  },
+  {
+    "seed": 999,
+    "timestep": 12288,
+    "episode": 819,
+    "latest_reward": 0.3087,
+    "mean_reward_rolling": 0.2115,
+    "action_easier_pct": 0.2699,
+    "action_same_pct": 0.3998,
+    "action_harder_pct": 0.3302
+  },
+  {
+    "seed": 999,
+    "timestep": 12544,
+    "episode": 836,
+    "latest_reward": 0.2028,
+    "mean_reward_rolling": 0.1519,
+    "action_easier_pct": 0.268,
+    "action_same_pct": 0.4027,
+    "action_harder_pct": 0.3293
+  },
+  {
+    "seed": 999,
+    "timestep": 12800,
+    "episode": 853,
+    "latest_reward": -0.2834,
+    "mean_reward_rolling": 0.1604,
+    "action_easier_pct": 0.2674,
+    "action_same_pct": 0.4029,
+    "action_harder_pct": 0.3297
+  },
+  {
+    "seed": 999,
+    "timestep": 13056,
+    "episode": 870,
+    "latest_reward": -0.2402,
+    "mean_reward_rolling": 0.2216,
+    "action_easier_pct": 0.2662,
+    "action_same_pct": 0.4052,
+    "action_harder_pct": 0.3286
+  },
+  {
+    "seed": 999,
+    "timestep": 13312,
+    "episode": 887,
+    "latest_reward": 0.1992,
+    "mean_reward_rolling": 0.1818,
+    "action_easier_pct": 0.2638,
+    "action_same_pct": 0.4089,
+    "action_harder_pct": 0.3273
+  },
+  {
+    "seed": 999,
+    "timestep": 13568,
+    "episode": 904,
+    "latest_reward": 0.162,
+    "mean_reward_rolling": 0.1551,
+    "action_easier_pct": 0.2632,
+    "action_same_pct": 0.4091,
+    "action_harder_pct": 0.3277
+  },
+  {
+    "seed": 999,
+    "timestep": 13824,
+    "episode": 921,
+    "latest_reward": -0.1834,
+    "mean_reward_rolling": 0.1723,
+    "action_easier_pct": 0.2618,
+    "action_same_pct": 0.4108,
+    "action_harder_pct": 0.3274
+  },
+  {
+    "seed": 999,
+    "timestep": 14080,
+    "episode": 938,
+    "latest_reward": 0.2847,
+    "mean_reward_rolling": 0.2162,
+    "action_easier_pct": 0.2589,
+    "action_same_pct": 0.4153,
+    "action_harder_pct": 0.3257
+  },
+  {
+    "seed": 999,
+    "timestep": 14336,
+    "episode": 955,
+    "latest_reward": 0.258,
+    "mean_reward_rolling": 0.184,
+    "action_easier_pct": 0.2576,
+    "action_same_pct": 0.4166,
+    "action_harder_pct": 0.3258
+  },
+  {
+    "seed": 999,
+    "timestep": 14592,
+    "episode": 972,
+    "latest_reward": 0.308,
+    "mean_reward_rolling": 0.1681,
+    "action_easier_pct": 0.2576,
+    "action_same_pct": 0.4163,
+    "action_harder_pct": 0.3261
+  },
+  {
+    "seed": 999,
+    "timestep": 14848,
+    "episode": 989,
+    "latest_reward": 0.3057,
+    "mean_reward_rolling": 0.2498,
+    "action_easier_pct": 0.2559,
+    "action_same_pct": 0.4186,
+    "action_harder_pct": 0.3255
+  },
+  {
+    "seed": 999,
+    "timestep": 15104,
+    "episode": 1006,
+    "latest_reward": 0.2497,
+    "mean_reward_rolling": 0.1931,
+    "action_easier_pct": 0.2543,
+    "action_same_pct": 0.4218,
+    "action_harder_pct": 0.3239
+  },
+  {
+    "seed": 999,
+    "timestep": 15360,
+    "episode": 1024,
+    "latest_reward": 0.1933,
+    "mean_reward_rolling": 0.1984,
+    "action_easier_pct": 0.2542,
+    "action_same_pct": 0.4223,
+    "action_harder_pct": 0.3236
+  },
+  {
+    "seed": 999,
+    "timestep": 15616,
+    "episode": 1041,
+    "latest_reward": 0.3545,
+    "mean_reward_rolling": 0.1894,
+    "action_easier_pct": 0.2534,
+    "action_same_pct": 0.4236,
+    "action_harder_pct": 0.323
+  },
+  {
+    "seed": 999,
+    "timestep": 15872,
+    "episode": 1058,
+    "latest_reward": 0.3121,
+    "mean_reward_rolling": 0.179,
+    "action_easier_pct": 0.2517,
+    "action_same_pct": 0.4267,
+    "action_harder_pct": 0.3216
+  },
+  {
+    "seed": 999,
+    "timestep": 16128,
+    "episode": 1075,
+    "latest_reward": 0.2799,
+    "mean_reward_rolling": 0.1551,
+    "action_easier_pct": 0.2512,
+    "action_same_pct": 0.4271,
+    "action_harder_pct": 0.3217
+  },
+  {
+    "seed": 999,
+    "timestep": 16384,
+    "episode": 1092,
+    "latest_reward": 0.213,
+    "mean_reward_rolling": 0.2113,
+    "action_easier_pct": 0.2506,
+    "action_same_pct": 0.4274,
+    "action_harder_pct": 0.322
+  },
+  {
+    "seed": 999,
+    "timestep": 16640,
+    "episode": 1109,
+    "latest_reward": 0.2753,
+    "mean_reward_rolling": 0.2415,
+    "action_easier_pct": 0.2487,
+    "action_same_pct": 0.4297,
+    "action_harder_pct": 0.3216
+  },
+  {
+    "seed": 999,
+    "timestep": 16896,
+    "episode": 1126,
+    "latest_reward": 0.1693,
+    "mean_reward_rolling": 0.2013,
+    "action_easier_pct": 0.2469,
+    "action_same_pct": 0.4325,
+    "action_harder_pct": 0.3206
+  },
+  {
+    "seed": 999,
+    "timestep": 17152,
+    "episode": 1143,
+    "latest_reward": 0.2748,
+    "mean_reward_rolling": 0.2126,
+    "action_easier_pct": 0.2467,
+    "action_same_pct": 0.4335,
+    "action_harder_pct": 0.3198
+  },
+  {
+    "seed": 999,
+    "timestep": 17408,
+    "episode": 1160,
+    "latest_reward": 0.1241,
+    "mean_reward_rolling": 0.2245,
+    "action_easier_pct": 0.2456,
+    "action_same_pct": 0.4343,
+    "action_harder_pct": 0.3201
+  },
+  {
+    "seed": 999,
+    "timestep": 17664,
+    "episode": 1177,
+    "latest_reward": 0.2804,
+    "mean_reward_rolling": 0.2001,
+    "action_easier_pct": 0.2441,
+    "action_same_pct": 0.4374,
+    "action_harder_pct": 0.3185
+  },
+  {
+    "seed": 999,
+    "timestep": 17920,
+    "episode": 1194,
+    "latest_reward": 0.1884,
+    "mean_reward_rolling": 0.2089,
+    "action_easier_pct": 0.2432,
+    "action_same_pct": 0.4393,
+    "action_harder_pct": 0.3175
+  },
+  {
+    "seed": 999,
+    "timestep": 18176,
+    "episode": 1211,
+    "latest_reward": 0.3105,
+    "mean_reward_rolling": 0.2268,
+    "action_easier_pct": 0.2424,
+    "action_same_pct": 0.4395,
+    "action_harder_pct": 0.3181
+  },
+  {
+    "seed": 999,
+    "timestep": 18432,
+    "episode": 1228,
+    "latest_reward": 0.2792,
+    "mean_reward_rolling": 0.2145,
+    "action_easier_pct": 0.241,
+    "action_same_pct": 0.4424,
+    "action_harder_pct": 0.3166
+  },
+  {
+    "seed": 999,
+    "timestep": 18688,
+    "episode": 1245,
+    "latest_reward": 0.2252,
+    "mean_reward_rolling": 0.1797,
+    "action_easier_pct": 0.2392,
+    "action_same_pct": 0.4455,
+    "action_harder_pct": 0.3153
+  },
+  {
+    "seed": 999,
+    "timestep": 18944,
+    "episode": 1262,
+    "latest_reward": 0.2589,
+    "mean_reward_rolling": 0.1846,
+    "action_easier_pct": 0.2393,
+    "action_same_pct": 0.4465,
+    "action_harder_pct": 0.3142
+  },
+  {
+    "seed": 999,
+    "timestep": 19200,
+    "episode": 1280,
+    "latest_reward": 0.2458,
+    "mean_reward_rolling": 0.2186,
+    "action_easier_pct": 0.2386,
+    "action_same_pct": 0.4474,
+    "action_harder_pct": 0.314
+  },
+  {
+    "seed": 999,
+    "timestep": 19456,
+    "episode": 1297,
+    "latest_reward": 0.3439,
+    "mean_reward_rolling": 0.194,
+    "action_easier_pct": 0.237,
+    "action_same_pct": 0.4507,
+    "action_harder_pct": 0.3123
+  },
+  {
+    "seed": 999,
+    "timestep": 19712,
+    "episode": 1314,
+    "latest_reward": 0.271,
+    "mean_reward_rolling": 0.1955,
+    "action_easier_pct": 0.2368,
+    "action_same_pct": 0.4511,
+    "action_harder_pct": 0.312
+  },
+  {
+    "seed": 999,
+    "timestep": 19968,
+    "episode": 1331,
+    "latest_reward": 0.2181,
+    "mean_reward_rolling": 0.2214,
+    "action_easier_pct": 0.236,
+    "action_same_pct": 0.4518,
+    "action_harder_pct": 0.3122
+  },
+  {
+    "seed": 999,
+    "timestep": 20224,
+    "episode": 1348,
+    "latest_reward": 0.3589,
+    "mean_reward_rolling": 0.1874,
+    "action_easier_pct": 0.2351,
+    "action_same_pct": 0.4534,
+    "action_harder_pct": 0.3115
+  },
+  {
+    "seed": 999,
+    "timestep": 20480,
+    "episode": 1365,
+    "latest_reward": 0.2647,
+    "mean_reward_rolling": 0.2007,
+    "action_easier_pct": 0.2337,
+    "action_same_pct": 0.456,
+    "action_harder_pct": 0.3104
+  },
+  {
+    "seed": 999,
+    "timestep": 20736,
+    "episode": 1382,
+    "latest_reward": 0.2063,
+    "mean_reward_rolling": 0.2206,
+    "action_easier_pct": 0.2336,
+    "action_same_pct": 0.4563,
+    "action_harder_pct": 0.3101
+  },
+  {
+    "seed": 999,
+    "timestep": 20992,
+    "episode": 1399,
+    "latest_reward": 0.1981,
+    "mean_reward_rolling": 0.2603,
+    "action_easier_pct": 0.2328,
+    "action_same_pct": 0.4569,
+    "action_harder_pct": 0.3103
+  },
+  {
+    "seed": 999,
+    "timestep": 21248,
+    "episode": 1416,
+    "latest_reward": 0.2779,
+    "mean_reward_rolling": 0.1989,
+    "action_easier_pct": 0.2316,
+    "action_same_pct": 0.4597,
+    "action_harder_pct": 0.3088
+  },
+  {
+    "seed": 999,
+    "timestep": 21504,
+    "episode": 1433,
+    "latest_reward": 0.2,
+    "mean_reward_rolling": 0.1992,
+    "action_easier_pct": 0.2308,
+    "action_same_pct": 0.4599,
+    "action_harder_pct": 0.3092
+  },
+  {
+    "seed": 999,
+    "timestep": 21760,
+    "episode": 1450,
+    "latest_reward": 0.2606,
+    "mean_reward_rolling": 0.1493,
+    "action_easier_pct": 0.2304,
+    "action_same_pct": 0.4601,
+    "action_harder_pct": 0.3095
+  },
+  {
+    "seed": 999,
+    "timestep": 22016,
+    "episode": 1467,
+    "latest_reward": 0.3094,
+    "mean_reward_rolling": 0.1967,
+    "action_easier_pct": 0.2292,
+    "action_same_pct": 0.4619,
+    "action_harder_pct": 0.3088
+  },
+  {
+    "seed": 999,
+    "timestep": 22272,
+    "episode": 1484,
+    "latest_reward": 0.261,
+    "mean_reward_rolling": 0.2007,
+    "action_easier_pct": 0.2289,
+    "action_same_pct": 0.4634,
+    "action_harder_pct": 0.3078
+  },
+  {
+    "seed": 999,
+    "timestep": 22528,
+    "episode": 1501,
+    "latest_reward": 0.2572,
+    "mean_reward_rolling": 0.2028,
+    "action_easier_pct": 0.2288,
+    "action_same_pct": 0.4636,
+    "action_harder_pct": 0.3076
+  },
+  {
+    "seed": 999,
+    "timestep": 22784,
+    "episode": 1518,
+    "latest_reward": 0.3206,
+    "mean_reward_rolling": 0.1996,
+    "action_easier_pct": 0.2284,
+    "action_same_pct": 0.4645,
+    "action_harder_pct": 0.3071
+  },
+  {
+    "seed": 999,
+    "timestep": 23040,
+    "episode": 1536,
+    "latest_reward": 0.2261,
+    "mean_reward_rolling": 0.2007,
+    "action_easier_pct": 0.2271,
+    "action_same_pct": 0.467,
+    "action_harder_pct": 0.3059
+  },
+  {
+    "seed": 999,
+    "timestep": 23296,
+    "episode": 1553,
+    "latest_reward": 0.2961,
+    "mean_reward_rolling": 0.22,
+    "action_easier_pct": 0.2267,
+    "action_same_pct": 0.4672,
+    "action_harder_pct": 0.3061
+  },
+  {
+    "seed": 999,
+    "timestep": 23552,
+    "episode": 1570,
+    "latest_reward": 0.3062,
+    "mean_reward_rolling": 0.1895,
+    "action_easier_pct": 0.226,
+    "action_same_pct": 0.4672,
+    "action_harder_pct": 0.3068
+  },
+  {
+    "seed": 999,
+    "timestep": 23808,
+    "episode": 1587,
+    "latest_reward": 0.3134,
+    "mean_reward_rolling": 0.2259,
+    "action_easier_pct": 0.2247,
+    "action_same_pct": 0.4692,
+    "action_harder_pct": 0.3061
+  },
+  {
+    "seed": 999,
+    "timestep": 24064,
+    "episode": 1604,
+    "latest_reward": 0.2597,
+    "mean_reward_rolling": 0.2039,
+    "action_easier_pct": 0.2239,
+    "action_same_pct": 0.4705,
+    "action_harder_pct": 0.3056
+  },
+  {
+    "seed": 999,
+    "timestep": 24320,
+    "episode": 1621,
+    "latest_reward": 0.2073,
+    "mean_reward_rolling": 0.1963,
+    "action_easier_pct": 0.2235,
+    "action_same_pct": 0.4704,
+    "action_harder_pct": 0.3061
+  },
+  {
+    "seed": 999,
+    "timestep": 24576,
+    "episode": 1638,
+    "latest_reward": 0.2809,
+    "mean_reward_rolling": 0.2115,
+    "action_easier_pct": 0.2228,
+    "action_same_pct": 0.4714,
+    "action_harder_pct": 0.3058
+  },
+  {
+    "seed": 999,
+    "timestep": 24832,
+    "episode": 1655,
+    "latest_reward": 0.2146,
+    "mean_reward_rolling": 0.213,
+    "action_easier_pct": 0.2215,
+    "action_same_pct": 0.4741,
+    "action_harder_pct": 0.3044
+  },
+  {
+    "seed": 999,
+    "timestep": 25088,
+    "episode": 1672,
+    "latest_reward": 0.2179,
+    "mean_reward_rolling": 0.2228,
+    "action_easier_pct": 0.2211,
+    "action_same_pct": 0.4745,
+    "action_harder_pct": 0.3044
+  },
+  {
+    "seed": 999,
+    "timestep": 25344,
+    "episode": 1689,
+    "latest_reward": 0.258,
+    "mean_reward_rolling": 0.2408,
+    "action_easier_pct": 0.2206,
+    "action_same_pct": 0.4747,
+    "action_harder_pct": 0.3046
+  },
+  {
+    "seed": 999,
+    "timestep": 25600,
+    "episode": 1706,
+    "latest_reward": 0.2347,
+    "mean_reward_rolling": 0.2227,
+    "action_easier_pct": 0.2194,
+    "action_same_pct": 0.4774,
+    "action_harder_pct": 0.3032
+  },
+  {
+    "seed": 999,
+    "timestep": 25856,
+    "episode": 1723,
+    "latest_reward": 0.173,
+    "mean_reward_rolling": 0.2118,
+    "action_easier_pct": 0.2186,
+    "action_same_pct": 0.4787,
+    "action_harder_pct": 0.3028
+  },
+  {
+    "seed": 999,
+    "timestep": 26112,
+    "episode": 1740,
+    "latest_reward": 0.2241,
+    "mean_reward_rolling": 0.234,
+    "action_easier_pct": 0.2181,
+    "action_same_pct": 0.4789,
+    "action_harder_pct": 0.3029
+  },
+  {
+    "seed": 999,
+    "timestep": 26368,
+    "episode": 1757,
+    "latest_reward": 0.2534,
+    "mean_reward_rolling": 0.1896,
+    "action_easier_pct": 0.2175,
+    "action_same_pct": 0.4794,
+    "action_harder_pct": 0.3031
+  },
+  {
+    "seed": 999,
+    "timestep": 26624,
+    "episode": 1774,
+    "latest_reward": 0.1724,
+    "mean_reward_rolling": 0.1938,
+    "action_easier_pct": 0.2164,
+    "action_same_pct": 0.4813,
+    "action_harder_pct": 0.3022
+  },
+  {
+    "seed": 999,
+    "timestep": 26880,
+    "episode": 1792,
+    "latest_reward": 0.2284,
+    "mean_reward_rolling": 0.229,
+    "action_easier_pct": 0.216,
+    "action_same_pct": 0.4822,
+    "action_harder_pct": 0.3019
+  },
+  {
+    "seed": 999,
+    "timestep": 27136,
+    "episode": 1809,
+    "latest_reward": 0.2952,
+    "mean_reward_rolling": 0.2284,
+    "action_easier_pct": 0.2158,
+    "action_same_pct": 0.4825,
+    "action_harder_pct": 0.3017
+  },
+  {
+    "seed": 999,
+    "timestep": 27392,
+    "episode": 1826,
+    "latest_reward": 0.2417,
+    "mean_reward_rolling": 0.2215,
+    "action_easier_pct": 0.2146,
+    "action_same_pct": 0.4847,
+    "action_harder_pct": 0.3007
+  },
+  {
+    "seed": 999,
+    "timestep": 27648,
+    "episode": 1843,
+    "latest_reward": 0.1638,
+    "mean_reward_rolling": 0.194,
+    "action_easier_pct": 0.2137,
+    "action_same_pct": 0.4851,
+    "action_harder_pct": 0.3012
+  },
+  {
+    "seed": 999,
+    "timestep": 27904,
+    "episode": 1860,
+    "latest_reward": 0.1447,
+    "mean_reward_rolling": 0.2016,
+    "action_easier_pct": 0.2134,
+    "action_same_pct": 0.4851,
+    "action_harder_pct": 0.3015
+  },
+  {
+    "seed": 999,
+    "timestep": 28160,
+    "episode": 1877,
+    "latest_reward": 0.3525,
+    "mean_reward_rolling": 0.2156,
+    "action_easier_pct": 0.2125,
+    "action_same_pct": 0.4863,
+    "action_harder_pct": 0.3013
+  },
+  {
+    "seed": 999,
+    "timestep": 28416,
+    "episode": 1894,
+    "latest_reward": 0.2194,
+    "mean_reward_rolling": 0.2072,
+    "action_easier_pct": 0.2114,
+    "action_same_pct": 0.4883,
+    "action_harder_pct": 0.3004
+  },
+  {
+    "seed": 999,
+    "timestep": 28672,
+    "episode": 1911,
+    "latest_reward": 0.1901,
+    "mean_reward_rolling": 0.2253,
+    "action_easier_pct": 0.2111,
+    "action_same_pct": 0.489,
+    "action_harder_pct": 0.2998
+  },
+  {
+    "seed": 999,
+    "timestep": 28928,
+    "episode": 1928,
+    "latest_reward": 0.2892,
+    "mean_reward_rolling": 0.2331,
+    "action_easier_pct": 0.2109,
+    "action_same_pct": 0.4893,
+    "action_harder_pct": 0.2998
+  },
+  {
+    "seed": 999,
+    "timestep": 29184,
+    "episode": 1945,
+    "latest_reward": 0.2264,
+    "mean_reward_rolling": 0.2326,
+    "action_easier_pct": 0.21,
+    "action_same_pct": 0.4912,
+    "action_harder_pct": 0.2988
+  },
+  {
+    "seed": 999,
+    "timestep": 29440,
+    "episode": 1962,
+    "latest_reward": 0.1968,
+    "mean_reward_rolling": 0.1941,
+    "action_easier_pct": 0.2096,
+    "action_same_pct": 0.4924,
+    "action_harder_pct": 0.2981
+  },
+  {
+    "seed": 999,
+    "timestep": 29696,
+    "episode": 1979,
+    "latest_reward": 0.292,
+    "mean_reward_rolling": 0.2428,
+    "action_easier_pct": 0.2091,
+    "action_same_pct": 0.4926,
+    "action_harder_pct": 0.2983
+  },
+  {
+    "seed": 999,
+    "timestep": 29952,
+    "episode": 1996,
+    "latest_reward": 0.2958,
+    "mean_reward_rolling": 0.2143,
+    "action_easier_pct": 0.2081,
+    "action_same_pct": 0.494,
+    "action_harder_pct": 0.2979
+  },
+  {
+    "seed": 999,
+    "timestep": 30208,
+    "episode": 2013,
+    "latest_reward": 0.2169,
+    "mean_reward_rolling": 0.2137,
+    "action_easier_pct": 0.2073,
+    "action_same_pct": 0.4958,
+    "action_harder_pct": 0.2969
+  },
+  {
+    "seed": 999,
+    "timestep": 30464,
+    "episode": 2030,
+    "latest_reward": 0.2526,
+    "mean_reward_rolling": 0.1945,
+    "action_easier_pct": 0.2071,
+    "action_same_pct": 0.4959,
+    "action_harder_pct": 0.297
+  },
+  {
+    "seed": 999,
+    "timestep": 30720,
+    "episode": 2048,
+    "latest_reward": 0.2609,
+    "mean_reward_rolling": 0.2195,
+    "action_easier_pct": 0.2069,
+    "action_same_pct": 0.496,
+    "action_harder_pct": 0.2971
+  },
+  {
+    "seed": 999,
+    "timestep": 30976,
+    "episode": 2065,
+    "latest_reward": 0.2856,
+    "mean_reward_rolling": 0.2229,
+    "action_easier_pct": 0.2059,
+    "action_same_pct": 0.4982,
+    "action_harder_pct": 0.2959
+  },
+  {
+    "seed": 999,
+    "timestep": 31232,
+    "episode": 2082,
+    "latest_reward": 0.3136,
+    "mean_reward_rolling": 0.2299,
+    "action_easier_pct": 0.2053,
+    "action_same_pct": 0.4989,
+    "action_harder_pct": 0.2958
+  },
+  {
+    "seed": 999,
+    "timestep": 31488,
+    "episode": 2099,
+    "latest_reward": 0.2944,
+    "mean_reward_rolling": 0.224,
+    "action_easier_pct": 0.205,
+    "action_same_pct": 0.4986,
+    "action_harder_pct": 0.2964
+  },
+  {
+    "seed": 999,
+    "timestep": 31744,
+    "episode": 2116,
+    "latest_reward": 0.2501,
+    "mean_reward_rolling": 0.2001,
+    "action_easier_pct": 0.2044,
+    "action_same_pct": 0.4996,
+    "action_harder_pct": 0.296
+  },
+  {
+    "seed": 999,
+    "timestep": 32000,
+    "episode": 2133,
+    "latest_reward": 0.2433,
+    "mean_reward_rolling": 0.2032,
+    "action_easier_pct": 0.2037,
+    "action_same_pct": 0.5011,
+    "action_harder_pct": 0.2952
+  },
+  {
+    "seed": 999,
+    "timestep": 32256,
+    "episode": 2150,
+    "latest_reward": 0.1788,
+    "mean_reward_rolling": 0.237,
+    "action_easier_pct": 0.2036,
+    "action_same_pct": 0.5012,
+    "action_harder_pct": 0.2952
+  },
+  {
+    "seed": 999,
+    "timestep": 32512,
+    "episode": 2167,
+    "latest_reward": 0.2109,
+    "mean_reward_rolling": 0.258,
+    "action_easier_pct": 0.2031,
+    "action_same_pct": 0.5014,
+    "action_harder_pct": 0.2955
+  },
+  {
+    "seed": 999,
+    "timestep": 32768,
+    "episode": 2184,
+    "latest_reward": 0.279,
+    "mean_reward_rolling": 0.2064,
+    "action_easier_pct": 0.2022,
+    "action_same_pct": 0.5034,
+    "action_harder_pct": 0.2945
+  },
+  {
+    "seed": 999,
+    "timestep": 33024,
+    "episode": 2201,
+    "latest_reward": 0.2035,
+    "mean_reward_rolling": 0.2162,
+    "action_easier_pct": 0.2019,
+    "action_same_pct": 0.5035,
+    "action_harder_pct": 0.2946
+  },
+  {
+    "seed": 999,
+    "timestep": 33280,
+    "episode": 2218,
+    "latest_reward": 0.2684,
+    "mean_reward_rolling": 0.2047,
+    "action_easier_pct": 0.2018,
+    "action_same_pct": 0.5038,
+    "action_harder_pct": 0.2945
+  },
+  {
+    "seed": 999,
+    "timestep": 33536,
+    "episode": 2235,
+    "latest_reward": 0.2729,
+    "mean_reward_rolling": 0.2173,
+    "action_easier_pct": 0.2011,
+    "action_same_pct": 0.5049,
+    "action_harder_pct": 0.294
+  },
+  {
+    "seed": 999,
+    "timestep": 33792,
+    "episode": 2252,
+    "latest_reward": 0.2394,
+    "mean_reward_rolling": 0.208,
+    "action_easier_pct": 0.2006,
+    "action_same_pct": 0.5063,
+    "action_harder_pct": 0.2931
+  },
+  {
+    "seed": 999,
+    "timestep": 34048,
+    "episode": 2269,
+    "latest_reward": 0.1874,
+    "mean_reward_rolling": 0.2149,
+    "action_easier_pct": 0.2006,
+    "action_same_pct": 0.5068,
+    "action_harder_pct": 0.2926
+  },
+  {
+    "seed": 999,
+    "timestep": 34304,
+    "episode": 2286,
+    "latest_reward": -0.5565,
+    "mean_reward_rolling": 0.2196,
+    "action_easier_pct": 0.2,
+    "action_same_pct": 0.5072,
+    "action_harder_pct": 0.2928
+  },
+  {
+    "seed": 999,
+    "timestep": 34560,
+    "episode": 2304,
+    "latest_reward": 0.1898,
+    "mean_reward_rolling": 0.2125,
+    "action_easier_pct": 0.1991,
+    "action_same_pct": 0.509,
+    "action_harder_pct": 0.292
+  },
+  {
+    "seed": 999,
+    "timestep": 34816,
+    "episode": 2321,
+    "latest_reward": 0.29,
+    "mean_reward_rolling": 0.2137,
+    "action_easier_pct": 0.1988,
+    "action_same_pct": 0.5089,
+    "action_harder_pct": 0.2923
+  },
+  {
+    "seed": 999,
+    "timestep": 35072,
+    "episode": 2338,
+    "latest_reward": 0.2441,
+    "mean_reward_rolling": 0.2137,
+    "action_easier_pct": 0.1983,
+    "action_same_pct": 0.5091,
+    "action_harder_pct": 0.2926
+  },
+  {
+    "seed": 999,
+    "timestep": 35328,
+    "episode": 2355,
+    "latest_reward": 0.2888,
+    "mean_reward_rolling": 0.2321,
+    "action_easier_pct": 0.1974,
+    "action_same_pct": 0.5104,
+    "action_harder_pct": 0.2922
+  },
+  {
+    "seed": 999,
+    "timestep": 35584,
+    "episode": 2372,
+    "latest_reward": 0.1823,
+    "mean_reward_rolling": 0.218,
+    "action_easier_pct": 0.197,
+    "action_same_pct": 0.5112,
+    "action_harder_pct": 0.2917
+  },
+  {
+    "seed": 999,
+    "timestep": 35840,
+    "episode": 2389,
+    "latest_reward": 0.2891,
+    "mean_reward_rolling": 0.234,
+    "action_easier_pct": 0.197,
+    "action_same_pct": 0.5112,
+    "action_harder_pct": 0.2918
+  },
+  {
+    "seed": 999,
+    "timestep": 36096,
+    "episode": 2406,
+    "latest_reward": 0.1875,
+    "mean_reward_rolling": 0.2052,
+    "action_easier_pct": 0.1965,
+    "action_same_pct": 0.5117,
+    "action_harder_pct": 0.2918
+  },
+  {
+    "seed": 999,
+    "timestep": 36352,
+    "episode": 2423,
+    "latest_reward": 0.2101,
+    "mean_reward_rolling": 0.213,
+    "action_easier_pct": 0.1957,
+    "action_same_pct": 0.5135,
+    "action_harder_pct": 0.2908
+  },
+  {
+    "seed": 999,
+    "timestep": 36608,
+    "episode": 2440,
+    "latest_reward": -0.2193,
+    "mean_reward_rolling": 0.2302,
+    "action_easier_pct": 0.1955,
+    "action_same_pct": 0.5134,
+    "action_harder_pct": 0.2911
+  },
+  {
+    "seed": 999,
+    "timestep": 36864,
+    "episode": 2457,
+    "latest_reward": 0.2144,
+    "mean_reward_rolling": 0.2247,
+    "action_easier_pct": 0.1953,
+    "action_same_pct": 0.5133,
+    "action_harder_pct": 0.2914
+  },
+  {
+    "seed": 999,
+    "timestep": 37120,
+    "episode": 2474,
+    "latest_reward": 0.2653,
+    "mean_reward_rolling": 0.2276,
+    "action_easier_pct": 0.1944,
+    "action_same_pct": 0.5145,
+    "action_harder_pct": 0.2911
+  },
+  {
+    "seed": 999,
+    "timestep": 37376,
+    "episode": 2491,
+    "latest_reward": 0.1838,
+    "mean_reward_rolling": 0.1904,
+    "action_easier_pct": 0.1939,
+    "action_same_pct": 0.5154,
+    "action_harder_pct": 0.2907
+  },
+  {
+    "seed": 999,
+    "timestep": 37632,
+    "episode": 2508,
+    "latest_reward": 0.2893,
+    "mean_reward_rolling": 0.2255,
+    "action_easier_pct": 0.1933,
+    "action_same_pct": 0.5157,
+    "action_harder_pct": 0.2909
+  },
+  {
+    "seed": 999,
+    "timestep": 37888,
+    "episode": 2525,
+    "latest_reward": 0.2295,
+    "mean_reward_rolling": 0.23,
+    "action_easier_pct": 0.1928,
+    "action_same_pct": 0.5165,
+    "action_harder_pct": 0.2908
+  },
+  {
+    "seed": 999,
+    "timestep": 38144,
+    "episode": 2542,
+    "latest_reward": 0.1813,
+    "mean_reward_rolling": 0.2174,
+    "action_easier_pct": 0.1919,
+    "action_same_pct": 0.5179,
+    "action_harder_pct": 0.2902
+  },
+  {
+    "seed": 999,
+    "timestep": 38400,
+    "episode": 2560,
+    "latest_reward": 0.2871,
+    "mean_reward_rolling": 0.2373,
+    "action_easier_pct": 0.1917,
+    "action_same_pct": 0.5183,
+    "action_harder_pct": 0.2901
+  },
+  {
+    "seed": 999,
+    "timestep": 38656,
+    "episode": 2577,
+    "latest_reward": 0.2889,
+    "mean_reward_rolling": 0.255,
+    "action_easier_pct": 0.1911,
+    "action_same_pct": 0.5188,
+    "action_harder_pct": 0.2901
+  },
+  {
+    "seed": 999,
+    "timestep": 38912,
+    "episode": 2594,
+    "latest_reward": 0.3097,
+    "mean_reward_rolling": 0.2235,
+    "action_easier_pct": 0.1903,
+    "action_same_pct": 0.52,
+    "action_harder_pct": 0.2897
+  },
+  {
+    "seed": 999,
+    "timestep": 39168,
+    "episode": 2611,
+    "latest_reward": 0.1598,
+    "mean_reward_rolling": 0.2209,
+    "action_easier_pct": 0.19,
+    "action_same_pct": 0.5206,
+    "action_harder_pct": 0.2894
+  },
+  {
+    "seed": 999,
+    "timestep": 39424,
+    "episode": 2628,
+    "latest_reward": 0.1767,
+    "mean_reward_rolling": 0.2004,
+    "action_easier_pct": 0.1895,
+    "action_same_pct": 0.5207,
+    "action_harder_pct": 0.2898
+  },
+  {
+    "seed": 999,
+    "timestep": 39680,
+    "episode": 2645,
+    "latest_reward": 0.1141,
+    "mean_reward_rolling": 0.1967,
+    "action_easier_pct": 0.1889,
+    "action_same_pct": 0.5212,
+    "action_harder_pct": 0.29
+  },
+  {
+    "seed": 999,
+    "timestep": 39936,
+    "episode": 2662,
+    "latest_reward": 0.1404,
+    "mean_reward_rolling": 0.2064,
+    "action_easier_pct": 0.188,
+    "action_same_pct": 0.5227,
+    "action_harder_pct": 0.2893
+  },
+  {
+    "seed": 999,
+    "timestep": 40192,
+    "episode": 2679,
+    "latest_reward": 0.2451,
+    "mean_reward_rolling": 0.2107,
+    "action_easier_pct": 0.1876,
+    "action_same_pct": 0.523,
+    "action_harder_pct": 0.2894
+  },
+  {
+    "seed": 999,
+    "timestep": 40448,
+    "episode": 2696,
+    "latest_reward": 0.1933,
+    "mean_reward_rolling": 0.2121,
+    "action_easier_pct": 0.1872,
+    "action_same_pct": 0.5232,
+    "action_harder_pct": 0.2896
+  },
+  {
+    "seed": 999,
+    "timestep": 40704,
+    "episode": 2713,
+    "latest_reward": -0.5766,
+    "mean_reward_rolling": 0.2092,
+    "action_easier_pct": 0.1867,
+    "action_same_pct": 0.5241,
+    "action_harder_pct": 0.2892
+  },
+  {
+    "seed": 999,
+    "timestep": 40960,
+    "episode": 2730,
+    "latest_reward": 0.2004,
+    "mean_reward_rolling": 0.2166,
+    "action_easier_pct": 0.1863,
+    "action_same_pct": 0.5248,
+    "action_harder_pct": 0.2889
+  },
+  {
+    "seed": 999,
+    "timestep": 41216,
+    "episode": 2747,
+    "latest_reward": 0.2666,
+    "mean_reward_rolling": 0.2327,
+    "action_easier_pct": 0.186,
+    "action_same_pct": 0.5246,
+    "action_harder_pct": 0.2893
+  },
+  {
+    "seed": 999,
+    "timestep": 41472,
+    "episode": 2764,
+    "latest_reward": 0.2531,
+    "mean_reward_rolling": 0.2384,
+    "action_easier_pct": 0.1854,
+    "action_same_pct": 0.5252,
+    "action_harder_pct": 0.2894
+  },
+  {
+    "seed": 999,
+    "timestep": 41728,
+    "episode": 2781,
+    "latest_reward": 0.2137,
+    "mean_reward_rolling": 0.2199,
+    "action_easier_pct": 0.1847,
+    "action_same_pct": 0.5265,
+    "action_harder_pct": 0.2888
+  },
+  {
+    "seed": 999,
+    "timestep": 41984,
+    "episode": 2798,
+    "latest_reward": 0.1877,
+    "mean_reward_rolling": 0.2218,
+    "action_easier_pct": 0.1843,
+    "action_same_pct": 0.5267,
+    "action_harder_pct": 0.289
+  },
+  {
+    "seed": 999,
+    "timestep": 42240,
+    "episode": 2816,
+    "latest_reward": -0.5335,
+    "mean_reward_rolling": 0.2567,
+    "action_easier_pct": 0.1837,
+    "action_same_pct": 0.5271,
+    "action_harder_pct": 0.2892
+  },
+  {
+    "seed": 999,
+    "timestep": 42496,
+    "episode": 2833,
+    "latest_reward": 0.2933,
+    "mean_reward_rolling": 0.2091,
+    "action_easier_pct": 0.1831,
+    "action_same_pct": 0.5285,
+    "action_harder_pct": 0.2885
+  },
+  {
+    "seed": 999,
+    "timestep": 42752,
+    "episode": 2850,
+    "latest_reward": 0.2518,
+    "mean_reward_rolling": 0.2249,
+    "action_easier_pct": 0.1826,
+    "action_same_pct": 0.529,
+    "action_harder_pct": 0.2884
+  },
+  {
+    "seed": 999,
+    "timestep": 43008,
+    "episode": 2867,
+    "latest_reward": 0.2285,
+    "mean_reward_rolling": 0.2196,
+    "action_easier_pct": 0.1823,
+    "action_same_pct": 0.5294,
+    "action_harder_pct": 0.2884
+  },
+  {
+    "seed": 999,
+    "timestep": 43264,
+    "episode": 2884,
+    "latest_reward": 0.2555,
+    "mean_reward_rolling": 0.2368,
+    "action_easier_pct": 0.1818,
+    "action_same_pct": 0.53,
+    "action_harder_pct": 0.2882
+  },
+  {
+    "seed": 999,
+    "timestep": 43520,
+    "episode": 2901,
+    "latest_reward": 0.1391,
+    "mean_reward_rolling": 0.2209,
+    "action_easier_pct": 0.181,
+    "action_same_pct": 0.5313,
+    "action_harder_pct": 0.2876
+  },
+  {
+    "seed": 999,
+    "timestep": 43776,
+    "episode": 2918,
+    "latest_reward": 0.197,
+    "mean_reward_rolling": 0.2357,
+    "action_easier_pct": 0.1805,
+    "action_same_pct": 0.5318,
+    "action_harder_pct": 0.2877
+  },
+  {
+    "seed": 999,
+    "timestep": 44032,
+    "episode": 2935,
+    "latest_reward": 0.2871,
+    "mean_reward_rolling": 0.2137,
+    "action_easier_pct": 0.1802,
+    "action_same_pct": 0.5318,
+    "action_harder_pct": 0.288
+  },
+  {
+    "seed": 999,
+    "timestep": 44288,
+    "episode": 2952,
+    "latest_reward": 0.1954,
+    "mean_reward_rolling": 0.2236,
+    "action_easier_pct": 0.1796,
+    "action_same_pct": 0.533,
+    "action_harder_pct": 0.2874
+  },
+  {
+    "seed": 999,
+    "timestep": 44544,
+    "episode": 2969,
+    "latest_reward": 0.2234,
+    "mean_reward_rolling": 0.2082,
+    "action_easier_pct": 0.1791,
+    "action_same_pct": 0.5334,
+    "action_harder_pct": 0.2875
+  },
+  {
+    "seed": 999,
+    "timestep": 44800,
+    "episode": 2986,
+    "latest_reward": 0.2979,
+    "mean_reward_rolling": 0.235,
+    "action_easier_pct": 0.1787,
+    "action_same_pct": 0.5338,
+    "action_harder_pct": 0.2875
+  },
+  {
+    "seed": 999,
+    "timestep": 45056,
+    "episode": 3003,
+    "latest_reward": 0.1911,
+    "mean_reward_rolling": 0.1968,
+    "action_easier_pct": 0.1782,
+    "action_same_pct": 0.5342,
+    "action_harder_pct": 0.2876
+  },
+  {
+    "seed": 999,
+    "timestep": 45312,
+    "episode": 3020,
+    "latest_reward": 0.2066,
+    "mean_reward_rolling": 0.2159,
+    "action_easier_pct": 0.1778,
+    "action_same_pct": 0.5349,
+    "action_harder_pct": 0.2873
+  },
+  {
+    "seed": 999,
+    "timestep": 45568,
+    "episode": 3037,
+    "latest_reward": 0.1751,
+    "mean_reward_rolling": 0.2395,
+    "action_easier_pct": 0.1775,
+    "action_same_pct": 0.5351,
+    "action_harder_pct": 0.2874
+  },
+  {
+    "seed": 999,
+    "timestep": 45824,
+    "episode": 3054,
+    "latest_reward": 0.1761,
+    "mean_reward_rolling": 0.188,
+    "action_easier_pct": 0.1772,
+    "action_same_pct": 0.5353,
+    "action_harder_pct": 0.2875
+  },
+  {
+    "seed": 999,
+    "timestep": 46080,
+    "episode": 3072,
+    "latest_reward": 0.23,
+    "mean_reward_rolling": 0.2073,
+    "action_easier_pct": 0.1766,
+    "action_same_pct": 0.5366,
+    "action_harder_pct": 0.2868
+  },
+  {
+    "seed": 999,
+    "timestep": 46336,
+    "episode": 3089,
+    "latest_reward": 0.2922,
+    "mean_reward_rolling": 0.2331,
+    "action_easier_pct": 0.1763,
+    "action_same_pct": 0.5369,
+    "action_harder_pct": 0.2868
+  },
+  {
+    "seed": 999,
+    "timestep": 46592,
+    "episode": 3106,
+    "latest_reward": 0.2512,
+    "mean_reward_rolling": 0.2073,
+    "action_easier_pct": 0.1758,
+    "action_same_pct": 0.5375,
+    "action_harder_pct": 0.2867
+  },
+  {
+    "seed": 999,
+    "timestep": 46848,
+    "episode": 3123,
+    "latest_reward": 0.2409,
+    "mean_reward_rolling": 0.2182,
+    "action_easier_pct": 0.1753,
+    "action_same_pct": 0.5383,
+    "action_harder_pct": 0.2865
+  },
+  {
+    "seed": 999,
+    "timestep": 47104,
+    "episode": 3140,
+    "latest_reward": 0.1935,
+    "mean_reward_rolling": 0.2025,
+    "action_easier_pct": 0.1749,
+    "action_same_pct": 0.539,
+    "action_harder_pct": 0.2861
+  },
+  {
+    "seed": 999,
+    "timestep": 47360,
+    "episode": 3157,
+    "latest_reward": 0.1812,
+    "mean_reward_rolling": 0.1972,
+    "action_easier_pct": 0.1746,
+    "action_same_pct": 0.5393,
+    "action_harder_pct": 0.286
+  },
+  {
+    "seed": 999,
+    "timestep": 47616,
+    "episode": 3174,
+    "latest_reward": 0.2132,
+    "mean_reward_rolling": 0.2243,
+    "action_easier_pct": 0.1743,
+    "action_same_pct": 0.5395,
+    "action_harder_pct": 0.2862
+  },
+  {
+    "seed": 999,
+    "timestep": 47872,
+    "episode": 3191,
+    "latest_reward": 0.1563,
+    "mean_reward_rolling": 0.2243,
+    "action_easier_pct": 0.1737,
+    "action_same_pct": 0.5403,
+    "action_harder_pct": 0.286
+  },
+  {
+    "seed": 999,
+    "timestep": 48128,
+    "episode": 3208,
+    "latest_reward": 0.231,
+    "mean_reward_rolling": 0.224,
+    "action_easier_pct": 0.1734,
+    "action_same_pct": 0.5405,
+    "action_harder_pct": 0.286
+  },
+  {
+    "seed": 999,
+    "timestep": 48384,
+    "episode": 3225,
+    "latest_reward": 0.2133,
+    "mean_reward_rolling": 0.2333,
+    "action_easier_pct": 0.1731,
+    "action_same_pct": 0.5405,
+    "action_harder_pct": 0.2864
+  },
+  {
+    "seed": 999,
+    "timestep": 48640,
+    "episode": 3242,
+    "latest_reward": 0.2954,
+    "mean_reward_rolling": 0.2143,
+    "action_easier_pct": 0.1727,
+    "action_same_pct": 0.5413,
+    "action_harder_pct": 0.2861
+  },
+  {
+    "seed": 999,
+    "timestep": 48896,
+    "episode": 3259,
+    "latest_reward": 0.2689,
+    "mean_reward_rolling": 0.2143,
+    "action_easier_pct": 0.1723,
+    "action_same_pct": 0.5418,
+    "action_harder_pct": 0.2859
+  },
+  {
+    "seed": 999,
+    "timestep": 49152,
+    "episode": 3276,
+    "latest_reward": 0.2537,
+    "mean_reward_rolling": 0.2412,
+    "action_easier_pct": 0.1721,
+    "action_same_pct": 0.5417,
+    "action_harder_pct": 0.2862
+  },
+  {
+    "seed": 999,
+    "timestep": 49408,
+    "episode": 3293,
+    "latest_reward": 0.2342,
+    "mean_reward_rolling": 0.234,
+    "action_easier_pct": 0.1717,
+    "action_same_pct": 0.5419,
+    "action_harder_pct": 0.2864
+  },
+  {
+    "seed": 999,
+    "timestep": 49664,
+    "episode": 3310,
+    "latest_reward": 0.235,
+    "mean_reward_rolling": 0.2175,
+    "action_easier_pct": 0.1713,
+    "action_same_pct": 0.5425,
+    "action_harder_pct": 0.2862
+  },
+  {
+    "seed": 999,
+    "timestep": 49920,
+    "episode": 3328,
+    "latest_reward": 0.2773,
+    "mean_reward_rolling": 0.2288,
+    "action_easier_pct": 0.1711,
+    "action_same_pct": 0.5424,
+    "action_harder_pct": 0.2864
+  },
+  {
+    "seed": 999,
+    "timestep": 50176,
+    "episode": 3345,
+    "latest_reward": 0.3426,
+    "mean_reward_rolling": 0.2047,
+    "action_easier_pct": 0.1709,
+    "action_same_pct": 0.5425,
+    "action_harder_pct": 0.2866
+  },
+  {
+    "seed": 999,
+    "timestep": 50432,
+    "episode": 3362,
+    "latest_reward": 0.2838,
+    "mean_reward_rolling": 0.219,
+    "action_easier_pct": 0.1703,
+    "action_same_pct": 0.5436,
+    "action_harder_pct": 0.2861
+  },
+  {
+    "seed": 999,
+    "timestep": 50688,
+    "episode": 3379,
+    "latest_reward": 0.2079,
+    "mean_reward_rolling": 0.2184,
+    "action_easier_pct": 0.1699,
+    "action_same_pct": 0.5441,
+    "action_harder_pct": 0.2859
+  },
+  {
+    "seed": 999,
+    "timestep": 50944,
+    "episode": 3396,
+    "latest_reward": 0.1978,
+    "mean_reward_rolling": 0.2458,
+    "action_easier_pct": 0.1697,
+    "action_same_pct": 0.5442,
+    "action_harder_pct": 0.2862
+  },
+  {
+    "seed": 999,
+    "timestep": 51200,
+    "episode": 3413,
+    "latest_reward": 0.1988,
+    "mean_reward_rolling": 0.2059,
+    "action_easier_pct": 0.1692,
+    "action_same_pct": 0.5446,
+    "action_harder_pct": 0.2861
+  },
+  {
+    "seed": 999,
+    "timestep": 51456,
+    "episode": 3430,
+    "latest_reward": 0.1858,
+    "mean_reward_rolling": 0.2136,
+    "action_easier_pct": 0.1686,
+    "action_same_pct": 0.5457,
+    "action_harder_pct": 0.2856
+  },
+  {
+    "seed": 999,
+    "timestep": 51712,
+    "episode": 3447,
+    "latest_reward": 0.1861,
+    "mean_reward_rolling": 0.1911,
+    "action_easier_pct": 0.1684,
+    "action_same_pct": 0.546,
+    "action_harder_pct": 0.2857
+  },
+  {
+    "seed": 999,
+    "timestep": 51968,
+    "episode": 3464,
+    "latest_reward": 0.1568,
+    "mean_reward_rolling": 0.2315,
+    "action_easier_pct": 0.1681,
+    "action_same_pct": 0.5459,
+    "action_harder_pct": 0.286
+  },
+  {
+    "seed": 999,
+    "timestep": 52224,
+    "episode": 3481,
+    "latest_reward": 0.1241,
+    "mean_reward_rolling": 0.2169,
+    "action_easier_pct": 0.1676,
+    "action_same_pct": 0.5468,
+    "action_harder_pct": 0.2856
+  },
+  {
+    "seed": 999,
+    "timestep": 52480,
+    "episode": 3498,
+    "latest_reward": 0.2079,
+    "mean_reward_rolling": 0.224,
+    "action_easier_pct": 0.1672,
+    "action_same_pct": 0.5475,
+    "action_harder_pct": 0.2853
+  },
+  {
+    "seed": 999,
+    "timestep": 52736,
+    "episode": 3515,
+    "latest_reward": 0.1774,
+    "mean_reward_rolling": 0.2139,
+    "action_easier_pct": 0.1671,
+    "action_same_pct": 0.5475,
+    "action_harder_pct": 0.2854
+  },
+  {
+    "seed": 999,
+    "timestep": 52992,
+    "episode": 3532,
+    "latest_reward": 0.2387,
+    "mean_reward_rolling": 0.2072,
+    "action_easier_pct": 0.1668,
+    "action_same_pct": 0.5477,
+    "action_harder_pct": 0.2855
+  },
+  {
+    "seed": 999,
+    "timestep": 53248,
+    "episode": 3549,
+    "latest_reward": 0.1897,
+    "mean_reward_rolling": 0.2083,
+    "action_easier_pct": 0.1663,
+    "action_same_pct": 0.5487,
+    "action_harder_pct": 0.285
+  },
+  {
+    "seed": 999,
+    "timestep": 53504,
+    "episode": 3566,
+    "latest_reward": 0.3039,
+    "mean_reward_rolling": 0.2189,
+    "action_easier_pct": 0.166,
+    "action_same_pct": 0.5486,
+    "action_harder_pct": 0.2853
+  },
+  {
+    "seed": 999,
+    "timestep": 53760,
+    "episode": 3584,
+    "latest_reward": 0.2931,
+    "mean_reward_rolling": 0.24,
+    "action_easier_pct": 0.1658,
+    "action_same_pct": 0.5488,
+    "action_harder_pct": 0.2854
+  },
+  {
+    "seed": 999,
+    "timestep": 54016,
+    "episode": 3601,
+    "latest_reward": 0.2636,
+    "mean_reward_rolling": 0.2197,
+    "action_easier_pct": 0.1652,
+    "action_same_pct": 0.5501,
+    "action_harder_pct": 0.2848
+  },
+  {
+    "seed": 999,
+    "timestep": 54272,
+    "episode": 3618,
+    "latest_reward": 0.2829,
+    "mean_reward_rolling": 0.2085,
+    "action_easier_pct": 0.1649,
+    "action_same_pct": 0.5505,
+    "action_harder_pct": 0.2846
+  },
+  {
+    "seed": 999,
+    "timestep": 54528,
+    "episode": 3635,
+    "latest_reward": 0.2937,
+    "mean_reward_rolling": 0.2401,
+    "action_easier_pct": 0.1646,
+    "action_same_pct": 0.5507,
+    "action_harder_pct": 0.2847
+  },
+  {
+    "seed": 999,
+    "timestep": 54784,
+    "episode": 3652,
+    "latest_reward": 0.3198,
+    "mean_reward_rolling": 0.2309,
+    "action_easier_pct": 0.1642,
+    "action_same_pct": 0.5513,
+    "action_harder_pct": 0.2845
+  },
+  {
+    "seed": 999,
+    "timestep": 55040,
+    "episode": 3669,
+    "latest_reward": 0.1535,
+    "mean_reward_rolling": 0.2233,
+    "action_easier_pct": 0.1637,
+    "action_same_pct": 0.5522,
+    "action_harder_pct": 0.2841
+  },
+  {
+    "seed": 999,
+    "timestep": 55296,
+    "episode": 3686,
+    "latest_reward": 0.2244,
+    "mean_reward_rolling": 0.2417,
+    "action_easier_pct": 0.1636,
+    "action_same_pct": 0.5524,
+    "action_harder_pct": 0.284
+  },
+  {
+    "seed": 999,
+    "timestep": 55552,
+    "episode": 3703,
+    "latest_reward": 0.1268,
+    "mean_reward_rolling": 0.2268,
+    "action_easier_pct": 0.1633,
+    "action_same_pct": 0.5525,
+    "action_harder_pct": 0.2842
+  },
+  {
+    "seed": 999,
+    "timestep": 55808,
+    "episode": 3720,
+    "latest_reward": 0.2655,
+    "mean_reward_rolling": 0.2106,
+    "action_easier_pct": 0.1628,
+    "action_same_pct": 0.5536,
+    "action_harder_pct": 0.2837
+  },
+  {
+    "seed": 999,
+    "timestep": 56064,
+    "episode": 3737,
+    "latest_reward": 0.207,
+    "mean_reward_rolling": 0.2128,
+    "action_easier_pct": 0.1626,
+    "action_same_pct": 0.5539,
+    "action_harder_pct": 0.2835
+  },
+  {
+    "seed": 999,
+    "timestep": 56320,
+    "episode": 3754,
+    "latest_reward": 0.251,
+    "mean_reward_rolling": 0.2311,
+    "action_easier_pct": 0.1624,
+    "action_same_pct": 0.5541,
+    "action_harder_pct": 0.2835
+  },
+  {
+    "seed": 999,
+    "timestep": 56576,
+    "episode": 3771,
+    "latest_reward": 0.2752,
+    "mean_reward_rolling": 0.2174,
+    "action_easier_pct": 0.1621,
+    "action_same_pct": 0.5544,
+    "action_harder_pct": 0.2835
+  },
+  {
+    "seed": 999,
+    "timestep": 56832,
+    "episode": 3788,
+    "latest_reward": 0.2048,
+    "mean_reward_rolling": 0.2164,
+    "action_easier_pct": 0.1617,
+    "action_same_pct": 0.555,
+    "action_harder_pct": 0.2833
+  },
+  {
+    "seed": 999,
+    "timestep": 57088,
+    "episode": 3805,
+    "latest_reward": 0.2997,
+    "mean_reward_rolling": 0.2323,
+    "action_easier_pct": 0.1616,
+    "action_same_pct": 0.5553,
+    "action_harder_pct": 0.2831
+  },
+  {
+    "seed": 999,
+    "timestep": 57344,
+    "episode": 3822,
+    "latest_reward": 0.3093,
+    "mean_reward_rolling": 0.2324,
+    "action_easier_pct": 0.1615,
+    "action_same_pct": 0.5554,
+    "action_harder_pct": 0.2832
+  },
+  {
+    "seed": 999,
+    "timestep": 57600,
+    "episode": 3840,
+    "latest_reward": 0.2568,
+    "mean_reward_rolling": 0.2203,
+    "action_easier_pct": 0.161,
+    "action_same_pct": 0.5564,
+    "action_harder_pct": 0.2826
+  },
+  {
+    "seed": 999,
+    "timestep": 57856,
+    "episode": 3857,
+    "latest_reward": 0.2954,
+    "mean_reward_rolling": 0.2239,
+    "action_easier_pct": 0.1608,
+    "action_same_pct": 0.5566,
+    "action_harder_pct": 0.2826
+  },
+  {
+    "seed": 999,
+    "timestep": 58112,
+    "episode": 3874,
+    "latest_reward": -0.4899,
+    "mean_reward_rolling": 0.2069,
+    "action_easier_pct": 0.1605,
+    "action_same_pct": 0.5567,
+    "action_harder_pct": 0.2828
+  },
+  {
+    "seed": 999,
+    "timestep": 58368,
+    "episode": 3891,
+    "latest_reward": 0.2745,
+    "mean_reward_rolling": 0.2261,
+    "action_easier_pct": 0.16,
+    "action_same_pct": 0.5575,
+    "action_harder_pct": 0.2826
+  },
+  {
+    "seed": 999,
+    "timestep": 58624,
+    "episode": 3908,
+    "latest_reward": 0.2881,
+    "mean_reward_rolling": 0.2215,
+    "action_easier_pct": 0.1597,
+    "action_same_pct": 0.5578,
+    "action_harder_pct": 0.2825
+  },
+  {
+    "seed": 999,
+    "timestep": 58880,
+    "episode": 3925,
+    "latest_reward": 0.2281,
+    "mean_reward_rolling": 0.2412,
+    "action_easier_pct": 0.1594,
+    "action_same_pct": 0.5579,
+    "action_harder_pct": 0.2827
+  },
+  {
+    "seed": 999,
+    "timestep": 59136,
+    "episode": 3942,
+    "latest_reward": 0.3186,
+    "mean_reward_rolling": 0.24,
+    "action_easier_pct": 0.1591,
+    "action_same_pct": 0.558,
+    "action_harder_pct": 0.2828
+  },
+  {
+    "seed": 999,
+    "timestep": 59392,
+    "episode": 3959,
+    "latest_reward": 0.212,
+    "mean_reward_rolling": 0.2142,
+    "action_easier_pct": 0.1587,
+    "action_same_pct": 0.559,
+    "action_harder_pct": 0.2823
+  },
+  {
+    "seed": 999,
+    "timestep": 59648,
+    "episode": 3976,
+    "latest_reward": 0.2232,
+    "mean_reward_rolling": 0.2118,
+    "action_easier_pct": 0.1584,
+    "action_same_pct": 0.5593,
+    "action_harder_pct": 0.2823
+  },
+  {
+    "seed": 999,
+    "timestep": 59904,
+    "episode": 3993,
+    "latest_reward": 0.3021,
+    "mean_reward_rolling": 0.2362,
+    "action_easier_pct": 0.1583,
+    "action_same_pct": 0.5593,
+    "action_harder_pct": 0.2824
+  },
+  {
+    "seed": 999,
+    "timestep": 60160,
+    "episode": 4010,
+    "latest_reward": 0.2988,
+    "mean_reward_rolling": 0.2051,
+    "action_easier_pct": 0.1578,
+    "action_same_pct": 0.5601,
+    "action_harder_pct": 0.2821
+  },
+  {
+    "seed": 999,
+    "timestep": 60416,
+    "episode": 4027,
+    "latest_reward": 0.1938,
+    "mean_reward_rolling": 0.2191,
+    "action_easier_pct": 0.1576,
+    "action_same_pct": 0.5603,
+    "action_harder_pct": 0.2821
+  },
+  {
+    "seed": 999,
+    "timestep": 60672,
+    "episode": 4044,
+    "latest_reward": 0.2174,
+    "mean_reward_rolling": 0.2195,
+    "action_easier_pct": 0.1573,
+    "action_same_pct": 0.5603,
+    "action_harder_pct": 0.2824
+  },
+  {
+    "seed": 999,
+    "timestep": 60928,
+    "episode": 4061,
+    "latest_reward": 0.277,
+    "mean_reward_rolling": 0.2163,
+    "action_easier_pct": 0.157,
+    "action_same_pct": 0.5606,
+    "action_harder_pct": 0.2824
+  },
+  {
+    "seed": 999,
+    "timestep": 61184,
+    "episode": 4078,
+    "latest_reward": 0.2102,
+    "mean_reward_rolling": 0.2099,
+    "action_easier_pct": 0.1566,
+    "action_same_pct": 0.5613,
+    "action_harder_pct": 0.2821
+  },
+  {
+    "seed": 999,
+    "timestep": 61440,
+    "episode": 4096,
+    "latest_reward": 0.178,
+    "mean_reward_rolling": 0.2318,
+    "action_easier_pct": 0.1563,
+    "action_same_pct": 0.5615,
+    "action_harder_pct": 0.2821
+  },
+  {
+    "seed": 999,
+    "timestep": 61696,
+    "episode": 4113,
+    "latest_reward": 0.3258,
+    "mean_reward_rolling": 0.2314,
+    "action_easier_pct": 0.1562,
+    "action_same_pct": 0.5618,
+    "action_harder_pct": 0.2821
+  },
+  {
+    "seed": 999,
+    "timestep": 61952,
+    "episode": 4130,
+    "latest_reward": 0.3148,
+    "mean_reward_rolling": 0.193,
+    "action_easier_pct": 0.1558,
+    "action_same_pct": 0.5626,
+    "action_harder_pct": 0.2816
+  },
+  {
+    "seed": 999,
+    "timestep": 62208,
+    "episode": 4147,
+    "latest_reward": -0.2052,
+    "mean_reward_rolling": 0.2107,
+    "action_easier_pct": 0.1555,
+    "action_same_pct": 0.563,
+    "action_harder_pct": 0.2815
+  },
+  {
+    "seed": 999,
+    "timestep": 62464,
+    "episode": 4164,
+    "latest_reward": 0.1731,
+    "mean_reward_rolling": 0.244,
+    "action_easier_pct": 0.1552,
+    "action_same_pct": 0.5629,
+    "action_harder_pct": 0.2819
+  },
+  {
+    "seed": 999,
+    "timestep": 62720,
+    "episode": 4181,
+    "latest_reward": 0.2315,
+    "mean_reward_rolling": 0.2493,
+    "action_easier_pct": 0.155,
+    "action_same_pct": 0.5632,
+    "action_harder_pct": 0.2819
+  },
+  {
+    "seed": 999,
+    "timestep": 62976,
+    "episode": 4198,
+    "latest_reward": 0.1927,
+    "mean_reward_rolling": 0.2093,
+    "action_easier_pct": 0.1546,
+    "action_same_pct": 0.5639,
+    "action_harder_pct": 0.2815
+  },
+  {
+    "seed": 999,
+    "timestep": 63232,
+    "episode": 4215,
+    "latest_reward": 0.2342,
+    "mean_reward_rolling": 0.2355,
+    "action_easier_pct": 0.1545,
+    "action_same_pct": 0.564,
+    "action_harder_pct": 0.2816
+  },
+  {
+    "seed": 999,
+    "timestep": 63488,
+    "episode": 4232,
+    "latest_reward": 0.2007,
+    "mean_reward_rolling": 0.2285,
+    "action_easier_pct": 0.1543,
+    "action_same_pct": 0.5641,
+    "action_harder_pct": 0.2816
+  },
+  {
+    "seed": 999,
+    "timestep": 63744,
+    "episode": 4249,
+    "latest_reward": 0.2888,
+    "mean_reward_rolling": 0.2209,
+    "action_easier_pct": 0.1538,
+    "action_same_pct": 0.5649,
+    "action_harder_pct": 0.2813
+  },
+  {
+    "seed": 999,
+    "timestep": 64000,
+    "episode": 4266,
+    "latest_reward": 0.2265,
+    "mean_reward_rolling": 0.2155,
+    "action_easier_pct": 0.1535,
+    "action_same_pct": 0.5653,
+    "action_harder_pct": 0.2811
+  },
+  {
+    "seed": 999,
+    "timestep": 64256,
+    "episode": 4283,
+    "latest_reward": 0.241,
+    "mean_reward_rolling": 0.2296,
+    "action_easier_pct": 0.1532,
+    "action_same_pct": 0.5656,
+    "action_harder_pct": 0.2812
+  },
+  {
+    "seed": 999,
+    "timestep": 64512,
+    "episode": 4300,
+    "latest_reward": 0.2157,
+    "mean_reward_rolling": 0.2358,
+    "action_easier_pct": 0.1528,
+    "action_same_pct": 0.566,
+    "action_harder_pct": 0.2812
+  },
+  {
+    "seed": 999,
+    "timestep": 64768,
+    "episode": 4317,
+    "latest_reward": 0.1923,
+    "mean_reward_rolling": 0.2219,
+    "action_easier_pct": 0.1524,
+    "action_same_pct": 0.5667,
+    "action_harder_pct": 0.2809
+  },
+  {
+    "seed": 999,
+    "timestep": 65024,
+    "episode": 4334,
+    "latest_reward": 0.2287,
+    "mean_reward_rolling": 0.2409,
+    "action_easier_pct": 0.1522,
+    "action_same_pct": 0.5668,
+    "action_harder_pct": 0.281
+  },
+  {
+    "seed": 999,
+    "timestep": 65280,
+    "episode": 4352,
+    "latest_reward": 0.2598,
+    "mean_reward_rolling": 0.1959,
+    "action_easier_pct": 0.152,
+    "action_same_pct": 0.567,
+    "action_harder_pct": 0.281
+  },
+  {
+    "seed": 999,
+    "timestep": 65536,
+    "episode": 4369,
+    "latest_reward": 0.3455,
+    "mean_reward_rolling": 0.2143,
+    "action_easier_pct": 0.1517,
+    "action_same_pct": 0.5677,
+    "action_harder_pct": 0.2807
+  },
+  {
+    "seed": 999,
+    "timestep": 65792,
+    "episode": 4386,
+    "latest_reward": 0.2884,
+    "mean_reward_rolling": 0.2344,
+    "action_easier_pct": 0.1514,
+    "action_same_pct": 0.5679,
+    "action_harder_pct": 0.2808
+  },
+  {
+    "seed": 999,
+    "timestep": 66048,
+    "episode": 4403,
+    "latest_reward": 0.128,
+    "mean_reward_rolling": 0.2232,
+    "action_easier_pct": 0.1512,
+    "action_same_pct": 0.5677,
+    "action_harder_pct": 0.281
+  },
+  {
+    "seed": 999,
+    "timestep": 66304,
+    "episode": 4420,
+    "latest_reward": 0.3168,
+    "mean_reward_rolling": 0.2494,
+    "action_easier_pct": 0.151,
+    "action_same_pct": 0.5679,
+    "action_harder_pct": 0.2811
+  },
+  {
+    "seed": 999,
+    "timestep": 66560,
+    "episode": 4437,
+    "latest_reward": 0.1544,
+    "mean_reward_rolling": 0.2137,
+    "action_easier_pct": 0.1506,
+    "action_same_pct": 0.5686,
+    "action_harder_pct": 0.2808
+  },
+  {
+    "seed": 999,
+    "timestep": 66816,
+    "episode": 4454,
+    "latest_reward": 0.2226,
+    "mean_reward_rolling": 0.1847,
+    "action_easier_pct": 0.1505,
+    "action_same_pct": 0.5687,
+    "action_harder_pct": 0.2807
+  },
+  {
+    "seed": 999,
+    "timestep": 67072,
+    "episode": 4471,
+    "latest_reward": 0.2968,
+    "mean_reward_rolling": 0.1963,
+    "action_easier_pct": 0.1503,
+    "action_same_pct": 0.569,
+    "action_harder_pct": 0.2807
+  },
+  {
+    "seed": 999,
+    "timestep": 67328,
+    "episode": 4488,
+    "latest_reward": 0.2686,
+    "mean_reward_rolling": 0.2091,
+    "action_easier_pct": 0.1499,
+    "action_same_pct": 0.5698,
+    "action_harder_pct": 0.2802
+  },
+  {
+    "seed": 999,
+    "timestep": 67584,
+    "episode": 4505,
+    "latest_reward": 0.2621,
+    "mean_reward_rolling": 0.2288,
+    "action_easier_pct": 0.1496,
+    "action_same_pct": 0.5701,
+    "action_harder_pct": 0.2802
+  },
+  {
+    "seed": 999,
+    "timestep": 67840,
+    "episode": 4522,
+    "latest_reward": -0.5221,
+    "mean_reward_rolling": 0.1947,
+    "action_easier_pct": 0.1494,
+    "action_same_pct": 0.57,
+    "action_harder_pct": 0.2805
+  },
+  {
+    "seed": 999,
+    "timestep": 68096,
+    "episode": 4539,
+    "latest_reward": 0.1929,
+    "mean_reward_rolling": 0.2296,
+    "action_easier_pct": 0.1492,
+    "action_same_pct": 0.5703,
+    "action_harder_pct": 0.2805
+  },
+  {
+    "seed": 999,
+    "timestep": 68352,
+    "episode": 4556,
+    "latest_reward": 0.2253,
+    "mean_reward_rolling": 0.2142,
+    "action_easier_pct": 0.1489,
+    "action_same_pct": 0.571,
+    "action_harder_pct": 0.2801
+  },
+  {
+    "seed": 999,
+    "timestep": 68608,
+    "episode": 4573,
+    "latest_reward": 0.2638,
+    "mean_reward_rolling": 0.1276,
+    "action_easier_pct": 0.1488,
+    "action_same_pct": 0.5712,
+    "action_harder_pct": 0.28
+  },
+  {
+    "seed": 999,
+    "timestep": 68864,
+    "episode": 4590,
+    "latest_reward": 0.2677,
+    "mean_reward_rolling": 0.1887,
+    "action_easier_pct": 0.1486,
+    "action_same_pct": 0.5714,
+    "action_harder_pct": 0.2801
+  },
+  {
+    "seed": 999,
+    "timestep": 69120,
+    "episode": 4608,
+    "latest_reward": 0.2392,
+    "mean_reward_rolling": 0.215,
+    "action_easier_pct": 0.1482,
+    "action_same_pct": 0.5721,
+    "action_harder_pct": 0.2797
+  },
+  {
+    "seed": 999,
+    "timestep": 69376,
+    "episode": 4625,
+    "latest_reward": 0.2906,
+    "mean_reward_rolling": 0.225,
+    "action_easier_pct": 0.1481,
+    "action_same_pct": 0.5719,
+    "action_harder_pct": 0.28
+  },
+  {
+    "seed": 999,
+    "timestep": 69632,
+    "episode": 4642,
+    "latest_reward": 0.3488,
+    "mean_reward_rolling": 0.2456,
+    "action_easier_pct": 0.1479,
+    "action_same_pct": 0.5719,
+    "action_harder_pct": 0.2802
+  },
+  {
+    "seed": 999,
+    "timestep": 69888,
+    "episode": 4659,
+    "latest_reward": 0.3101,
+    "mean_reward_rolling": 0.2127,
+    "action_easier_pct": 0.1476,
+    "action_same_pct": 0.5725,
+    "action_harder_pct": 0.2799
+  },
+  {
+    "seed": 999,
+    "timestep": 70144,
+    "episode": 4676,
+    "latest_reward": 0.2873,
+    "mean_reward_rolling": 0.2254,
+    "action_easier_pct": 0.1472,
+    "action_same_pct": 0.5732,
+    "action_harder_pct": 0.2796
+  },
+  {
+    "seed": 999,
+    "timestep": 70400,
+    "episode": 4693,
+    "latest_reward": 0.222,
+    "mean_reward_rolling": 0.237,
+    "action_easier_pct": 0.147,
+    "action_same_pct": 0.5734,
+    "action_harder_pct": 0.2796
+  },
+  {
+    "seed": 999,
+    "timestep": 70656,
+    "episode": 4710,
+    "latest_reward": 0.2836,
+    "mean_reward_rolling": 0.1935,
+    "action_easier_pct": 0.1468,
+    "action_same_pct": 0.5736,
+    "action_harder_pct": 0.2796
+  },
+  {
+    "seed": 999,
+    "timestep": 70912,
+    "episode": 4727,
+    "latest_reward": 0.2054,
+    "mean_reward_rolling": 0.2235,
+    "action_easier_pct": 0.1464,
+    "action_same_pct": 0.5742,
+    "action_harder_pct": 0.2794
+  },
+  {
+    "seed": 999,
+    "timestep": 71168,
+    "episode": 4744,
+    "latest_reward": 0.1999,
+    "mean_reward_rolling": 0.2435,
+    "action_easier_pct": 0.1462,
+    "action_same_pct": 0.5743,
+    "action_harder_pct": 0.2795
+  },
+  {
+    "seed": 999,
+    "timestep": 71424,
+    "episode": 4761,
+    "latest_reward": 0.2613,
+    "mean_reward_rolling": 0.2199,
+    "action_easier_pct": 0.1461,
+    "action_same_pct": 0.5744,
+    "action_harder_pct": 0.2795
+  },
+  {
+    "seed": 999,
+    "timestep": 71680,
+    "episode": 4778,
+    "latest_reward": 0.3196,
+    "mean_reward_rolling": 0.2067,
+    "action_easier_pct": 0.1458,
+    "action_same_pct": 0.575,
+    "action_harder_pct": 0.2791
+  },
+  {
+    "seed": 999,
+    "timestep": 71936,
+    "episode": 4795,
+    "latest_reward": 0.2277,
+    "mean_reward_rolling": 0.2153,
+    "action_easier_pct": 0.1455,
+    "action_same_pct": 0.5755,
+    "action_harder_pct": 0.2789
+  },
+  {
+    "seed": 999,
+    "timestep": 72192,
+    "episode": 4812,
+    "latest_reward": 0.2472,
+    "mean_reward_rolling": 0.1811,
+    "action_easier_pct": 0.1453,
+    "action_same_pct": 0.5756,
+    "action_harder_pct": 0.2791
+  },
+  {
+    "seed": 999,
+    "timestep": 72448,
+    "episode": 4829,
+    "latest_reward": 0.291,
+    "mean_reward_rolling": 0.1858,
+    "action_easier_pct": 0.145,
+    "action_same_pct": 0.576,
+    "action_harder_pct": 0.279
+  },
+  {
+    "seed": 999,
+    "timestep": 72704,
+    "episode": 4846,
+    "latest_reward": 0.2234,
+    "mean_reward_rolling": 0.2178,
+    "action_easier_pct": 0.1447,
+    "action_same_pct": 0.5767,
+    "action_harder_pct": 0.2787
+  },
+  {
+    "seed": 999,
+    "timestep": 72960,
+    "episode": 4864,
+    "latest_reward": 0.2409,
+    "mean_reward_rolling": 0.2287,
+    "action_easier_pct": 0.1445,
+    "action_same_pct": 0.5767,
+    "action_harder_pct": 0.2788
+  },
+  {
+    "seed": 999,
+    "timestep": 73216,
+    "episode": 4881,
+    "latest_reward": 0.3364,
+    "mean_reward_rolling": 0.2157,
+    "action_easier_pct": 0.1443,
+    "action_same_pct": 0.5767,
+    "action_harder_pct": 0.279
+  },
+  {
+    "seed": 999,
+    "timestep": 73472,
+    "episode": 4898,
+    "latest_reward": 0.2506,
+    "mean_reward_rolling": 0.2319,
+    "action_easier_pct": 0.1439,
+    "action_same_pct": 0.5772,
+    "action_harder_pct": 0.2788
+  },
+  {
+    "seed": 999,
+    "timestep": 73728,
+    "episode": 4915,
+    "latest_reward": 0.3154,
+    "mean_reward_rolling": 0.2273,
+    "action_easier_pct": 0.1437,
+    "action_same_pct": 0.5777,
+    "action_harder_pct": 0.2787
+  },
+  {
+    "seed": 999,
+    "timestep": 73984,
+    "episode": 4932,
+    "latest_reward": 0.1746,
+    "mean_reward_rolling": 0.245,
+    "action_easier_pct": 0.1436,
+    "action_same_pct": 0.5777,
+    "action_harder_pct": 0.2787
+  },
+  {
+    "seed": 999,
+    "timestep": 74240,
+    "episode": 4949,
+    "latest_reward": 0.2701,
+    "mean_reward_rolling": 0.2307,
+    "action_easier_pct": 0.1433,
+    "action_same_pct": 0.5779,
+    "action_harder_pct": 0.2788
+  },
+  {
+    "seed": 999,
+    "timestep": 74496,
+    "episode": 4966,
+    "latest_reward": 0.2011,
+    "mean_reward_rolling": 0.2159,
+    "action_easier_pct": 0.143,
+    "action_same_pct": 0.5784,
+    "action_harder_pct": 0.2786
+  },
+  {
+    "seed": 999,
+    "timestep": 74752,
+    "episode": 4983,
+    "latest_reward": 0.2908,
+    "mean_reward_rolling": 0.2024,
+    "action_easier_pct": 0.1429,
+    "action_same_pct": 0.5784,
+    "action_harder_pct": 0.2786
+  },
+  {
+    "seed": 999,
+    "timestep": 75008,
+    "episode": 5000,
+    "latest_reward": 0.2908,
+    "mean_reward_rolling": 0.218,
+    "action_easier_pct": 0.1428,
+    "action_same_pct": 0.5784,
+    "action_harder_pct": 0.2788
+  },
+  {
+    "seed": 999,
+    "timestep": 75264,
+    "episode": 5017,
+    "latest_reward": 0.2373,
+    "mean_reward_rolling": 0.222,
+    "action_easier_pct": 0.1424,
+    "action_same_pct": 0.5791,
+    "action_harder_pct": 0.2785
+  },
+  {
+    "seed": 999,
+    "timestep": 75520,
+    "episode": 5034,
+    "latest_reward": 0.2121,
+    "mean_reward_rolling": 0.2222,
+    "action_easier_pct": 0.1422,
+    "action_same_pct": 0.5793,
+    "action_harder_pct": 0.2785
+  },
+  {
+    "seed": 999,
+    "timestep": 75776,
+    "episode": 5051,
+    "latest_reward": 0.2513,
+    "mean_reward_rolling": 0.192,
+    "action_easier_pct": 0.142,
+    "action_same_pct": 0.5794,
+    "action_harder_pct": 0.2786
+  },
+  {
+    "seed": 999,
+    "timestep": 76032,
+    "episode": 5068,
+    "latest_reward": 0.2971,
+    "mean_reward_rolling": 0.2233,
+    "action_easier_pct": 0.1419,
+    "action_same_pct": 0.5795,
+    "action_harder_pct": 0.2786
+  },
+  {
+    "seed": 999,
+    "timestep": 76288,
+    "episode": 5085,
+    "latest_reward": 0.2272,
+    "mean_reward_rolling": 0.2135,
+    "action_easier_pct": 0.1416,
+    "action_same_pct": 0.5802,
+    "action_harder_pct": 0.2782
+  },
+  {
+    "seed": 999,
+    "timestep": 76544,
+    "episode": 5102,
+    "latest_reward": 0.1718,
+    "mean_reward_rolling": 0.1973,
+    "action_easier_pct": 0.1414,
+    "action_same_pct": 0.5804,
+    "action_harder_pct": 0.2782
+  },
+  {
+    "seed": 999,
+    "timestep": 76800,
+    "episode": 5120,
+    "latest_reward": 0.2705,
+    "mean_reward_rolling": 0.2493,
+    "action_easier_pct": 0.1413,
+    "action_same_pct": 0.5805,
+    "action_harder_pct": 0.2782
+  },
+  {
+    "seed": 999,
+    "timestep": 77056,
+    "episode": 5137,
+    "latest_reward": 0.2677,
+    "mean_reward_rolling": 0.1772,
+    "action_easier_pct": 0.1411,
+    "action_same_pct": 0.581,
+    "action_harder_pct": 0.2779
+  },
+  {
+    "seed": 999,
+    "timestep": 77312,
+    "episode": 5154,
+    "latest_reward": 0.191,
+    "mean_reward_rolling": 0.2318,
+    "action_easier_pct": 0.1409,
+    "action_same_pct": 0.5812,
+    "action_harder_pct": 0.2779
+  },
+  {
+    "seed": 999,
+    "timestep": 77568,
+    "episode": 5171,
+    "latest_reward": 0.356,
+    "mean_reward_rolling": 0.2301,
+    "action_easier_pct": 0.1408,
+    "action_same_pct": 0.5814,
+    "action_harder_pct": 0.2779
+  },
+  {
+    "seed": 999,
+    "timestep": 77824,
+    "episode": 5188,
+    "latest_reward": 0.3218,
+    "mean_reward_rolling": 0.2414,
+    "action_easier_pct": 0.1405,
+    "action_same_pct": 0.5816,
+    "action_harder_pct": 0.2779
+  },
+  {
+    "seed": 999,
+    "timestep": 78080,
+    "episode": 5205,
+    "latest_reward": 0.1763,
+    "mean_reward_rolling": 0.2279,
+    "action_easier_pct": 0.1402,
+    "action_same_pct": 0.5822,
+    "action_harder_pct": 0.2776
+  },
+  {
+    "seed": 999,
+    "timestep": 78336,
+    "episode": 5222,
+    "latest_reward": 0.2232,
+    "mean_reward_rolling": 0.235,
+    "action_easier_pct": 0.1401,
+    "action_same_pct": 0.5822,
+    "action_harder_pct": 0.2777
+  },
+  {
+    "seed": 999,
+    "timestep": 78592,
+    "episode": 5239,
+    "latest_reward": 0.1981,
+    "mean_reward_rolling": 0.2087,
+    "action_easier_pct": 0.14,
+    "action_same_pct": 0.5823,
+    "action_harder_pct": 0.2777
+  },
+  {
+    "seed": 999,
+    "timestep": 78848,
+    "episode": 5256,
+    "latest_reward": 0.2564,
+    "mean_reward_rolling": 0.2296,
+    "action_easier_pct": 0.1397,
+    "action_same_pct": 0.583,
+    "action_harder_pct": 0.2773
+  },
+  {
+    "seed": 999,
+    "timestep": 79104,
+    "episode": 5273,
+    "latest_reward": 0.2318,
+    "mean_reward_rolling": 0.2362,
+    "action_easier_pct": 0.1395,
+    "action_same_pct": 0.583,
+    "action_harder_pct": 0.2775
+  },
+  {
+    "seed": 999,
+    "timestep": 79360,
+    "episode": 5290,
+    "latest_reward": 0.2774,
+    "mean_reward_rolling": 0.2194,
+    "action_easier_pct": 0.1395,
+    "action_same_pct": 0.5829,
+    "action_harder_pct": 0.2776
+  },
+  {
+    "seed": 999,
+    "timestep": 79616,
+    "episode": 5307,
+    "latest_reward": 0.2796,
+    "mean_reward_rolling": 0.2263,
+    "action_easier_pct": 0.1393,
+    "action_same_pct": 0.5831,
+    "action_harder_pct": 0.2776
+  },
+  {
+    "seed": 999,
+    "timestep": 79872,
+    "episode": 5324,
+    "latest_reward": 0.2395,
+    "mean_reward_rolling": 0.2205,
+    "action_easier_pct": 0.139,
+    "action_same_pct": 0.5836,
+    "action_harder_pct": 0.2774
+  },
+  {
+    "seed": 999,
+    "timestep": 80128,
+    "episode": 5341,
+    "latest_reward": 0.2329,
+    "mean_reward_rolling": 0.2614,
+    "action_easier_pct": 0.1389,
+    "action_same_pct": 0.5837,
+    "action_harder_pct": 0.2774
+  },
+  {
+    "seed": 999,
+    "timestep": 80384,
+    "episode": 5358,
+    "latest_reward": -0.5631,
+    "mean_reward_rolling": 0.2295,
+    "action_easier_pct": 0.1387,
+    "action_same_pct": 0.5836,
+    "action_harder_pct": 0.2776
+  },
+  {
+    "seed": 999,
+    "timestep": 80640,
+    "episode": 5376,
+    "latest_reward": 0.1834,
+    "mean_reward_rolling": 0.2178,
+    "action_easier_pct": 0.1384,
+    "action_same_pct": 0.5844,
+    "action_harder_pct": 0.2772
+  },
+  {
+    "seed": 999,
+    "timestep": 80896,
+    "episode": 5393,
+    "latest_reward": 0.2899,
+    "mean_reward_rolling": 0.2338,
+    "action_easier_pct": 0.1382,
+    "action_same_pct": 0.5844,
+    "action_harder_pct": 0.2774
+  },
+  {
+    "seed": 999,
+    "timestep": 81152,
+    "episode": 5410,
+    "latest_reward": 0.2914,
+    "mean_reward_rolling": 0.2395,
+    "action_easier_pct": 0.1381,
+    "action_same_pct": 0.5843,
+    "action_harder_pct": 0.2776
+  },
+  {
+    "seed": 999,
+    "timestep": 81408,
+    "episode": 5427,
+    "latest_reward": 0.2925,
+    "mean_reward_rolling": 0.2007,
+    "action_easier_pct": 0.1379,
+    "action_same_pct": 0.5847,
+    "action_harder_pct": 0.2775
+  },
+  {
+    "seed": 999,
+    "timestep": 81664,
+    "episode": 5444,
+    "latest_reward": 0.2815,
+    "mean_reward_rolling": 0.2255,
+    "action_easier_pct": 0.1376,
+    "action_same_pct": 0.5851,
+    "action_harder_pct": 0.2774
+  },
+  {
+    "seed": 999,
+    "timestep": 81920,
+    "episode": 5461,
+    "latest_reward": 0.223,
+    "mean_reward_rolling": 0.1844,
+    "action_easier_pct": 0.1374,
+    "action_same_pct": 0.5851,
+    "action_harder_pct": 0.2775
+  },
+  {
+    "seed": 999,
+    "timestep": 82176,
+    "episode": 5478,
+    "latest_reward": 0.1918,
+    "mean_reward_rolling": 0.1797,
+    "action_easier_pct": 0.1373,
+    "action_same_pct": 0.5852,
+    "action_harder_pct": 0.2776
+  },
+  {
+    "seed": 999,
+    "timestep": 82432,
+    "episode": 5495,
+    "latest_reward": 0.243,
+    "mean_reward_rolling": 0.2139,
+    "action_easier_pct": 0.137,
+    "action_same_pct": 0.5859,
+    "action_harder_pct": 0.2772
+  },
+  {
+    "seed": 999,
+    "timestep": 82688,
+    "episode": 5512,
+    "latest_reward": 0.1905,
+    "mean_reward_rolling": 0.2326,
+    "action_easier_pct": 0.1369,
+    "action_same_pct": 0.5859,
+    "action_harder_pct": 0.2772
+  },
+  {
+    "seed": 999,
+    "timestep": 82944,
+    "episode": 5529,
+    "latest_reward": 0.1988,
+    "mean_reward_rolling": 0.2537,
+    "action_easier_pct": 0.1368,
+    "action_same_pct": 0.586,
+    "action_harder_pct": 0.2772
+  },
+  {
+    "seed": 999,
+    "timestep": 83200,
+    "episode": 5546,
+    "latest_reward": 0.2067,
+    "mean_reward_rolling": 0.2473,
+    "action_easier_pct": 0.1366,
+    "action_same_pct": 0.5862,
+    "action_harder_pct": 0.2773
+  },
+  {
+    "seed": 999,
+    "timestep": 83456,
+    "episode": 5563,
+    "latest_reward": 0.2027,
+    "mean_reward_rolling": 0.2193,
+    "action_easier_pct": 0.1363,
+    "action_same_pct": 0.5865,
+    "action_harder_pct": 0.2772
+  },
+  {
+    "seed": 999,
+    "timestep": 83712,
+    "episode": 5580,
+    "latest_reward": 0.2314,
+    "mean_reward_rolling": 0.2202,
+    "action_easier_pct": 0.1361,
+    "action_same_pct": 0.5866,
+    "action_harder_pct": 0.2773
+  },
+  {
+    "seed": 999,
+    "timestep": 83968,
+    "episode": 5597,
+    "latest_reward": 0.305,
+    "mean_reward_rolling": 0.2413,
+    "action_easier_pct": 0.1359,
+    "action_same_pct": 0.5867,
+    "action_harder_pct": 0.2774
+  },
+  {
+    "seed": 999,
+    "timestep": 84224,
+    "episode": 5614,
+    "latest_reward": 0.2005,
+    "mean_reward_rolling": 0.2143,
+    "action_easier_pct": 0.1357,
+    "action_same_pct": 0.5873,
+    "action_harder_pct": 0.277
+  },
+  {
+    "seed": 999,
+    "timestep": 84480,
+    "episode": 5632,
+    "latest_reward": 0.1943,
+    "mean_reward_rolling": 0.2247,
+    "action_easier_pct": 0.1356,
+    "action_same_pct": 0.5874,
+    "action_harder_pct": 0.2771
+  },
+  {
+    "seed": 999,
+    "timestep": 84736,
+    "episode": 5649,
+    "latest_reward": 0.3597,
+    "mean_reward_rolling": 0.1914,
+    "action_easier_pct": 0.1355,
+    "action_same_pct": 0.5874,
+    "action_harder_pct": 0.2771
+  },
+  {
+    "seed": 999,
+    "timestep": 84992,
+    "episode": 5666,
+    "latest_reward": 0.2548,
+    "mean_reward_rolling": 0.235,
+    "action_easier_pct": 0.1352,
+    "action_same_pct": 0.5878,
+    "action_harder_pct": 0.277
+  },
+  {
+    "seed": 999,
+    "timestep": 85248,
+    "episode": 5683,
+    "latest_reward": 0.2806,
+    "mean_reward_rolling": 0.2253,
+    "action_easier_pct": 0.1351,
+    "action_same_pct": 0.5881,
+    "action_harder_pct": 0.2768
+  },
+  {
+    "seed": 999,
+    "timestep": 85504,
+    "episode": 5700,
+    "latest_reward": 0.1321,
+    "mean_reward_rolling": 0.26,
+    "action_easier_pct": 0.135,
+    "action_same_pct": 0.5884,
+    "action_harder_pct": 0.2767
+  },
+  {
+    "seed": 999,
+    "timestep": 85760,
+    "episode": 5717,
+    "latest_reward": -0.5809,
+    "mean_reward_rolling": 0.1747,
+    "action_easier_pct": 0.1348,
+    "action_same_pct": 0.5885,
+    "action_harder_pct": 0.2767
+  },
+  {
+    "seed": 999,
+    "timestep": 86016,
+    "episode": 5734,
+    "latest_reward": 0.1684,
+    "mean_reward_rolling": 0.2183,
+    "action_easier_pct": 0.1346,
+    "action_same_pct": 0.5891,
+    "action_harder_pct": 0.2764
+  },
+  {
+    "seed": 999,
+    "timestep": 86272,
+    "episode": 5751,
+    "latest_reward": 0.2001,
+    "mean_reward_rolling": 0.1783,
+    "action_easier_pct": 0.1345,
+    "action_same_pct": 0.5891,
+    "action_harder_pct": 0.2764
+  },
+  {
+    "seed": 999,
+    "timestep": 86528,
+    "episode": 5768,
+    "latest_reward": 0.3019,
+    "mean_reward_rolling": 0.2591,
+    "action_easier_pct": 0.1344,
+    "action_same_pct": 0.5893,
+    "action_harder_pct": 0.2764
+  },
+  {
+    "seed": 999,
+    "timestep": 86784,
+    "episode": 5785,
+    "latest_reward": 0.2719,
+    "mean_reward_rolling": 0.2213,
+    "action_easier_pct": 0.1341,
+    "action_same_pct": 0.5898,
+    "action_harder_pct": 0.2761
+  },
+  {
+    "seed": 999,
+    "timestep": 87040,
+    "episode": 5802,
+    "latest_reward": 0.1779,
+    "mean_reward_rolling": 0.2241,
+    "action_easier_pct": 0.134,
+    "action_same_pct": 0.5901,
+    "action_harder_pct": 0.276
+  },
+  {
+    "seed": 999,
+    "timestep": 87296,
+    "episode": 5819,
+    "latest_reward": 0.3073,
+    "mean_reward_rolling": 0.2311,
+    "action_easier_pct": 0.1339,
+    "action_same_pct": 0.5902,
+    "action_harder_pct": 0.2759
+  },
+  {
+    "seed": 999,
+    "timestep": 87552,
+    "episode": 5836,
+    "latest_reward": 0.253,
+    "mean_reward_rolling": 0.2498,
+    "action_easier_pct": 0.1338,
+    "action_same_pct": 0.5902,
+    "action_harder_pct": 0.276
+  },
+  {
+    "seed": 999,
+    "timestep": 87808,
+    "episode": 5853,
+    "latest_reward": 0.2372,
+    "mean_reward_rolling": 0.2199,
+    "action_easier_pct": 0.1335,
+    "action_same_pct": 0.5908,
+    "action_harder_pct": 0.2757
+  },
+  {
+    "seed": 999,
+    "timestep": 88064,
+    "episode": 5870,
+    "latest_reward": 0.193,
+    "mean_reward_rolling": 0.2456,
+    "action_easier_pct": 0.1335,
+    "action_same_pct": 0.5908,
+    "action_harder_pct": 0.2757
+  },
+  {
+    "seed": 999,
+    "timestep": 88320,
+    "episode": 5888,
+    "latest_reward": 0.2934,
+    "mean_reward_rolling": 0.231,
+    "action_easier_pct": 0.1335,
+    "action_same_pct": 0.5907,
+    "action_harder_pct": 0.2758
+  },
+  {
+    "seed": 999,
+    "timestep": 88576,
+    "episode": 5905,
+    "latest_reward": 0.312,
+    "mean_reward_rolling": 0.2133,
+    "action_easier_pct": 0.1332,
+    "action_same_pct": 0.5912,
+    "action_harder_pct": 0.2756
+  },
+  {
+    "seed": 999,
+    "timestep": 88832,
+    "episode": 5922,
+    "latest_reward": 0.2585,
+    "mean_reward_rolling": 0.2355,
+    "action_easier_pct": 0.1332,
+    "action_same_pct": 0.5914,
+    "action_harder_pct": 0.2754
+  },
+  {
+    "seed": 999,
+    "timestep": 89088,
+    "episode": 5939,
+    "latest_reward": 0.1907,
+    "mean_reward_rolling": 0.2148,
+    "action_easier_pct": 0.1332,
+    "action_same_pct": 0.5912,
+    "action_harder_pct": 0.2756
+  },
+  {
+    "seed": 999,
+    "timestep": 89344,
+    "episode": 5956,
+    "latest_reward": 0.2353,
+    "mean_reward_rolling": 0.2448,
+    "action_easier_pct": 0.133,
+    "action_same_pct": 0.5914,
+    "action_harder_pct": 0.2755
+  },
+  {
+    "seed": 999,
+    "timestep": 89600,
+    "episode": 5973,
+    "latest_reward": 0.2066,
+    "mean_reward_rolling": 0.2258,
+    "action_easier_pct": 0.1328,
+    "action_same_pct": 0.592,
+    "action_harder_pct": 0.2752
+  },
+  {
+    "seed": 999,
+    "timestep": 89856,
+    "episode": 5990,
+    "latest_reward": 0.1878,
+    "mean_reward_rolling": 0.2393,
+    "action_easier_pct": 0.1328,
+    "action_same_pct": 0.592,
+    "action_harder_pct": 0.2752
+  },
+  {
+    "seed": 999,
+    "timestep": 90112,
+    "episode": 6007,
+    "latest_reward": 0.2558,
+    "mean_reward_rolling": 0.242,
+    "action_easier_pct": 0.1327,
+    "action_same_pct": 0.592,
+    "action_harder_pct": 0.2753
+  },
+  {
+    "seed": 999,
+    "timestep": 90368,
+    "episode": 6024,
+    "latest_reward": 0.255,
+    "mean_reward_rolling": 0.2239,
+    "action_easier_pct": 0.1325,
+    "action_same_pct": 0.5924,
+    "action_harder_pct": 0.2751
+  },
+  {
+    "seed": 999,
+    "timestep": 90624,
+    "episode": 6041,
+    "latest_reward": 0.2466,
+    "mean_reward_rolling": 0.2321,
+    "action_easier_pct": 0.1324,
+    "action_same_pct": 0.5924,
+    "action_harder_pct": 0.2752
+  },
+  {
+    "seed": 999,
+    "timestep": 90880,
+    "episode": 6058,
+    "latest_reward": 0.2467,
+    "mean_reward_rolling": 0.2305,
+    "action_easier_pct": 0.1324,
+    "action_same_pct": 0.5924,
+    "action_harder_pct": 0.2752
+  },
+  {
+    "seed": 999,
+    "timestep": 91136,
+    "episode": 6075,
+    "latest_reward": 0.2524,
+    "mean_reward_rolling": 0.2099,
+    "action_easier_pct": 0.1322,
+    "action_same_pct": 0.5927,
+    "action_harder_pct": 0.2751
+  },
+  {
+    "seed": 999,
+    "timestep": 91392,
+    "episode": 6092,
+    "latest_reward": 0.199,
+    "mean_reward_rolling": 0.2214,
+    "action_easier_pct": 0.132,
+    "action_same_pct": 0.5931,
+    "action_harder_pct": 0.2748
+  },
+  {
+    "seed": 999,
+    "timestep": 91648,
+    "episode": 6109,
+    "latest_reward": 0.2504,
+    "mean_reward_rolling": 0.2267,
+    "action_easier_pct": 0.1319,
+    "action_same_pct": 0.5933,
+    "action_harder_pct": 0.2748
+  },
+  {
+    "seed": 999,
+    "timestep": 91904,
+    "episode": 6126,
+    "latest_reward": 0.1938,
+    "mean_reward_rolling": 0.2397,
+    "action_easier_pct": 0.1318,
+    "action_same_pct": 0.5934,
+    "action_harder_pct": 0.2747
+  },
+  {
+    "seed": 999,
+    "timestep": 92160,
+    "episode": 6144,
+    "latest_reward": 0.2282,
+    "mean_reward_rolling": 0.2186,
+    "action_easier_pct": 0.1316,
+    "action_same_pct": 0.594,
+    "action_harder_pct": 0.2744
+  },
+  {
+    "seed": 999,
+    "timestep": 92416,
+    "episode": 6161,
+    "latest_reward": 0.2886,
+    "mean_reward_rolling": 0.2369,
+    "action_easier_pct": 0.1315,
+    "action_same_pct": 0.5942,
+    "action_harder_pct": 0.2743
+  },
+  {
+    "seed": 999,
+    "timestep": 92672,
+    "episode": 6178,
+    "latest_reward": 0.3217,
+    "mean_reward_rolling": 0.2181,
+    "action_easier_pct": 0.1315,
+    "action_same_pct": 0.5942,
+    "action_harder_pct": 0.2743
+  },
+  {
+    "seed": 999,
+    "timestep": 92928,
+    "episode": 6195,
+    "latest_reward": -0.517,
+    "mean_reward_rolling": 0.2244,
+    "action_easier_pct": 0.1314,
+    "action_same_pct": 0.5943,
+    "action_harder_pct": 0.2743
+  },
+  {
+    "seed": 999,
+    "timestep": 93184,
+    "episode": 6212,
+    "latest_reward": 0.1874,
+    "mean_reward_rolling": 0.2282,
+    "action_easier_pct": 0.1312,
+    "action_same_pct": 0.5947,
+    "action_harder_pct": 0.2741
+  },
+  {
+    "seed": 999,
+    "timestep": 93440,
+    "episode": 6229,
+    "latest_reward": 0.2268,
+    "mean_reward_rolling": 0.252,
+    "action_easier_pct": 0.1311,
+    "action_same_pct": 0.5947,
+    "action_harder_pct": 0.2741
+  },
+  {
+    "seed": 999,
+    "timestep": 93696,
+    "episode": 6246,
+    "latest_reward": 0.2408,
+    "mean_reward_rolling": 0.1891,
+    "action_easier_pct": 0.1311,
+    "action_same_pct": 0.5948,
+    "action_harder_pct": 0.274
+  },
+  {
+    "seed": 999,
+    "timestep": 93952,
+    "episode": 6263,
+    "latest_reward": 0.2153,
+    "mean_reward_rolling": 0.2103,
+    "action_easier_pct": 0.1309,
+    "action_same_pct": 0.5953,
+    "action_harder_pct": 0.2738
+  },
+  {
+    "seed": 999,
+    "timestep": 94208,
+    "episode": 6280,
+    "latest_reward": 0.2106,
+    "mean_reward_rolling": 0.2117,
+    "action_easier_pct": 0.1308,
+    "action_same_pct": 0.5953,
+    "action_harder_pct": 0.2739
+  },
+  {
+    "seed": 999,
+    "timestep": 94464,
+    "episode": 6297,
+    "latest_reward": 0.3112,
+    "mean_reward_rolling": 0.2489,
+    "action_easier_pct": 0.1308,
+    "action_same_pct": 0.5952,
+    "action_harder_pct": 0.274
+  },
+  {
+    "seed": 999,
+    "timestep": 94720,
+    "episode": 6314,
+    "latest_reward": 0.2922,
+    "mean_reward_rolling": 0.2223,
+    "action_easier_pct": 0.1306,
+    "action_same_pct": 0.5956,
+    "action_harder_pct": 0.2738
+  },
+  {
+    "seed": 999,
+    "timestep": 94976,
+    "episode": 6331,
+    "latest_reward": 0.2055,
+    "mean_reward_rolling": 0.2207,
+    "action_easier_pct": 0.1305,
+    "action_same_pct": 0.5957,
+    "action_harder_pct": 0.2738
+  },
+  {
+    "seed": 999,
+    "timestep": 95232,
+    "episode": 6348,
+    "latest_reward": 0.2953,
+    "mean_reward_rolling": 0.2386,
+    "action_easier_pct": 0.1304,
+    "action_same_pct": 0.5957,
+    "action_harder_pct": 0.2739
+  },
+  {
+    "seed": 999,
+    "timestep": 95488,
+    "episode": 6365,
+    "latest_reward": 0.277,
+    "mean_reward_rolling": 0.2414,
+    "action_easier_pct": 0.1304,
+    "action_same_pct": 0.5956,
+    "action_harder_pct": 0.274
+  },
+  {
+    "seed": 999,
+    "timestep": 95744,
+    "episode": 6382,
+    "latest_reward": 0.1833,
+    "mean_reward_rolling": 0.2179,
+    "action_easier_pct": 0.1302,
+    "action_same_pct": 0.5959,
+    "action_harder_pct": 0.2738
+  },
+  {
+    "seed": 999,
+    "timestep": 96000,
+    "episode": 6400,
+    "latest_reward": 0.2365,
+    "mean_reward_rolling": 0.2407,
+    "action_easier_pct": 0.1302,
+    "action_same_pct": 0.5959,
+    "action_harder_pct": 0.2739
+  },
+  {
+    "seed": 999,
+    "timestep": 96256,
+    "episode": 6417,
+    "latest_reward": 0.2819,
+    "mean_reward_rolling": 0.2458,
+    "action_easier_pct": 0.1301,
+    "action_same_pct": 0.596,
+    "action_harder_pct": 0.2739
+  },
+  {
+    "seed": 999,
+    "timestep": 96512,
+    "episode": 6434,
+    "latest_reward": 0.2802,
+    "mean_reward_rolling": 0.2107,
+    "action_easier_pct": 0.13,
+    "action_same_pct": 0.5963,
+    "action_harder_pct": 0.2738
+  },
+  {
+    "seed": 999,
+    "timestep": 96768,
+    "episode": 6451,
+    "latest_reward": 0.2687,
+    "mean_reward_rolling": 0.2254,
+    "action_easier_pct": 0.1299,
+    "action_same_pct": 0.5966,
+    "action_harder_pct": 0.2735
+  },
+  {
+    "seed": 999,
+    "timestep": 97024,
+    "episode": 6468,
+    "latest_reward": 0.1398,
+    "mean_reward_rolling": 0.2593,
+    "action_easier_pct": 0.1299,
+    "action_same_pct": 0.5966,
+    "action_harder_pct": 0.2735
+  },
+  {
+    "seed": 999,
+    "timestep": 97280,
+    "episode": 6485,
+    "latest_reward": 0.1927,
+    "mean_reward_rolling": 0.2471,
+    "action_easier_pct": 0.1298,
+    "action_same_pct": 0.5967,
+    "action_harder_pct": 0.2735
+  },
+  {
+    "seed": 999,
+    "timestep": 97536,
+    "episode": 6502,
+    "latest_reward": 0.1455,
+    "mean_reward_rolling": 0.2072,
+    "action_easier_pct": 0.1296,
+    "action_same_pct": 0.5971,
+    "action_harder_pct": 0.2733
+  },
+  {
+    "seed": 999,
+    "timestep": 97792,
+    "episode": 6519,
+    "latest_reward": 0.251,
+    "mean_reward_rolling": 0.164,
+    "action_easier_pct": 0.1296,
+    "action_same_pct": 0.5971,
+    "action_harder_pct": 0.2733
+  },
+  {
+    "seed": 999,
+    "timestep": 98048,
+    "episode": 6536,
+    "latest_reward": 0.2268,
+    "mean_reward_rolling": 0.2135,
+    "action_easier_pct": 0.1296,
+    "action_same_pct": 0.5969,
+    "action_harder_pct": 0.2735
+  },
+  {
+    "seed": 999,
+    "timestep": 98304,
+    "episode": 6553,
+    "latest_reward": 0.2235,
+    "mean_reward_rolling": 0.2249,
+    "action_easier_pct": 0.1295,
+    "action_same_pct": 0.5973,
+    "action_harder_pct": 0.2733
+  }
+]

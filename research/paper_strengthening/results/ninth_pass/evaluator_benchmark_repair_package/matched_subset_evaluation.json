@@ -1,0 +1,209 @@
+{
+  "description": "The recommended citable evaluator/human-gold estimate until a full benchmark repair is completed: production scoring (real, fully-indexed rubrics, no shortcuts), restricted to the 4 questions (1, 3, 10, 41) whose qid still matches its originally-intended content.",
+  "n_cases": 32,
+  "n_questions": 4,
+  "spearman_rho": 0.655,
+  "p_value": 4.736322735155105e-05,
+  "question_clustered_bootstrap_95pct_ci": [
+    0.4987,
+    0.809
+  ],
+  "bootstrap_note": "resamples the 4 distinct qids (not the 32 case instances), B=5000, seed=20270901, matching this project's established question-clustered bootstrap convention (evaluator_v2_recalibration_check.py)",
+  "mean_signed_diff": -0.006,
+  "mean_abs_diff": 0.2524,
+  "selection_limitation": "This is a reduced, non-random subset (the 4 questions that happened to keep their original qid) of the originally-intended 8-question design, not a fresh sample. It should not be described as replacing the original 8-question design's intended coverage or statistical power; it is the largest subset that can currently be scored with full production fidelity.",
+  "per_case": [
+    {
+      "case_id": "BM-001",
+      "qid": 1,
+      "eval_score": 0.6,
+      "gold_score": 0.9167
+    },
+    {
+      "case_id": "BM-002",
+      "qid": 1,
+      "eval_score": 0.8359,
+      "gold_score": 0.98
+    },
+    {
+      "case_id": "BM-003",
+      "qid": 1,
+      "eval_score": 0.4173,
+      "gold_score": 0.73
+    },
+    {
+      "case_id": "BM-004",
+      "qid": 1,
+      "eval_score": 0.0097,
+      "gold_score": 0.5267
+    },
+    {
+      "case_id": "BM-005",
+      "qid": 1,
+      "eval_score": 0.386,
+      "gold_score": 0.1433
+    },
+    {
+      "case_id": "BM-006",
+      "qid": 1,
+      "eval_score": 0.408,
+      "gold_score": 0.28
+    },
+    {
+      "case_id": "BM-007",
+      "qid": 1,
+      "eval_score": 0.203,
+      "gold_score": 0.06
+    },
+    {
+      "case_id": "BM-008",
+      "qid": 1,
+      "eval_score": 0.3707,
+      "gold_score": 0.1867
+    },
+    {
+      "case_id": "BM-009",
+      "qid": 3,
+      "eval_score": 0.6,
+      "gold_score": 0.92
+    },
+    {
+      "case_id": "BM-010",
+      "qid": 3,
+      "eval_score": 0.8709,
+      "gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-011",
+      "qid": 3,
+      "eval_score": 0.4041,
+      "gold_score": 0.5067
+    },
+    {
+      "case_id": "BM-012",
+      "qid": 3,
+      "eval_score": 0.2333,
+      "gold_score": 0.0833
+    },
+    {
+      "case_id": "BM-013",
+      "qid": 3,
+      "eval_score": 0.542,
+      "gold_score": 0.1667
+    },
+    {
+      "case_id": "BM-014",
+      "qid": 3,
+      "eval_score": 0.5937,
+      "gold_score": 0.3
+    },
+    {
+      "case_id": "BM-015",
+      "qid": 3,
+      "eval_score": 0.4499,
+      "gold_score": 0.1167
+    },
+    {
+      "case_id": "BM-016",
+      "qid": 3,
+      "eval_score": 0.5601,
+      "gold_score": 0.86
+    },
+    {
+      "case_id": "BM-017",
+      "qid": 10,
+      "eval_score": 0.7396,
+      "gold_score": 0.9067
+    },
+    {
+      "case_id": "BM-018",
+      "qid": 10,
+      "eval_score": 0.8185,
+      "gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-019",
+      "qid": 10,
+      "eval_score": 0.4479,
+      "gold_score": 0.55
+    },
+    {
+      "case_id": "BM-020",
+      "qid": 10,
+      "eval_score": 0.0,
+      "gold_score": 0.1167
+    },
+    {
+      "case_id": "BM-021",
+      "qid": 10,
+      "eval_score": 0.4088,
+      "gold_score": 0.1133
+    },
+    {
+      "case_id": "BM-022",
+      "qid": 10,
+      "eval_score": 0.6024,
+      "gold_score": 0.3
+    },
+    {
+      "case_id": "BM-023",
+      "qid": 10,
+      "eval_score": 0.297,
+      "gold_score": 0.1367
+    },
+    {
+      "case_id": "BM-024",
+      "qid": 10,
+      "eval_score": 0.437,
+      "gold_score": 0.14
+    },
+    {
+      "case_id": "BM-025",
+      "qid": 41,
+      "eval_score": 0.4074,
+      "gold_score": 0.9033
+    },
+    {
+      "case_id": "BM-026",
+      "qid": 41,
+      "eval_score": 0.7227,
+      "gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-027",
+      "qid": 41,
+      "eval_score": 0.3281,
+      "gold_score": 0.6333
+    },
+    {
+      "case_id": "BM-028",
+      "qid": 41,
+      "eval_score": 0.304,
+      "gold_score": 0.06
+    },
+    {
+      "case_id": "BM-029",
+      "qid": 41,
+      "eval_score": 0.442,
+      "gold_score": 0.0567
+    },
+    {
+      "case_id": "BM-030",
+      "qid": 41,
+      "eval_score": 0.5234,
+      "gold_score": 0.28
+    },
+    {
+      "case_id": "BM-031",
+      "qid": 41,
+      "eval_score": 0.3216,
+      "gold_score": 0.1567
+    },
+    {
+      "case_id": "BM-032",
+      "qid": 41,
+      "eval_score": 0.3862,
+      "gold_score": 0.7833
+    }
+  ]
+}

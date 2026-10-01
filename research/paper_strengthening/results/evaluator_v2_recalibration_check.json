@@ -1,0 +1,65 @@
+{
+  "n_cases": 64,
+  "n_questions": 8,
+  "bootstrap_reps": 2000,
+  "seed": 20260921,
+  "old_evaluator_full_composite": {
+    "point_rho": 0.38117943724207154,
+    "boot_n": 2000,
+    "ci_lower": 0.30869868633648023,
+    "ci_upper": 0.5889057509481991
+  },
+  "new_evaluator_full_composite": {
+    "point_rho": 0.3728121955657812,
+    "boot_n": 2000,
+    "ci_lower": 0.2954635890174876,
+    "ci_upper": 0.5563014323202562
+  },
+  "n_cases_with_changed_score": 6,
+  "mean_abs_score_delta": 0.0081,
+  "max_abs_score_delta": 0.12,
+  "per_case_deltas": [
+    {
+      "case_id": "BM-016",
+      "qid": 3,
+      "old": 0.6401,
+      "new": 0.5601,
+      "delta": -0.08
+    },
+    {
+      "case_id": "BM-025",
+      "qid": 41,
+      "old": 0.5274,
+      "new": 0.4074,
+      "delta": -0.12
+    },
+    {
+      "case_id": "BM-027",
+      "qid": 41,
+      "old": 0.4081,
+      "new": 0.3281,
+      "delta": -0.08
+    },
+    {
+      "case_id": "BM-029",
+      "qid": 41,
+      "old": 0.522,
+      "new": 0.442,
+      "delta": -0.08
+    },
+    {
+      "case_id": "BM-030",
+      "qid": 41,
+      "old": 0.6034,
+      "new": 0.5234,
+      "delta": -0.08
+    },
+    {
+      "case_id": "BM-032",
+      "qid": 41,
+      "old": 0.4662,
+      "new": 0.3862,
+      "delta": -0.08
+    }
+  ]
+}

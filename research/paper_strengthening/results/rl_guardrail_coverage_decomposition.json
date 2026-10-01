@@ -1,0 +1,251 @@
+{
+  "schema_verification": {
+    "turn_log_rows": 3500,
+    "distinct_condition_seed_groups": 14,
+    "distinct_sessions_all_conditions": 350,
+    "personas": [
+      "lucky_guesser",
+      "nervous_expert",
+      "normal",
+      "overconfident_fail",
+      "struggling_junior"
+    ],
+    "eval_seeds": [
+      1001,
+      2002,
+      3003,
+      4004,
+      5005
+    ],
+    "training_seeds_ppo": [
+      "123",
+      "42",
+      "456",
+      "789",
+      "999"
+    ],
+    "turns_per_session": 10,
+    "note_no_stored_oracle_field": "The frozen evaluation script (execute_paper3_study.run_session_trajectory) computes raw_action -> apply_canonical_guardrails -> final_action only. It does not compute or log an 'oracle' action; oracle_action_from_obs exists only in rl/env/interview_env.py, the TRAINING environment, where it shapes PPO's reward. All oracle_action values below are recomputed here (this script) from InterviewEnv.oracle_action_from_obs applied to the ALREADY-STORED per-turn state, not read from any stored oracle column."
+  },
+  "guardrail_recomputation_fidelity_check": {
+    "rows_checked": 1500,
+    "scope": "PPO+G and Constant-Same+G rows only (the only conditions where the frozen script actually applied guardrails)",
+    "final_action_mismatches": 0,
+    "guardrail_id_mismatches": 0,
+    "interpretation": "Recomputing apply_canonical_guardrails() from this script's own reconstructed avg_perf/progress/diff_norm and comparing to the stored final_action/guardrail_id in the frozen CSV, restricted to the two conditions where guardrails were actually applied during the original run. Zero mismatches means the state-reconstruction (avg_perf rolling window, progress, difficulty normalization) used throughout this analysis is verified correct against the frozen evaluation code's own recorded output, not merely assumed."
+  },
+  "integrity_check_vs_published_X3_0c_report": {
+    "per_seed_rule_activations": {
+      "123": 101,
+      "42": 122,
+      "456": 115,
+      "789": 120,
+      "999": 105
+    },
+    "total_rule_activations_5_seeds": 563,
+    "total_overrides_5_seeds": 99,
+    "total_unchanged_activations_5_seeds": 464,
+    "sessions_with_at_least_one_override": 41,
+    "total_sessions_ppo_plus_g": 125,
+    "matches_published_X3_0c_report": {
+      "total_rule_activations_5_seeds": true,
+      "total_overrides_5_seeds": true,
+      "total_unchanged_activations_5_seeds": true,
+      "sessions_with_at_least_one_override": true
+    },
+    "published_reference_values": {
+      "total_rule_activations_5_seeds": 563,
+      "total_overrides_5_seeds": 99,
+      "total_unchanged_activations_5_seeds": 464,
+      "sessions_with_at_least_one_override": 41
+    }
+  },
+  "total_sessions_and_turns": {
+    "PPO+G": {
+      "sessions": 125,
+      "turns": 1250
+    },
+    "PPO_raw": {
+      "sessions": 125,
+      "turns": 1250
+    },
+    "all_conditions_combined": {
+      "sessions": 350,
+      "turns": 3500
+    }
+  },
+  "guardrail_coverage_PPO_plus_G": {
+    "turns": 1250,
+    "coverage_overall": 0.4504,
+    "activations_by_rule": {
+      "g5_partial_same": 205,
+      "g4_stuck_easier": 167,
+      "g1_overload_protection": 111,
+      "g2_anxiety_stabilizer_same": 80
+    },
+    "override_rate_by_rule": {
+      "g1_overload_protection": {
+        "overrides": 49,
+        "activations": 111,
+        "override_share": 0.4414
+      },
+      "g2_anxiety_stabilizer_same": {
+        "overrides": 35,
+        "activations": 80,
+        "override_share": 0.4375
+      },
+      "g4_stuck_easier": {
+        "overrides": 15,
+        "activations": 167,
+        "override_share": 0.0898
+      },
+      "g5_partial_same": {
+        "overrides": 0,
+        "activations": 205,
+        "override_share": 0.0
+      }
+    },
+    "overall_override_rate_given_activation": 0.1758,
+    "overall_override_rate_of_all_turns": 0.0792
+  },
+  "precondition_overlap_PPO_plus_G": {
+    "total_turns": 1250,
+    "by_num_preconditions_true": {
+      "0": 687,
+      "2": 85,
+      "1": 423,
+      "3": 55
+    },
+    "overlap_combinations": {
+      "combo:g2_anxiety_stabilizer_same+g5_partial_same": 45,
+      "combo:g1_overload_protection+g2_anxiety_stabilizer_same+g4_stuck_easier": 55,
+      "combo:g2_anxiety_stabilizer_same+g4_stuck_easier": 40
+    }
+  },
+  "guardrail_free_states_PPO_plus_G": {
+    "turns": 687,
+    "share_of_all_PPO_plus_G_turns": 0.5496,
+    "oracle_action_distribution_counts": {
+      "Same": 385,
+      "Easier": 182,
+      "Harder": 120
+    },
+    "oracle_action_distribution_share": {
+      "Same": 0.5604,
+      "Easier": 0.2649,
+      "Harder": 0.1747
+    },
+    "oracle_nontrivial_share": 0.4396,
+    "ppo_raw_action_nonSame_share_in_these_states": 0.2722,
+    "ppo_raw_action_distribution_in_these_states": {
+      "Same": 500,
+      "Easier": 120,
+      "Harder": 67
+    },
+    "oracle_matches_ppo_raw_share_in_these_states": 0.7234
+  },
+  "oracle_vs_ppo_raw_confusion_in_free_states": {
+    "Easier": {
+      "Easier": 117,
+      "Harder": 65,
+      "Same": 0
+    },
+    "Harder": {
+      "Easier": 0,
+      "Harder": 0,
+      "Same": 120
+    },
+    "Same": {
+      "Easier": 3,
+      "Harder": 2,
+      "Same": 380
+    }
+  },
+  "actionable_disagreement_in_free_states": {
+    "turns_where_oracle_and_ppo_raw_disagree": 190,
+    "as_share_of_free_turns": 0.2766,
+    "as_share_of_all_PPO_plus_G_turns": 0.152,
+    "breakdown_oracle_wants_vs_ppo_proposes": {
+      "oracle=Easier_ppo=Harder": 65,
+      "oracle=Harder_ppo=Same": 120,
+      "oracle=Same_ppo=Easier": 3,
+      "oracle=Same_ppo=Harder": 2
+    },
+    "caveat": "This is the count of turns where, on the ALREADY-REALIZED PPO+G trajectory, the reward's oracle target disagreed with what PPO actually proposed and no guardrail was present to mask the difference. It is the closest available proxy for 'turns where PPO's own choice, not a guardrail, drove a departure from the reward's stated target' -- it is NOT a bound on achievable MAE improvement (agreement with the oracle is not the evaluation metric, and the oracle itself is an unvalidated hand-authored heuristic, not a proven-optimal target), and it is NOT policy-invariant (a different policy would visit a different, action-dependent distribution of states, per SimulatedCandidate's difficulty-dependent performance model)."
+  },
+  "ppo_raw_condition_note": "The 'PPO raw' condition runs with guardrails_enabled=False throughout, so its 'activation' column is always False by construction -- it is not a second guardrail-free sample of the same states as PPO+G, because disabling guardrails changes which difficulty each subsequent question is posed at, and therefore the candidate's subsequent performance (SimulatedCandidate's perf is a sigmoid of skill-minus-difficulty). It is reported only for its own raw-action distribution and MAE, not merged with PPO+G's guardrail-free subset.",
+  "ppo_raw_own_action_distribution": {
+    "Same": 1017,
+    "Easier": 209,
+    "Harder": 24
+  },
+  "variation_across_training_seeds": {
+    "123": {
+      "turns": 250,
+      "coverage": 0.404,
+      "free_share": 0.596,
+      "override_rate": 0.048
+    },
+    "42": {
+      "turns": 250,
+      "coverage": 0.488,
+      "free_share": 0.512,
+      "override_rate": 0.148
+    },
+    "456": {
+      "turns": 250,
+      "coverage": 0.46,
+      "free_share": 0.54,
+      "override_rate": 0.08
+    },
+    "789": {
+      "turns": 250,
+      "coverage": 0.48,
+      "free_share": 0.52,
+      "override_rate": 0.072
+    },
+    "999": {
+      "turns": 250,
+      "coverage": 0.42,
+      "free_share": 0.58,
+      "override_rate": 0.048
+    }
+  },
+  "variation_across_personas": {
+    "lucky_guesser": {
+      "turns": 250,
+      "coverage": 0.0,
+      "free_share": 1.0,
+      "override_rate": 0.0,
+      "oracle_nontrivial_share_in_free_states": 0.48
+    },
+    "nervous_expert": {
+      "turns": 250,
+      "coverage": 0.0,
+      "free_share": 1.0,
+      "override_rate": 0.0,
+      "oracle_nontrivial_share_in_free_states": 0.0
+    },
+    "normal": {
+      "turns": 250,
+      "coverage": 1.0,
+      "free_share": 0.0,
+      "override_rate": 0.0,
+      "oracle_nontrivial_share_in_free_states": null
+    },
+    "overconfident_fail": {
+      "turns": 250,
+      "coverage": 0.444,
+      "free_share": 0.556,
+      "override_rate": 0.196,
+      "oracle_nontrivial_share_in_free_states": 1.0
+    },
+    "struggling_junior": {
+      "turns": 250,
+      "coverage": 0.808,
+      "free_share": 0.192,
+      "override_rate": 0.2,
+      "oracle_nontrivial_share_in_free_states": 0.8958
+    }
+  }
+}

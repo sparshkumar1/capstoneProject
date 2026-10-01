@@ -1,0 +1,10 @@
+{
+  "arm": "MOO",
+  "factor_a": "matched",
+  "factor_b": "original",
+  "factor_c": "original",
+  "training_seed": 789,
+  "elapsed_sec": 72.13,
+  "final_model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1dynmatch_v1\\MOO\\seed_789\\MOO_seed789_final_24576.zip",
+  "final_vecnorm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1dynmatch_v1\\MOO\\seed_789\\MOO_seed789_vecnormalize_final_24576.pkl"
+}

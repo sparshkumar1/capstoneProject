@@ -1,0 +1,12 @@
+{
+  "checkpoint_used": "research\\experiments\\paper3\\checkpoints\\seed_42",
+  "checkpoint_sha256": {
+    "ppo_final.zip": "8395b6da753f5d272c46bfad018f7a7ae6e5508be58bcd732094771911b3d465",
+    "vecnormalize.pkl": "0e24cdd77e27170137ee5739d6b9258418a98bdf5a1a1bea23e8208ed85debcf"
+  },
+  "n_combinations_checked": 36,
+  "n_mismatches": 0,
+  "mismatches": [],
+  "parity_status": "PASS",
+  "note": "ordinary_candidate_factory cases compare x3a_lib.simulate() directly against the e1_simulate_adapter.simulate_diverse() loop using the same unwrapped SimulatedCandidate; diverse-k0 cases additionally check the DiverseCandidate identity-at-k=0 wrapper against the same x3a_lib.simulate() reference, using the real loaded PPO policy (not a deterministic stand-in policy as in the unit-test suite)."
+}

@@ -1,0 +1,107 @@
+[
+  {
+    "status": "completed",
+    "training_seed": 42,
+    "elapsed_sec": 676.8,
+    "checkpoint_interval": 8192,
+    "checkpoints_saved": [
+      8192,
+      16384,
+      24576,
+      32768,
+      40960,
+      49152,
+      57344,
+      65536,
+      73728,
+      81920,
+      90112,
+      98304
+    ],
+    "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2v2ckpt_seed42.csv"
+  },
+  {
+    "status": "completed",
+    "training_seed": 123,
+    "elapsed_sec": 512.86,
+    "checkpoint_interval": 8192,
+    "checkpoints_saved": [
+      8192,
+      16384,
+      24576,
+      32768,
+      40960,
+      49152,
+      57344,
+      65536,
+      73728,
+      81920,
+      90112,
+      98304
+    ],
+    "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2v2ckpt_seed123.csv"
+  },
+  {
+    "status": "completed",
+    "training_seed": 456,
+    "elapsed_sec": 234.5,
+    "checkpoint_interval": 8192,
+    "checkpoints_saved": [
+      8192,
+      16384,
+      24576,
+      32768,
+      40960,
+      49152,
+      57344,
+      65536,
+      73728,
+      81920,
+      90112,
+      98304
+    ],
+    "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2v2ckpt_seed456.csv"
+  },
+  {
+    "status": "completed",
+    "training_seed": 789,
+    "elapsed_sec": 216.71,
+    "checkpoint_interval": 8192,
+    "checkpoints_saved": [
+      8192,
+      16384,
+      24576,
+      32768,
+      40960,
+      49152,
+      57344,
+      65536,
+      73728,
+      81920,
+      90112,
+      98304
+    ],
+    "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2v2ckpt_seed789.csv"
+  },
+  {
+    "status": "completed",
+    "training_seed": 999,
+    "elapsed_sec": 210.76,
+    "checkpoint_interval": 8192,
+    "checkpoints_saved": [
+      8192,
+      16384,
+      24576,
+      32768,
+      40960,
+      49152,
+      57344,
+      65536,
+      73728,
+      81920,
+      90112,
+      98304
+    ],
+    "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2v2ckpt_seed999.csv"
+  }
+]

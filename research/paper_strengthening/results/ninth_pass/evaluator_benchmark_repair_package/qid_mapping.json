@@ -1,0 +1,146 @@
+[
+  {
+    "qid": 1,
+    "status": "matched",
+    "benchmark_question_text": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "current_live_question_text_for_this_qid": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "exact_text_match": true,
+    "case_ids": [
+      "BM-001",
+      "BM-002",
+      "BM-003",
+      "BM-004",
+      "BM-005",
+      "BM-006",
+      "BM-007",
+      "BM-008"
+    ],
+    "n_cases": 8
+  },
+  {
+    "qid": 3,
+    "status": "matched",
+    "benchmark_question_text": "Describe the approach to reverse a singly linked list in-place.",
+    "current_live_question_text_for_this_qid": "Describe the approach to reverse a singly linked list in-place.",
+    "exact_text_match": true,
+    "case_ids": [
+      "BM-009",
+      "BM-010",
+      "BM-011",
+      "BM-012",
+      "BM-013",
+      "BM-014",
+      "BM-015",
+      "BM-016"
+    ],
+    "n_cases": 8
+  },
+  {
+    "qid": 7,
+    "status": "mismatched",
+    "benchmark_question_text": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "current_live_question_text_for_this_qid": "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place.",
+    "exact_text_match": false,
+    "case_ids": [
+      "BM-033",
+      "BM-034",
+      "BM-035",
+      "BM-036",
+      "BM-037",
+      "BM-038",
+      "BM-039",
+      "BM-040"
+    ],
+    "n_cases": 8
+  },
+  {
+    "qid": 10,
+    "status": "matched",
+    "benchmark_question_text": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "current_live_question_text_for_this_qid": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+    "exact_text_match": true,
+    "case_ids": [
+      "BM-017",
+      "BM-018",
+      "BM-019",
+      "BM-020",
+      "BM-021",
+      "BM-022",
+      "BM-023",
+      "BM-024"
+    ],
+    "n_cases": 8
+  },
+  {
+    "qid": 15,
+    "status": "mismatched",
+    "benchmark_question_text": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "current_live_question_text_for_this_qid": "Describe the Three-Way Partition logic used in the Dutch National Flag problem.",
+    "exact_text_match": false,
+    "case_ids": [
+      "BM-041",
+      "BM-042",
+      "BM-043",
+      "BM-044",
+      "BM-045",
+      "BM-046",
+      "BM-047",
+      "BM-048"
+    ],
+    "n_cases": 8
+  },
+  {
+    "qid": 22,
+    "status": "mismatched",
+    "benchmark_question_text": "Explain the binary search algorithm and its preconditions.",
+    "current_live_question_text_for_this_qid": "Explain the logic to detect a cycle in an undirected graph using BFS.",
+    "exact_text_match": false,
+    "case_ids": [
+      "BM-049",
+      "BM-050",
+      "BM-051",
+      "BM-052",
+      "BM-053",
+      "BM-054",
+      "BM-055",
+      "BM-056"
+    ],
+    "n_cases": 8
+  },
+  {
+    "qid": 41,
+    "status": "matched",
+    "benchmark_question_text": "What is a pointer in C and how do you declare one?",
+    "current_live_question_text_for_this_qid": "What is a pointer in C and how do you declare one?",
+    "exact_text_match": true,
+    "case_ids": [
+      "BM-025",
+      "BM-026",
+      "BM-027",
+      "BM-028",
+      "BM-029",
+      "BM-030",
+      "BM-031",
+      "BM-032"
+    ],
+    "n_cases": 8
+  },
+  {
+    "qid": 50,
+    "status": "mismatched",
+    "benchmark_question_text": "What is a race condition in multithreading and how do you prevent it?",
+    "current_live_question_text_for_this_qid": "What is a segmentation fault and how is it caused?",
+    "exact_text_match": false,
+    "case_ids": [
+      "BM-057",
+      "BM-058",
+      "BM-059",
+      "BM-060",
+      "BM-061",
+      "BM-062",
+      "BM-063",
+      "BM-064"
+    ],
+    "n_cases": 8
+  }
+]

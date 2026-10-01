@@ -1,0 +1,248 @@
+{
+  "primary_comparison_24576": {
+    "OOO_pooled_mae": 0.27348484848484844,
+    "OOO_sd": 0.22693788465005102,
+    "MMM_pooled_mae": 0.39030303030303026,
+    "MMM_sd": 0.3664732773253353,
+    "MMM_minus_OOO": 0.11681818181818182,
+    "gap_to_heuristic_G_0.2674": {
+      "OOO": 0.006084848484848415,
+      "MMM": 0.12290303030303024
+    }
+  },
+  "paired_within_seed_mmm_vs_ooo": [
+    {
+      "training_seed": 42,
+      "OOO_mae": 0.2651515151515151,
+      "MMM_mae": 0.3939393939393939,
+      "MMM_minus_OOO": 0.12878787878787884
+    },
+    {
+      "training_seed": 123,
+      "OOO_mae": 0.28106060606060607,
+      "MMM_mae": 0.4151515151515151,
+      "MMM_minus_OOO": 0.13409090909090904
+    },
+    {
+      "training_seed": 456,
+      "OOO_mae": 0.2674242424242424,
+      "MMM_mae": 0.3871212121212121,
+      "MMM_minus_OOO": 0.11969696969696969
+    },
+    {
+      "training_seed": 789,
+      "OOO_mae": 0.2651515151515151,
+      "MMM_mae": 0.40378787878787875,
+      "MMM_minus_OOO": 0.13863636363636367
+    },
+    {
+      "training_seed": 999,
+      "OOO_mae": 0.28863636363636364,
+      "MMM_mae": 0.35151515151515145,
+      "MMM_minus_OOO": 0.06287878787878781
+    }
+  ],
+  "per_cell_mmm_vs_ooo_regressions": [
+    {
+      "skill": 0.2,
+      "k": 0.0,
+      "OOO_mae": 0.2727272727272727,
+      "MMM_mae": 0.2727272727272727,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.2,
+      "k": 0.3,
+      "OOO_mae": 0.2727272727272727,
+      "MMM_mae": 0.2727272727272727,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.2,
+      "k": 0.45,
+      "OOO_mae": 0.2727272727272727,
+      "MMM_mae": 0.2727272727272727,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.2,
+      "k": 0.6,
+      "OOO_mae": 0.2727272727272727,
+      "MMM_mae": 0.2727272727272727,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.35,
+      "k": 0.0,
+      "OOO_mae": 0.1090909090909091,
+      "MMM_mae": 0.15636363636363637,
+      "MMM_minus_OOO": 0.04727272727272727,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.35,
+      "k": 0.3,
+      "OOO_mae": 0.0909090909090909,
+      "MMM_mae": 0.0909090909090909,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.35,
+      "k": 0.45,
+      "OOO_mae": 0.0909090909090909,
+      "MMM_mae": 0.0909090909090909,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.35,
+      "k": 0.6,
+      "OOO_mae": 0.0909090909090909,
+      "MMM_mae": 0.0909090909090909,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.5,
+      "k": 0.0,
+      "OOO_mae": 0.5,
+      "MMM_mae": 0.5,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.5,
+      "k": 0.3,
+      "OOO_mae": 0.5,
+      "MMM_mae": 0.5,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.5,
+      "k": 0.45,
+      "OOO_mae": 0.5,
+      "MMM_mae": 0.5,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.5,
+      "k": 0.6,
+      "OOO_mae": 0.5,
+      "MMM_mae": 0.5,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.65,
+      "k": 0.0,
+      "OOO_mae": 0.021818181818181816,
+      "MMM_mae": 0.014545454545454545,
+      "MMM_minus_OOO": -0.007272727272727271,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.65,
+      "k": 0.3,
+      "OOO_mae": 0.0,
+      "MMM_mae": 0.0,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.65,
+      "k": 0.45,
+      "OOO_mae": 0.0,
+      "MMM_mae": 0.0,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.65,
+      "k": 0.6,
+      "OOO_mae": 0.0,
+      "MMM_mae": 0.0,
+      "MMM_minus_OOO": 0.0,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.8,
+      "k": 0.0,
+      "OOO_mae": 0.2727272727272727,
+      "MMM_mae": 0.0909090909090909,
+      "MMM_minus_OOO": -0.18181818181818182,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.8,
+      "k": 0.3,
+      "OOO_mae": 0.0909090909090909,
+      "MMM_mae": 0.5127272727272727,
+      "MMM_minus_OOO": 0.4218181818181818,
+      "regressed_ge_0.05": true
+    },
+    {
+      "skill": 0.8,
+      "k": 0.45,
+      "OOO_mae": 0.16363636363636364,
+      "MMM_mae": 0.9636363636363636,
+      "MMM_minus_OOO": 0.8,
+      "regressed_ge_0.05": true
+    },
+    {
+      "skill": 0.8,
+      "k": 0.6,
+      "OOO_mae": 0.16363636363636364,
+      "MMM_mae": 1.0,
+      "MMM_minus_OOO": 0.8363636363636364,
+      "regressed_ge_0.05": true
+    },
+    {
+      "skill": 0.9,
+      "k": 0.0,
+      "OOO_mae": 0.6054545454545456,
+      "MMM_mae": 0.590909090909091,
+      "MMM_minus_OOO": -0.014545454545454528,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.9,
+      "k": 0.3,
+      "OOO_mae": 0.590909090909091,
+      "MMM_mae": 0.6018181818181819,
+      "MMM_minus_OOO": 0.010909090909090868,
+      "regressed_ge_0.05": false
+    },
+    {
+      "skill": 0.9,
+      "k": 0.45,
+      "OOO_mae": 0.590909090909091,
+      "MMM_mae": 0.7690909090909092,
+      "MMM_minus_OOO": 0.1781818181818181,
+      "regressed_ge_0.05": true
+    },
+    {
+      "skill": 0.9,
+      "k": 0.6,
+      "OOO_mae": 0.590909090909091,
+      "MMM_mae": 1.3036363636363637,
+      "MMM_minus_OOO": 0.7127272727272727,
+      "regressed_ge_0.05": true
+    }
+  ],
+  "n_cells_regressed_ge_0.05": 5,
+  "extended_budget_trigger": {
+    "mae_gap_ooo_minus_mmm": -0.11681818181818182,
+    "required_gap": 0.02,
+    "max_percell_regression": 0.8363636363636364,
+    "required_max_regression": "< 0.05",
+    "triggered": false
+  },
+  "practical_improvement_criterion_met_for_MMM_vs_OOO": false
+}

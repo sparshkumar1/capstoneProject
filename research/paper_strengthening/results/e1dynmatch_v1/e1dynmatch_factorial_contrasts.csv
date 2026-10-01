@@ -1,0 +1,22 @@
+checkpoint_step,contrast,value_mae_units,interpretation
+8192,A,0.0333,"main effect of step-size/floor factor (matched - original, averaged)"
+8192,B,0.05466,main effect of horizon factor
+8192,C,0.01799,main effect of initial-difficulty factor
+8192,AB,-0.01163,A x B interaction
+8192,AC,-0.0192,A x C interaction
+8192,BC,0.02231,B x C interaction
+8192,ABC,-0.01004,three-way interaction
+16384,A,0.04898,"main effect of step-size/floor factor (matched - original, averaged)"
+16384,B,0.02822,main effect of horizon factor
+16384,C,0.0358,main effect of initial-difficulty factor
+16384,AB,-0.00799,A x B interaction
+16384,AC,0.01504,A x C interaction
+16384,BC,0.02686,B x C interaction
+16384,ABC,0.00504,three-way interaction
+24576,A,0.06758,"main effect of step-size/floor factor (matched - original, averaged)"
+24576,B,0.02144,main effect of horizon factor
+24576,C,-0.00114,main effect of initial-difficulty factor
+24576,AB,-0.02644,A x B interaction
+24576,AC,-0.00811,A x C interaction
+24576,BC,0.03924,B x C interaction
+24576,ABC,0.02894,three-way interaction

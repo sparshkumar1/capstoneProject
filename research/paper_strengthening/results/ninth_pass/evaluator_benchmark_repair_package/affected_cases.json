@@ -1,0 +1,322 @@
+[
+  {
+    "case_id": "BM-033",
+    "qid": 7,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "current_live_rubric_question": "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-034",
+    "qid": 7,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "current_live_rubric_question": "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-035",
+    "qid": 7,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "current_live_rubric_question": "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-036",
+    "qid": 7,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "current_live_rubric_question": "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-037",
+    "qid": 7,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "current_live_rubric_question": "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-038",
+    "qid": 7,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "current_live_rubric_question": "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-039",
+    "qid": 7,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "current_live_rubric_question": "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-040",
+    "qid": 7,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+    "current_live_rubric_question": "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-041",
+    "qid": 15,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "current_live_rubric_question": "Describe the Three-Way Partition logic used in the Dutch National Flag problem.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-042",
+    "qid": 15,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "current_live_rubric_question": "Describe the Three-Way Partition logic used in the Dutch National Flag problem.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-043",
+    "qid": 15,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "current_live_rubric_question": "Describe the Three-Way Partition logic used in the Dutch National Flag problem.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-044",
+    "qid": 15,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "current_live_rubric_question": "Describe the Three-Way Partition logic used in the Dutch National Flag problem.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-045",
+    "qid": 15,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "current_live_rubric_question": "Describe the Three-Way Partition logic used in the Dutch National Flag problem.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-046",
+    "qid": 15,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "current_live_rubric_question": "Describe the Three-Way Partition logic used in the Dutch National Flag problem.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-047",
+    "qid": 15,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "current_live_rubric_question": "Describe the Three-Way Partition logic used in the Dutch National Flag problem.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-048",
+    "qid": 15,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+    "current_live_rubric_question": "Describe the Three-Way Partition logic used in the Dutch National Flag problem.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-049",
+    "qid": 22,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain the binary search algorithm and its preconditions.",
+    "current_live_rubric_question": "Explain the logic to detect a cycle in an undirected graph using BFS.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-050",
+    "qid": 22,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain the binary search algorithm and its preconditions.",
+    "current_live_rubric_question": "Explain the logic to detect a cycle in an undirected graph using BFS.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-051",
+    "qid": 22,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain the binary search algorithm and its preconditions.",
+    "current_live_rubric_question": "Explain the logic to detect a cycle in an undirected graph using BFS.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-052",
+    "qid": 22,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain the binary search algorithm and its preconditions.",
+    "current_live_rubric_question": "Explain the logic to detect a cycle in an undirected graph using BFS.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-053",
+    "qid": 22,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain the binary search algorithm and its preconditions.",
+    "current_live_rubric_question": "Explain the logic to detect a cycle in an undirected graph using BFS.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-054",
+    "qid": 22,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain the binary search algorithm and its preconditions.",
+    "current_live_rubric_question": "Explain the logic to detect a cycle in an undirected graph using BFS.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-055",
+    "qid": 22,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain the binary search algorithm and its preconditions.",
+    "current_live_rubric_question": "Explain the logic to detect a cycle in an undirected graph using BFS.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-056",
+    "qid": 22,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "Explain the binary search algorithm and its preconditions.",
+    "current_live_rubric_question": "Explain the logic to detect a cycle in an undirected graph using BFS.",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-057",
+    "qid": 50,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "What is a race condition in multithreading and how do you prevent it?",
+    "current_live_rubric_question": "What is a segmentation fault and how is it caused?",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-058",
+    "qid": 50,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "What is a race condition in multithreading and how do you prevent it?",
+    "current_live_rubric_question": "What is a segmentation fault and how is it caused?",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-059",
+    "qid": 50,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "What is a race condition in multithreading and how do you prevent it?",
+    "current_live_rubric_question": "What is a segmentation fault and how is it caused?",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-060",
+    "qid": 50,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "What is a race condition in multithreading and how do you prevent it?",
+    "current_live_rubric_question": "What is a segmentation fault and how is it caused?",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-061",
+    "qid": 50,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "What is a race condition in multithreading and how do you prevent it?",
+    "current_live_rubric_question": "What is a segmentation fault and how is it caused?",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-062",
+    "qid": 50,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "What is a race condition in multithreading and how do you prevent it?",
+    "current_live_rubric_question": "What is a segmentation fault and how is it caused?",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-063",
+    "qid": 50,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "What is a race condition in multithreading and how do you prevent it?",
+    "current_live_rubric_question": "What is a segmentation fault and how is it caused?",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  },
+  {
+    "case_id": "BM-064",
+    "qid": 50,
+    "reason": "benchmark question text does not match the current live rubrics.json/qns.json entry for this qid",
+    "benchmark_question": "What is a race condition in multithreading and how do you prevent it?",
+    "current_live_rubric_question": "What is a segmentation fault and how is it caused?",
+    "gold_score_still_valid": true,
+    "gold_score_note": "human rating was made against the benchmark's own stored question/answer text, not against get_rubric(qid); unaffected by this bug",
+    "production_rescoring_via_get_rubric_qid_is_invalid_for_this_case": true
+  }
+]

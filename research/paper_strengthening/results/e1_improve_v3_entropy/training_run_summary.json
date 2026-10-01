@@ -1,0 +1,62 @@
+[
+  {
+    "status": "completed",
+    "arm": "B2ent",
+    "training_seed": 42,
+    "timesteps": 98304,
+    "extended_budget": true,
+    "ent_coef": 0.01,
+    "elapsed_sec": 452.72,
+    "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2ent_ext_seed42.csv",
+    "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_42\\ppo_final.zip",
+    "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_42\\vecnormalize.pkl"
+  },
+  {
+    "status": "completed",
+    "arm": "B2ent",
+    "training_seed": 123,
+    "timesteps": 98304,
+    "extended_budget": true,
+    "ent_coef": 0.01,
+    "elapsed_sec": 390.55,
+    "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2ent_ext_seed123.csv",
+    "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_123\\ppo_final.zip",
+    "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_123\\vecnormalize.pkl"
+  },
+  {
+    "status": "completed",
+    "arm": "B2ent",
+    "training_seed": 456,
+    "timesteps": 98304,
+    "extended_budget": true,
+    "ent_coef": 0.01,
+    "elapsed_sec": 404.81,
+    "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2ent_ext_seed456.csv",
+    "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_456\\ppo_final.zip",
+    "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_456\\vecnormalize.pkl"
+  },
+  {
+    "status": "completed",
+    "arm": "B2ent",
+    "training_seed": 789,
+    "timesteps": 98304,
+    "extended_budget": true,
+    "ent_coef": 0.01,
+    "elapsed_sec": 481.01,
+    "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2ent_ext_seed789.csv",
+    "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_789\\ppo_final.zip",
+    "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_789\\vecnormalize.pkl"
+  },
+  {
+    "status": "completed",
+    "arm": "B2ent",
+    "training_seed": 999,
+    "timesteps": 98304,
+    "extended_budget": true,
+    "ent_coef": 0.01,
+    "elapsed_sec": 482.26,
+    "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2ent_ext_seed999.csv",
+    "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_999\\ppo_final.zip",
+    "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_999\\vecnormalize.pkl"
+  }
+]

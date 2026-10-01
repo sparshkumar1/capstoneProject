@@ -1,0 +1,709 @@
+{
+  "mismatch_confirmation_from_live_question_bank": {
+    "1": {
+      "benchmark_question": "Explain your logic to find the two indices in an array that sum up to a target value.",
+      "live_rubric_question": "Explain your logic to find the two indices in an array that sum up to a target value."
+    },
+    "3": {
+      "benchmark_question": "Describe the approach to reverse a singly linked list in-place.",
+      "live_rubric_question": "Describe the approach to reverse a singly linked list in-place."
+    },
+    "7": {
+      "benchmark_question": "How do you determine the number of distinct ways to climb n stairs if you can take 1 or 2 steps?",
+      "live_rubric_question": "Explain how to rotate an N x N matrix by 90 degrees clockwise in-place."
+    },
+    "10": {
+      "benchmark_question": "Explain the BFS (Level Order) traversal logic for a binary tree.",
+      "live_rubric_question": "Explain the BFS (Level Order) traversal logic for a binary tree."
+    },
+    "15": {
+      "benchmark_question": "Explain how Depth First Search (DFS) detects a cycle in a directed graph.",
+      "live_rubric_question": "Describe the Three-Way Partition logic used in the Dutch National Flag problem."
+    },
+    "22": {
+      "benchmark_question": "Explain the binary search algorithm and its preconditions.",
+      "live_rubric_question": "Explain the logic to detect a cycle in an undirected graph using BFS."
+    },
+    "41": {
+      "benchmark_question": "What is a pointer in C and how do you declare one?",
+      "live_rubric_question": "What is a pointer in C and how do you declare one?"
+    },
+    "50": {
+      "benchmark_question": "What is a race condition in multithreading and how do you prevent it?",
+      "live_rubric_question": "What is a segmentation fault and how is it caused?"
+    }
+  },
+  "full_64_case_set_stale_scoring": {
+    "n": 64,
+    "mean_signed_diff": -0.1419,
+    "mean_abs_diff": 0.2951,
+    "spearman_rho": 0.3728
+  },
+  "matched_32_case_subset_stale_scoring": {
+    "n": 32,
+    "mean_signed_diff": -0.006,
+    "mean_abs_diff": 0.2524,
+    "spearman_rho": 0.655
+  },
+  "mismatched_32_case_subset_stale_scoring": {
+    "n": 32,
+    "mean_signed_diff": -0.2778,
+    "mean_abs_diff": 0.3378,
+    "spearman_rho": 0.4249
+  },
+  "mismatched_32_case_subset_adhoc_rescoring": {
+    "n": 32,
+    "mean_signed_diff": 0.0388,
+    "mean_abs_diff": 0.2021,
+    "spearman_rho": 0.7098
+  },
+  "full_64_case_set_with_mismatched_cases_adhoc_rescored": {
+    "n": 64,
+    "mean_signed_diff": 0.0164,
+    "mean_abs_diff": 0.2273,
+    "spearman_rho": 0.7002
+  },
+  "per_case": [
+    {
+      "case_id": "BM-001",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.6,
+      "rescored_score": null,
+      "gold_score": 0.9167,
+      "stale_signed_diff": -0.3167,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-002",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.8359,
+      "rescored_score": null,
+      "gold_score": 0.98,
+      "stale_signed_diff": -0.1441,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-003",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.4173,
+      "rescored_score": null,
+      "gold_score": 0.73,
+      "stale_signed_diff": -0.3127,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-004",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.0097,
+      "rescored_score": null,
+      "gold_score": 0.5267,
+      "stale_signed_diff": -0.517,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-005",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.386,
+      "rescored_score": null,
+      "gold_score": 0.1433,
+      "stale_signed_diff": 0.2427,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-006",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.408,
+      "rescored_score": null,
+      "gold_score": 0.28,
+      "stale_signed_diff": 0.128,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-007",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.203,
+      "rescored_score": null,
+      "gold_score": 0.06,
+      "stale_signed_diff": 0.143,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-008",
+      "qid": 1,
+      "group": "matched",
+      "stale_score": 0.3707,
+      "rescored_score": null,
+      "gold_score": 0.1867,
+      "stale_signed_diff": 0.184,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-009",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.6,
+      "rescored_score": null,
+      "gold_score": 0.92,
+      "stale_signed_diff": -0.32,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-010",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.8709,
+      "rescored_score": null,
+      "gold_score": 0.9833,
+      "stale_signed_diff": -0.1124,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-011",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.4041,
+      "rescored_score": null,
+      "gold_score": 0.5067,
+      "stale_signed_diff": -0.1026,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-012",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.2333,
+      "rescored_score": null,
+      "gold_score": 0.0833,
+      "stale_signed_diff": 0.15,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-013",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.542,
+      "rescored_score": null,
+      "gold_score": 0.1667,
+      "stale_signed_diff": 0.3753,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-014",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.5937,
+      "rescored_score": null,
+      "gold_score": 0.3,
+      "stale_signed_diff": 0.2937,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-015",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.4499,
+      "rescored_score": null,
+      "gold_score": 0.1167,
+      "stale_signed_diff": 0.3332,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-016",
+      "qid": 3,
+      "group": "matched",
+      "stale_score": 0.5601,
+      "rescored_score": null,
+      "gold_score": 0.86,
+      "stale_signed_diff": -0.2999,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-017",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.7396,
+      "rescored_score": null,
+      "gold_score": 0.9067,
+      "stale_signed_diff": -0.1671,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-018",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.8185,
+      "rescored_score": null,
+      "gold_score": 0.9833,
+      "stale_signed_diff": -0.1648,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-019",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.4479,
+      "rescored_score": null,
+      "gold_score": 0.55,
+      "stale_signed_diff": -0.1021,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-020",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.0,
+      "rescored_score": null,
+      "gold_score": 0.1167,
+      "stale_signed_diff": -0.1167,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-021",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.4088,
+      "rescored_score": null,
+      "gold_score": 0.1133,
+      "stale_signed_diff": 0.2955,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-022",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.6024,
+      "rescored_score": null,
+      "gold_score": 0.3,
+      "stale_signed_diff": 0.3024,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-023",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.297,
+      "rescored_score": null,
+      "gold_score": 0.1367,
+      "stale_signed_diff": 0.1603,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-024",
+      "qid": 10,
+      "group": "matched",
+      "stale_score": 0.437,
+      "rescored_score": null,
+      "gold_score": 0.14,
+      "stale_signed_diff": 0.297,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-025",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.4074,
+      "rescored_score": null,
+      "gold_score": 0.9033,
+      "stale_signed_diff": -0.4959,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-026",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.7227,
+      "rescored_score": null,
+      "gold_score": 0.9833,
+      "stale_signed_diff": -0.2606,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-027",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.3281,
+      "rescored_score": null,
+      "gold_score": 0.6333,
+      "stale_signed_diff": -0.3052,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-028",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.304,
+      "rescored_score": null,
+      "gold_score": 0.06,
+      "stale_signed_diff": 0.244,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-029",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.442,
+      "rescored_score": null,
+      "gold_score": 0.0567,
+      "stale_signed_diff": 0.3853,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-030",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.5234,
+      "rescored_score": null,
+      "gold_score": 0.28,
+      "stale_signed_diff": 0.2434,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-031",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.3216,
+      "rescored_score": null,
+      "gold_score": 0.1567,
+      "stale_signed_diff": 0.1649,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-032",
+      "qid": 41,
+      "group": "matched",
+      "stale_score": 0.3862,
+      "rescored_score": null,
+      "gold_score": 0.7833,
+      "stale_signed_diff": -0.3971,
+      "rescored_signed_diff": null
+    },
+    {
+      "case_id": "BM-033",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.2142,
+      "rescored_score": 0.7243,
+      "gold_score": 0.9233,
+      "stale_signed_diff": -0.7091,
+      "rescored_signed_diff": -0.199
+    },
+    {
+      "case_id": "BM-034",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.4151,
+      "rescored_score": 0.8869,
+      "gold_score": 0.9833,
+      "stale_signed_diff": -0.5682,
+      "rescored_signed_diff": -0.0964
+    },
+    {
+      "case_id": "BM-035",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.1901,
+      "rescored_score": 0.4986,
+      "gold_score": 0.72,
+      "stale_signed_diff": -0.5299,
+      "rescored_signed_diff": -0.2214
+    },
+    {
+      "case_id": "BM-036",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.1831,
+      "gold_score": 0.51,
+      "stale_signed_diff": -0.51,
+      "rescored_signed_diff": -0.3269
+    },
+    {
+      "case_id": "BM-037",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.1882,
+      "rescored_score": 0.2527,
+      "gold_score": 0.0967,
+      "stale_signed_diff": 0.0915,
+      "rescored_signed_diff": 0.156
+    },
+    {
+      "case_id": "BM-038",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.1115,
+      "rescored_score": 0.6407,
+      "gold_score": 0.33,
+      "stale_signed_diff": -0.2185,
+      "rescored_signed_diff": 0.3107
+    },
+    {
+      "case_id": "BM-039",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.1706,
+      "rescored_score": 0.4179,
+      "gold_score": 0.0567,
+      "stale_signed_diff": 0.1139,
+      "rescored_signed_diff": 0.3612
+    },
+    {
+      "case_id": "BM-040",
+      "qid": 7,
+      "group": "mismatched",
+      "stale_score": 0.0977,
+      "rescored_score": 0.5868,
+      "gold_score": 0.1667,
+      "stale_signed_diff": -0.069,
+      "rescored_signed_diff": 0.4201
+    },
+    {
+      "case_id": "BM-041",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.2346,
+      "rescored_score": 0.6737,
+      "gold_score": 0.9033,
+      "stale_signed_diff": -0.6687,
+      "rescored_signed_diff": -0.2296
+    },
+    {
+      "case_id": "BM-042",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.3941,
+      "rescored_score": 0.7793,
+      "gold_score": 0.9833,
+      "stale_signed_diff": -0.5892,
+      "rescored_signed_diff": -0.204
+    },
+    {
+      "case_id": "BM-043",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.1999,
+      "rescored_score": 0.2861,
+      "gold_score": 0.37,
+      "stale_signed_diff": -0.1701,
+      "rescored_signed_diff": -0.0839
+    },
+    {
+      "case_id": "BM-044",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.2007,
+      "rescored_score": 0.1016,
+      "gold_score": 0.1167,
+      "stale_signed_diff": 0.084,
+      "rescored_signed_diff": -0.0151
+    },
+    {
+      "case_id": "BM-045",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.2066,
+      "rescored_score": 0.2292,
+      "gold_score": 0.09,
+      "stale_signed_diff": 0.1166,
+      "rescored_signed_diff": 0.1392
+    },
+    {
+      "case_id": "BM-046",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.2079,
+      "rescored_score": 0.5478,
+      "gold_score": 0.3,
+      "stale_signed_diff": -0.0921,
+      "rescored_signed_diff": 0.2478
+    },
+    {
+      "case_id": "BM-047",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.1859,
+      "rescored_score": 0.3187,
+      "gold_score": 0.16,
+      "stale_signed_diff": 0.0259,
+      "rescored_signed_diff": 0.1587
+    },
+    {
+      "case_id": "BM-048",
+      "qid": 15,
+      "group": "mismatched",
+      "stale_score": 0.2126,
+      "rescored_score": 0.3489,
+      "gold_score": 0.8533,
+      "stale_signed_diff": -0.6407,
+      "rescored_signed_diff": -0.5044
+    },
+    {
+      "case_id": "BM-049",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.2573,
+      "rescored_score": 0.5402,
+      "gold_score": 0.91,
+      "stale_signed_diff": -0.6527,
+      "rescored_signed_diff": -0.3698
+    },
+    {
+      "case_id": "BM-050",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.3781,
+      "rescored_score": 0.8619,
+      "gold_score": 0.99,
+      "stale_signed_diff": -0.6119,
+      "rescored_signed_diff": -0.1281
+    },
+    {
+      "case_id": "BM-051",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.1891,
+      "rescored_score": 0.4529,
+      "gold_score": 0.45,
+      "stale_signed_diff": -0.2609,
+      "rescored_signed_diff": 0.0029
+    },
+    {
+      "case_id": "BM-052",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.2156,
+      "rescored_score": 0.2944,
+      "gold_score": 0.0867,
+      "stale_signed_diff": 0.1289,
+      "rescored_signed_diff": 0.2077
+    },
+    {
+      "case_id": "BM-053",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.2278,
+      "rescored_score": 0.2167,
+      "gold_score": 0.11,
+      "stale_signed_diff": 0.1178,
+      "rescored_signed_diff": 0.1067
+    },
+    {
+      "case_id": "BM-054",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.2291,
+      "rescored_score": 0.6391,
+      "gold_score": 0.35,
+      "stale_signed_diff": -0.1209,
+      "rescored_signed_diff": 0.2891
+    },
+    {
+      "case_id": "BM-055",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.199,
+      "rescored_score": 0.1709,
+      "gold_score": 0.0667,
+      "stale_signed_diff": 0.1323,
+      "rescored_signed_diff": 0.1042
+    },
+    {
+      "case_id": "BM-056",
+      "qid": 22,
+      "group": "mismatched",
+      "stale_score": 0.2194,
+      "rescored_score": 0.1856,
+      "gold_score": 0.12,
+      "stale_signed_diff": 0.0994,
+      "rescored_signed_diff": 0.0656
+    },
+    {
+      "case_id": "BM-057",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.8933,
+      "gold_score": 0.9133,
+      "stale_signed_diff": -0.9133,
+      "rescored_signed_diff": -0.02
+    },
+    {
+      "case_id": "BM-058",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.2917,
+      "rescored_score": 0.8908,
+      "gold_score": 0.9833,
+      "stale_signed_diff": -0.6916,
+      "rescored_signed_diff": -0.0925
+    },
+    {
+      "case_id": "BM-059",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.586,
+      "gold_score": 0.61,
+      "stale_signed_diff": -0.61,
+      "rescored_signed_diff": -0.024
+    },
+    {
+      "case_id": "BM-060",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.3001,
+      "gold_score": 0.0567,
+      "stale_signed_diff": -0.0567,
+      "rescored_signed_diff": 0.2434
+    },
+    {
+      "case_id": "BM-061",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.1133,
+      "rescored_score": 0.5654,
+      "gold_score": 0.0633,
+      "stale_signed_diff": 0.05,
+      "rescored_signed_diff": 0.5021
+    },
+    {
+      "case_id": "BM-062",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.6683,
+      "gold_score": 0.3,
+      "stale_signed_diff": -0.3,
+      "rescored_signed_diff": 0.3683
+    },
+    {
+      "case_id": "BM-063",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.0,
+      "rescored_score": 0.2812,
+      "gold_score": 0.11,
+      "stale_signed_diff": -0.11,
+      "rescored_signed_diff": 0.1712
+    },
+    {
+      "case_id": "BM-064",
+      "qid": 50,
+      "group": "mismatched",
+      "stale_score": 0.1238,
+      "rescored_score": 0.783,
+      "gold_score": 0.88,
+      "stale_signed_diff": -0.7562,
+      "rescored_signed_diff": -0.097
+    }
+  ],
+  "note": "stale scoring = current production get_rubric(qid) lookup (what every prior pass's human-gold correlation number, including the sixth pass's 0.3728, actually measured). adhoc rescoring = diagnostic-only re-score of the 32 mismatched cases against a rubric built from the benchmark's own reference_answer/rubric_concepts columns, with the limitations documented in this script's module docstring (no mandatory-cap/bonus/mistake-vector path for these ad hoc rubrics)."
+}

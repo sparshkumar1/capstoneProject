@@ -1,0 +1,98 @@
+[
+  {
+    "step": 8192,
+    "pooled_mae_mean": 0.27757575757575753,
+    "pooled_mae_sd": 0.014266581704646486,
+    "lucky_guesser_mae_mean": 0.18909090909090906,
+    "lucky_guesser_mae_sd": 0.050909090909090904,
+    "n_seeds": 5
+  },
+  {
+    "step": 16384,
+    "pooled_mae_mean": 0.26969696969696966,
+    "pooled_mae_sd": 0.0033539308516937543,
+    "lucky_guesser_mae_mean": 0.16363636363636364,
+    "lucky_guesser_mae_sd": 0.0,
+    "n_seeds": 5
+  },
+  {
+    "step": 24576,
+    "pooled_mae_mean": 0.27348484848484844,
+    "pooled_mae_sd": 0.009376817240464148,
+    "lucky_guesser_mae_mean": 0.16363636363636364,
+    "lucky_guesser_mae_sd": 0.0,
+    "n_seeds": 5
+  },
+  {
+    "step": 32768,
+    "pooled_mae_mean": 0.27848484848484845,
+    "pooled_mae_sd": 0.01109893731624996,
+    "lucky_guesser_mae_mean": 0.29454545454545455,
+    "lucky_guesser_mae_sd": 0.26181818181818184,
+    "n_seeds": 5
+  },
+  {
+    "step": 40960,
+    "pooled_mae_mean": 0.3036363636363636,
+    "pooled_mae_sd": 0.02239863402630304,
+    "lucky_guesser_mae_mean": 0.33454545454545453,
+    "lucky_guesser_mae_sd": 0.3328017800333833,
+    "n_seeds": 5
+  },
+  {
+    "step": 49152,
+    "pooled_mae_mean": 0.3375757575757576,
+    "pooled_mae_sd": 0.026838290697557003,
+    "lucky_guesser_mae_mean": 0.46909090909090906,
+    "lucky_guesser_mae_sd": 0.3640724657682568,
+    "n_seeds": 5
+  },
+  {
+    "step": 57344,
+    "pooled_mae_mean": 0.38196969696969696,
+    "pooled_mae_sd": 0.029011887624003453,
+    "lucky_guesser_mae_mean": 0.7636363636363636,
+    "lucky_guesser_mae_sd": 0.3232070697205669,
+    "n_seeds": 5
+  },
+  {
+    "step": 65536,
+    "pooled_mae_mean": 0.4115151515151515,
+    "pooled_mae_sd": 0.024352967662609942,
+    "lucky_guesser_mae_mean": 0.9272727272727274,
+    "lucky_guesser_mae_sd": 0.14545454545454545,
+    "n_seeds": 5
+  },
+  {
+    "step": 73728,
+    "pooled_mae_mean": 0.4149999999999999,
+    "pooled_mae_sd": 0.017050672601982054,
+    "lucky_guesser_mae_mean": 0.9272727272727274,
+    "lucky_guesser_mae_sd": 0.14545454545454545,
+    "n_seeds": 5
+  },
+  {
+    "step": 81920,
+    "pooled_mae_mean": 0.4033333333333333,
+    "pooled_mae_sd": 0.016587968467777166,
+    "lucky_guesser_mae_mean": 0.9636363636363636,
+    "lucky_guesser_mae_sd": 0.07272727272727275,
+    "n_seeds": 5
+  },
+  {
+    "step": 90112,
+    "pooled_mae_mean": 0.3962121212121211,
+    "pooled_mae_sd": 0.02428972657860818,
+    "lucky_guesser_mae_mean": 1.0,
+    "lucky_guesser_mae_sd": 0.0,
+    "n_seeds": 5
+  },
+  {
+    "step": 98304,
+    "pooled_mae_mean": 0.3993939393939394,
+    "pooled_mae_sd": 0.030114565451648128,
+    "lucky_guesser_mae_mean": 1.0,
+    "lucky_guesser_mae_sd": 0.0,
+    "n_seeds": 5
+  }
+]

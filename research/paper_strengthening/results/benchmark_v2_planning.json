@@ -1,0 +1,92 @@
+{
+  "eligible_count": 122,
+  "excluded": [
+    {
+      "qid": "26",
+      "topic": "DynamicProgramming",
+      "reasons": [
+        "mandatory phrase too long (>10 words) to flatten into a clean keyword list"
+      ]
+    },
+    {
+      "qid": "39",
+      "topic": "DynamicProgramming",
+      "reasons": [
+        "mandatory phrase too long (>10 words) to flatten into a clean keyword list"
+      ]
+    },
+    {
+      "qid": "110",
+      "topic": "C_Programming",
+      "reasons": [
+        "mandatory phrase too long (>10 words) to flatten into a clean keyword list"
+      ]
+    }
+  ],
+  "eligible_topics": [
+    "Advanced C",
+    "Amortized Analysis",
+    "Arrays",
+    "Backtracking",
+    "Binary Search Tree",
+    "Binary Trees",
+    "BinarySearch",
+    "BitManipulation",
+    "C Preprocessor",
+    "C Variables",
+    "C_Programming",
+    "DSA_Theory",
+    "Data Structures",
+    "DynamicProgramming",
+    "Enum",
+    "Expressions",
+    "Functions",
+    "Graph Representation",
+    "Graph Traversal",
+    "Graphs",
+    "Hashing",
+    "Heaps",
+    "Linkage",
+    "LinkedLists",
+    "Matrix",
+    "Memory Allocation",
+    "Memory Management",
+    "Pointers",
+    "Preprocessor",
+    "Programming Concepts",
+    "Recursion",
+    "Sorting",
+    "Stack",
+    "Stack Applications",
+    "Storage Classes",
+    "Strings",
+    "Trees"
+  ],
+  "precision_projection": {
+    "8": {
+      "ci95_low": -0.0151,
+      "ci95_high": 0.0497,
+      "half_width": 0.0324
+    },
+    "16": {
+      "ci95_low": -0.0065,
+      "ci95_high": 0.0382,
+      "half_width": 0.0223
+    },
+    "32": {
+      "ci95_low": -0.0003,
+      "ci95_high": 0.033,
+      "half_width": 0.0166
+    },
+    "64": {
+      "ci95_low": 0.0042,
+      "ci95_high": 0.0275,
+      "half_width": 0.0117
+    },
+    "107": {
+      "ci95_low": 0.007,
+      "ci95_high": 0.0248,
+      "half_width": 0.0089
+    }
+  }
+}

@@ -1,0 +1,172 @@
+[
+  {
+    "arm": "B0",
+    "training_seed": 42,
+    "extended_budget": false,
+    "status": "completed",
+    "elapsed_sec": 77.39,
+    "meta": {
+      "arm": "B0",
+      "training_seed": 42,
+      "timesteps": 24576,
+      "extended_budget": false,
+      "config": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\scripts\\e1_config.json",
+      "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B0_seed42.csv",
+      "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B0\\seed_42\\ppo_final.zip",
+      "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B0\\seed_42\\vecnormalize.pkl"
+    }
+  },
+  {
+    "arm": "B0",
+    "training_seed": 123,
+    "extended_budget": false,
+    "status": "completed",
+    "elapsed_sec": 70.01,
+    "meta": {
+      "arm": "B0",
+      "training_seed": 123,
+      "timesteps": 24576,
+      "extended_budget": false,
+      "config": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\scripts\\e1_config.json",
+      "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B0_seed123.csv",
+      "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B0\\seed_123\\ppo_final.zip",
+      "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B0\\seed_123\\vecnormalize.pkl"
+    }
+  },
+  {
+    "arm": "B0",
+    "training_seed": 456,
+    "extended_budget": false,
+    "status": "completed",
+    "elapsed_sec": 69.66,
+    "meta": {
+      "arm": "B0",
+      "training_seed": 456,
+      "timesteps": 24576,
+      "extended_budget": false,
+      "config": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\scripts\\e1_config.json",
+      "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B0_seed456.csv",
+      "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B0\\seed_456\\ppo_final.zip",
+      "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B0\\seed_456\\vecnormalize.pkl"
+    }
+  },
+  {
+    "arm": "B0",
+    "training_seed": 789,
+    "extended_budget": false,
+    "status": "completed",
+    "elapsed_sec": 80.62,
+    "meta": {
+      "arm": "B0",
+      "training_seed": 789,
+      "timesteps": 24576,
+      "extended_budget": false,
+      "config": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\scripts\\e1_config.json",
+      "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B0_seed789.csv",
+      "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B0\\seed_789\\ppo_final.zip",
+      "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B0\\seed_789\\vecnormalize.pkl"
+    }
+  },
+  {
+    "arm": "B0",
+    "training_seed": 999,
+    "extended_budget": false,
+    "status": "completed",
+    "elapsed_sec": 85.88,
+    "meta": {
+      "arm": "B0",
+      "training_seed": 999,
+      "timesteps": 24576,
+      "extended_budget": false,
+      "config": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\scripts\\e1_config.json",
+      "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B0_seed999.csv",
+      "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B0\\seed_999\\ppo_final.zip",
+      "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B0\\seed_999\\vecnormalize.pkl"
+    }
+  },
+  {
+    "arm": "B2",
+    "training_seed": 42,
+    "extended_budget": false,
+    "status": "completed",
+    "elapsed_sec": 91.15,
+    "meta": {
+      "arm": "B2",
+      "training_seed": 42,
+      "timesteps": 24576,
+      "extended_budget": false,
+      "config": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\scripts\\e1_config.json",
+      "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2_seed42.csv",
+      "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_42\\ppo_final.zip",
+      "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_42\\vecnormalize.pkl"
+    }
+  },
+  {
+    "arm": "B2",
+    "training_seed": 123,
+    "extended_budget": false,
+    "status": "completed",
+    "elapsed_sec": 90.9,
+    "meta": {
+      "arm": "B2",
+      "training_seed": 123,
+      "timesteps": 24576,
+      "extended_budget": false,
+      "config": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\scripts\\e1_config.json",
+      "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2_seed123.csv",
+      "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_123\\ppo_final.zip",
+      "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_123\\vecnormalize.pkl"
+    }
+  },
+  {
+    "arm": "B2",
+    "training_seed": 456,
+    "extended_budget": false,
+    "status": "completed",
+    "elapsed_sec": 89.55,
+    "meta": {
+      "arm": "B2",
+      "training_seed": 456,
+      "timesteps": 24576,
+      "extended_budget": false,
+      "config": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\scripts\\e1_config.json",
+      "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2_seed456.csv",
+      "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_456\\ppo_final.zip",
+      "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_456\\vecnormalize.pkl"
+    }
+  },
+  {
+    "arm": "B2",
+    "training_seed": 789,
+    "extended_budget": false,
+    "status": "completed",
+    "elapsed_sec": 87.25,
+    "meta": {
+      "arm": "B2",
+      "training_seed": 789,
+      "timesteps": 24576,
+      "extended_budget": false,
+      "config": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\scripts\\e1_config.json",
+      "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2_seed789.csv",
+      "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_789\\ppo_final.zip",
+      "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_789\\vecnormalize.pkl"
+    }
+  },
+  {
+    "arm": "B2",
+    "training_seed": 999,
+    "extended_budget": false,
+    "status": "completed",
+    "elapsed_sec": 88.78,
+    "meta": {
+      "arm": "B2",
+      "training_seed": 999,
+      "timesteps": 24576,
+      "extended_budget": false,
+      "config": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\scripts\\e1_config.json",
+      "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2_seed999.csv",
+      "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_999\\ppo_final.zip",
+      "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_999\\vecnormalize.pkl"
+    }
+  }
+]
