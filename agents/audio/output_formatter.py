@@ -38,7 +38,7 @@ def format_output(final_score, prosodic, transcription, linguistic):
     print(f"  Total pauses   : {transcription.get('total_pause_time', 0):.3f}s")
     print(f"  Speech time    : {transcription.get('total_speech_time', 0):.3f}s")
     print(f"  Audio duration : {transcription.get('audio_duration', 0):.3f}s")
-    print(f"  Speaking rate  : {transcription.get('true_speaking_rate', 0):.2f} words/sec")
+    print(f"  Speaking rate  : {transcription.get('true_speaking_rate', 0):.2f} words/min")
     print(f"  Fluency score  : {breakdown['fluency_score']:.4f}")
     print(f"  Rhythm score   : {breakdown.get('rhythm_score', 0):.4f}")
     print(f"  Pause ratio    : {breakdown.get('pause_ratio', 0):.4f}")

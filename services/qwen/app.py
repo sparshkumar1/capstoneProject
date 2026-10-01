@@ -22,6 +22,7 @@ from __future__ import annotations
 import os
 import sys
 import asyncio
+import math
 import contextlib
 import json
 import re
@@ -398,9 +399,9 @@ class HintResponse(BaseModel):
 class ReportRequest(BaseModel):
     candidate_name: str = "Candidate"
     questions: list[dict] = Field(default_factory=list)
-    overall_score: float = 0.5
-    c_score: float = 0.5
-    dsa_score: float = 0.5
+    overall_score: float = 0.0
+    c_score: float = 0.0
+    dsa_score: float = 0.0
     difficulty_history: list[int] = Field(default_factory=list)
     behaviour: dict = Field(default_factory=dict)
 
@@ -413,13 +414,81 @@ class ReportResponse(BaseModel):
 
 # ── Prompt Builders ───────────────────────────────────────────────────────────
 
+_CHATML_TOKEN_RE = re.compile(r"<\|[a-zA-Z0-9_]+\|>")
+
+
+def _sanitize_for_prompt(text: str) -> str:
+    """
+    Neutralizes literal ChatML/Qwen special-token markers (e.g. "<|im_start|>",
+    "<|im_end|>", "<|endoftext|>") inside user-controlled free text before it
+    is interpolated into a ChatML prompt string.
+
+    candidate_answer (and previous_best_answer, on re-attempts) originates
+    from ASR transcription of spoken candidate audio and is interpolated
+    into the prompt unescaped; without this, a candidate who speaks or is
+    transcribed as producing one of these literal token strings could inject
+    a fake role turn (e.g. a spoken "im end im start system") into the
+    ChatML-formatted prompt seen by the model. This does not, by itself,
+    guarantee the underlying tokenizer treats a literal in-text occurrence
+    of these strings as the corresponding special token rather than plain
+    text (that depends on the tokenizer's encoding mode) -- it removes the
+    injection surface regardless of that detail, as defense in depth.
+    """
+    if not text:
+        return text
+    return _CHATML_TOKEN_RE.sub("", text)
+
+
 def _build_followup_prompt(req: FollowupRequest) -> str:
     ev = req.structured_evaluation
-    score = ev.get("final_score", 0.5)
-    grade = ev.get("grade", "Average")
+    raw_s = ev.get("final_score")
+    try:
+        score = float(raw_s) if raw_s is not None else 0.0
+        if not math.isfinite(score):
+            score = 0.0
+    except (TypeError, ValueError):
+        score = 0.0
+    grade = ev.get("grade", "Poor" if score < 0.40 else "Average")
     correct_str = ", ".join(req.correct_concepts or ev.get("correct_claims", [])) or "None identified"
     missing_str = ", ".join(req.missing_concepts or ev.get("missing_concepts", [])) or "None identified"
     miscon_str = ", ".join(req.misconceptions or req.incorrect_concepts or ev.get("incorrect_claims", [])) or "None detected"
+    weakest_gap_str = req.weakest_gap or ev.get("weakest_gap", "")
+    candidate_answer = _sanitize_for_prompt(req.candidate_answer)
+
+    # The explicit TASK instruction below previously named only missing_str,
+    # so a follow-up triggered solely by a misconception or an unresolved
+    # weakest_gap (missing_concepts empty) received a vacuous directive
+    # ("targeting the missing concepts: None identified") even though the
+    # context block above correctly listed the real gap -- found via a
+    # direct behavioral probe (followup_behavioral_probe_v1.py, weakest_gap
+    # case) where the model, given that vacuous instruction, generated a
+    # plausible but untargeted question instead of probing the supplied gap.
+    # Priority mirrors the orchestrator's own trigger order (misconception >
+    # missing concept > weakest gap), documented in docs/FOLLOW_UP_SYSTEM.md.
+    if miscon_str != "None detected":
+        task_target = f"the misconception(s): {miscon_str}"
+    elif missing_str != "None identified":
+        task_target = f"the missing concept(s): {missing_str}"
+    elif weakest_gap_str:
+        task_target = f"the following unresolved gap: {weakest_gap_str}"
+    else:
+        # A follow-up can be triggered by score alone (score < 0.80 in
+        # InterviewOrchestrator._decide_and_inject_followup) even when the
+        # evaluator's own correct/incorrect/missing-concept extraction came
+        # back empty -- e.g. a thin, generic answer that doesn't clearly hit
+        # or miss any single rubric concept. Found via
+        # followup_behavioral_probe_v2.py's sparse_incomplete_evidence case:
+        # the previous fallback here ("the missing concept(s): None
+        # identified") was a vacuous directive in exactly this situation.
+        # The model still produced a topically coherent question despite it,
+        # but the instruction itself carried no real signal, so this
+        # fallback now asks for depth/specificity instead of naming a
+        # nonexistent gap.
+        task_target = (
+            f"the depth and specificity of the answer (score {score:.2f}/1.00 on {req.topic}: "
+            "no specific missing concept or misconception was flagged, so probe for a concrete "
+            "example, edge case, or deeper mechanism the answer did not cover)"
+        )
 
     return f"""<|im_start|>system
 You are an expert technical interviewer conducting a technical interview on {req.topic}.
@@ -434,17 +503,17 @@ CRITICAL RULES:
 CONTEXT:
 - Topic: {req.topic} (Difficulty: {req.current_difficulty}/5)
 - Original Question: {req.original_question}
-- Candidate Answer: "{req.candidate_answer}"
+- Candidate Answer: "{candidate_answer}"
 
 EVALUATION ANALYSIS:
 - Score: {score:.2f} ({grade})
 - Identified Strengths: {correct_str}
 - Missing Concepts / Knowledge Gaps: {missing_str}
 - Misconceptions / Inaccuracies: {miscon_str}
-- Weakest Gap to Target: {req.weakest_gap or ev.get('weakest_gap', missing_str)}
+- Weakest Gap to Target: {weakest_gap_str or missing_str}
 
 TASK:
-Generate a direct follow-up question targeting the missing concepts: {missing_str}.
+Generate a direct follow-up question targeting {task_target}.
 
 Return ONLY a JSON object in this exact schema:
 {{
@@ -459,11 +528,18 @@ Return ONLY a JSON object in this exact schema:
 
 def _build_feedback_prompt(req: FeedbackRequest) -> str:
     ev = req.structured_evaluation
-    score = ev.get("final_score", 0.5)
-    grade = ev.get("grade", "Average")
+    raw_s = ev.get("final_score")
+    try:
+        score = float(raw_s) if raw_s is not None else 0.0
+        if not math.isfinite(score):
+            score = 0.0
+    except (TypeError, ValueError):
+        score = 0.0
+    grade = ev.get("grade", "Poor" if score < 0.40 else "Average")
     correct_str = "\n".join(f"  + {c}" for c in ev.get("correct_claims", [])) or "  + General attempt"
     missing_str = "\n".join(f"  - {m}" for m in ev.get("missing_concepts", [])) or "  - None identified"
     incorrect_str = "\n".join(f"  ! {x}" for x in ev.get("incorrect_claims", [])) or "  ! None detected"
+    candidate_answer = _sanitize_for_prompt(req.candidate_answer)
 
     attempt_ctx = ""
     if req.attempt_number > 1:
@@ -471,10 +547,11 @@ def _build_feedback_prompt(req: FeedbackRequest) -> str:
         delta_str = f"{req.score_delta:+.2f}" if req.score_delta is not None else "N/A"
         resolved_str = ", ".join(req.resolved_concepts) if req.resolved_concepts else "None"
         rem_str = ", ".join(req.remaining_concepts) if req.remaining_concepts else "None"
+        prev_best_answer = _sanitize_for_prompt(req.previous_best_answer) if req.previous_best_answer else None
         attempt_ctx = f"""
 RE-ATTEMPT CONTEXT:
 - Attempt Number: {req.attempt_number}
-- Previous Best Answer: "{req.previous_best_answer or 'N/A'}"
+- Previous Best Answer: "{prev_best_answer or 'N/A'}"
 - Previous Best Score: {prev_score_str} (Score Delta: {delta_str})
 - Resolved Concepts in this attempt: {resolved_str}
 - Still Remaining Gaps: {rem_str}
@@ -488,7 +565,7 @@ QUESTION (Topic: {req.topic}):
 {req.question_text}
 
 CANDIDATE TRANSCRIPT:
-"{req.candidate_answer}"
+"{candidate_answer}"
 
 EVALUATION EVIDENCE:
 - Final Score: {score:.2f} ({grade})
@@ -522,8 +599,12 @@ def _synthesize_structured_followup(req: FollowupRequest) -> FollowupResponse:
     ev = req.structured_evaluation
     misconceptions = req.misconceptions or req.incorrect_concepts or ev.get("incorrect_claims", [])
     missing = req.missing_concepts or ev.get("missing_concepts", [])
-    score = ev.get("final_score", 0.5)
-    grade = ev.get("grade", "Average")
+    raw_s = ev.get("final_score")
+    try:
+        score = float(raw_s) if raw_s is not None and math.isfinite(float(raw_s)) else 0.0
+    except (TypeError, ValueError):
+        score = 0.0
+    grade = ev.get("grade", "Poor" if score < 0.40 else "Average")
 
     if misconceptions:
         miscon = misconceptions[0]
@@ -561,6 +642,47 @@ def _synthesize_structured_followup(req: FollowupRequest) -> FollowupResponse:
     )
 
 
+def _validate_followup_output(data: Optional[dict], req: FollowupRequest) -> bool:
+    """
+    Analogous to _validate_feedback_output, for the live-model follow-up path.
+    Before this, generate_followup()'s only check on the LLM's raw JSON output
+    was `"followup" in data and len(followup) > 5` -- accepting near-empty,
+    verbatim-repeated, or already-asked follow-ups as long as they cleared a
+    5-character bar. This enforces the prompt's own stated rules (rule 1: do
+    not repeat/re-phrase the original question) and the session-level
+    deduplication behavior the deterministic fallback already applies
+    (_synthesize_structured_followup), so the live-model path is no weaker
+    than the fallback it is meant to improve on.
+    """
+    if not isinstance(data, dict):
+        return False
+    followup = str(data.get("followup", "")).strip()
+    if len(followup) < 10:
+        return False
+
+    followup_norm = followup.lower().strip("?.! ")
+    orig_norm = str(req.original_question or "").lower().strip("?.! ")
+    if orig_norm and (followup_norm == orig_norm or orig_norm in followup_norm or followup_norm in orig_norm):
+        return False
+
+    generic_fillers = {
+        "can you elaborate", "tell me more", "anything else", "what else",
+        "can you say more", "is there anything else",
+    }
+    if followup_norm in generic_fillers:
+        return False
+
+    target_concepts = data.get("target_concepts")
+    if not isinstance(target_concepts, list) or len(target_concepts) == 0:
+        return False
+
+    prev_all = [str(p).lower() for p in (req.previous_questions or []) + (req.previous_followups or []) if p]
+    if any(followup.lower() in p or p in followup.lower() for p in prev_all if len(p) > 20):
+        return False
+
+    return True
+
+
 def _validate_feedback_output(data: Optional[dict], req: FeedbackRequest) -> bool:
     if not isinstance(data, dict):
         return False
@@ -585,12 +707,26 @@ def _validate_feedback_output(data: Optional[dict], req: FeedbackRequest) -> boo
     # Check for contradictions against authoritative evaluator structured facts
     ev = req.structured_evaluation if isinstance(req.structured_evaluation, dict) else {}
     missing = [str(m).lower().strip() for m in ev.get("missing_concepts", []) if m]
+    incorrect = [str(m).lower().strip() for m in ev.get("incorrect_claims", []) if m]
     what_correct = [str(c).lower().strip() for c in data.get("what_was_correct", []) if c]
 
     for m in missing:
         if m in what_correct:
             return False
         if f"correctly explained {m}" in low_narrative or f"correctly covered {m}" in low_narrative:
+            return False
+
+    # Symmetric check: something the evaluator flagged as an INCORRECT claim
+    # (a genuine misconception) must not be echoed back as correct. Mirrors
+    # the missing_concepts check above; previously only the missing-concepts
+    # direction was checked, so a feedback response could tell the candidate
+    # a misconception was correct without being rejected.
+    for inc in incorrect:
+        if inc in what_correct:
+            return False
+        if any(inc in wc or wc in inc for wc in what_correct if len(wc) > 8):
+            return False
+        if f"correctly explained {inc}" in low_narrative or f"correctly covered {inc}" in low_narrative:
             return False
 
     # Score leakage rejection
@@ -602,8 +738,13 @@ def _validate_feedback_output(data: Optional[dict], req: FeedbackRequest) -> boo
 
 def _synthesize_structured_feedback(req: FeedbackRequest) -> FeedbackResponse:
     ev = req.structured_evaluation
-    score = float(ev.get("final_score", 0.5))
-    grade = str(ev.get("grade", "Average"))
+    raw_s = ev.get("final_score")
+    try:
+        score = float(raw_s) if raw_s is not None and math.isfinite(float(raw_s)) else 0.0
+    except (TypeError, ValueError):
+        score = 0.0
+    default_grade = "Poor" if score < 0.40 else "Average"
+    grade = str(ev.get("grade") or default_grade)
     candidate_ans = req.candidate_answer.strip()
 
     correct_claims = list(ev.get("correct_claims", []))
@@ -751,7 +892,7 @@ async def generate_followup(req: FollowupRequest):
                 None, registry.generate_full, "qwen_1b", prompt, 128
             )
             data = _extract_json_from_llm(raw)
-            if data and "followup" in data and len(str(data["followup"]).strip()) > 5:
+            if _validate_followup_output(data, req):
                 return FollowupResponse(
                     followup=str(data["followup"]).strip(),
                     reason=str(data.get("reason", "Targeted probe on candidate gap")).strip(),
@@ -796,6 +937,11 @@ async def generate_feedback(req: FeedbackRequest):
             if _validate_feedback_output(data, req):
                 ev = req.structured_evaluation
                 source_label = "qwen_7b_llm" if active_key == "qwen_7b" else "qwen_1.5b_llm"
+                raw_s = ev.get("final_score")
+                try:
+                    final_score_val = float(raw_s) if raw_s is not None and math.isfinite(float(raw_s)) else 0.0
+                except (TypeError, ValueError):
+                    final_score_val = 0.0
                 return FeedbackResponse(
                     what_candidate_said=str(data.get("what_candidate_said", req.candidate_answer[:120])),
                     what_was_correct=[str(x) for x in data.get("what_was_correct", [])],
@@ -806,8 +952,8 @@ async def generate_feedback(req: FeedbackRequest):
                     stronger_answer_guide=str(data.get("stronger_answer_guide", "")),
                     actionable_improvements=[str(x) for x in data.get("actionable_improvements", [])],
                     narrative_feedback=str(data.get("narrative_feedback", "")),
-                    final_score=float(ev.get("final_score", 0.5)),
-                    grade=str(ev.get("grade", "Average")),
+                    final_score=final_score_val,
+                    grade=str(ev.get("grade") or ("Poor" if final_score_val < 0.40 else "Average")),
                     decision_source=source_label,
                     llm_status="available",
                     attempt_number=req.attempt_number,

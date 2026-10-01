@@ -73,7 +73,8 @@ class ScoreValidator:
             trace.append({"rule": "type_error", "before": str(raw_score), "after": 0.0, "reason": "Non-numeric raw score converted to 0.0"})
 
         # 2. Non-finite Numeric Handling
-        if math.isnan(score) or math.isinf(score):
+        non_finite_score = math.isnan(score) or math.isinf(score)
+        if non_finite_score:
             trace.append({"rule": "non_finite_score", "before": str(score), "after": 0.0, "reason": "NaN or Inf score replaced with 0.0"})
             score = 0.0
 
@@ -142,11 +143,21 @@ class ScoreValidator:
         if isinstance(evidence, dict) and "evaluation_status" in evidence:
             eval_status = str(evidence["evaluation_status"]).lower()
             is_infra_failure = eval_status in {"unavailable", "evaluator_unavailable", "malformed", "timeout", "error"}
+            if non_finite_score and not is_infra_failure:
+                # A contradictory upstream "success" must not hide a non-finite evaluator output.
+                eval_status = "non_finite_score"
+                is_infra_failure = True
         elif raw_score is None:
             eval_status = "unavailable"
             is_infra_failure = True
         elif isinstance(evidence, dict) and evidence.get("decision_source") in {"evaluator_unavailable", "stt_failure_handler"}:
             eval_status = "unavailable"
+            is_infra_failure = True
+        elif non_finite_score:
+            # X1-A FLT-04: a NaN/Inf raw score means the evaluator itself malfunctioned. The score above
+            # is still clamped to 0.0 (unchanged scoring behaviour), but this must not be silently
+            # indistinguishable from a genuine 0.0 candidate answer.
+            eval_status = "non_finite_score"
             is_infra_failure = True
         else:
             eval_status = "success"

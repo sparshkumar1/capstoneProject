@@ -75,6 +75,35 @@ def split_sentences(text):
     return [s.strip() for s in re.split(r'(?<=[.!?])\s+', text) if s.strip()]
 
 
+_WHITESPACE_RE = re.compile(r"\s+")
+
+
+def dedupe_repeated_sentences(text):
+    """
+    Drops exact-duplicate sentences (case/whitespace-insensitive, first
+    occurrence kept) before scoring, so that a candidate cannot inflate its
+    score simply by repeating the same content. Verified empirically: an
+    answer consisting of one correct sentence pair repeated verbatim scored
+    a materially higher reasoning_score than the same content stated once
+    (0.494 vs 0.375 in one measured case), with no new information present
+    -- a case_encoder input-length sensitivity, not a genuine correctness
+    signal. Near-duplicate (non-exact) repetition is not caught here; this
+    targets the specific, demonstrated exact/near-exact repetition pattern
+    without attempting a fuzzier semantic-duplicate detector that would need
+    its own validation.
+    """
+    sentences = split_sentences(text)
+    seen = set()
+    kept = []
+    for s in sentences:
+        key = _WHITESPACE_RE.sub(" ", s.strip().lower())
+        if key in seen:
+            continue
+        seen.add(key)
+        kept.append(s)
+    return " ".join(kept)
+
+
 def _cosine_similarity(a, b):
     from sklearn.metrics.pairwise import cosine_similarity
     return cosine_similarity(a, b)
@@ -177,6 +206,27 @@ def cross_encoder_verification(qn, candidate, rubric):
 BONUS_WEIGHT    = 0.03
 BONUS_THRESHOLD = 0.50
 
+# Shared negation-sentence filter, used by bonus_score(), mistake_penalty()
+# and _detect_misconceptions(). Word-boundary matched (\b...\b), NOT a plain
+# substring check: a substring check on "not" and "no " previously matched
+# inside ordinary vocabulary words -- most consequentially "notation" (as in
+# "Big-O notation", ubiquitous in this project's CS/algorithms question
+# domain), but also "cannot"/"denote"/"note"/"piano"/"casino" and similar --
+# incorrectly classifying those sentences as negations. That silently
+# excluded such sentences from mistake-vector and misconception matching in
+# mistake_penalty()/_detect_misconceptions() (a real mistake stated in a
+# sentence that happens to mention "notation" could escape detection
+# entirely) and from bonus eligibility in bonus_score() (under-crediting).
+# Found and fixed in the sixth research-improvement pass.
+_NEGATION_RE = re.compile(
+    r"\b(?:avoid|avoids|cannot|not|without|instead|unlike|no)\b", re.IGNORECASE
+)
+
+
+def _is_negation_sentence(sentence):
+    return bool(_NEGATION_RE.search(sentence))
+
+
 def bonus_score(candidate, rubric):
 
     sentences = split_sentences(candidate)
@@ -189,9 +239,7 @@ def bonus_score(candidate, rubric):
         return 0.0
 
     # Filter negation sentences so "avoid X" does not get bonus for X
-    negation_words = ["avoid", "avoids", "not", "without", "instead", "unlike", "no "]
-    filtered = [s for s in sentences
-                if not any(neg in s.lower() for neg in negation_words)]
+    filtered = [s for s in sentences if not _is_negation_sentence(s)]
     if not filtered:
         return 0.0
 
@@ -211,6 +259,32 @@ MISTAKE_THRESHOLD = 0.55
 MISTAKE_WEIGHT    = 0.07
 PENALTY_CAP       = 0.30
 
+
+def _rubric_mistake_texts(rubric):
+    return rubric.get("common_mistakes_addressed", []) or rubric.get("common_mistakes", []) or []
+
+
+def _extra_mistake_texts(rubric, n_indexed):
+    """
+    Returns the rubric's own common_mistakes_addressed/common_mistakes entries
+    beyond the first n_indexed (the count already covered by the FAISS
+    "mistake" vector store for this question). The FAISS index is a
+    precomputed, harder-to-maintain cache of a subset of this text (see
+    CLAUDE.md: the evaluator's mistake bank has "incomplete provenance");
+    editing rubrics.json to add a new common_mistakes_addressed entry is the
+    normal, low-risk way to extend misconception coverage, but without this,
+    any such addition was previously silently ignored by scoring -- neither
+    mistake_penalty() nor _detect_misconceptions() checked rubric text past
+    the FAISS vector count. This embeds only the overflow entries on demand
+    (via the same already-loaded SBERT model used everywhere else in this
+    file), leaving the original FAISS-vector-covered entries' behavior
+    completely unchanged, so this is additive-only, not a switch of the
+    detection mechanism for existing content.
+    """
+    texts = _rubric_mistake_texts(rubric)
+    return texts[n_indexed:] if len(texts) > n_indexed else []
+
+
 def mistake_penalty(candidate, rubric, reasoning_score, s2_score):
 
     penalty   = 0.0
@@ -218,10 +292,8 @@ def mistake_penalty(candidate, rubric, reasoning_score, s2_score):
     if not sentences:
         return 0.0
 
-    # ── Negation filter ──────────────────────────────────────────────────────
-    negation_words = ["avoid", "avoids", "not", "without", "instead", "unlike", "no "]
-    filtered       = [s for s in sentences
-                      if not any(neg in s.lower() for neg in negation_words)]
+    # ── Negation filter (word-boundary matched, see _is_negation_sentence) ───
+    filtered = [s for s in sentences if not _is_negation_sentence(s)]
     if not filtered:
         filtered = sentences   # fallback — do not discard all sentences
 
@@ -236,11 +308,31 @@ def mistake_penalty(candidate, rubric, reasoning_score, s2_score):
             if np.max(row) > MISTAKE_THRESHOLD:
                 penalty += MISTAKE_WEIGHT
 
+    extra_texts = _extra_mistake_texts(rubric, len(mistake_vectors))
+    if extra_texts:
+        extra_vecs = embed(extra_texts)
+        extra_sims = _cosine_similarity(extra_vecs, sent_emb)
+        for row in extra_sims:
+            if np.max(row) > MISTAKE_THRESHOLD:
+                penalty += MISTAKE_WEIGHT
+
     # ── 2. Reasoning-based penalty (only very wrong answers) ─────────────────
     if reasoning_score <= 0.25 and s2_score <= 0.25:
         penalty += 0.20   # clearly wrong on both dimensions
     elif reasoning_score < 0.30 and s2_score < 0.50:
         penalty += 0.05   # wrong answer with poor concept coverage too
+    elif reasoning_score < 0.50 and s2_score >= 0.60:
+        # Correct terminology / high concept coverage combined with reasoning
+        # the cross-encoder finds weak-to-contradictory (post-calibration
+        # 0.30-0.50 is this file's own documented "partial/weak reasoning"
+        # band -- see cross_encoder_verification()'s calibration comment).
+        # The rule above only fires when concept coverage is ALSO low, so it
+        # never catches this pattern: an answer that uses the right
+        # vocabulary but reasons about it backwards or contradicts itself
+        # (e.g. inverted complexity claims, describing the wrong mechanism
+        # while naming the right data structure) previously received no
+        # penalty and no S2 dampening at all in this reasoning-score range.
+        penalty += 0.08
 
     # ── 3. Confidence penalty (only when content is also weak) ───────────────
     # FIX 7: added umm / uhh / uh — most common interview hesitation words
@@ -322,8 +414,7 @@ def _detect_misconceptions(candidate, rubric):
     if not sentences:
         return []
 
-    negation_words = ["avoid", "avoids", "not", "without", "instead", "unlike", "no "]
-    filtered = [s for s in sentences if not any(neg in s.lower() for neg in negation_words)]
+    filtered = [s for s in sentences if not _is_negation_sentence(s)]
     if not filtered:
         filtered = sentences
 
@@ -332,12 +423,22 @@ def _detect_misconceptions(candidate, rubric):
     mistake_vectors = get_vectors_by_type(qid, "mistake") if qid else []
     detected = []
 
-    mistake_texts = rubric.get("common_mistakes_addressed", []) or rubric.get("common_mistakes", [])
-    if len(mistake_vectors) > 0 and len(mistake_texts) >= len(mistake_vectors):
+    mistake_texts = _rubric_mistake_texts(rubric)
+    if len(mistake_vectors) > 0:
         sims = _cosine_similarity(mistake_vectors, sent_emb)
         for idx, row in enumerate(sims):
-            if np.max(row) > MISTAKE_THRESHOLD:
+            if idx < len(mistake_texts) and np.max(row) > MISTAKE_THRESHOLD:
                 detected.append(mistake_texts[idx])
+        # Rubric text entries beyond the FAISS vector count (e.g. a newly
+        # added common_mistakes_addressed entry with no indexed vector yet)
+        # are otherwise silently unreachable here -- check them too.
+        extra_texts = _extra_mistake_texts(rubric, len(mistake_vectors))
+        if extra_texts:
+            extra_vecs = embed(extra_texts)
+            extra_sims = _cosine_similarity(extra_vecs, sent_emb)
+            for idx, row in enumerate(extra_sims):
+                if np.max(row) > MISTAKE_THRESHOLD:
+                    detected.append(extra_texts[idx])
     elif mistake_texts:
         m_vecs = embed(mistake_texts)
         sims = _cosine_similarity(m_vecs, sent_emb)
@@ -353,13 +454,19 @@ def evaluate(qn, candidate, rubric):
     candidate_text = str(candidate).strip()
     sentences = split_sentences(candidate_text)
 
-    S1 = semantic_score(candidate_text, rubric)
-    S2, concept_details = concept_detection(candidate_text, rubric)
-    reasoning_score = cross_encoder_verification(qn, candidate_text, rubric)
+    # Deduplication applies only to the scoring path, not to the returned
+    # candidate_answer/candidate_claims fields, which must reflect what the
+    # candidate actually said (see dedupe_repeated_sentences() docstring for
+    # why this exists: verbatim repetition otherwise inflates reasoning_score).
+    scoring_text = dedupe_repeated_sentences(candidate_text)
 
-    bonus = bonus_score(candidate_text, rubric)
-    penalty = mistake_penalty(candidate_text, rubric, reasoning_score, S2)
-    mandatory_pass = mandatory_check(candidate_text, rubric)
+    S1 = semantic_score(scoring_text, rubric)
+    S2, concept_details = concept_detection(scoring_text, rubric)
+    reasoning_score = cross_encoder_verification(qn, scoring_text, rubric)
+
+    bonus = bonus_score(scoring_text, rubric)
+    penalty = mistake_penalty(scoring_text, rubric, reasoning_score, S2)
+    mandatory_pass = mandatory_check(scoring_text, rubric)
 
     # Attach human-readable concept texts to concept details
     concept_texts = _extract_concept_texts(rubric)
@@ -407,7 +514,7 @@ def evaluate(qn, candidate, rubric):
     # Concept breakdown
     correct_claims = [d["concept_text"] for d in concept_details if d.get("covered")]
     missing_concepts = [d["concept_text"] for d in concept_details if not d.get("covered")]
-    incorrect_claims = _detect_misconceptions(candidate_text, rubric)
+    incorrect_claims = _detect_misconceptions(scoring_text, rubric)
 
     # Weakest gap & strong points
     if missing_concepts:

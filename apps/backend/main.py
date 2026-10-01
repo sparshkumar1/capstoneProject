@@ -871,6 +871,15 @@ async def get_report(session_id: str):
             report = await obj.end()
             REPORTS[report["id"]] = report
             return report
+
+    # If session not in memory, try restoring from persisted snapshot
+    restored = _try_restore_session(session_id)
+    if restored is not None:
+        SESSIONS[session_id] = restored
+        report = await restored.end()
+        REPORTS[report["id"]] = report
+        return report
+
     raise HTTPException(404, "Report not found")
 
 
@@ -982,7 +991,13 @@ async def run_code(req: RunCodeRequest):
     # If session and question are active, try to fetch question test cases
     if req.session_id and req.session_id in SESSIONS:
         sess = SESSIONS[req.session_id]
-        curr_q = getattr(sess, "_current_question", None)
+        curr_q = None
+        if hasattr(sess, "_get_current_question") and callable(sess._get_current_question):
+            curr_q = sess._get_current_question()
+        elif hasattr(sess, "current_question"):
+            curr_q = getattr(sess, "current_question")
+        elif hasattr(sess, "_current_question"):
+            curr_q = getattr(sess, "_current_question")
         if isinstance(curr_q, dict) and curr_q.get("test_cases"):
             test_cases = curr_q["test_cases"]
 
@@ -1061,6 +1076,75 @@ async def admin_session_detail(session_id: str):
 
 # ── WebSocket Interview Handler ───────────────────────────────────────────
 
+def _snapshot_session(orch: "InterviewOrchestrator") -> None:
+    """
+    Best-effort persistence of the orchestrator's resumable state after a
+    turn completes, so a backend restart can resume the session instead of
+    losing it -- SESSIONS is an in-memory dict (see /api/sessions above) with
+    no other persistence path prior to this. Never raises: a failure here
+    must not break the live turn the candidate is in the middle of.
+    """
+    try:
+        from services.storage.database import save_session_snapshot
+        snap = orch.snapshot_state()
+        save_session_snapshot(
+            session_id=snap["state"].get("id", ""),
+            state=snap["state"],
+            question_queue=snap["question_queue"],
+            current_q_index=snap["current_q_index"],
+        )
+    except Exception as exc:
+        print(f"[WS] Session snapshot failed (non-fatal): {exc}")
+
+
+def _try_restore_session(session_id: str) -> Optional["InterviewOrchestrator"]:
+    """
+    Attempts to rebuild a live InterviewOrchestrator for session_id from its
+    last saved snapshot, for the case where the requesting client already has
+    a session_id (from before a backend restart) but SESSIONS no longer has
+    it in memory. Returns None if no snapshot exists or restoration fails --
+    the caller falls back to the existing "Session not found" behavior.
+
+    The resumed orchestrator's current question resumes as freshly asked
+    (see InterviewOrchestrator.snapshot_state()'s docstring for the exact,
+    disclosed scope of what is and is not restored).
+    """
+    try:
+        from services.storage.database import load_session_snapshot, get_candidate_by_id
+        snap = load_session_snapshot(session_id)
+        if snap is None:
+            return None
+        state = snap["state"]
+        cid = str(state.get("candidate_id") or "")
+        candidate = CANDIDATES.get(cid) or get_candidate_by_id(cid) or {"id": cid}
+        config = {
+            "c_topics": state.get("c_topics", []),
+            "dsa_topics": state.get("dsa_topics", []),
+            "duration_minutes": state.get("duration_minutes", 30),
+            "num_questions": state.get("num_questions", 15),
+            "interview_mode": state.get("interview_mode", "standard"),
+            "defer_rl": True,
+        }
+        if not _INTERVIEW_ORCHESTRATOR_READY or InterviewOrchestrator is None:
+            return None
+        orch = InterviewOrchestrator(
+            session_id=session_id,
+            candidate=candidate,
+            config=config,
+            evaluator_fn=_run_integrated_evaluator,
+            select_questions_fn=select_questions,
+        )
+        orch.restore_from_snapshot({
+            "state": state,
+            "question_queue": snap["question_queue"],
+            "current_q_index": snap["current_q_index"],
+        })
+        return orch
+    except Exception as exc:
+        print(f"[WS] Session restore failed for {session_id}: {exc}")
+        return None
+
+
 @app.websocket("/ws/interview/{session_id}")
 async def interview_ws(websocket: WebSocket, session_id: str):
     """
@@ -1086,9 +1170,12 @@ async def interview_ws(websocket: WebSocket, session_id: str):
     await websocket.accept()
 
     if session_id not in SESSIONS:
-        await websocket.send_json({"type": "error", "payload": {"message": "Session not found"}})
-        await websocket.close()
-        return
+        restored = _try_restore_session(session_id)
+        if restored is None:
+            await websocket.send_json({"type": "error", "payload": {"message": "Session not found"}})
+            await websocket.close()
+            return
+        SESSIONS[session_id] = restored
 
     orch: InterviewOrchestrator = SESSIONS[session_id]
 
@@ -1197,6 +1284,9 @@ async def interview_ws(websocket: WebSocket, session_id: str):
                     "overall_score": report.get("overall_score", 0.0),
                 })
                 break
+
+            if mtype in ("start", "voice_answer", "code_submission", "next_question", "retry_question", "retry", "skip_question"):
+                _snapshot_session(orch)
 
     except WebSocketDisconnect:
         orch.mark_abandoned()

@@ -18,6 +18,7 @@ Output contract (all keys always present):
 
 from __future__ import annotations
 import asyncio
+import math
 from typing import Optional
 
 try:
@@ -95,12 +96,38 @@ class FeedbackAgent:
         comparison: Optional[dict] = None,
     ) -> dict:
         """Build and return rich feedback dict."""
-        score = float(eval_result.get("final_score", 0.5))
+        raw_sc = eval_result.get("final_score")
+        try:
+            score = float(raw_sc) if raw_sc is not None else 0.0
+            if not math.isfinite(score):
+                score = 0.0
+        except (TypeError, ValueError):
+            score = 0.0
         raw = eval_result.get("raw") or {}
 
-        s1 = float(raw.get("S1_semantic", score))
-        s2 = float(raw.get("S2_structural", score))
-        r  = float(raw.get("reasoning_score", score))
+        try:
+            raw_s1 = raw.get("S1_semantic")
+            s1 = float(raw_s1) if raw_s1 is not None else score
+            if not math.isfinite(s1):
+                s1 = score
+        except (TypeError, ValueError):
+            s1 = score
+
+        try:
+            raw_s2 = raw.get("S2_structural")
+            s2 = float(raw_s2) if raw_s2 is not None else score
+            if not math.isfinite(s2):
+                s2 = score
+        except (TypeError, ValueError):
+            s2 = score
+
+        try:
+            raw_r = raw.get("reasoning_score")
+            r = float(raw_r) if raw_r is not None else score
+            if not math.isfinite(r):
+                r = score
+        except (TypeError, ValueError):
+            r = score
 
         # ── Audio signals ─────────────────────────────────────────────
         conf          = 0.5

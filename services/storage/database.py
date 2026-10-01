@@ -11,6 +11,7 @@ Authoritative source of truth for:
 from __future__ import annotations
 
 import json
+import math
 import sqlite3
 import threading
 import uuid
@@ -125,8 +126,20 @@ def init_db(db_path: Optional[Path | str] = None) -> None:
                 )
                 conn.execute(
                     """
-                    CREATE INDEX IF NOT EXISTS idx_attempts_session 
+                    CREATE INDEX IF NOT EXISTS idx_attempts_session
                     ON question_attempts(session_id);
+                    """
+                )
+
+                conn.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS session_snapshots (
+                        session_id TEXT PRIMARY KEY,
+                        state_json TEXT NOT NULL,
+                        question_queue_json TEXT NOT NULL,
+                        current_q_index INTEGER NOT NULL DEFAULT 0,
+                        updated_at TEXT NOT NULL
+                    );
                     """
                 )
         finally:
@@ -266,6 +279,81 @@ def save_session(session_data: Dict[str, Any], db_path: Optional[Path | str] = N
             conn.close()
 
 
+def save_session_snapshot(
+    session_id: str,
+    state: Dict[str, Any],
+    question_queue: List[Dict[str, Any]],
+    current_q_index: int,
+    db_path: Optional[Path | str] = None,
+) -> None:
+    """
+    Persists a full, restorable snapshot of an in-progress InterviewOrchestrator
+    (its self._state dict plus the two mutable attributes not captured inside
+    self._state: the live question queue -- which diverges from
+    self._state["questions"] once a follow-up question is injected -- and the
+    current queue index). Overwrites any prior snapshot for this session_id
+    (one row per session, latest-wins), so a process restart can resume from
+    the last successfully completed turn.
+
+    Does not capture every InterviewOrchestrator instance attribute (notably
+    self._active_question_attempts, self._attempt_counts, self._timer_snapshot,
+    self._pre_attempt_state, self._rl_adapted_turns are NOT restored -- a
+    resumed session starts a fresh in-progress-attempt/timer state for its
+    current question, exactly as if the candidate had just been asked it).
+    """
+    sid = str(session_id or "")
+    if not sid:
+        return
+    with _LOCK:
+        conn = get_connection(db_path)
+        try:
+            with conn:
+                conn.execute(
+                    """
+                    INSERT INTO session_snapshots (session_id, state_json, question_queue_json, current_q_index, updated_at)
+                    VALUES (?, ?, ?, ?, ?)
+                    ON CONFLICT(session_id) DO UPDATE SET
+                        state_json = excluded.state_json,
+                        question_queue_json = excluded.question_queue_json,
+                        current_q_index = excluded.current_q_index,
+                        updated_at = excluded.updated_at;
+                    """,
+                    (
+                        sid,
+                        json.dumps(state),
+                        json.dumps(question_queue),
+                        int(current_q_index),
+                        datetime.now(UTC).isoformat(),
+                    ),
+                )
+        finally:
+            conn.close()
+
+
+def load_session_snapshot(session_id: str, db_path: Optional[Path | str] = None) -> Optional[Dict[str, Any]]:
+    """Returns {"state": dict, "question_queue": list, "current_q_index": int,
+    "updated_at": str} for the given session_id, or None if no snapshot exists."""
+    sid = str(session_id or "")
+    if not sid:
+        return None
+    with _LOCK:
+        conn = get_connection(db_path)
+        try:
+            row = conn.execute(
+                "SELECT * FROM session_snapshots WHERE session_id = ?;", (sid,)
+            ).fetchone()
+        finally:
+            conn.close()
+    if row is None:
+        return None
+    return {
+        "state": json.loads(row["state_json"]),
+        "question_queue": json.loads(row["question_queue_json"]),
+        "current_q_index": int(row["current_q_index"]),
+        "updated_at": row["updated_at"],
+    }
+
+
 # ── Attempt Recording & Deterministic Best-Answer Selection ───────────────────
 
 def _decode_attempt_row(row: sqlite3.Row) -> Dict[str, Any]:
@@ -286,6 +374,24 @@ def _authoritative_best(conn: sqlite3.Connection, cid: str, qid: str) -> Optiona
         (cid, qid),
     ).fetchall()
     return select_best([_decode_attempt_row(r) for r in rows])
+
+
+def _clean_score(val: Any, default: float = 0.0) -> float:
+    """
+    Safely validate and normalize a score at the persistence boundary.
+    Handles None, non-numeric strings, NaN, +inf, -inf safely by converting to default (0.0).
+    Clamps valid finite numbers to [0.0, 1.0].
+    Preserves legitimate 0.0 and valid partial-credit scores (e.g. 0.4, 0.5).
+    """
+    if val is None:
+        return default
+    try:
+        f = float(val)
+        if not math.isfinite(f):
+            return default
+        return max(0.0, min(1.0, f))
+    except (TypeError, ValueError):
+        return default
 
 
 def save_attempt(
@@ -313,8 +419,15 @@ def save_attempt(
     atype = str(attempt_data.get("attempt_type", "primary")).lower()
     parent_qid = attempt_data.get("parent_question_id")
     ans_type = str(attempt_data.get("answer_type", "verbal")).lower()
-    raw_s = float(attempt_data.get("raw_score", 0.0))
-    val_s = float(attempt_data.get("validated_score", raw_s))
+    raw_s = _clean_score(attempt_data.get("raw_score"), default=0.0)
+    val_raw = attempt_data.get("validated_score")
+    val_s = _clean_score(val_raw, default=raw_s) if val_raw is not None else raw_s
+    raw_conf = attempt_data.get("evaluation_confidence")
+    if raw_conf is not None:
+        eval_conf = _clean_score(raw_conf, default=0.0)
+    else:
+        # Failed/missing evaluation or zero-score attempt must not receive unjustified nonzero confidence
+        eval_conf = 0.85 if val_s > 0.0 else 0.0
     now_iso = str(attempt_data.get("created_at") or datetime.now(UTC).isoformat())
 
     covered = attempt_data.get("covered_concepts", [])
@@ -382,7 +495,7 @@ def save_attempt(
                         json.dumps(incorrect),
                         str(attempt_data.get("weakest_gap", "")),
                         json.dumps(strong),
-                        float(attempt_data.get("evaluation_confidence", 0.85)),
+                        round(eval_conf, 4),
                         json.dumps(feedback) if isinstance(feedback, (dict, list)) else str(feedback),
                         now_iso,
                     ),
@@ -493,8 +606,23 @@ def compare_with_previous_best(
             "has_improvement": False,
         }
 
-    prev_score = float(prev_best.get("validated_score", 0.0))
-    curr_score = float(current_eval.get("validated_score", current_eval.get("final_score", 0.0)))
+    try:
+        raw_prev = prev_best.get("validated_score")
+        prev_score = float(raw_prev) if raw_prev is not None else 0.0
+        if not math.isfinite(prev_score):
+            prev_score = 0.0
+    except (TypeError, ValueError):
+        prev_score = 0.0
+
+    try:
+        raw_curr = current_eval.get("validated_score")
+        if raw_curr is None:
+            raw_curr = current_eval.get("final_score")
+        curr_score = float(raw_curr) if raw_curr is not None else 0.0
+        if not math.isfinite(curr_score):
+            curr_score = 0.0
+    except (TypeError, ValueError):
+        curr_score = 0.0
     score_delta = round(curr_score - prev_score, 4)
 
     prev_missing = set(str(c).strip().lower() for c in prev_best.get("missing_concepts", []))
@@ -550,6 +678,14 @@ def get_candidate_history(candidate_id: str, db_path: Optional[Path | str] = Non
             """,
             (str(candidate_id),),
         ).fetchall()
-        return [dict(r) for r in rows]
+        results = []
+        for r in rows:
+            d = dict(r)
+            qid = str(d.get("question_id", ""))
+            best = _authoritative_best(conn, str(candidate_id), qid)
+            d["best_attempt"] = best
+            d["has_authoritative_best"] = best is not None
+            results.append(d)
+        return results
     finally:
         conn.close()

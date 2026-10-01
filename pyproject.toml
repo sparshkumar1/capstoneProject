@@ -8,6 +8,9 @@ requires-python = ">=3.11"
 asyncio_mode = "auto"
 testpaths = ["tests"]
 pythonpath = ["."]
+markers = [
+    "real_model: mark test as requiring real local model weights",
+]
 
 [tool.pyright]
 pythonVersion = "3.12"

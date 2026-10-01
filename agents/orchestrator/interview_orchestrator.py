@@ -17,6 +17,7 @@ Usage in frontend/main.py:
 from __future__ import annotations
 
 import asyncio
+import math
 import uuid
 import re
 from collections import Counter
@@ -267,11 +268,78 @@ class InterviewOrchestrator:
         """Return a copy of session state for REST endpoints."""
         return dict(self._state)
 
-    def ingest_audio_analysis(self, audio_result: dict, confidence_score: Optional[float]) -> None:
+    def snapshot_state(self) -> dict:
+        """
+        Returns a JSON-serializable snapshot sufficient to resume this
+        session's main line (question queue position, scores/answers history,
+        difficulty, RL/guardrail-relevant counters, follow-up counters) after
+        this orchestrator instance is lost -- e.g. a backend process restart,
+        which currently loses all of SESSIONS (see apps/backend/main.py) since
+        sessions live only in that in-memory dict.
+
+        Deliberately excludes: self._active_question_attempts (in-progress,
+        not-yet-scored retry attempts for the CURRENT question),
+        self._attempt_counts, self._timer_snapshot, self._pre_attempt_state,
+        self._rl_adapted_turns. A resumed session's current question behaves
+        as freshly asked (fresh timer, no in-progress retry state) rather than
+        mid-attempt; this is a disclosed, bounded scope, not full fidelity.
+        """
+        return {
+            "state": dict(self._state),
+            "question_queue": list(self._question_queue),
+            "current_q_index": int(self._current_q_index),
+        }
+
+    def restore_from_snapshot(self, snapshot: dict) -> None:
+        """
+        Overwrites this freshly-constructed orchestrator's main-line state
+        from a snapshot previously produced by snapshot_state(). Must be
+        called on a newly-constructed instance (same session_id, candidate,
+        config used originally) before any turn-handling method is called.
+        """
+        if not isinstance(snapshot, dict):
+            raise ValueError("snapshot must be a dict")
+        state = snapshot.get("state")
+        question_queue = snapshot.get("question_queue")
+        current_q_index = snapshot.get("current_q_index")
+        if not isinstance(state, dict) or not isinstance(question_queue, list) or not isinstance(current_q_index, int):
+            raise ValueError("snapshot missing required keys: state (dict), question_queue (list), current_q_index (int)")
+        self._state = dict(state)
+        self._question_queue = list(question_queue)
+        self._current_q_index = current_q_index
+
+    def ingest_audio_analysis(self, audio_result: dict, confidence_score: Optional[float] = None) -> None:
         """Called by /api/transcribe to push audio signals without direct _state writes."""
         self._state["last_audio_analysis"] = audio_result
         if confidence_score is not None:
             self._state["last_confidence_score"] = float(confidence_score)
+        elif isinstance(audio_result, dict):
+            conf = audio_result.get("confidence")
+            if isinstance(conf, dict) and "score" in conf:
+                try:
+                    self._state["last_confidence_score"] = float(conf["score"])
+                except (TypeError, ValueError):
+                    pass
+            elif conf is not None:
+                try:
+                    self._state["last_confidence_score"] = float(conf)
+                except (TypeError, ValueError):
+                    pass
+
+        if isinstance(audio_result, dict):
+            hes = audio_result.get("hesitation")
+            if isinstance(hes, dict):
+                score_val = hes.get("hesitation_score", hes.get("score"))
+                if score_val is not None:
+                    try:
+                        self._state["last_hesitation_score"] = float(score_val)
+                    except (TypeError, ValueError):
+                        pass
+            elif hes is not None:
+                try:
+                    self._state["last_hesitation_score"] = float(hes)
+                except (TypeError, ValueError):
+                    pass
 
     def mark_abandoned(self) -> None:
         """Status transition for WS disconnect. No lock — fires outside message loop."""
@@ -392,7 +460,13 @@ class InterviewOrchestrator:
                 comparison=comparison,
             )
 
-            raw_score = float(eval_result.get("final_score", feedback.get("final_score", 0.5)))
+            raw_cand = eval_result.get("final_score")
+            try:
+                raw_score = float(raw_cand) if raw_cand is not None else 0.0
+                if not math.isfinite(raw_score):
+                    raw_score = 0.0
+            except (TypeError, ValueError):
+                raw_score = 0.0
             if eval_result.get("stt_status") == "stt_unavailable":
                 timing_mod = {
                     "raw_score": 0.0,
@@ -436,6 +510,9 @@ class InterviewOrchestrator:
             # Save attempt to SQLite; best-answer status is decided by the backend rule only
             # (eligible = authoritatively correct/partially correct), never defaulted to True.
             save_res = None
+            eval_conf = eval_result.get("evaluation_confidence")
+            if eval_conf is None:
+                eval_conf = 0.0 if (eval_result.get("stt_status") == "stt_unavailable" or raw_score == 0.0) else 0.85
             attempt_payload = {
                 "candidate_id": cid,
                 "session_id": sid,
@@ -449,6 +526,7 @@ class InterviewOrchestrator:
                 "covered_concepts": eval_result.get("correct_claims", []) or eval_result.get("covered_concepts", []),
                 "missing_concepts": eval_result.get("missing_concepts", []),
                 "incorrect_claims": eval_result.get("incorrect_claims", []),
+                "evaluation_confidence": eval_conf,
                 "feedback_json": feedback,
                 "attempt_number": lifetime_attempt_num,
             }
@@ -656,7 +734,13 @@ class InterviewOrchestrator:
                 comparison=comparison,
             )
 
-            raw_score = float(result.get("final_score", 0.5))
+            raw_cand = result.get("final_score")
+            try:
+                raw_score = float(raw_cand) if raw_cand is not None else 0.0
+                if not math.isfinite(raw_score):
+                    raw_score = 0.0
+            except (TypeError, ValueError):
+                raw_score = 0.0
             if self._timer:
                 timing_mod = self._timer.compute_timing_modifier(
                     raw_score=raw_score,
@@ -689,6 +773,9 @@ class InterviewOrchestrator:
             # Save attempt to SQLite; best-answer status is decided by the backend rule only
             # (eligible = authoritatively correct/partially correct), never defaulted to True.
             save_res = None
+            eval_conf = result.get("evaluation_confidence")
+            if eval_conf is None:
+                eval_conf = 1.0 if passed else (0.85 if raw_score > 0.0 else 0.0)
             attempt_payload = {
                 "candidate_id": cid,
                 "session_id": sid,
@@ -701,6 +788,7 @@ class InterviewOrchestrator:
                 "validated_score": raw_score,
                 "covered_concepts": result.get("strong_points", []),
                 "missing_concepts": result.get("missing_concepts", []),
+                "evaluation_confidence": eval_conf,
                 "feedback_json": result,
                 "attempt_number": lifetime_attempt_num,
             }
@@ -918,6 +1006,7 @@ class InterviewOrchestrator:
         1. Highest validated technical score (raw_score)
         2. Fewest missing concepts
         3. Most recent attempt
+        Safely handles None, NaN, Infinite, non-numeric values and corrupt records.
         """
         if not attempts:
             return {}
@@ -925,10 +1014,23 @@ class InterviewOrchestrator:
             return attempts[0]
 
         def key_fn(item):
-            s = round(float(item.get("raw_score", item.get("validated_score", item.get("score", 0.0)))), 4)
+            raw = item.get("raw_score")
+            if raw is None:
+                raw = item.get("validated_score")
+            if raw is None:
+                raw = item.get("score", 0.0)
+            try:
+                s_float = float(raw)
+                s = round(s_float, 4) if math.isfinite(s_float) else 0.0
+            except (TypeError, ValueError):
+                s = 0.0
             ev = item.get("eval_result") or item.get("feedback") or {}
-            missing_count = len(ev.get("missing_concepts", []))
-            att_num = int(item.get("attempt_number", 0))
+            missing = ev.get("missing_concepts", [])
+            missing_count = len(missing) if isinstance(missing, (list, tuple)) else 0
+            try:
+                att_num = int(item.get("attempt_number", 0))
+            except (TypeError, ValueError):
+                att_num = 0
             return (s, -missing_count, att_num)
 
         return max(attempts, key=key_fn)
@@ -1313,11 +1415,11 @@ class InterviewOrchestrator:
                 if raw:
                     if self._validator:
                         try:
-                            rs = float(raw.get("final_score", 0.0))
+                            raw_val = raw.get("final_score")
                             ev = {"mandatory_pass": bool(raw.get("mandatory_pass", True)),
                                   "mistake_penalty": float(raw.get("mistake_penalty", 0.0))}
-                            v = self._validator.validate(rs, ev, is_coding=False)
-                            raw["final_score"] = float(v.get("validated_score", rs))
+                            v = self._validator.validate(raw_val, ev, is_coding=False)
+                            raw["final_score"] = float(v.get("validated_score", 0.0))
                             raw["validation_trace"] = v.get("validation_trace", [])
                         except Exception:
                             pass
@@ -1409,10 +1511,10 @@ class InterviewOrchestrator:
 
         if self._validator:
             try:
-                rs = float(result.get("final_score", 0.5))
+                raw_val = result.get("final_score")
                 ev = {"mandatory_pass": bool(passed), "mistake_penalty": 0.0}
-                v = self._validator.validate(rs, ev, is_coding=True)
-                result["final_score"] = float(v.get("validated_score", rs))
+                v = self._validator.validate(raw_val, ev, is_coding=True)
+                result["final_score"] = float(v.get("validated_score", 0.0))
                 result["validation_trace"] = v.get("validation_trace", [])
             except Exception:
                 pass
@@ -1734,7 +1836,13 @@ class InterviewOrchestrator:
         if consec >= 2:
             return False
 
-        score = float(eval_result.get("final_score", 0.5))
+        raw_sc = eval_result.get("final_score")
+        try:
+            score = float(raw_sc) if raw_sc is not None else 0.0
+            if not math.isfinite(score):
+                score = 0.0
+        except (TypeError, ValueError):
+            score = 0.0
         missing = list(eval_result.get("missing_concepts", []))
         incorrect = list(eval_result.get("incorrect_claims", []))
         weakest_gap = eval_result.get("weakest_gap")
@@ -2213,6 +2321,7 @@ class InterviewOrchestrator:
                 "communication_tips": fb.get("communication_tips") or [],
                 "trend": fb.get("trend") or "stable",
                 "trend_note": fb.get("trend_note") or "",
+                "status": fb.get("status", "evaluated"),
             })
 
         missing_counts = Counter(all_missing)

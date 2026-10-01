@@ -138,3 +138,36 @@ def test_validator_distinguishes_infrastructure_failure_from_candidate_failure()
     assert res_malformed["evaluation_status"] == "malformed"
     assert res_malformed["is_infrastructure_failure"] is True
     assert res_malformed["validated_score"] == 0.0
+
+
+def test_validator_flags_non_finite_score_as_infrastructure_failure():
+    """X1-A FLT-04 regression: NaN/Inf must not look like a genuine 0.0 candidate answer."""
+    validator = ScoreValidator()
+
+    for raw_score in (float("nan"), float("inf"), float("-inf")):
+        result = validator.validate(raw_score, evidence={}, is_coding=False)
+        assert result["validated_score"] == 0.0
+        assert result["evaluation_status"] == "non_finite_score"
+        assert result["is_infrastructure_failure"] is True
+
+    # A contradictory upstream success label must not mask the invalid numeric output.
+    contradictory_status = validator.validate(
+        float("nan"), evidence={"evaluation_status": "success"}, is_coding=False
+    )
+    assert contradictory_status["evaluation_status"] == "non_finite_score"
+    assert contradictory_status["is_infrastructure_failure"] is True
+
+    # Preserve a more specific infrastructure status when one was already supplied.
+    unavailable = validator.validate(
+        float("nan"), evidence={"evaluation_status": "unavailable"}, is_coding=False
+    )
+    assert unavailable["evaluation_status"] == "unavailable"
+    assert unavailable["is_infrastructure_failure"] is True
+
+    genuine_zero = validator.validate(0.0, evidence={}, is_coding=False)
+    assert genuine_zero["evaluation_status"] == "success"
+    assert genuine_zero["is_infrastructure_failure"] is False
+
+    finite_extreme = validator.validate(999.0, evidence={}, is_coding=False)
+    assert finite_extreme["evaluation_status"] == "success"
+    assert finite_extreme["is_infrastructure_failure"] is False

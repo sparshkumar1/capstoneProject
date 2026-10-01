@@ -3,6 +3,7 @@ Extracts a dedicated hesitation score for the RL state vector.
 Combines acoustic pauses + filler density + pitch-drop markers.
 """
 from __future__ import annotations
+import math
 import numpy as np
 
 _FILLERS = {
@@ -45,12 +46,33 @@ def score_hesitation(prosodic: dict, transcription: dict) -> dict:
     filler_hits = sum(1 for f in _FILLERS if re.search(r"\b" + re.escape(f) + r"\b", transcript))
     filler_density = _clamp(filler_hits / max(token_count / 15, 1))
 
-    # 5. Pitch instability during speech (jitter proxy)
-    jitter  = float(prosodic.get("jitter", 0.02))
-    pitch_instability = _clamp(jitter / 0.05)
+    # 5. Pitch instability during speech (jitter proxy). A missing, non-numeric,
+    # NaN or infinite jitter reading (e.g. Parselmouth failing on very
+    # short/silent/unvoiced audio) must not silently become a fabricated
+    # instability reading -- score this component neutrally (0.5) instead of
+    # letting a NaN propagate through _clamp (which would otherwise clamp NaN
+    # to 1.0, the worst-case hesitation contribution, for a signal that was
+    # never actually measured).
+    _jitter_raw = prosodic.get("jitter", 0.02)
+    try:
+        jitter = float(_jitter_raw)
+        if math.isnan(jitter) or math.isinf(jitter):
+            raise ValueError
+        pitch_instability = _clamp(jitter / 0.05)
+    except (TypeError, ValueError):
+        pitch_instability = 0.5
 
-    # 6. Speaking rate deviation (optimal 2.1–4.3 words/sec)
-    rate = transcription.get("true_speaking_rate", 3.2)
+    # 6. Speaking rate deviation (optimal 2.1-4.3 words/sec). true_speaking_rate
+    # is produced by transcriber.py in words per minute; convert to words per
+    # second here, at the point of use (see confidence_scorer.py's matching
+    # comment). A missing or non-numeric value keeps the prior "assume
+    # optimal" default (3.2, already words/sec) rather than being treated as
+    # a real rate of zero.
+    _rate_raw = transcription.get("true_speaking_rate")
+    try:
+        rate = 3.2 if _rate_raw is None else float(_rate_raw) / 60.0
+    except (TypeError, ValueError):
+        rate = 3.2
     if 2.1 <= rate <= 4.3:
         rate_dev = 0.0
     else:

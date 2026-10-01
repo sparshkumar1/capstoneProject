@@ -27,7 +27,8 @@
     "common_mistakes_addressed": [
       "Nested loops are O(n²) and unnecessary; hash map eliminates the inner loop",
       "The map stores indices not values — the answer must return indices of the two numbers",
-      "Duplicates are handled correctly because we check complement before inserting current element"
+      "Duplicates are handled correctly because we check complement before inserting current element",
+      "Returning or reusing the same array index for both required positions is invalid — the two returned indices must refer to two distinct positions in the array"
     ],
     "evaluation_rubric": {
       "focus": "Efficient logic using hashing",

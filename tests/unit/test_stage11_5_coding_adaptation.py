@@ -396,6 +396,7 @@ def test_coding_turn_preserves_speech_confidence_and_does_not_fabricate_metrics(
     orch._state["last_confidence_score"] = 0.94
     orch._state["last_hesitation_score"] = 0.06
     orch._state["last_time_norm"] = 0.22
+    orch._state["progress"] = 0.2  # simulated 2-of-10 turn progress before the coding turn
     orch._state["communication_indicators"] = {
         "confidence_score": 0.94,
         "speaking_rate": 145.0,
@@ -423,18 +424,29 @@ def test_coding_turn_preserves_speech_confidence_and_does_not_fabricate_metrics(
     assert orch._state["last_hesitation_score"] == 0.06
     assert orch._state["communication_indicators"]["confidence_score"] == 0.94
     assert orch._state["coding_history"][-1]["execution_time_ms"] == 1850.0
+    # last_time_norm (verbal response latency) is a separate state field from obs[4]
+    # (see rl_state_definition.md's documented s4 training/runtime split); a coding
+    # turn processed through _update_session_state must not overwrite it either.
+    assert orch._state["last_time_norm"] == 0.22
 
-    # 4. 6D RL observation construction
+    # 4. 6D RL observation construction. obs[4] is the canonical runtime definition of
+    # dimension 4: normalized session turn-progress ratio t/T (session["progress"]),
+    # NOT response latency -- see build_rl_observation's own docstring and
+    # research/audit/rl_state_definition.md. A coding turn's execution_time_ms
+    # (1850ms) must not leak into it, and it must reflect the pre-turn progress
+    # value untouched by _update_session_state, which does not write "progress".
     obs = build_rl_observation(score=0.75, current_difficulty=3, session=orch._state)
     assert obs.shape == (6,)
     assert pytest.approx(float(obs[2]), abs=1e-3) == 0.94  # Genuine speech confidence preserved
     assert pytest.approx(float(obs[3]), abs=1e-3) == 0.06  # Genuine speech hesitation preserved
-    assert pytest.approx(float(obs[4]), abs=1e-3) == 0.22  # Verbal response time preserved, NOT 1850ms execution time
+    assert pytest.approx(float(obs[4]), abs=1e-3) == 0.20  # Turn-progress ratio preserved, NOT derived from 1850ms execution time
 
-    # 5. Default missing-value semantics when no prior speech exists
+    # 5. Default missing-value semantics when no prior speech or progress data exists.
+    # With no "progress"/"turn_progress"/turn-index/"last_time_norm" key present,
+    # build_rl_observation falls back to len(scores)/total_turns (default total_turns=10).
     fresh_state = {"scores": [0.80], "current_difficulty": 3}
     fresh_obs = build_rl_observation(score=0.80, current_difficulty=3, session=fresh_state)
     assert fresh_obs.shape == (6,)
     assert pytest.approx(float(fresh_obs[2]), abs=1e-3) == 0.80  # Default missing-value confidence: fallback to perf
     assert pytest.approx(float(fresh_obs[3]), abs=1e-3) == 0.20  # Default missing-value hesitation: 1.0 - conf
-    assert pytest.approx(float(fresh_obs[4]), abs=1e-3) == 0.00  # Default missing-value time_norm: 0.0
+    assert pytest.approx(float(fresh_obs[4]), abs=1e-3) == 0.10  # len(scores)=1 / default total_turns=10

@@ -293,7 +293,13 @@ function QuestionsTab({ r }) {
                   </div>
                 </div>
                 <div className="q-row-right">
-                  <span className="badge badge-neutral" style={{ fontSize: 11 }}>Evaluated</span>
+                  {q.status === "evaluator_unavailable" || q.grade === "Unscored" ? (
+                    <span className="badge badge-warn" style={{ fontSize: 11 }}>Unavailable</span>
+                  ) : q.status === "stt_unavailable" || q.grade === "Ungraded" ? (
+                    <span className="badge badge-warn" style={{ fontSize: 11 }}>Ungraded</span>
+                  ) : (
+                    <span className="badge badge-neutral" style={{ fontSize: 11 }}>Evaluated</span>
+                  )}
                   <span style={{ color: "var(--text-3)", fontSize: 12 }}>{expanded === i ? "▲" : "▼"}</span>
                 </div>
               </div>
