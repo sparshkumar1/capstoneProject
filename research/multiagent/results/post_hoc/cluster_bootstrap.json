@@ -1,0 +1,38 @@
+{
+  "M1-B0:followups": {
+    "B": 10000,
+    "clusters": 8,
+    "clusters_same_sign": 1,
+    "hi": 1.7625000000000002,
+    "lo": 0.0,
+    "mean": 0.5875,
+    "seed": 20270101
+  },
+  "M1-B0:level_changes": {
+    "B": 10000,
+    "clusters": 8,
+    "clusters_same_sign": 7,
+    "hi": -0.23749999999999982,
+    "lo": -4.5,
+    "mean": -2.66875,
+    "seed": 20270101
+  },
+  "M1-B0:ppo_agree": {
+    "B": 10000,
+    "clusters": 8,
+    "clusters_same_sign": 8,
+    "hi": -0.17020220588235294,
+    "lo": -0.2842294102955868,
+    "mean": -0.22604828382401912,
+    "seed": 20270101
+  },
+  "M1-B0:reversals": {
+    "B": 10000,
+    "clusters": 8,
+    "clusters_same_sign": 7,
+    "hi": -0.2749999999999999,
+    "lo": -3.125,
+    "mean": -1.875,
+    "seed": 20270101
+  }
+}

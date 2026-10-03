@@ -1,0 +1,13 @@
+\begin{tabular}{lp{4.2cm}p{4.2cm}}
+\toprule
+\textbf{Dimension} & \textbf{Specialized Architecture ($M_{\text{split}}$)} & \textbf{Unified Architecture ($M_{\text{unified}}$)} \\
+\midrule
+\textbf{Agent Roles} & Strategy Agent + Coaching Agent & Unified Technical-Coach Agent \\
+\textbf{State Ledgers} & Disjoint ledgers (Weakness vs Coaching History) & Shared joint session ledger \\
+\textbf{Inter-Agent Comm.} & Explicit typed peer message (\texttt{TurnObservation.peer}) & Internal variable passing \\
+\textbf{Decision Equivalence} & Replay difficulty identical ($M_3 = M_1$, 160/160) & $\mathbb{P}(\text{Decision}_{\text{unified}} = \text{Decision}_{\text{split}}) = 1.0$ \\
+\textbf{Dispatch Overhead} & 2 serializations, 2 schema checks ($+1.04$\,ms p50) & 1 serialization, 1 schema check (est. $+0.5$\,ms) \\
+\textbf{Failure Blast Radius} & Bulkhead isolation: coaching fault spares strategy & Whole-turn drop: coaching fault halts strategy \\
+\textbf{Auditability} & Independent per-agent ledgers and breakers & Joint opaque decision state \\
+\bottomrule
+\end{tabular}

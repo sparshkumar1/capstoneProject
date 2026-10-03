@@ -1,0 +1,44 @@
+{
+  "id": "MA-XA-XB-v1",
+  "evidence_class": ["REPLAY", "FAULT-INJECTED"],
+  "evaluator_source": "research/results/paper2/paper2_evaluator_raw.json (64 recorded production-evaluator payloads; evaluator not executed)",
+  "llm": "none (Qwen stubbed as down; orchestrator non-LLM fallbacks)",
+  "ppo_checkpoint": "rl/checkpoints/seed_123/ppo_final.zip (frozen; deterministic=True) unless a condition sets ppo=false",
+  "recorded_sessions": 8,
+  "xa": {
+    "order_seeds": 20,
+    "timeout_s": 2.0,
+    "conditions": {
+      "B0":  {"note": "existing single-controller workflow (multiagent off), legacy_inline guardrails, PPO on"},
+      "B7":  {"note": "B0 with PPO unavailable (labelled non-RL heuristic)", "ppo": false},
+      "B0c": {"note": "B0 with guardrail_impl=canonical", "guardrail_impl": "canonical"},
+      "M1":  {"note": "full multi-agent", "multiagent": {}},
+      "M2":  {"note": "Strategy Agent ablated", "multiagent": {"strategy": false}},
+      "M3":  {"note": "Coaching Agent ablated", "multiagent": {"coaching": false}},
+      "M4":  {"note": "arbitration ablated", "multiagent": {"arbitration": false}},
+      "M5":  {"note": "grounding check ablated", "multiagent": {"grounding": false}},
+      "M6":  {"note": "Strategy->Coaching communication removed", "multiagent": {"communication": false}},
+      "M7":  {"note": "full multi-agent, PPO unavailable", "multiagent": {}, "ppo": false},
+      "M8":  {"note": "authority enforcement ablated", "multiagent": {"authority": false}},
+      "M1c": {"note": "full multi-agent with guardrail_impl=canonical", "multiagent": {}, "guardrail_impl": "canonical"}
+    }
+  },
+  "xb": {
+    "order_seeds": 5,
+    "timeout_s": 0.15,
+    "fault_rate": 0.3,
+    "agent_thresholds": {"tau": 0.6},
+    "faults": {
+      "strategy": ["crash", "timeout", "malformed", "forbidden_key", "stale", "nan_confidence", "adversarial_valid"],
+      "coaching": ["crash", "malformed", "stale", "ungrounded"]
+    },
+    "variants": {
+      "full": {},
+      "no_authority": {"authority": false},
+      "no_arbitration": {"arbitration": false},
+      "no_grounding": {"grounding": false}
+    }
+  },
+  "statistics": {"bootstrap_B": 10000, "bootstrap_seed": 20270101, "ci": 0.95, "proportion_ci": "Clopper-Pearson exact",
+                 "unit": "session (dependent: the same 64 recorded answers are reused across order seeds) - descriptive, exploratory"}
+}

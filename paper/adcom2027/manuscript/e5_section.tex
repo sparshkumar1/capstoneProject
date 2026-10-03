@@ -1,0 +1,18 @@
+The measurement in Sect.~\ref{sec:e2} showed that a service that accepts connections but never answers costs \twoHangMed{} s per turn. We added a circuit breaker (opens after two consecutive failures, cooldown 60\,s, one probe when half-open; parameters fixed from the timeout constants before the run) used at the three service call sites; a switch reproduces the earlier behaviour. The breaker's clock was advanced by an injected pacing clock $P \in \{30, 60, 120\}$\,s after each turn to model candidate think time, while HTTP transport calls and timeouts executed against real sockets (Table~\ref{tab:e5}). The first turn still pays \fiveFirstTurn{} s (two attempts to reach the threshold). Afterwards a probe is made once per cooldown window; with $P=30$\,s the probe falls on every second turn, and with $P\ge 60$\,s on every turn, so the median per turn is \fiveMedSThirty{} s and \fiveMedSSixty{} s against \fiveMedB{} s without the breaker, and total time over \twoTurns{} turns falls from \fiveTotB{} s to \fiveTotSThirty{}--\fiveTotSSixty{} s. A longer pacing ($P=120$\,s) does not lower the cost further because the cooldown has already elapsed at every turn (\fiveMedSOneTwenty{} s). With the healthy service the breaker never opened (\fiveOkOpen{} openings); in the recovery run the first call after the service returned closed it again with \fiveRecoverTurns{} turns of delay. Committed scores were \fiveSameScores{} across all runs, as expected because only waiting changes. The cost remains a function of the cooldown parameter, which was not tuned; a longer cooldown trades slower recovery for fewer probes.
+
+\begin{table}[t]
+\caption{E5: answer-handling time per turn with a hanging service (24 turns, session 0, real timeouts); client-side attempts.}\label{tab:e5}
+\centering\small
+\begin{tabular}{lccc}
+\toprule
+Condition & Median (s) & Total (s) & Attempts\\
+\midrule
+Hanging, no breaker & \fiveMedB & \fiveTotB & \fiveAttB\\
+Hanging, breaker, $P=30$\,s & \fiveMedSThirty & \fiveTotSThirty & \fiveAttSThirty\\
+Hanging, breaker, $P=60$\,s & \fiveMedSSixty & \fiveTotSSixty & \fiveAttSSixty\\
+Hanging, breaker, $P=120$\,s & \fiveMedSOneTwenty & \fiveTotSOneTwenty & \fiveAttSOneTwenty\\
+Refusing, breaker, $P=60$\,s & \fiveMedRefuse & \fiveTotRefuse & \fiveAttRefuse (vs.\ \fiveRefuseAttB{} without)\\
+Healthy, breaker, $P=60$\,s & \fiveMedOk & \fiveTotOk & \fiveAttOk\\
+\bottomrule
+\end{tabular}
+\end{table}

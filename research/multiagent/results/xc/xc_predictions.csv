@@ -1,0 +1,7 @@
+id,prediction,observed,verdict
+C1,"TAU0: PPO agreement<0.10, level changes<5.0, no guardrail bypass","{""bypass_sessions"": 0, ""level_changes"": 2.225, ""ppo_agree"": 0.014}",SUPPORTED
+C2,TAU6 reproduces XA M1 paths in every session,true,SUPPORTED
+C3,TAU5 equals TAU6 in every session,true,SUPPORTED
+C4,"strategy-sourced decisions non-increasing over tau 0.6,0.7,0.8,0.9","[6.669, 6.669, 6.594, 0.0]",SUPPORTED
+C5,tau=0.9 strategy-sourced decisions < half of tau=0.6,"{""tau0.6"": 6.669, ""tau0.9"": 0.0}",SUPPORTED
+V,completion/authority/transition valid in every session of every condition,true,SUPPORTED

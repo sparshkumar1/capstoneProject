@@ -1,0 +1,17 @@
+cell,variant,sessions,sessions_with_invalid_commit,invalid_commits,ci_lo,ci_hi,sessions_terminated,mean_committed_answers
+F0,B(baseline),8,0,0,0.0,0.369,8,23.25
+F0,S(strict),8,0,0,0.0,0.369,8,23.25
+F3each:None,B(baseline),8,8,192,0.631,1.0,8,24.0
+F3each:None,S(strict),8,0,0,0.0,0.369,0,0.0
+F3each:NaN,B(baseline),8,8,192,0.631,1.0,8,24.0
+F3each:NaN,S(strict),8,0,0,0.0,0.369,0,0.0
+F3each:high,B(baseline),8,8,192,0.631,1.0,8,24.0
+F3each:high,S(strict),8,0,0,0.0,0.369,0,0.0
+F3each:1.7,B(baseline),8,8,184,0.631,1.0,8,23.0
+F3each:1.7,S(strict),8,0,0,0.0,0.369,0,0.0
+F3each:-0.3,B(baseline),8,8,192,0.631,1.0,8,24.0
+F3each:-0.3,S(strict),8,0,0,0.0,0.369,0,0.0
+F2,B(baseline),160,0,0,0.0,0.023,145,22.69
+F2,S(strict),160,0,0,0.0,0.023,145,22.69
+F6,B(baseline),160,144,375,0.843,0.942,160,23.26
+F6,S(strict),160,0,0,0.0,0.023,160,23.25

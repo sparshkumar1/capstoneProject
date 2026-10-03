@@ -1,0 +1,14 @@
+\begin{tabular}{lp{4.2cm}p{4.2cm}}
+\toprule
+\textbf{Dimension} & \textbf{Specialized Architecture ($M_{\text{split}}$)} & \textbf{Unified Architecture ($M_{\text{unified}}$)} \\
+\midrule
+\textbf{Agent Roles} & Strategy Agent + Coaching Agent & Unified Technical-Coach Agent \\
+\textbf{State Encapsulation} & Disjoint private ledgers (Weakness vs Coaching) & Monolithic shared session ledger \\
+\textbf{Inter-Agent Comm.} & Explicit typed peer message (\texttt{TurnObservation.peer}) & Internal variable passing \\
+\textbf{Decision Equivalence} & Baseline reference ($M_1$, 160 sessions) & $\mathbb{P} = 1.0$ ($1{,}280/1{,}280$ turns identical) \\
+\textbf{Serialization Micro-bench.} & 2 models ($0.0092$\,ms per turn) & 1 model ($0.0038$\,ms, $-58.7\%$) \\
+\textbf{Component Dispatch Latency} & $0.0440$\,ms per dispatch & $0.0401$\,ms ($-8.9\%$) \\
+\textbf{End-to-End Orchestration} & $+1.04$\,ms p50 overhead ($M_1$ vs $B_0$) & Baseline reference ($B_0$: $0.55$\,ms) \\
+\textbf{Auditability} & Independent per-agent decision records & Joint opaque decision state \\
+\bottomrule
+\end{tabular}

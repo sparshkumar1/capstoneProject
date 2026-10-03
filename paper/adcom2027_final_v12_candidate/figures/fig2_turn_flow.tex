@@ -1,0 +1,27 @@
+\begin{tikzpicture}[font=\footnotesize, x=1cm, y=1cm,
+  life/.style={draw, rounded corners=1pt, minimum width=17mm, minimum height=6mm, align=center, fill=gray!10},
+  msg/.style={-{Stealth[length=2mm]}, thin},
+  dmsg/.style={-{Stealth[length=2mm]}, thin, dashed},
+  note/.style={draw, fill=white, rounded corners=1pt, inner sep=2pt, font=\scriptsize}]
+\def\xh{0} \def\xe{2.4} \def\xs{4.8} \def\xc{7.2} \def\xd{9.6} \def\xp{12}
+\node[life] (hub) at (\xh,0) {Hub};
+\node[life, fill=blue!12] (ev) at (\xe,0) {Evaluator};
+\node[life, fill=orange!25] (st) at (\xs,0) {Strategy};
+\node[life, fill=orange!25] (co) at (\xc,0) {Coaching};
+\node[life] (cd) at (\xd,0) {Coordinator};
+\node[life, fill=blue!12] (pp) at (\xp,0) {PPO};
+\foreach \x in {\xh,\xe,\xs,\xc,\xd,\xp} \draw[gray, dotted] (\x,-0.4) -- (\x,-8.1);
+\draw[msg] (\xh,-0.9) -- node[above]{answer} (\xe,-0.9);
+\draw[msg] (\xe,-1.4) -- node[above]{payload} (\xh,-1.4);
+\draw[msg] (\xh,-2.0) -- node[above]{1 observation $(v)$} (\xs,-2.0);
+\draw[dmsg] (\xs,-2.5) -- node[above]{2 proposal $(v)$} (\xd,-2.5);
+\draw[msg] (\xh,-3.1) -- node[above]{3 observation $(v)$ + peer proposal} (\xc,-3.1);
+\draw[dmsg] (\xc,-3.6) -- node[above]{4 plan $(v)$} (\xd,-3.6);
+\draw[msg] (\xd,-4.1) -- node[above]{validated proposals} (\xh,-4.1);
+\node[note] at (\xh+1.35,-4.75) {5 render coaching plan};
+\node[note] at (\xh+1.05,-5.3) {6 commit; $v \leftarrow v{+}1$};
+\draw[msg] (\xh,-5.9) -- node[above]{7 state observation} (\xp,-5.9);
+\draw[msg] (\xp,-6.4) -- node[above]{PPO action} (\xd,-6.4);
+\draw[msg] (\xd,-6.9) -- node[above]{8 arbitrated action + guardrail} (\xh,-6.9);
+\node[note] at (\xh+1.7,-7.55) {9 follow-up decision, next question};
+\end{tikzpicture}

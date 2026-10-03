@@ -1,0 +1,18 @@
+{
+ "byte_identical": true,
+ "config": {
+  "qwen_breaker": "disabled",
+  "strict_evaluator_contract": false
+ },
+ "git": {
+  "branch": "research/adcom2027-multiagent-final",
+  "commit": "2d987bf820fe02c617cac9ab74a16e01961f6b2b",
+  "dirty": true
+ },
+ "new_sha256": "889bb142814e82cd274ace94af013d01c46a9e9c5253c3b7add9ae550c81cc86",
+ "part": "e1",
+ "rows": 752,
+ "rows_differing": 0,
+ "seconds": 31.5,
+ "stored_sha256": "889bb142814e82cd274ace94af013d01c46a9e9c5253c3b7add9ae550c81cc86"
+}

@@ -1,0 +1,50 @@
+\begin{tabular}{llcccrrrr}
+\toprule
+Fault & Variant & compl. & auth. & trans. & byp. & leak & brk. & p95 ms\\
+\midrule
+coach:crash & full & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.09 \\
+coach:crash & no\_arbitration & 40/40 & 40/40 & 40/40 & 1 & 0 & 29 & 4.28 \\
+coach:crash & no\_authority & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.73 \\
+coach:crash & no\_grounding & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.48 \\
+coach:malformed & full & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.85 \\
+coach:malformed & no\_arbitration & 40/40 & 40/40 & 40/40 & 1 & 0 & 29 & 4.08 \\
+coach:malformed & no\_authority & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.75 \\
+coach:malformed & no\_grounding & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.58 \\
+coach:stale & full & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.33 \\
+coach:stale & no\_arbitration & 40/40 & 40/40 & 40/40 & 1 & 0 & 29 & 4.22 \\
+coach:stale & no\_authority & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.38 \\
+coach:stale & no\_grounding & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.42 \\
+coach:ungrounded & full & 40/40 & 40/40 & 40/40 & 0 & 0 & 0 & 4.45 \\
+coach:ungrounded & no\_arbitration & 40/40 & 40/40 & 40/40 & 1 & 0 & 0 & 4.15 \\
+coach:ungrounded & no\_authority & 40/40 & 40/40 & 40/40 & 0 & 0 & 0 & 4.6 \\
+coach:ungrounded & no\_grounding & 40/40 & 40/40 & 40/40 & 0 & 40 & 0 & 4.57 \\
+strat:adversarial\_valid & full & 40/40 & 40/40 & 40/40 & 0 & 0 & 0 & 4.5 \\
+strat:adversarial\_valid & no\_arbitration & 40/40 & 40/40 & 40/40 & 38 & 0 & 0 & 4.96 \\
+strat:adversarial\_valid & no\_authority & 40/40 & 40/40 & 40/40 & 0 & 0 & 0 & 5.16 \\
+strat:adversarial\_valid & no\_grounding & 40/40 & 40/40 & 40/40 & 0 & 0 & 0 & 5.38 \\
+strat:crash & full & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 3.83 \\
+strat:crash & no\_arbitration & 40/40 & 40/40 & 40/40 & 34 & 0 & 29 & 3.66 \\
+strat:crash & no\_authority & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 3.41 \\
+strat:crash & no\_grounding & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 3.43 \\
+strat:forbidden\_key & full & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 3.86 \\
+strat:forbidden\_key & no\_arbitration & 40/40 & 40/40 & 40/40 & 34 & 0 & 29 & 3.35 \\
+strat:forbidden\_key & no\_authority & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 3.57 \\
+strat:forbidden\_key & no\_grounding & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.17 \\
+strat:malformed & full & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 3.62 \\
+strat:malformed & no\_arbitration & 40/40 & 40/40 & 40/40 & 34 & 0 & 29 & 3.27 \\
+strat:malformed & no\_authority & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.39 \\
+strat:malformed & no\_grounding & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 3.88 \\
+strat:nan\_confidence & full & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.14 \\
+strat:nan\_confidence & no\_arbitration & 40/40 & 40/40 & 40/40 & 34 & 0 & 29 & 5.02 \\
+strat:nan\_confidence & no\_authority & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.34 \\
+strat:nan\_confidence & no\_grounding & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.79 \\
+strat:stale & full & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.04 \\
+strat:stale & no\_arbitration & 40/40 & 40/40 & 40/40 & 34 & 0 & 29 & 4.36 \\
+strat:stale & no\_authority & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 3.64 \\
+strat:stale & no\_grounding & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 4.45 \\
+strat:timeout & full & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 154.38 \\
+strat:timeout & no\_arbitration & 40/40 & 40/40 & 40/40 & 34 & 0 & 29 & 154.23 \\
+strat:timeout & no\_authority & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 154.4 \\
+strat:timeout & no\_grounding & 40/40 & 40/40 & 40/40 & 0 & 0 & 29 & 154.66 \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,18 @@
+\begin{tabular}{lrcccccrr}
+\toprule
+Fault & inj. & compl. & auth. & trans. & bypass & leak & brk. & p95\\
+ & (full) & \multicolumn{3}{c}{all 4 variants} & full/no-arb. & full/no-gr. & full & ms\\
+\midrule
+coach:crash & 154 & 160/160 & 160/160 & 160/160 & 0 / 1 & 0 / 0 & 29 & 4.09 \\
+coach:malformed & 154 & 160/160 & 160/160 & 160/160 & 0 / 1 & 0 / 0 & 29 & 4.85 \\
+coach:stale & 154 & 160/160 & 160/160 & 160/160 & 0 / 1 & 0 / 0 & 29 & 4.33 \\
+coach:ungrounded & 950 & 160/160 & 160/160 & 160/160 & 0 / 1 & 0 / 40 & 0 & 4.45 \\
+strat:adversarial\_valid & 930 & 160/160 & 160/160 & 160/160 & 0 / 38 & 0 / 0 & 0 & 4.5 \\
+strat:crash & 152 & 160/160 & 160/160 & 160/160 & 0 / 34 & 0 / 0 & 29 & 3.83 \\
+strat:forbidden\_key & 152 & 160/160 & 160/160 & 160/160 & 0 / 34 & 0 / 0 & 29 & 3.86 \\
+strat:malformed & 152 & 160/160 & 160/160 & 160/160 & 0 / 34 & 0 / 0 & 29 & 3.62 \\
+strat:nan\_confidence & 152 & 160/160 & 160/160 & 160/160 & 0 / 34 & 0 / 0 & 29 & 4.14 \\
+strat:stale & 152 & 160/160 & 160/160 & 160/160 & 0 / 34 & 0 / 0 & 29 & 4.04 \\
+strat:timeout & 152 & 160/160 & 160/160 & 160/160 & 0 / 34 & 0 / 0 & 29 & 154.38 \\
+\bottomrule
+\end{tabular}

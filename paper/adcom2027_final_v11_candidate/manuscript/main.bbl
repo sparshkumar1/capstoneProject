@@ -1,0 +1,110 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{shield}
+Alshiekh, M., Bloem, R., Ehlers, R., K{\"o}nighofer, B., Niekum, S., Topcu, U.:
+  Safe reinforcement learning via shielding. In: Proceedings of the AAAI
+  Conference on Artificial Intelligence (2018)
+
+\bibitem{alrl04}
+Avi{\v{z}}ienis, A., Laprie, J.C., Randell, B., Landwehr, C.: Basic concepts
+  and taxonomy of dependable and secure computing. IEEE Transactions on
+  Dependable and Secure Computing  \textbf{1}(1),  11--33 (2004).
+  \doi{10.1109/TDSC.2004.2}
+
+\bibitem{marl}
+Bu{\c{s}}oniu, L., Babu{\v{s}}ka, R., De~Schutter, B.: A comprehensive survey
+  of multiagent reinforcement learning. IEEE Transactions on Systems, Man, and
+  Cybernetics, Part C: Applications and Reviews  \textbf{38}(2),  156--172
+  (2008)
+
+\bibitem{mast}
+Cemri, M., Pan, M.Z., Yang, S., Agrawal, L.A., Chopra, B., Tiwari, R., Keutzer,
+  K., Parameswaran, A., Klein, D., Ramchandran, K., Zaharia, M., Gonzalez,
+  J.E., Stoica, I.: Why do multi-agent {LLM} systems fail? arXiv preprint
+  arXiv:2503.13657  (2025)
+
+\bibitem{cp34}
+Clopper, C.J., Pearson, E.S.: The use of confidence or fiducial limits
+  illustrated in the case of the binomial. Biometrika  \textbf{26}(4),
+  404--413 (1934)
+
+\bibitem{fw07}
+Field, C.A., Welsh, A.H.: Bootstrapping clustered data. Journal of the Royal
+  Statistical Society: Series B (Statistical Methodology)  \textbf{69}(3),
+  369--390 (2007). \doi{10.1111/j.1467-9868.2007.00593.x}
+
+\bibitem{safe}
+Garc{\'\i}a, J., Fern{\'a}ndez, F.: A comprehensive survey on safe
+  reinforcement learning. Journal of Machine Learning Research  \textbf{16},
+  1437--1480 (2015)
+
+\bibitem{virt}
+Gomez, N., Batham, S.S., Volonte, M., Do, T.D.: Virtual interviewers, real
+  results: Exploring {AI}-driven mock technical interviews on student readiness
+  and confidence. In: Companion Publication of the ACM Conference on
+  Computer-Supported Cooperative Work and Social Computing (CSCW Companion '25)
+  (2025)
+
+\bibitem{metagpt}
+Hong, S., Zhuge, M., Chen, J., et~al.: {MetaGPT}: Meta programming for a
+  multi-agent collaborative framework. In: International Conference on Learning
+  Representations (ICLR) (2024)
+
+\bibitem{resil}
+Huang, J.T., Zhou, J., Jin, T., Zhou, X., Chen, Z., Wang, W., Yuan, Y., Lyu,
+  M., Sap, M.: On the resilience of {LLM}-based multi-agent collaboration with
+  faulty agents. In: Proceedings of the 42nd International Conference on
+  Machine Learning, PMLR 267. pp. 26202--26226 (2025)
+
+\bibitem{masfire}
+Jia, J., Deng, Z., Chen, Z., Wang, Y., Zheng, Z.: {MAS-FIRE}: Fault injection
+  and reliability evaluation for {LLM}-based multi-agent systems. arXiv
+  preprint arXiv:2602.19843  (2026)
+
+\bibitem{nygard}
+Nygard, M.T.: Release It! Design and Deploy Production-Ready Software.
+  Pragmatic Bookshelf (2007)
+
+\bibitem{sb3}
+Raffin, A., Hill, A., Gleave, A., Kanervisto, A., Ernestus, M., Dormann, N.:
+  {Stable-Baselines3}: Reliable reinforcement learning implementations. Journal
+  of Machine Learning Research  \textbf{22}(268) (2021)
+
+\bibitem{ss75}
+Saltzer, J.H., Schroeder, M.D.: The protection of information in computer
+  systems. Proceedings of the IEEE  \textbf{63}(9),  1278--1308 (1975).
+  \doi{10.1109/PROC.1975.9939}
+
+\bibitem{ppo}
+Schulman, J., Wolski, F., Dhariwal, P., Radford, A., Klimov, O.: Proximal
+  policy optimization algorithms. arXiv preprint arXiv:1707.06347  (2017)
+
+\bibitem{chase}
+Vaishampayan, S., Brown, C.: Will you trust me more than {ChatGPT}?
+  {E}valuating {LLM}-generated code feedback for mock technical interviews. In:
+  Cooperative and Human Aspects of Software Engineering (CHASE) (2025)
+
+\bibitem{wj95}
+Wooldridge, M., Jennings, N.R.: Intelligent agents: theory and practice. The
+  Knowledge Engineering Review  \textbf{10}(2) (1995).
+  \doi{10.1017/S0269888900008122}
+
+\bibitem{autogen}
+Wu, Q., Bansal, G., Zhang, J., Wu, Y., Zhang, S., Zhu, E., Li, B., Jiang, L.,
+  Zhang, X., Wang, C.: {AutoGen}: Enabling next-gen {LLM} applications via
+  multi-agent conversation. arXiv preprint arXiv:2308.08155  (2023)
+
+\bibitem{zara}
+Yazdani, N., Mahajan, A., Ansari, A.: Zara: An {LLM}-based candidate interview
+  feedback system. arXiv preprint arXiv:2507.02869  (2025)
+
+\bibitem{judge}
+Zheng, L., Chiang, W.L., Sheng, Y., Zhuang, S., Wu, Z., Zhuang, Y., Lin, Z.,
+  Li, Z., Li, D., Xing, E.P., Zhang, H., Gonzalez, J.E., Stoica, I.: Judging
+  {LLM}-as-a-judge with {MT-Bench} and {Chatbot Arena}. In: Advances in Neural
+  Information Processing Systems 36 (Datasets and Benchmarks Track) (2023)
+
+\end{thebibliography}

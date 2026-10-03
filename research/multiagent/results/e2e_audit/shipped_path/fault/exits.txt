@@ -1,0 +1,13 @@
+crash exit 0
+slow exit 0
+forbidden exit 0
+terminate exit 0
+stale exit 0
+malformed exit 0
+nan exit 0
+lowconf exit 0
+noevidence exit 0
+adversarial exit 0
+coach_crash exit 0
+coach_ungrounded exit 0
+FAULT_DONE

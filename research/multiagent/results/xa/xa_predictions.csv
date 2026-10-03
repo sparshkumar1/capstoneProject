@@ -1,0 +1,11 @@
+id,prediction,observed,verdict
+A1,completion 100% in every condition,"{""B0"": 160, ""B0c"": 160, ""B7"": 160, ""M1"": 160, ""M1c"": 160, ""M2"": 160, ""M3"": 160, ""M4"": 160, ""M5"": 160, ""M6"": 160, ""M7"": 160, ""M8"": 160}",SUPPORTED
+A2,committed scores equal the recorded evaluator output in every session of every condition,"{""B0"": 160, ""B0c"": 160, ""B7"": 160, ""M1"": 160, ""M1c"": 160, ""M2"": 160, ""M3"": 160, ""M4"": 160, ""M5"": 160, ""M6"": 160, ""M7"": 160, ""M8"": 160}",SUPPORTED
+A3,"difficulty levels stay within [1,5], and every RL-phase decision moves by at most one level, in every session of every condition","{""B0"": 160, ""B0c"": 160, ""B7"": 160, ""M1"": 160, ""M1c"": 160, ""M2"": 160, ""M3"": 160, ""M4"": 160, ""M5"": 160, ""M6"": 160, ""M7"": 160, ""M8"": 160}",SUPPORTED
+A4,"M2 (no Strategy Agent) reproduces B0 (difficulty, score and question paths) in every session",1,SUPPORTED
+A5,"M3, M5, M6, M8 reproduce M1's difficulty/score/question paths in every session (fault-free)","{""M3"": true, ""M5"": true, ""M6"": true, ""M8"": true}",SUPPORTED
+A6,M4 (no arbitration) has guardrail_bypass>0 in >=1 session; M1 has 0 in all,"{""M1_sessions"": 0, ""M4_sessions"": 3}",SUPPORTED
+A7,M1 differs from B0 in difficulty path in >=50% of sessions,1.0,SUPPORTED
+A8,median per-turn latency M1 - B0 < 50 ms (pooled turns),"""+1.043 ms [+1.000,+1.079]""",SUPPORTED
+A9,"with PPO unavailable, M7 differs from B7 in difficulty path in >=50% of sessions",0.025,CONTRADICTED
+A10,canonical guardrails change the difficulty path in >=1 session vs legacy (B0c vs B0),"""0/160""",CONTRADICTED

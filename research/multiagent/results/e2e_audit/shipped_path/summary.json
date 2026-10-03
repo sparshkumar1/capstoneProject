@@ -1,0 +1,61 @@
+{
+ "off": {
+  "event_counts": {
+   "created": 1,
+   "question": 41,
+   "feedback": 40,
+   "difficulty_update": 40,
+   "session_end": 1
+  },
+  "feedback_with_coaching_plan": 0,
+  "null_scores": 0,
+  "decision_source": {
+   "evaluator_cross_encoder": 40
+  },
+  "followup_questions": 27,
+  "overall_score": 0.427,
+  "session_ended": true,
+  "ma_report": {
+   "agent_calls": null,
+   "records": null,
+   "by_outcome": null
+  }
+ },
+ "on": {
+  "event_counts": {
+   "created": 1,
+   "question": 41,
+   "feedback": 40,
+   "difficulty_update": 40,
+   "session_end": 1
+  },
+  "feedback_with_coaching_plan": 40,
+  "null_scores": 0,
+  "decision_source": {
+   "evaluator_cross_encoder": 40
+  },
+  "followup_questions": 27,
+  "overall_score": 0.427,
+  "session_ended": true,
+  "ma_report": {
+   "agent_calls": {
+    "strategy": 40,
+    "coaching": 40
+   },
+   "records": 222,
+   "by_outcome": {
+    "agent_call:strategy:accepted:valid": 40,
+    "agent_call:coaching:accepted:valid": 40,
+    "coaching:coaching:accepted:validated_plan": 40,
+    "probe:hub_default:accepted:default_policy": 13,
+    "probe:strategy:modified:retargeted_default_probe": 14,
+    "difficulty:strategy:accepted:validated_proposal": 20,
+    "difficulty:ppo:rejected:superseded_by_strategy": 18,
+    "difficulty:strategy:rejected:low_confidence": 11,
+    "difficulty:ppo:accepted:default_policy": 11,
+    "difficulty:guardrail:accepted:guardrail:guardrail_G1": 11,
+    "difficulty:guardrail:accepted:guardrail:guardrail_G3": 4
+   }
+  }
+ }
+}

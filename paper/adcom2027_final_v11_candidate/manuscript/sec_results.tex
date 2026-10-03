@@ -1,0 +1,73 @@
+\section{Results}\label{sec:results}
+All reported results are derived from deterministic REPLAY of recorded evaluator outputs unless explicitly noted. All sessions within a condition are dependent across question orders due to the 8-cluster structure (Sect.~\ref{sec:method}).
+
+\subsection{Coordination and Intervention Dynamics (RQ1)}
+
+\begin{table}[tbp]
+\centering\scriptsize\setlength{\tabcolsep}{3pt}
+\caption{Replay ablation summary across 160 sessions per condition (mean per session unless noted as counts). \textbf{compl./auth./trans.}: sessions completing, keeping committed scores authoritative, and preserving valid transitions. \textbf{chg./rev.}: mean level changes and reversals; \textbf{agr.}: fraction of decisions agreeing with the PPO action; \textbf{gfire}: guardrail overrides; \textbf{strat.}: decisions where the Strategy Agent was the final action source; \textbf{byp.}: sessions with guardrail bypass; \textbf{p50/p95}: pooled per-turn latency in ms; \textbf{calls}: agent calls per session.}\label{tab:xa}
+\resizebox{\textwidth}{!}{\input{../tables/xa_summary}}
+\end{table}
+
+\begin{table}[tbp]
+\centering\scriptsize\setlength{\tabcolsep}{3pt}
+\caption{Paired differences ($M_1 - B_0$) over identical 160 replay sessions: fraction of sessions with divergent difficulty paths, paired mean differences with 95\% percentile-bootstrap intervals, and pooled median turn latency delta. Intervals are descriptive due to cluster reuse.}\label{tab:xapaired}
+\resizebox{\textwidth}{!}{\input{../tables/xa_paired}}
+\end{table}
+
+\noindent\textbf{Execution Invariants and Baseline Transparency.} Every evaluated condition completed all 160 sessions, maintained strict evaluator authority (committed scores equaled recorded evaluator output in 100\% of sessions), and enforced valid difficulty bounds in $[1, 5]$ with transitions of at most one level per step (A1--A3; exact Clopper--Pearson 95\% lower bound for 160/160: 0.977~\cite{cp34}). In the silent-agent condition ($M_2$), difficulty, score, and question trajectories reproduced the baseline ($B_0$) identically in 160 of 160 sessions (A4), demonstrating that the coordination infrastructure is completely transparent when agents remain inactive.
+
+\noindent\textbf{Trajectory Divergence and Oscillation Smoothing.} Enabling multi-agent coordination ($M_1$) altered the difficulty trajectory relative to the frozen baseline ($B_0$) in \textbf{all 160 replay sessions (100\%)} (A7; Table~\ref{tab:xapaired}). The stateful Strategy Agent smoothed difficulty oscillations across turns: mean level changes fell from 15.12 to 12.45 per session (point difference $-2.67$, naive session bootstrap 95\% CI $[-3.19, -2.13]$), and mean reversals fell from 11.74 to 9.87 per session ($-1.88$, naive CI $[-2.28, -1.46]$). Agreement with the uncoordinated PPO action dropped from 0.626 to 0.400 (overall PPO agreement fraction 0.774), with a Strategy proposal superseding PPO before the guardrail layer in an average of 11.9 decisions per session.
+
+\noindent\textbf{Cluster Dependence and Proactive Probing Sensitivity.} Because the 160 sessions reuse 8 recorded candidate answer sets, treating sessions as independent underestimates parameter uncertainty. A post-hoc cluster bootstrap over the 8 answer clusters (Field and Welsh~\cite{fw07}, $B = 10{,}000$) yields wider, defensible intervals: level changes \phchgmean{} \phchgci{}, reversals \phrevmean{} \phrevci{}, and PPO action agreement \phagrmean{} \phagrci{}. The negative sign for level changes and reversals is shared across 7 of the 8 clusters.
+
+Proactive probing added an average of \phfumean{} turns per session (naive CI $[+0.34, +0.85]$, cluster CI \phfuci{}). However, cluster-level decomposition reveals that this probe increase is present in \textbf{only \phfusame{} of the 8 recorded answer sets} ($k=1$); in the remaining seven clusters, proactive probing added exactly 0.00 turns. A leave-one-cluster-out (LOCO) sensitivity analysis confirms that omitting cluster $k=1$ shifts the level-change delta to $-3.76$ (CI $[-4.81, -2.78]$), whereas omitting any of the other seven clusters causes the 95\% interval to include zero. Thus, while the directional tendency toward oscillation reduction is robust across clusters, the specific magnitude and extra-turn gains are highly cluster-dependent and cannot be generalized as an unconditional property.
+
+\noindent\textbf{Proposal Distribution.} Across the 160 sessions, the Strategy Agent generated \scTotal{} proposals: \scRemEight{} \emph{remediate} proposals (confidence 0.80), \scRecEight{} and \scRecSeven{} \emph{recover} proposals (confidence 0.80 and 0.70), and \scSteady{} \emph{steady} proposals (confidence 0.45). Notably, the Strategy Agent emitted zero \emph{stretch} proposals (\scStretch{}), indicating that during replay the candidate trajectories never maintained the sustained high-performance criteria ($3\text{ scores} \ge 0.60$, $\text{EMA} \ge 0.70$) required to trigger proactive difficulty increases. The agent operated exclusively to stabilize or lower difficulty.
+
+\noindent\textbf{Coordination Overhead.} Introducing the multi-agent layer increased pooled per-turn latency from \xaBzeroMed{}\,ms ($B_0$) to \xaMoneMed{}\,ms ($M_1$) at the median (median difference $+1.04$\,ms, 95\% CI $[+1.00, +1.08]$\,ms) and from \xaBzeroHigh{}\,ms to \xaMoneHigh{}\,ms at the 95th percentile, executing an average of 47.7 agent calls per session. Because agents execute deterministic Python rule logic, this overhead represents pure dispatch, serialization, and schema validation.
+
+\begin{table}[tbp]
+\centering\scriptsize\setlength{\tabcolsep}{3pt}
+\caption{Registered predictions and empirical outcomes for Experiment XA.}\label{tab:preds}
+\input{../tables/xa_pred}
+\end{table}
+
+\subsection{Coordination Mechanisms and Sensitivity (RQ3)}
+
+\begin{table}[tbp]
+\centering\scriptsize\setlength{\tabcolsep}{3pt}
+\caption{Experiment XC (REPLAY, 160 sessions per row, mean per session): only confidence threshold $\tau$ varies; evidence requirements and guardrails remain active. \textbf{chg./rev.}: mean level changes and reversals; \textbf{agr.}: agreement with PPO; \textbf{strat.}: decisions from Strategy Agent; \textbf{byp.}: sessions with guardrail bypass.}\label{tab:xc}
+\input{../tables/xc.tex}
+\end{table}
+
+\noindent\textbf{Decomposing Arbitration via Threshold Sensitivity (XC).} In the unarbitrated condition ($M_4$), where all arbitration checks were simultaneously disabled, trajectory dynamics collapsed: level changes fell to 2.225 per session, PPO agreement plummeted to 0.014, and 38 of 40 sessions in fault testing experienced guardrail bypass. Experiment XC isolates the specific causal mechanism by varying only the confidence threshold $\tau \in [0.0, 0.9]$ while keeping all other safety checks active (Table~\ref{tab:xc}).
+
+Setting $\tau = 0.0$ alone reproduced the $M_4$ trajectory collapse (level changes \xctauzerochg{}, PPO agreement \xctauzeroagr{}) with \textbf{zero guardrail bypass} in any session (C1). Because confidence is min-clamped at 0.45 for unevidenced \emph{steady} proposals, setting $\tau = 0.0$ allows uncalibrated default proposals to override PPO on virtually every turn. This confirms that the collapse in $M_4$ is caused specifically by the missing confidence threshold, not by absent guardrails or step bounds. Behavior remained completely flat across $\tau \in [0.5, 0.8]$ (12.450 level changes, 0.774 agreement) because realized evidenced confidences are discrete steps (0.70 and 0.80). At $\tau = 0.9$, the threshold exceeds all possible heuristic confidences ($\max = 0.80$), completely silencing the Strategy Agent and reverting trajectories to the baseline ($B_0$). All \xcsupported{} registered XC predictions were supported.
+
+\noindent\textbf{Peer Information Exchange ($M_5$).} Ablating the unidirectional peer message from Strategy to Coaching ($M_5$) resulted in difficulty trajectories 100\% identical to the full configuration ($M_1$) across all 160 sessions (A5). The peer message does not feed back into Strategy decision-making; its role is strictly to condition Coaching presentation (switching depth to \emph{detailed} during \emph{recover}, \emph{brief} during \emph{stretch}, and attaching remediation tags during \emph{remediate}).
+
+\noindent\textbf{Contradicted Prediction A9 (PPO Fallback Interaction).} Pre-registered prediction A9 posited that disabling the learned PPO policy would alter $\ge 50\%$ of session paths. Empirically, disabling PPO ($M_7$) altered difficulty trajectories in only \textbf{4 of 160 sessions (2.5\%)}. Inspection of orchestrator traces reveals that under replay conditions, the rule-based Strategy Agent heuristic predominantly reaches the identical difficulty action as the non-RL heuristic fallback, demonstrating high behavioral alignment between the heuristic rules and the learned policy fallback.
+
+\noindent\textbf{Contradicted Prediction A10 (Guardrail Divergence).} Pre-registered prediction A10 posited that evaluating the system with canonical guardrails ($B_{0c}$) would alter at least one trajectory path. In replay, \textbf{zero paths differed (0/160)}. While the two implementations disagree on 11.8\% of synthetic state grid points (4,728 of 39,930), the divergent boundary regions require extreme acoustic hesitation or low voice confidence. Because replay data contain neutral acoustic defaults, the divergent guardrail states are never reached.
+
+\subsection{Evaluating the Value of Agent Specialization (RQ2)}
+
+\begin{table}[tbp]
+\centering\small
+\caption{Architectural and operational comparison of the Specialized Two-Agent Architecture ($M_{\text{split}}$) versus a Unified Monolithic Controller ($M_{\text{unified}}$).}\label{tab:specialization}
+\input{../tables/specialization}
+\end{table}
+
+\noindent\textbf{Trajectory Invariance under Functional Decomposition.} A central motivation for multi-agent architecture is the assumption that role specialization produces superior decisions. To test this hypothesis, we examine Condition $M_3$, where the Coaching Agent is disabled while the Strategy Agent remains active. In all 160 sessions, the difficulty trajectories, score progressions, level changes (12.45), and reversals (9.87) were \textbf{100\% identical to the full two-agent system ($M_1$)} (A5; Table~\ref{tab:xapaired}). The Coaching Agent's private history ledger and decisions have zero causal influence on difficulty adaptation.
+
+\noindent\textbf{Decision Equivalence under Equivalent Information.} When given equivalent input observations and executing deterministic rule logic, a unified agent (\texttt{UnifiedCoachAgent}) synthesizing both strategy and coaching outputs produces mathematically identical proposals:
+$$\mathbb{P}(\text{Decision}_{\text{unified}} = \text{Decision}_{\text{split}}) = 1.0$$
+Specialization provides no emergent algorithmic synergy or decision-quality advantage under deterministic heuristic rules.
+
+\noindent\textbf{Trade-offs: Modularity versus Operational Overhead.} As synthesized in Table~\ref{tab:specialization}, the value of specialization lies entirely in software engineering properties:
+\begin{itemize}
+\item \emph{State and Failure Isolation:} In the specialized architecture, Strategy and Coaching maintain disjoint memory structures. A failure, malformed payload, or timeout in Coaching leaves Strategy difficulty adaptation unaffected (bulkhead isolation~\cite{nygard}). In a unified agent, an unhandled exception in either pedagogical sub-task causes the entire turn dispatch to fail closed, dropping both difficulty adaptation and coaching.
+\item \emph{Operational Cost:} Specialization incurs a measurable runtime penalty. Dispatching two agents requires two serialization passes, two Pydantic validation checks, and inter-agent message routing, adding $+1.04$\,ms median latency per turn ($+1.85$\,ms p95). A unified agent requires a single dispatch pass, cutting serialization overhead by approximately half.
+\end{itemize}
+We conclude that agent specialization does not improve decision trajectories or pedagogical optimization. It represents a classical software engineering trade-off: modularity, independent maintainability, and fault containment at the expense of dispatch latency and architectural complexity.

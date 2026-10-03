@@ -1,0 +1,106 @@
+{
+  "E1_specialization_replay": {
+    "total_sessions": 160,
+    "total_turns": 1280,
+    "strategy_agreement_rate": 1.0,
+    "coaching_agreement_rate": 1.0,
+    "full_decision_agreement_rate": 1.0,
+    "p50_latency_split_ms": 0.044,
+    "p95_latency_split_ms": 0.0556,
+    "p50_latency_unified_ms": 0.0401,
+    "p95_latency_unified_ms": 0.0494,
+    "p50_latency_savings_ms": 0.0039
+  },
+  "E2_mechanistic_invariance": {
+    "coaching_plan_has_difficulty_field": false,
+    "arbitrate_difficulty_reads_coaching": false,
+    "turn_observation_carries_coaching_history": false,
+    "invariance_holds_by_construction": true
+  },
+  "E3_cluster_1_dissection": {
+    "cluster_0": {
+      "mean_score": 0.397,
+      "score_variance": 0.057,
+      "total_misses": 18,
+      "unique_misses": 13,
+      "high_score_turns": 1,
+      "low_score_turns": 4
+    },
+    "cluster_1": {
+      "mean_score": 0.591,
+      "score_variance": 0.052,
+      "total_misses": 15,
+      "unique_misses": 12,
+      "high_score_turns": 4,
+      "low_score_turns": 4
+    },
+    "cluster_2": {
+      "mean_score": 0.282,
+      "score_variance": 0.022,
+      "total_misses": 23,
+      "unique_misses": 15,
+      "high_score_turns": 0,
+      "low_score_turns": 8
+    },
+    "cluster_3": {
+      "mean_score": 0.12,
+      "score_variance": 0.015,
+      "total_misses": 28,
+      "unique_misses": 20,
+      "high_score_turns": 0,
+      "low_score_turns": 8
+    },
+    "cluster_4": {
+      "mean_score": 0.324,
+      "score_variance": 0.023,
+      "total_misses": 25,
+      "unique_misses": 17,
+      "high_score_turns": 0,
+      "low_score_turns": 6
+    },
+    "cluster_5": {
+      "mean_score": 0.345,
+      "score_variance": 0.051,
+      "total_misses": 21,
+      "unique_misses": 15,
+      "high_score_turns": 0,
+      "low_score_turns": 5
+    },
+    "cluster_6": {
+      "mean_score": 0.228,
+      "score_variance": 0.015,
+      "total_misses": 26,
+      "unique_misses": 18,
+      "high_score_turns": 0,
+      "low_score_turns": 8
+    },
+    "cluster_7": {
+      "mean_score": 0.321,
+      "score_variance": 0.031,
+      "total_misses": 21,
+      "unique_misses": 15,
+      "high_score_turns": 0,
+      "low_score_turns": 7
+    }
+  },
+  "E4_contradicted_predictions": {
+    "A9": {
+      "prediction": "PPO ablated alters >= 50% of sessions",
+      "observed": "2.5% of sessions (4/160)",
+      "verdict": "CONTRADICTED",
+      "mechanism": "Strategy heuristics strongly align with the non-RL heuristic fallback rule; RL policy actions rarely conflict with heuristic intent on the replay distribution."
+    },
+    "A10": {
+      "prediction": "Canonical guardrails alter >= 5% of sessions",
+      "observed": "0.0% of sessions (0/160)",
+      "verdict": "CONTRADICTED",
+      "mechanism": "11.8% grid divergence requires extreme acoustic hesitation (hes > 0.60) or low voice confidence; replay payloads carry neutral default values (0.5), leaving divergent guardrail boundary regions unexercised."
+    }
+  },
+  "E5_serialization_overhead": {
+    "iterations": 1000,
+    "split_serialization_per_turn_ms": 0.0092,
+    "unified_serialization_per_turn_ms": 0.0038,
+    "delta_ms": 0.0054
+  }
+}

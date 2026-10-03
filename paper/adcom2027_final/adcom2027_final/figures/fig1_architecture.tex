@@ -1,0 +1,32 @@
+\begin{tikzpicture}[font=\footnotesize,
+  box/.style={draw, rounded corners=1.5pt, minimum height=8mm, align=center, inner sep=2pt},
+  det/.style={box, fill=gray!12},
+  lrn/.style={box, fill=blue!12},
+  agt/.style={box, fill=orange!25, very thick},
+  arr/.style={-{Stealth[length=2mm]}, thin},
+  darr/.style={-{Stealth[length=2mm]}, thin, dashed}]
+% outside the hub
+\node[det, minimum width=26mm] (ui) at (0.5,6.2) {Browser UI\\(unchanged)};
+\node[det, minimum width=26mm] (be) at (3.9,6.2) {Backend\\REST / WebSocket};
+\node[lrn, minimum width=30mm] (ev) at (7.5,6.2) {Evaluator\\(learned scorer)};
+\node[det, minimum width=30mm] (val) at (11.4,6.2) {Validator +\\strict contract};
+\draw[arr] (ui) -- (be); \draw[arr] (be) -- (ev); \draw[arr] (ev) -- (val);
+% hub
+\draw[rounded corners=3pt, thick, fill=yellow!6] (-0.9,-0.4) rectangle (13.3,5.0);
+\node[anchor=north west, font=\footnotesize\bfseries] at (-0.8,4.95) {InterviewOrchestrator (hub: sole writer of session state)};
+\node[agt, minimum width=30mm] (st) at (1.6,3.6) {Strategy Agent\\{\scriptsize ledger}};
+\node[agt, minimum width=30mm] (co) at (6.9,3.6) {Coaching Agent\\{\scriptsize history}};
+\node[lrn, minimum width=30mm] (pp) at (11.2,3.6) {PPO policy\\{\scriptsize (frozen)}};
+\node[det, minimum width=112mm] (cd) at (6.3,1.9) {Coordinator: validation $\cdot$ arbitration $\cdot$ trace};
+\node[det, minimum width=34mm] (gr) at (1.7,0.3) {Guardrails\\{\scriptsize (legacy / canonical)}};
+\node[det, minimum width=44mm] (fb) at (7.3,0.3) {Feedback and follow-up\\generators {\scriptsize (LLM optional)}};
+\node[det, minimum width=26mm] (db) at (11.6,-1.4) {SQLite\\persistence};
+\draw[arr] (val.south) -- node[right]{\scriptsize committed score} (11.4,5.0);
+\draw[darr] (st) -- node[above]{\scriptsize peer message} (co);
+\draw[darr] (st.south) -- node[left]{\scriptsize proposal} (1.6,2.35);
+\draw[darr] (co.south) -- node[right]{\scriptsize plan} (6.9,2.35);
+\draw[arr] (pp.south) -- node[right]{\scriptsize action} (11.2,2.35);
+\draw[arr] (2.6,1.45) -- node[left]{\scriptsize candidate} (gr.north);
+\draw[arr] (7.3,1.45) -- node[right]{\scriptsize plan, probe target} (fb.north);
+\draw[arr] (db.north) -- node[right]{\scriptsize commit} (11.6,-0.4);
+\end{tikzpicture}

@@ -1,0 +1,8 @@
+manuscript/*.aux
+manuscript/*.blg
+manuscript/*.fdb_latexmk
+manuscript/*.fls
+manuscript/*.log
+manuscript/*.out
+manuscript/build.log
+manuscript/main.pdf
