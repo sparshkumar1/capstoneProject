@@ -1,4 +1,4 @@
-\documentclass[runningheads]{llncs}
+\documentclass[runningheads,a4paper]{llncs}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
@@ -7,21 +7,42 @@
 \usepackage{microtype}
 \usepackage{tikz}
 
-\renewcommand{\topfraction}{.9}\renewcommand{\bottomfraction}{.8}\renewcommand{\textfraction}{.08}\renewcommand{\floatpagefraction}{.75}
+\renewcommand{\topfraction}{.95}\renewcommand{\bottomfraction}{.90}\renewcommand{\textfraction}{.05}\renewcommand{\floatpagefraction}{.85}
+\setlength{\textfloatsep}{4pt plus 1pt minus 1pt}
+\setlength{\floatsep}{3pt plus 1pt minus 1pt}
+\setlength{\intextsep}{3pt plus 1pt minus 1pt}
+\setlength{\abovecaptionskip}{2pt}
+\setlength{\belowcaptionskip}{0pt}
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+                       {-6\p@ \@plus -1\p@ \@minus -1\p@}%
+                       {3\p@ \@plus 1\p@ \@minus 1\p@}%
+                       {\normalfont\large\bfseries\boldmath
+                        \rightskip=\z@ \@plus 8em\pretolerance=10000 }}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                          {-5\p@ \@plus -1\p@ \@minus -1\p@}%
+                          {2\p@ \@plus 1\p@ \@minus 1\p@}%
+                          {\normalfont\normalsize\bfseries\boldmath
+                           \rightskip=\z@ \@plus 8em\pretolerance=10000 }}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                         {3\p@ \@plus 1\p@ \@minus 1\p@}%
+                         {-0.5em}%
+                         {\normalfont\normalsize\bfseries}}
+\makeatother
 \usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
 \input{numbers}
 \emergencystretch=2em
 \begin{document}
 
-\title{Specialization and Coordination in a Multi-Agent Technical Interview System: Trajectory Dynamics and Architectural Trade-offs}
-\titlerunning{Specialization and Coordination in a Multi-Agent Interview System}
+\title{Bounded-Authority Agent Specialization for Adaptive Technical Interview Systems: Coordination, Safeguards, and Empirical Trade-offs}
+\titlerunning{Bounded-Authority Agent Specialization for Adaptive Interview Systems}
 \author{Anonymous Author(s)}
 \authorrunning{Anonymous}
 \institute{Anonymous Institution}
 \maketitle
-
+\vspace{-1.2em}
 \begin{abstract}
-Educational and conversational systems that combine automated evaluation, language models, and reinforcement-learning controllers are frequently labelled multi-agent, even when a single monolithic controller invokes components procedurally. We investigate whether decomposing pedagogical decision-making into specialized, stateful agents with a coordination layer yields measurable behavioral, trajectory, or decision-making differences over a single-controller baseline. We extend an orchestrated technical-interview preparation system with two bounded-authority agents: a Strategy Agent managing a persistent weakness ledger across turns (proposing difficulty transitions and follow-up probes) and a Coaching Agent managing a coaching history ledger (proposing feedback depth, hints, and instructional emphasis), coordinated via unidirectional peer messaging and threshold-gated arbitration. Evaluating across 160 deterministic replay sessions (a fixed set of 64 technical-interview replay instances across 20 question orders; no live language model ran), we find that stateful coordination alters difficulty trajectories in all 160 sessions relative to the frozen single-policy PPO baseline, smoothing level changes ($15.12 \to 12.45$; cluster-bootstrap 95\% CI $[-4.50, -0.24]$) and reversals ($11.74 \to 9.87$; cluster CI $[-3.12, -0.27]$), while reducing PPO agreement ($1.000 \to 0.774$) and introducing $+0.59$ probe turns driven specifically by one replay cluster ($k=1$). However, under the tested deterministic replay configuration, the split and unified architectures produced identical decision trajectories ($\mathbb{P}(\text{agree}) = 1.0$, $1{,}280/1{,}280$ turns), indicating that architectural decomposition alone did not alter the implemented decision policy. The results indicate that, under the tested configuration, specialization primarily manifests as an architectural decomposition rather than a change in the resulting decision policy, introducing measurable end-to-end orchestration overhead ($+1.04$\,ms median per-turn latency; $0.0092$\,ms vs $0.0038$\,ms in a serialization micro-benchmark) alongside architectural characteristics such as decoupled state ledgers and isolated decision records. Threshold sensitivity experiments ($\tau \in [0.0, 0.9]$) isolate the confidence threshold as the critical gating mechanism preventing oscillation collapse. We make no claims of human candidate learning or live model performance.
+Interview-practice systems may be described as multi-agent even when one controller invokes components procedurally. We ask whether two bounded-authority agents, a Strategy Agent and a Coaching Agent, with threshold-gated arbitration over a frozen Proximal Policy Optimization (PPO) policy, change decisions, and whether any change arises from specialization or from coordination. Across 160 deterministic replay sessions (no live LLM), the agent layer altered difficulty trajectories, with fewer level changes ($15.12 \to 12.45$) and lower PPO agreement ($0.626 \to 0.400$); leave-one-cluster-out analysis showed sensitivity to the eight replay clusters. Split and unified implementations produced identical decisions in open-loop replay ($1{,}280/1{,}280$ turns), and the layer added $+1.04$\,ms median latency. Fault injection showed containment of the tested adversarial proposals ($0/40$ vs $38/40$ sessions with guardrail bypass, with and without arbitration). Results are limited to deterministic replay; no human-learning claims are made.
 \keywords{multi-agent coordination \and agent specialization \and decision-making \and trajectory dynamics \and interview practice \and arbitration}
 \end{abstract}
 
@@ -34,6 +55,17 @@ Educational and conversational systems that combine automated evaluation, langua
 \input{sec_limits}
 \input{sec_concl}
 
+\let\oldthebibliography\thebibliography
+\let\endoldthebibliography\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+  \begin{oldthebibliography}{#1}%
+    \setlength{\itemsep}{0pt}%
+    \setlength{\parsep}{0pt}%
+}{%
+  \end{oldthebibliography}%
+}
+
+\enlargethispage{2\baselineskip}
 \bibliographystyle{splncs04}
 \bibliography{refs}
 \end{document}

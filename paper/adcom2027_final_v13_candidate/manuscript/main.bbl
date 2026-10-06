@@ -8,12 +8,6 @@ Alshiekh, M., Bloem, R., Ehlers, R., K{\"o}nighofer, B., Niekum, S., Topcu, U.:
   Safe reinforcement learning via shielding. In: Proceedings of the AAAI
   Conference on Artificial Intelligence (2018)
 
-\bibitem{marl}
-Bu{\c{s}}oniu, L., Babu{\v{s}}ka, R., De~Schutter, B.: A comprehensive survey
-  of multiagent reinforcement learning. IEEE Transactions on Systems, Man, and
-  Cybernetics, Part C: Applications and Reviews  \textbf{38}(2),  156--172
-  (2008)
-
 \bibitem{mast}
 Cemri, M., Pan, M.Z., Yang, S., Agrawal, L.A., Chopra, B., Tiwari, R., Keutzer,
   K., Parameswaran, A., Klein, D., Ramchandran, K., Zaharia, M., Gonzalez,
@@ -35,21 +29,22 @@ Garc{\'\i}a, J., Fern{\'a}ndez, F.: A comprehensive survey on safe
   reinforcement learning. Journal of Machine Learning Research  \textbf{16},
   1437--1480 (2015)
 
-\bibitem{virt}
-Gomez, N., Batham, S.S., Volonte, M., Do, T.D.: Virtual interviewers, real
-  results: Exploring {AI}-driven mock technical interviews on student readiness
-  and confidence. In: Companion Publication of the ACM Conference on
-  Computer-Supported Cooperative Work and Social Computing (CSCW Companion '25)
-  (2025)
-
 \bibitem{metagpt}
 Hong, S., Zhuge, M., Chen, J., et~al.: {MetaGPT}: Meta programming for a
   multi-agent collaborative framework. In: International Conference on Learning
   Representations (ICLR) (2024)
 
-\bibitem{nygard}
-Nygard, M.T.: Release It! Design and Deploy Production-Ready Software.
-  Pragmatic Bookshelf (2007)
+\bibitem{kim2026artifact}
+Kim, D.K.: Artifact validity under varying agent configurations in
+  {LLM}-assisted software development: A comparative analysis. Information and
+  Software Technology  \textbf{192},  108022 (2026).
+  \doi{10.1016/j.infsof.2026.108022}
+
+\bibitem{kim2026capable}
+Kim, Y., Gu, K., Park, C., Park, C., Schmidgall, S., Heydari, A.A., et~al.:
+  Capable language models can outgrow the benefits of collaboration. Nature
+  Machine Intelligence  \textbf{8},  1157--1172 (2026).
+  \doi{10.1038/s42256-026-01268-y}
 
 \bibitem{sb3}
 Raffin, A., Hill, A., Gleave, A., Kanervisto, A., Ernestus, M., Dormann, N.:
@@ -65,11 +60,6 @@ Saltzer, J.H., Schroeder, M.D.: The protection of information in computer
 Schulman, J., Wolski, F., Dhariwal, P., Radford, A., Klimov, O.: Proximal
   policy optimization algorithms. arXiv preprint arXiv:1707.06347  (2017)
 
-\bibitem{chase}
-Vaishampayan, S., Brown, C.: Will you trust me more than {ChatGPT}?
-  {E}valuating {LLM}-generated code feedback for mock technical interviews. In:
-  Cooperative and Human Aspects of Software Engineering (CHASE) (2025)
-
 \bibitem{wj95}
 Wooldridge, M., Jennings, N.R.: Intelligent agents: theory and practice. The
   Knowledge Engineering Review  \textbf{10}(2) (1995).
@@ -79,15 +69,5 @@ Wooldridge, M., Jennings, N.R.: Intelligent agents: theory and practice. The
 Wu, Q., Bansal, G., Zhang, J., Wu, Y., Zhang, S., Zhu, E., Li, B., Jiang, L.,
   Zhang, X., Wang, C.: {AutoGen}: Enabling next-gen {LLM} applications via
   multi-agent conversation. arXiv preprint arXiv:2308.08155  (2023)
-
-\bibitem{zara}
-Yazdani, N., Mahajan, A., Ansari, A.: Zara: An {LLM}-based candidate interview
-  feedback system. arXiv preprint arXiv:2507.02869  (2025)
-
-\bibitem{judge}
-Zheng, L., Chiang, W.L., Sheng, Y., Zhuang, S., Wu, Z., Zhuang, Y., Lin, Z.,
-  Li, Z., Li, D., Xing, E.P., Zhang, H., Gonzalez, J.E., Stoica, I.: Judging
-  {LLM}-as-a-judge with {MT-Bench} and {Chatbot Arena}. In: Advances in Neural
-  Information Processing Systems 36 (Datasets and Benchmarks Track) (2023)
 
 \end{thebibliography}

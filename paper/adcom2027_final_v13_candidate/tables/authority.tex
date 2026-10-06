@@ -2,7 +2,7 @@
 \toprule
 Agent & May propose & Private state & Cannot & On invalid output \\
 \midrule
-\textbf{Strategy} & difficulty\_action (Easier/Same/Harder); probe request (concept, kind); strategy mode & weakness ledger (per-concept miss counts, probe history, trend) & write or overwrite any score; set a difficulty level directly; terminate the session; edit history; override hard constraints or guardrail overrides; call another agent & invalid / stale / low-confidence / timed-out proposal is dropped; PPO proposal stands \\
+\textbf{Strategy} & difficulty\_action (Easier\slash Same\slash Harder); probe request (concept, kind); strategy mode & weakness ledger (per-concept miss counts, probe history, trend) & write or overwrite any score; set a difficulty level directly; terminate the session; edit history; override hard constraints or guardrail overrides; call another agent & invalid / stale / low-confidence / timed-out proposal is dropped; PPO proposal stands \\
 \midrule
 \textbf{Coaching} & feedback depth; hint / example flags; concepts to emphasise; remediation tag; tone & coaching history (hints/examples given, repeated misconceptions) & alter evaluator results or scores; cite concepts absent from the evaluator evidence; request difficulty changes; request follow-ups; terminate the session & invalid plan is dropped; the existing template feedback is used unchanged \\
 \bottomrule

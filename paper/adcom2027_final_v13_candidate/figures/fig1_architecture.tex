@@ -17,16 +17,20 @@
 \node[agt, minimum width=30mm] (st) at (1.6,3.6) {Strategy Agent\\{\scriptsize ledger}};
 \node[agt, minimum width=30mm] (co) at (6.9,3.6) {Coaching Agent\\{\scriptsize history}};
 \node[lrn, minimum width=30mm] (pp) at (11.2,3.6) {PPO policy\\{\scriptsize (frozen)}};
-\node[det, minimum width=112mm] (cd) at (6.3,1.9) {Coordinator: validation $\cdot$ arbitration $\cdot$ trace};
-\node[det, minimum width=34mm] (gr) at (1.7,0.3) {Guardrails\\{\scriptsize (legacy / canonical)}};
-\node[det, minimum width=44mm] (fb) at (7.3,0.3) {Feedback and follow-up\\generators {\scriptsize (LLM optional)}};
-\node[det, minimum width=26mm] (db) at (11.6,-1.4) {SQLite\\persistence};
+\node[det, minimum width=71mm] (cd) at (3.85,1.9) {AgentCoordinator: validation $\cdot$ trace};
+\node[det, minimum width=44mm] (ar) at (10.1,1.9) {Deterministic Arbitrator\\{\scriptsize Strategy $\leftrightarrow$ PPO}\\{\scriptsize confidence gate $\tau = 0.60$}};
+\node[det, minimum width=40mm] (gr) at (10.9,0.3) {Safety Guardrails: final veto\\{\scriptsize $1 \le d \le 5$, $|\Delta d| \le 1$}};
+\node[det, minimum width=44mm] (fb) at (2.2,0.3) {Feedback and follow-up\\generators {\scriptsize (LLM optional)}};
+\node[det, minimum width=28mm] (cm) at (6.4,0.3) {\textbf{Authoritative}\\\textbf{commit}};
+\node[det, minimum width=26mm] (db) at (6.4,-1.4) {SQLite\\persistence};
 \draw[arr] (val.south) -- node[right]{\scriptsize committed score} (11.4,5.0);
 \draw[darr] (st) -- node[above]{\scriptsize peer message} (co);
 \draw[darr] (st.south) -- node[left]{\scriptsize proposal} (1.6,2.35);
 \draw[darr] (co.south) -- node[right]{\scriptsize plan} (6.9,2.35);
-\draw[arr] (pp.south) -- node[right]{\scriptsize action} (11.2,2.35);
-\draw[arr] (2.6,1.45) -- node[left]{\scriptsize candidate} (gr.north);
-\draw[arr] (7.3,1.45) -- node[right]{\scriptsize plan, probe target} (fb.north);
-\draw[arr] (db.north) -- node[right]{\scriptsize commit} (11.6,-0.4);
+\draw[arr] (pp.south) -- node[right]{\scriptsize action} (pp.south |- ar.north);
+\draw[arr] (cd.east) -- (ar.west);
+\draw[arr] (ar.south -| gr.north) -- node[right]{\scriptsize candidate} (gr.north);
+\draw[arr] (gr.west) -- (cm.east);
+\draw[arr] (2.2,1.45) -- node[right]{\scriptsize plan, probe target} (fb.north);
+\draw[arr] (cm.south) -- node[right]{\scriptsize commit} (db.north);
 \end{tikzpicture}

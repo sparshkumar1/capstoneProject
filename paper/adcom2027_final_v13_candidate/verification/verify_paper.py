@@ -23,15 +23,34 @@ sys.path.insert(0, str(REPO / "research/multiagent/analysis"))
 from stats_util import clopper_pearson, paired_boot  # noqa: E402
 
 candidate_pdfs = [
+    HERE / "ADCOM2027_PREPAIred_v13_FINAL_FROZEN_LATENCY_SCOPE_CORRECTED.pdf",
+    HERE / "ADCOM2027_PREPAIred_v13_CMT_ANONYMOUS_LATENCY_SCOPE_CORRECTED.pdf",
+    HERE / "ADCOM2027_PREPAIred_v13_ADCOM2027_CMT_ANONYMOUS.pdf",
+    HERE / "ADCOM2027_PREPAIred_v13_FINAL_FROZEN.pdf",
+    HERE / "ADCOM2027_PREPAIred_v13_FINAL_CORRECTED.pdf",
     HERE / "manuscript/main.pdf",
+    HERE / "ADCOM2027_PREPAIred_v13_REVISED.pdf",
+    HERE / "ADCOM2027_PREPAIred_v13_specialization_blind.pdf",
     HERE / "ADCOM2027_PREPAIred_v12_specialization_blind.pdf",
 ]
 pdf_txt = ""
 for cand in candidate_pdfs:
     if cand.exists():
-        pdf_txt = subprocess.run(["pdftotext", str(cand), "-"], capture_output=True, text=True).stdout
-        if pdf_txt:
-            break
+        try:
+            import fitz
+            doc = fitz.open(cand)
+            pdf_txt = "".join(p.get_text() for p in doc)
+            if pdf_txt:
+                break
+        except Exception:
+            pass
+        try:
+            res = subprocess.run(["pdftotext", str(cand), "-"], capture_output=True, text=True)
+            if res.stdout:
+                pdf_txt = res.stdout
+                break
+        except Exception:
+            pass
 if not pdf_txt:
     print("ERROR: No compiled PDF found to audit.")
     sys.exit(1)
