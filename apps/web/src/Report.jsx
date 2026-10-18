@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { SessionContext } from "./contexts";
-import Topbar from "./Topbar";
+import Shell from "./Shell";
 import ScoreRing from "./ScoreRing";
 import { api } from "./api";
 import "./Report.css";
@@ -65,8 +65,7 @@ export default function Report({ navigate }) {
 
   if (error || !report) {
     return (
-      <div className="report-page page">
-        <Topbar navigate={navigate} />
+      <Shell page="report" navigate={navigate} title="Session report">
         <div className="report-content" style={{ maxWidth: 640, margin: "60px auto" }}>
           <div className="card report-error-card" style={{ padding: "32px", textAlign: "center" }}>
             <div style={{ fontSize: 36, marginBottom: 12 }}>⚠️</div>
@@ -84,7 +83,7 @@ export default function Report({ navigate }) {
             </div>
           </div>
         </div>
-      </div>
+      </Shell>
     );
   }
 
@@ -102,10 +101,8 @@ export default function Report({ navigate }) {
   const tabs = ["overview", "questions", "timeline", "concepts", "behaviour"];
 
   return (
-    <div className="report-page page">
-      <Topbar navigate={navigate} />
-
-      <div className="report-content">
+    <Shell page="report" navigate={navigate} title="Session report" subtitle="Scores and concepts come from the evaluator for this session">
+      <div className="report-content" style={{ padding: 0 }}>
 
         {/* ── Hero ─────────────────────────────────────────── */}
         <div className="report-hero card fade-up">
@@ -167,14 +164,17 @@ export default function Report({ navigate }) {
         {/* ── Actions ──────────────────────────────────────── */}
         <div className="report-actions fade-up">
           <button type="button" className="btn btn-primary btn-lg" onClick={() => navigate("topics") }>
-            🔁 Start New Interview
+            Start new interview
           </button>
-          <button type="button" className="btn btn-ghost btn-lg" onClick={() => navigate("admin") }>
-            📊 View All Sessions
+          <button type="button" className="btn btn-ghost btn-lg" onClick={() => navigate("weakness") }>
+            Open Weakness Map
+          </button>
+          <button type="button" className="btn btn-ghost btn-lg" onClick={() => navigate("dashboard") }>
+            Back to dashboard
           </button>
         </div>
       </div>
-    </div>
+    </Shell>
   );
 }
 

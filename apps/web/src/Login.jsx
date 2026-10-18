@@ -34,7 +34,7 @@ export default function Login({ navigate }) {
       if (tab === "admin") {
         navigate("admin");
       } else {
-        navigate("topics");
+        navigate("dashboard");
       }
     } catch (e) {
       const message = (e?.message || "").toLowerCase();

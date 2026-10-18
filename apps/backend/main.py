@@ -17,9 +17,13 @@ import os
 import pickle
 import re
 import sys
+import logging
 import tempfile
+import threading
 import time
 import uuid
+_PROCESS_START = time.perf_counter()
+from contextlib import asynccontextmanager
 from datetime import UTC, datetime, date
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -30,6 +34,7 @@ if str(REPO_ROOT) not in sys.path:
 
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, UploadFile, File, Form
+from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, EmailStr
@@ -199,10 +204,47 @@ score_hesitation = None
 build_state_vector = None
 reset_audio_session = None
 AUDIO_ANALYSIS_READY = False
-_AUDIO_IMPORT_ATTEMPTED = False
+
+# Audio initialisation is an explicit state machine: pending -> loading -> ready | failed.
+# The lock guards state transitions only (never the import itself), and waiters block on an
+# Event with a bounded timeout, so a slow or failed import cannot hang requests indefinitely.
+_audio_log = logging.getLogger("prepaired.audio")
+_AUDIO_STATE = "pending"
+_AUDIO_ERROR: Optional[str] = None
+_AUDIO_STATE_LOCK = threading.Lock()
+_AUDIO_DONE = threading.Event()
+AUDIO_WAIT_TIMEOUT_S = float(os.getenv("PREPAIRED_AUDIO_WAIT_TIMEOUT_S", "180"))
+WARMUP_TIMINGS: Dict[str, Any] = {}
+_WARMUP_ACTIVE = False
 
 
-def _ensure_audio_analysis_imports() -> bool:
+def audio_status() -> Dict[str, Any]:
+    return {"state": _AUDIO_STATE, "error": _AUDIO_ERROR, "ready": AUDIO_ANALYSIS_READY,
+            "warmup_seconds": dict(WARMUP_TIMINGS)}
+
+
+def _ensure_audio_analysis_imports(timeout: Optional[float] = None) -> bool:
+    """Return True once the audio stack is usable.
+
+    The first caller performs the import in its own thread; concurrent callers wait (bounded) for it.
+    Never call this directly on the event loop for a request that may trigger the import.
+    """
+    global _AUDIO_STATE
+    if AUDIO_ANALYSIS_READY:
+        return True
+    with _AUDIO_STATE_LOCK:
+        owner = _AUDIO_STATE == "pending"
+        if owner:
+            _AUDIO_STATE = "loading"
+    if owner:
+        _import_audio_analysis()
+    elif not _AUDIO_DONE.wait(AUDIO_WAIT_TIMEOUT_S if timeout is None else timeout):
+        _audio_log.warning("Timed out waiting for audio stack initialisation (state=%s)", _AUDIO_STATE)
+        return False
+    return AUDIO_ANALYSIS_READY
+
+
+def _import_audio_analysis() -> bool:
     global extract_prosodic_features
     global audio_confidence_score
     global audio_score_breakdown
@@ -212,14 +254,9 @@ def _ensure_audio_analysis_imports() -> bool:
     global build_state_vector
     global reset_audio_session
     global AUDIO_ANALYSIS_READY
-    global _AUDIO_IMPORT_ATTEMPTED
+    global _AUDIO_STATE, _AUDIO_ERROR
 
-    if AUDIO_ANALYSIS_READY:
-        return True
-    if _AUDIO_IMPORT_ATTEMPTED:
-        return False
-
-    _AUDIO_IMPORT_ATTEMPTED = True
+    started = time.perf_counter()
     try:
         from agents.audio.audio_features import extract_prosodic_features as _extract
         from agents.audio.confidence_scorer import score as _score
@@ -230,6 +267,7 @@ def _ensure_audio_analysis_imports() -> bool:
         from agents.audio.rl_state_vector import reset_session as _reset_audio_session
         from agents.audio.transcriber import transcribe_and_align as _transcribe
 
+        # Publish every component first, flag ready last: no request sees a partial stack.
         extract_prosodic_features = _extract
         audio_confidence_score = _score
         audio_score_breakdown = _breakdown
@@ -239,14 +277,61 @@ def _ensure_audio_analysis_imports() -> bool:
         reset_audio_session = _reset_audio_session
         transcribe_and_align = _transcribe
         AUDIO_ANALYSIS_READY = True
+        _AUDIO_STATE = "ready"
+        _audio_log.info("Audio stack ready in %.1fs", time.perf_counter() - started)
         return True
-    except Exception as exc:
+    except BaseException as exc:  # noqa: BLE001 - record any failure so waiters are released
         AUDIO_ANALYSIS_READY = False
+        _AUDIO_STATE = "failed"
+        _AUDIO_ERROR = f"{type(exc).__name__}: {exc}"
+        _audio_log.exception("Audio stack failed to initialise; speech analysis is unavailable")
         print(f"[WARN] Audio_Analysis_agent not loaded — audio confidence analysis disabled: {exc}")
         return False
+    finally:
+        WARMUP_TIMINGS["audio_imports"] = round(time.perf_counter() - started, 2)
+        _AUDIO_DONE.set()
+
+
+def _warm_up_backend() -> None:
+    """Background warm-up: heavy imports/models that would otherwise block the first interview."""
+    t0 = time.perf_counter()
+    WARMUP_TIMINGS["started_after_boot_s"] = round(t0 - _PROCESS_START, 2)
+    # 1. RL stack (needed by session creation) - import only; per-session PPO load stays lazy.
+    try:
+        from agents.strategy.hybrid_orchestrator import _try_load_rl
+        t = time.perf_counter()
+        _try_load_rl()
+        WARMUP_TIMINGS["rl_import"] = round(time.perf_counter() - t, 2)
+    except Exception:
+        _audio_log.exception("RL warm-up failed (session creation will retry lazily)")
+    # 2. Audio/STT modules.
+    _ensure_audio_analysis_imports()
+    # 3. STT model weights (otherwise loaded on the first transcription).
+    if AUDIO_ANALYSIS_READY and os.getenv("PREPAIRED_WARMUP_STT_MODELS", "1") != "0":
+        try:
+            from agents.audio import transcriber as _tr
+            if getattr(_tr, "_WHISPERX_AVAILABLE", False):
+                t = time.perf_counter()
+                _tr._get_models()
+                WARMUP_TIMINGS["stt_models"] = round(time.perf_counter() - t, 2)
+        except Exception:
+            _audio_log.exception("STT model warm-up failed (first transcription will retry)")
+    WARMUP_TIMINGS["total"] = round(time.perf_counter() - t0, 2)
+    _audio_log.info("Backend warm-up finished: %s", WARMUP_TIMINGS)
+
+
+@asynccontextmanager
+async def _lifespan(_app):
+    global _WARMUP_ACTIVE
+    if os.getenv("PREPAIRED_DISABLE_WARMUP", "0") != "1":
+        _WARMUP_ACTIVE = True
+        threading.Thread(target=_warm_up_backend, name="backend-warmup", daemon=True).start()
+    yield
+    # Warm-up is a daemon thread: model loads cannot be interrupted, and nothing needs flushing.
+
 
 # ── App ─────────────────────────────────────────────────────────────────
-app = FastAPI(title="PrepAIred API", version="1.0.0")
+app = FastAPI(title="PrepAIred API", version="1.0.0", lifespan=_lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -296,6 +381,7 @@ class CreateSessionRequest(BaseModel):
     num_questions: int = 15
     interview_mode: str = "demo_rl"  # demo_rl | standard
     baseline_questions: int = 2
+    focus_question_ids: List[str] = []  # optional: pin these question ids at the front of a practice session
 
 
 class RunCodeRequest(BaseModel):
@@ -632,13 +718,15 @@ def select_questions(
 
 
 
-def _analyze_audio_confidence(audio_path: str, transcript_text: str = "", session_id: str = "") -> Optional[dict]:
+def _analyze_audio_confidence(audio_path: str, transcript_text: str = "", session_id: str = "",
+                              transcription: Optional[dict] = None) -> Optional[dict]:
     if not _ensure_audio_analysis_imports():
         return None
 
     try:
         prosodic = extract_prosodic_features(audio_path)
-        transcription = transcribe_and_align(audio_path) if transcribe_and_align else {}
+        if transcription is None:
+            transcription = transcribe_and_align(audio_path) if transcribe_and_align else {}
 
         # Use authoritative server transcript for linguistic analysis
         effective_transcript = (transcription.get("transcript") or transcript_text or "").strip()
@@ -711,7 +799,16 @@ def _get_session_dict(session_id: str) -> dict:
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "pipeline_ready": PIPELINE_READY, "timestamp": datetime.now(UTC).isoformat()}
+    audio = audio_status()
+    # HTTP 200 always (liveness); `status` says whether required functionality is usable.
+    if audio["state"] == "failed":
+        status = "degraded"
+    elif audio["state"] == "loading" or (audio["state"] == "pending" and _WARMUP_ACTIVE):
+        status = "starting"
+    else:
+        status = "ok"
+    return {"status": status, "pipeline_ready": PIPELINE_READY, "audio": audio,
+            "timestamp": datetime.now(UTC).isoformat()}
 
 
 @app.post("/api/login")
@@ -750,6 +847,69 @@ async def login(req: LoginRequest):
         return candidate
 
 
+def _with_focus_questions(base_select, focus_ids: List[str]):
+    """Wrap select_questions so the first call (initial session queue) starts with the requested questions.
+
+    Later calls (difficulty adaptation rebuilds) are delegated unchanged, so the RL/guardrail behaviour is untouched.
+    """
+    state = {"used": False}
+
+    def _select(c_topics, dsa_topics, num, difficulty=2, exclude_ids=None, candidate_state=None):
+        base = base_select(c_topics, dsa_topics, num, difficulty, exclude_ids=exclude_ids, candidate_state=candidate_state)
+        if state["used"] or exclude_ids is not None:
+            return base
+        state["used"] = True
+        by_id = {str(q.get("id")): q for qs in QUESTION_BANK.values() for q in qs}
+        pinned = [by_id[i] for i in focus_ids if i in by_id][:max(num, 1)]
+        pinned_ids = {str(q["id"]) for q in pinned}
+        rest = [q for q in base if str(q.get("id")) not in pinned_ids]
+        return (pinned + rest)[:max(num, len(pinned))]
+
+    return _select
+
+
+def _question_lookup() -> Dict[str, dict]:
+    """Flat question-id -> question dict view of the loaded question bank (read-only, for analytics)."""
+    return {str(q.get("id")): q for qs in QUESTION_BANK.values() for q in qs if isinstance(q, dict)}
+
+
+@app.get("/api/candidates/{candidate_id}/dashboard")
+async def candidate_dashboard(candidate_id: str, tz_offset_minutes: int = 0):
+    """Aggregated progress for one candidate, derived from stored attempts (no fabricated values)."""
+    try:
+        from services.storage.analytics import build_dashboard
+        return build_dashboard(candidate_id, _question_lookup(), tz_offset_minutes=int(tz_offset_minutes))
+    except Exception as exc:
+        raise HTTPException(500, f"Could not build dashboard: {exc}")
+
+
+@app.get("/api/candidates/{candidate_id}/analytics")
+async def candidate_analytics(candidate_id: str, tz_offset_minutes: int = 0):
+    try:
+        from services.storage.analytics import build_analytics
+        return build_analytics(candidate_id, _question_lookup(), tz_offset_minutes=int(tz_offset_minutes))
+    except Exception as exc:
+        raise HTTPException(500, f"Could not build analytics: {exc}")
+
+
+@app.get("/api/candidates/{candidate_id}/weakness-map")
+async def candidate_weakness_map(candidate_id: str):
+    try:
+        from services.storage.analytics import build_weakness_map
+        return build_weakness_map(candidate_id, _question_lookup())
+    except Exception as exc:
+        raise HTTPException(500, f"Could not build weakness map: {exc}")
+
+
+@app.get("/api/candidates/{candidate_id}/compare/{question_id}")
+async def candidate_compare_attempts(candidate_id: str, question_id: str):
+    try:
+        from services.storage.analytics import build_compare
+        return build_compare(candidate_id, question_id, _question_lookup())
+    except Exception as exc:
+        raise HTTPException(500, f"Could not compare attempts: {exc}")
+
+
 @app.post("/api/sessions")
 async def create_session(req: CreateSessionRequest):
     """Create a new interview session."""
@@ -778,21 +938,34 @@ async def create_session(req: CreateSessionRequest):
         "defer_rl": True,
     }
 
+    select_fn = select_questions
+    focus_ids = [str(q) for q in (getattr(req, "focus_question_ids", None) or []) if str(q).strip()]
+    if focus_ids:
+        select_fn = _with_focus_questions(select_questions, focus_ids)
+
     if _INTERVIEW_ORCHESTRATOR_READY and InterviewOrchestrator is not None:
-        orchestrator = InterviewOrchestrator(
-            session_id=sid,
-            candidate=candidate,
-            config=config,
-            evaluator_fn=_run_integrated_evaluator,
-            select_questions_fn=select_questions,
-        )
-        SESSIONS[sid] = orchestrator
-        try:
-            from services.storage.database import save_session
-            save_session(orchestrator.to_session_dict())
-        except Exception:
-            pass
-        if _ensure_audio_analysis_imports() and reset_audio_session is not None:
+        def _build_session():
+            # Runs in a worker thread: constructing the orchestrator can import the RL stack on a
+            # cold start, which must not freeze the event loop for other requests.
+            orch = InterviewOrchestrator(
+                session_id=sid,
+                candidate=candidate,
+                config=config,
+                evaluator_fn=_run_integrated_evaluator,
+                select_questions_fn=select_fn,
+            )
+            SESSIONS[sid] = orch
+            try:
+                from services.storage.database import save_session
+                save_session(orch.to_session_dict())
+            except Exception:
+                pass
+            return orch
+
+        orchestrator = await run_in_threadpool(_build_session)
+        # Never import the heavy audio stack here; a not-yet-loaded audio module has no state
+        # for this new session id, so there is nothing to reset.
+        if AUDIO_ANALYSIS_READY and reset_audio_session is not None:
             try:
                 reset_audio_session(sid)
             except Exception:
@@ -900,26 +1073,39 @@ async def transcribe_audio(
         audio_bytes = await audio.read()
         tmp_path.write_bytes(audio_bytes)
 
-        server_transcript = ""
-        transcription_meta = {}
+        def _run_stt_pipeline():
+            """Blocking STT + acoustic analysis; executed in a worker thread, off the event loop."""
+            meta: dict = {}
+            text = ""
+            error = None
+            # 1. Authoritative server STT pipeline from raw audio (waits, bounded, for audio init)
+            if _ensure_audio_analysis_imports() and transcribe_and_align is not None:
+                meta = transcribe_and_align(str(tmp_path))
+                text = (meta.get("transcript", "") or "").strip()
+                if not text:
+                    error = f"STT produced no transcript (alignment_source={meta.get('alignment_source', 'unknown')})"
+                    _audio_log.error("Authoritative STT unavailable: %s", error)
+            else:
+                error = _AUDIO_ERROR or f"audio stack not ready (state={_AUDIO_STATE})"
+                _audio_log.error("Authoritative STT unavailable: %s", error)
+                if LOGGING_READY:
+                    try:
+                        from logging_agent.stt_processor import STTProcessor
+                        text = (STTProcessor().transcribe(str(tmp_path)) or "").strip()
+                    except Exception:
+                        pass
+            analysis = None
+            if text:
+                # Reuse the transcription already computed above instead of transcribing again.
+                analysis = _analyze_audio_confidence(str(tmp_path), text, session_id, transcription=meta or None)
+            return text, meta, analysis, error
 
-        # 1. Authoritative server STT pipeline from raw audio
-        if _ensure_audio_analysis_imports() and transcribe_and_align is not None:
-            transcription_meta = transcribe_and_align(str(tmp_path))
-            server_transcript = (transcription_meta.get("transcript", "") or "").strip()
-        elif LOGGING_READY:
-            try:
-                from logging_agent.stt_processor import STTProcessor
-                stt = STTProcessor()
-                server_transcript = (stt.transcribe(str(tmp_path)) or "").strip()
-            except Exception:
-                pass
+        server_transcript, transcription_meta, audio_analysis, stt_error = await run_in_threadpool(_run_stt_pipeline)
 
         # Strict STT validation: Never promote browser preview to authoritative evaluation transcript
         if server_transcript:
             stt_status = "success"
             transcript_source = transcription_meta.get("alignment_source", "whisperx")
-            audio_analysis = _analyze_audio_confidence(str(tmp_path), server_transcript, session_id)
         else:
             stt_status = "stt_unavailable"
             transcript_source = "unavailable"
@@ -949,6 +1135,8 @@ async def transcribe_audio(
             "true_speaking_rate": transcription_meta.get("true_speaking_rate", 0.0),
             "session_id": session_id,
             "audio_analysis_ready": AUDIO_ANALYSIS_READY,
+            "audio_init_status": _AUDIO_STATE,
+            "stt_error": stt_error,
             "audio_analysis": audio_analysis,
         }
 

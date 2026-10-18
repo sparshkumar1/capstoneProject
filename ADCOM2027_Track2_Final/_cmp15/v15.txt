@@ -1,0 +1,1253 @@
+     Coordination, Specialization, and Bounded
+     Authority in Adaptive Technical Interview
+ Systems: A Replay-Based Decomposition Study
+
+                                     Anonymous Author(s)
+
+                                          Anonymous Institution
+
+         Abstract. Adaptive interview-practice systems are often called multi-
+         agent even when one controller invokes components procedurally, which
+         leaves open whether a behavioral change comes from coordination, from
+         specialization, or from the rule that admits proposals. We separate
+         these mechanisms in a technical-interview system in which a central
+         hub alone commits state. Two rule-based, bounded-authority agents
+         (Strategy and Coaching) send typed proposals that are arbitrated
+         against a frozen Proximal Policy Optimization (PPO) policy. Under
+         deterministic replay of 64 constructed answers (8 replay clusters × 20
+         question orders = 160 dependent sessions per condition; recorded evalu-
+         ator outputs, no live language model, no human candidates), adding the
+         agent layer with confidence-gated arbitration changed difficulty trajec-
+         tories (level-change difference -2.67, cluster-bootstrap 95% confidence
+         interval [-4.50, -0.24]); ablations and a confidence-threshold sweep
+         locate the change in the Strategy proposal and its admission, although
+         leave-one-cluster-out analysis showed cluster sensitivity. Specialized and
+         unified implementations of the same rules produced identical decisions
+         on 1,280/1,280 matched open-loop turns, a consistency check on the
+         re-implementation, not evidence about specialization generally. In fault
+         injection, removing arbitration let adversarial-valid proposals bypass
+         guardrails in 38/40 sessions versus 0/40 with it, while a lexical ground-
+         ing probe accepted unsupported paraphrased credit in 57/57 applicable
+         cases, so containment is mechanism-specific, not semantic. Results rest
+         on one frozen PPO checkpoint and replayed stimuli; we make no claim
+         about candidate learning, pedagogical efficacy, live-model behavior, or
+         the superiority of specialization.
+
+         Keywords: multi-agent coordination · agent specialization · arbitration
+         · bounded authority · fault injection · interview practice
+
+1 Introduction
+
+A technical interview evaluates more than whether code passes tests: candidates
+explain their reasoning aloud, show conceptual understanding, handle follow-
+up questions, and communicate under questioning. A practice system therefore
+needs verbal and conceptual coverage, adaptation across turns, and trustwor-
+thy feedback, and its decisions accumulate into a trajectory rather than being
+independent. A centralized policy simplifies this control loop but couples re-
+sponsibilities that may operate at different temporal scales; when they share one
+2  Anonymous
+
+decision path, it is hard to tell whether behavior changes arise from the pol-
+icy, from the interaction between responsibilities, or from the mechanism that
+reconciles competing recommendations.
+
+    Existing solutions address parts of this problem. Coding-practice platforms
+such as LeetCode, Codeforces, and HackerRank typically emphasize coding and
+problem-solving practice rather than the spoken, adaptive interview interaction
+studied here, and general chat systems based on large language models (LLMs)
+can generate conversational interview practice or feedback [21]. Research proto-
+types use LLMs to give candidates interview feedback [24], to simulate multi-
+modal mock technical interviews [10], or to give code feedback [21], and report
+case-study or participant-perception evidence (a case study, a qualitative study
+with n = 20, a between-subject study with n = 46) on realism, confidence, and
+trust.
+
+    These works address portions of the interview-practice problem; this pa-
+per asks a different, systems-level question. It is an empirical decomposition
+study and does not ask whether one AI interview system works better than an-
+other; it asks which architectural mechanism produces an observed behavioral
+change when an adaptive technical-interview system is augmented with bounded-
+authority agent components. The system has an authoritative session-state hub
+and a single-policy reinforcement-learning controller for adaptive difficulty; we
+add a layer in which specialized agents keep separate private state and send
+typed, constrained proposals, while the hub remains the sole writer of state. The
+two added agents are rule- and ledger-based and the hub is centralized; we claim
+no new coordination algorithm or decentralized reasoning, only a controlled de-
+composition of what such a layer changes. The design separates four properties
+often treated together as evidence of a multi-agent design, each with its own
+comparison (Table 1): coordination (centralized arbitration of agent proposals
+against the existing policy), specialization (division of responsibility and state
+across components rather than one unified controller), arbitration (how compet-
+ing recommendations are admitted), and bounded authority (which components
+may influence committed state and how unsafe proposals are contained). Con-
+cretely, M1 versus B0 measures the effect of introducing the agent layer together
+with its arbitration, and Msplit versus Munified tests whether role decomposi-
+tion alone changes decisions. Without arbitration, adversarial-valid proposals
+bypassed guardrails in 38/40 sessions versus 0/40 with it; a lexical grounding
+probe accepted unsupported paraphrased credit in 57/57 applicable cases (a
+lexical, not semantic, evidence contract); and split and unified implementations
+agreed on 1,280/1,280 matched open-loop decisions, a consistency check that
+does not establish general equivalence or the absence of a specialization benefit.
+
+    What is tested is replay-level behavioral change, structural consistency of the
+split and unified designs, sensitivity to admission thresholds, and containment
+of injected faults. What is not tested is human candidates, real-time user adap-
+tation, live LLM stochasticity, pedagogical efficacy, universal agent robustness,
+and fairness or psychometric properties. The study asks:
+
+RQ1 Does adding bounded multi-agent coordination change adaptive interview
+     decision dynamics relative to the original single-controller system (B0)? (XA,
+     M1 vs. B0)
+Coordination, Specialization, and Bounded Authority in Interview Systems          3
+
+RQ2 Does dividing responsibility across specialized stateful components change
+     decisions when observations, rules, and arbitration are held constant? (Msplit
+     vs. Munified)
+
+RQ3 Which arbitration and admission mechanisms determine whether auxiliary
+     proposals influence the trajectory? (XA ablations, XC)
+
+RQ4 Do bounded proposal authority and downstream safeguards preserve au-
+     thoritative state and invariants under component failures and adversarial
+     proposals? (XB, authority and safeguard analysis)
+
+Table 1. Mechanism-to-evidence map (questions in RQ1­RQ4 above). Experiment
+names (XA­XD) and conditions are defined in Sect. 5; evidence classes are REPLAY
+(R), FAULT-INJECTED (F), and SYNTHETIC (S); SIMULATED applies only to
+PPO training (Sect. 5).
+
+Mechanism          Condition / test         Primary evidence
+
+Coordination       M1 vs. B0 (XA, R)        Level changes, reversals, PPO
+Specialization     Msplit vs. Munified (R)
+Arbitration        M4 (XA); XC (R)          agreement, probe turns
+Bounded authority  XB (F), XD (S)           Matched decisions (1,280 turns);
+
+                                            dispatch and serialization time
+                                            Admission-path bypass (M4);
+
+                                            confidence-threshold sweep (XC)
+                                            Adversarial-valid bypass, ungrounded
+
+                                            leakage, breaker, lexical grounding
+
+                                            probe
+
+    Sect. 2 reviews related work, Sect. 3 the architecture, Sect. 4 arbitration
+and validation, Sect. 5 the experiments, Sect. 6 the results, and Sects. 7­9 the
+discussion, limitations, and conclusion.
+
+2 Related Work
+
+Coordination and specialization. Classical agent-oriented work defines
+agency through autonomy, reactivity, pro-activeness, and social ability [22].
+LLM-based systems use conversational coordination, as in AutoGen [23], and
+specialized roles with standardized workflows, as in MetaGPT [11]. Comparisons
+of agent configurations report task-dependent rather than universally superior
+arrangements [14], and analyses of multi-agent failures identify specification,
+inter-agent alignment, and verification problems [5]. Existing work often evalu-
+ates an entire agentic system; this study separates coordination and arbitration
+effects from specialization and bounded-authority effects under controlled replay.
+
+    Adaptive sequential decisions. Our system uses PPO [20] as imple-
+mented in Stable-Baselines3 [17]. We do not frame the system as multi-agent
+reinforcement learning [4]: the two added agents are rule- and ledger-based and
+are not trained, and PPO remains a single frozen policy.
+
+    Evaluation and adaptation context. Reinforcement learning for instruc-
+tional sequencing [7] and curriculum learning for reinforcement learning [15]
+choose which item a learner sees next; we study the decision-layer decomposi-
+tion. Sentence-embedding scoring such as Sentence-BERT [18] underlies evalua-
+tors like ours, which we do not study as a standalone contribution. LLM-based
+4  Anonymous
+
+judging can show position, verbosity, and self-enhancement biases [25], moti-
+vating future evaluator validation without implying that our evaluator shows
+them.
+
+    Safety, shielding, and constrained action. Shielding and supervisory
+approaches place external constraints around learned policies so that unsafe
+actions are rejected or overridden before they take effect [1, 9].
+
+    Fault injection and resilience. The circuit-breaker pattern, which stops
+calling a repeatedly failing dependency [16], serves as one test target. Fault
+injection has been applied to LLM-based multi-agent systems [12, 13]; our faults
+instead target a rule-based agent layer with explicit authority boundaries.
+
+    Interview-practice systems. Prior interview-practice work [24, 10, 21]
+has concentrated on user-facing outcomes; it leaves open whether role separation
+changes decisions or only the architecture, as distinct from coordination and
+arbitration.
+
+3 System Architecture and Authority Topology
+
+Reference Workflow. Figure 1 shows the application end to end. The Or-
+chestrator Agent (the hub) owns one session-state dictionary and one lock. The
+QnSelector Agent retrieves a question of the current difficulty from a FAISS vec-
+tor store of questions and answers, and the hub shows it through the Interview
+UI. The candidate's spoken or typed response returns to the hub, and the Input
+Analysis Agent supplies a transcript, behavior metrics, and session-time metrics.
+The Transcript Evaluation Agent scores the transcript: a sentence-embedding
+similarity S1, a concept-coverage index S2, and a cross-encoder reasoning score
+R (0.15 S1 + 0.35 S2eff + 0.50 R plus a bonus term minus a penalty term, with
+a cap when a mandatory concept is missed) pass through a Reasoning Critic
+and a Validation step that returns the final score, and a strict hand-off con-
+tract fails closed on a non-finite or out-of-range score. A separate coding path
+(sandboxed execution, code analysis) also returns a final score and is outside the
+replay study. The hub commits the turn and logs it. The Strategy/RL Agent
+builds the six-dimensional state, and a baseline schedule and a frozen PPO pol-
+icy [17, 20] propose an easier/same/harder action, followed by a rule layer of six
+guardrails; the resulting next difficulty level returns to the QnSelector Agent.
+The follow-up trigger fires if a concept is missing or incorrect, a gap is flagged,
+or the score is below 0.80; the Feedback Agent (a local LLM, or a template) then
+produces a follow-up question (at most two in a row), and otherwise it returns
+detailed personalized feedback. All of this is unchanged when the multi-agent
+flag is off, and with Strategy ablated (M2) the difficulty, score, and question
+trajectories are identical to B0 (Sect. 6). In Fig. 1, boxes labeled "Agent" are
+application modules invoked by the hub and "Strategy/RL Agent" is the PPO
+policy; elsewhere, "agent" means the rule-based Strategy and Coaching agents
+defined below. The figure labels the cross-encoder's model family; the deployed
+weights are fine-tuned, with incomplete provenance. The question bank carries a
+coded Bloom level per question (six levels, L1­L6 [3, 2]); it is descriptive meta-
+data only, not used for question selection, the RL state or reward, evaluator
+targets, or score computation, and no experiment here validates it.
+Coordination, Specialization, and Bounded Authority in Interview Systems                                                  5
+
+    Three kinds of state. Proposal state is an agent's typed output plus its
+private ledger; authoritative state (committed scores, difficulty level, question
+queue, follow-up counters, state version) is written only by the hub and persisted
+in SQLite; the control/admission layer between them comprises the schema,
+forbidden-key, version, grounding, confidence-gate, step-bound, and guardrail
+checks.
+
+(a) Application flow (unchanged by the agent layer)
+
+                 Input Analysis Agent                                         Transcript Evaluation Agent
+Speech-to-Text (Whisper) · Behavior Analysis (Librosa)      SBERT (all-MiniLM-L6-v2): similarity S1, concept coverage S2
+Session Timer: transcript, behavior metrics, time metrics  Cross Encoder (ms-marco-MiniLM-L-6-v2): R  Reasoning Critic
+
+                                                                                    Validation  final score
+
+Candidate Layer        Orchestrator Agent (hub)                                    Coding Qns Evaluator
+   Candidate                                                                       Sandbox Code Executor,
+   Interview UI  sole writer of session state; commits the turn
+                                                                                    complexity and sanity
+                                                                                        (outside replay)
+
+Logger Agent            Feedback Agent                     QnSelector Agent           Strategy/RL Agent
+     log the     Follow-up Questions (Qwen2.5)              Question Selector      State Builder [P,R,C,H,T,D]
+                  Detailed Feedback (Qwen2.5)              FAISS VectorStore
+interview data                                               (Qns, Answers)            PPO policy (frozen)
+
+(b) The layer studied here, inside the hub between the final score and the commit
+
+Observation           Strategy Agent                         peer        Coaching Agent                PPO
+ immutable,      ledger: misses, probes, EMA               message     ledger: hints, examples,    frozen policy
+  validated                                                           repeated misconceptions      (not an agent)
+(score, state)     rules: recover, remediate,                       feedback plan only (no level)
+                         stretch, steady
+
+     Admission checks (in order)         typed proposals                               PPO action  Commit
+1 schema 2 forbidden-key scan (18 keys)               Arbitration                Guardrails        hub writes
+                                                                               six rules, applied
+   3 state version 4 concept grounding      validated Strategy proposal with    last; step  1;        level;
+   invalid, stale, timed out  dropped      confidence   (0.6) and evidence         levels 1­5      version +1
+
+                                                      supersedes PPO
+                                                (steady 0.45: PPO stands)
+
+                                                                               Hub: only writer of authoritative state
+
+Fig. 1. (a) End-to-end flow of the interview application, from the first question shown
+to the candidate to the final score, feedback, and log. The Orchestrator Agent is the
+hub, the only writer of session state. (b) The bounded-authority layer studied here
+(Strategy and Coaching agents, coordinator, arbitrator, guardrails), which operates
+inside the orchestrator between the final score and the commit. "PPO" is the frozen
+policy, not an agent.
+
+    Specialized Agent Roles and Private State. Table 2 lists what each
+agent may propose and may not do. Under least privilege [19], neither agent has
+state-write privileges; each receives an immutable, validated observation and re-
+turns a typed proposal. They are rule- and ledger-based, not LLM-driven: a
+compact design with private persistent state, pro-active proposals, and a com-
+munication channel, the properties of weak agency [22] that the existing roles
+lacked.
+6  Anonymous
+
+    The matrix fixes what each component may propose (typed, bounded fields)
+and what it may not commit; the hub remains the only writer of authoritative
+state. The forbidden-key scan blocks proposals that smuggle a state field; stale-
+version checks prevent applying a proposal computed against an earlier state;
+the grounding check catches well-formed plans that credit a concept the evalua-
+tor never found. Schema validation addresses structural invalidity, not semantic
+correctness.
+
+    Strategy Agent. It maintains configured difficulty adaptation and tracks
+persistent weaknesses within the follow-up budget. Private state: per concept,
+the distinct turns in which it was missed or incorrect, later coverage, probes
+requested, and an exponential moving average (EMA) of scores. Rules, first
+match wins: recover (a low current score with a low recent mean, or a weakness
+that survived its probes)  Easier; remediate (a concept missed on two distinct
+turns and unresolved)  Same plus a probe request; stretch (high current score
+and EMA, last three scores adequate, no open weakness)  Harder; otherwise
+steady (Same). Thresholds are listed in Table 4. Non-steady proposals carry con-
+fidence min(0.95, 0.5 + 0.1n) for n cited evidence items (a documented heuristic,
+not a calibrated probability); steady proposals carry 0.45, below the arbitration
+threshold  = 0.6, so the PPO action stands unless the ledger supports a change.
+Table 2. Authority matrix, generated from the enforcing code. Neither agent has
+state-write authority; the hub commits alone.
+
+Agent May propose     Private state Cannot             On invalid
+                                                       output
+
+Strategy difficulty_  weakness     write or overwrite invalid, stale,
+
+   action (Easier, ledger          any score; set a    low-
+
+   Same, or Harder); (per-concept difficulty level     confidence, or
+
+   probe request      miss counts, directly; terminate timed-out
+
+   (concept, kind); probe history, the session; edit   proposal is
+
+   strategy mode strategy trend) history; override hard dropped; PPO
+
+                                   constraints or      proposal
+
+                                   guardrail overrides; stands
+
+Coaching feedback depth; coaching  call another agent
+                                   alter evaluator results invalid plan is
+
+   hint/example       history (hints or scores; cite   dropped; the
+
+   flags; concepts to and examples concepts absent from existing
+
+   emphasize;         given, repeated evaluator evidence; template
+
+   remediation tag; misconcep-     request difficulty  feedback is
+
+   tone               tions)       changes or follow-ups; used
+
+                                   terminate the session unchanged
+
+    Coaching Agent. It chooses how to coach after an evaluated answer. Pri-
+vate state: concept miss counts and the hints and examples already given. De-
+cisions: up to two concepts to emphasize, whether to give a hint or an example,
+feedback depth, tone, and a remediation tag; a Strategy peer message modifies
+the plan (recover : detailed and encouraging; stretch: brief; remediate: remedia-
+tion tag on the probed concept). A deterministic renderer applies the plan to
+the existing feedback and raises if a protected evaluator field would change.
+
+    Communication and State Ownership. Every observation, proposal,
+and decision is a typed object (unknown fields, NaN, and out-of-range values
+Coordination, Specialization, and Bounded Authority in Interview Systems  7
+
+rejected). The coordinator records each call with session, turn, sender, recipient,
+state version, and provenance, and every accept, reject, or modify outcome with a
+reason code. Optimistic concurrency uses a state version that counts committed
+turns: a proposal whose version, turn, or session differs from the hub's is stale
+and dropped, and a second answer from the same agent for the same version is
+a duplicate and dropped.
+
+4 Orchestration, Arbitration and Validation
+
+Difficulty precedence (deterministic code, evaluated by ablation rather than
+assumed optimal), in order:
+
+ 1. hard constraints (infrastructure failure forces Same; levels stay in [1, 5]);
+ 2. the guardrail layer, applied last to whichever candidate was selected, wins
+
+     whenever a rule fires;
+ 3. a validated Strategy proposal with confidence c   and cited evidence
+
+     supersedes the PPO action, recorded as a conflict;
+ 4. the PPO action, or the labeled non-RL heuristic when PPO is unavailable.
+
+A proposal that cannot take effect at the bounds is recorded as modified. Probe
+precedence, in order:
+
+ 1. the hard cap of two consecutive follow-ups;
+ 2. a Strategy probe whose concept appeared in the evaluator's evidence earlier
+
+     in the session and whose confidence satisfies c   (it may add a probe the
+     thresholds would not trigger, or retarget the default one);
+ 3. the hub's original threshold rule.
+
+The retargeted concept is passed to the template follow-up generator; the LLM
+prompt is not changed. Table 3 follows one recorded turn through these steps;
+in Step 5 rule G1 (overload protection: a low score at medium difficulty selects
+Easier) fires and selects the same Easier action as the Strategy candidate, so the
+guardrail layer retains it.
+
+    PPO integration. PPO keeps its role and its 6-D state and 3-action defi-
+nitions; the policy was trained once and frozen before the multi-agent evaluation
+(Sect. 5), without hyperparameter search or result-based checkpoint selection.
+Its action is one input to arbitration; the agents never see it before proposing,
+and we make no claim that they improve PPO.
+
+    Guardrails. The deployed hub uses an inline copy of the rule layer that
+differs from the training environment's module; a configuration key selects the
+deployed (legacy inline) or canonical implementation, and both are reported.
+On a synthetic grid (39,930 points, hesitation = 1- acoustic confidence) the two
+disagree on 4,728 points (11.8%); this is a property of the grid, not a deployment
+frequency.
+
+    Proposal Validation. Before any proposal reaches arbitration, the coordi-
+nator executes four sequential checks: (1) strict schema validation; (2) recursive
+scanning against 18 forbidden state keys; (3) optimistic concurrency verification
+against the hub's committed turn version; and (4) concept evidence grounding.
+If an agent raises an unhandled exception or exceeds its timeout (2 s in XA and
+8  Anonymous
+
+Table 3. One recorded turn (REPLAY; first replay cluster, original question order,
+condition M1; state version 6). Rows are decision-record entries tagged by layer (P:
+proposal, C: control/admission, A: authoritative); a contrasting turn (version 5) is
+last.
+
+   Step (component) L. Content of the decision record Recorded outcome
+
+   1 Strategy proposal P/C Schema, forbidden-key, version, accepted, valid
+
+                                      and grounding checks pass
+   2 Coaching proposal P/C Same checks; plan with depth accepted, valid plan
+
+   3 Arbitration             detailed
+                        C Strategy proposes Easier with accepted, validated
+
+                        confidence   and cited         proposal
+
+   4 PPO baseline           evidence                   rejected, superseded
+                        P Proposed Same
+
+                                                       by Strategy (a
+
+   5 Guardrail          C Candidate Easier from        conflict)
+                                                       Easier accepted
+
+                        Strategy; rule G1 (overload
+
+                        protection) fires and selects
+
+   6 Probe decision          Easier                    probe accepted,
+                        C Hub default rule
+
+   7 Commit                                                              default policy
+                        A The hub alone writes the level version 6  7
+
+                        change and increments the
+
+                        state version
+
+   Contrast, version 5  C Strategy proposes Same       Strategy rejected,
+
+                        (steady); PPO proposes Harder low confidence
+
+                                                       (0.45 <  = 0.60);
+
+                                                       PPO accepted,
+
+                                                       default policy
+
+XC, 150 ms in XB), its proposal is dropped and the hub proceeds with the de-
+fault policy; a per-agent circuit breaker opens after two consecutive failures with
+a 60 s cooldown.
+
+5 Experimental Methodology
+
+This section describes the dataset, the conditions, the experiments, the param-
+eter provenance, and the statistics.
+
+    Evaluation Environment and Replay Dataset. All experiments run
+via deterministic replay through the real orchestrator hub, with the evaluator
+(the Transcript Evaluation Agent of Fig. 1) replaced by recorded outputs. The
+data are 64 constructed (authored) answers to eight technical-interview ques-
+tions, scored once by the production evaluator; the 64 payloads were recorded
+and replayed, and the evaluator is not re-run. The answers are authored, not an
+external public benchmark; the replay uses recorded evaluator outputs and no
+human ratings (reference scores from three raters appear only in the exploratory
+evaluator analysis below). Each replay cluster is the k-th recorded answer set
+across the eight questions (k = 1, . . . , 8); follow-up probes reuse the payload
+recorded for the root concept. This is a deterministic replay study of fixed stim-
+uli and recorded evaluator outputs, not an evaluation of closed-loop adaptation
+Coordination, Specialization, and Bounded Authority in Interview Systems  9
+
+to human candidates. Evidence classes are labeled by experiment: REPLAY
+(XA, XC, and the split versus unified comparison), FAULT-INJECTED (XB),
+SYNTHETIC (the authored feedback probes of XD and the guardrail state-grid
+analysis), and SIMULATED (PPO training against a synthetic candidate model,
+evidence about the policy, not about real candidates). Replay sessions combine
+the 8 clusters with 20 question orders (seeds 0­19; seed 0 is the original order,
+seeds 1­19 apply a seeded shuffle per cluster), yielding N = 160 sessions per
+condition. These sessions are not independent: they reuse the same 8 clusters,
+which we treat as the independent structural units in cluster-aware analyses. No
+live generative LLM is invoked; the LLM gateway is stubbed as down and deter-
+ministic template renderers produce text. Per-turn latency was timed in-process
+with a monotonic wall-clock timer. Pooled p50 and p95 timings are descriptive;
+because replay hardware and operating system were not recorded, absolute val-
+ues are not portable benchmarks, latency effects are interpreted through paired
+condition differences, and no cluster-level interval was computed for latency.
+
+    Baseline and Ablation Matrix. Experiment XA addresses RQ1 (chiefly
+M1 versus B0) and, through its ablations, RQ3 (arbitration) and RQ4 (authority
+and grounding safeguards); RQ2 is addressed by the split-versus-unified com-
+parison, RQ3 additionally by XC, and RQ4 by XB and XD. XA evaluates the
+following conditions across the identical 160 replay sessions:
+
+  ­ B0: frozen single-controller workflow without agents, PPO active, inline
+     guardrails. B7: B0 with PPO unavailable (deterministic rule fallback). B0c:
+     B0 with the canonical guardrail module.
+
+  ­ M1: full multi-agent system (Strategy and Coaching agents, peer messaging,
+     arbitration with  = 0.6). M7: M1 with PPO disabled (paired with B7).
+     M1c: M1 with canonical guardrails.
+
+  ­ M2: Strategy Agent ablated (Coaching and the coordination layer remain ac-
+     tive). M3: Coaching Agent ablated (Strategy remains active). M6: Strategy-
+     to-Coaching peer messaging disabled.
+
+  ­ M4: arbitration and downstream admission-control bypass, so raw Strategy
+     proposals are admitted without confidence-threshold, evidence-grounding,
+     step-bound, or guardrail-layer checks; because it removes several mechanisms
+     at once, it is not a pure arbitration-only ablation. M5: grounding verification
+     ablated (Coaching plans accepted without concept-evidence checks). M8:
+     authority enforcement ablated (score authority verification bypassed before
+     proposal admission).
+
+    Framework for Evaluating Agent Specialization (RQ2). We con-
+trast (1) the specialized architecture (Msplit), the two-agent configuration M1
+with separate state ledgers and explicit peer messaging, and (2) a unified archi-
+tecture (Munified), a monolithic agent with a joint session ledger that synthesizes
+difficulty actions, follow-up probes, and coaching plans in a single dispatch. Both
+receive identical observations, questions, thresholds, and arbitration rules. Out-
+comes are the decision agreement rate (P (Decisionunified = Decisionsplit)), with
+difficulty-action and follow-up probe agreement as components, per-turn dis-
+patch and serialization latency, and architectural state encapsulation (schema
+and ledger boundaries).
+10  Anonymous
+
+    Threshold Decomposition (Experiment XC). Because the bypassed
+condition (M4) simultaneously removes the confidence threshold, evidence veri-
+fication, and one-step limits, it cannot isolate which mechanism prevents oscil-
+lation collapse. XC provides the narrower isolation of the confidence-threshold
+mechanism: it sweeps   {0.0, 0.5, 0.6, 0.7, 0.8, 0.9} across the same 160 replay
+sessions while holding all other guardrail boundaries and evidence checks active.
+Five predictions (C1­C5, Table 8) were pre-specified in the internal protocol
+record before any XC run, with  = 0.6 fixed in advance (internal protocol regis-
+tration, not external preregistration). The value  = 0.60 is a selected operating
+point, not a tuned optimum; it was not tuned against replay outcomes.
+
+    Fault Injection and Circuit Breaker (Experiment XB). To test
+whether bounded authority contains component failures (RQ4), constructed
+faults were injected into the real agents during replay. Strategy faults were
+crash, timeout, malformed output, forbidden state key, stale version, NaN con-
+fidence, and adversarial-valid (a well-formed, authorized proposal opposing the
+evidence); Coaching faults were crash, malformed output, stale version, and un-
+grounded (a valid plan emphasizing a concept absent from the evaluator evi-
+dence). Adversarial-valid and ungrounded faults fired on every call; the others
+fired with probability 0.3 per agent call (seeded). One pre-specified, exploratory
+prediction (B6, Table 8) concerned the per-agent circuit breaker opening at least
+once in at least 80% of full-path crash, malformed, stale, and NaN-confidence
+sessions. Each fault was crossed with four variants (full path, authority check
+removed, arbitration removed, grounding check removed) over 40 sessions per
+cell (8 clusters × 5 order seeds) with a 150 ms agent timeout. A fault counted as
+contained only if the session completed, committed scores equaled the evaluator
+output, and every difficulty transition was valid; guardrail bypass, ungrounded-
+concept leakage, and breaker opening were counted per session. Each variant
+removes a mechanism and then injects the fault it guards against, so results
+show the necessity of a mechanism for the tested property, not general fault
+tolerance.
+
+    Grounding Probe (Experiment XD). Separately from the proposal-
+level concept-grounding check, the deployed lexical feedback validator was
+probed with authored (synthetic) feedback texts; no LLM was involved. For
+each of the 64 recorded evaluator payloads, seven constructed feedback cat-
+egories were checked (for example faithful text, a score leak, and truncated
+paraphrase credit, which credits a concept in paraphrase without supporting
+evidence). Placeholder concept texts were relabeled uniquely to remove an
+evidence artifact, and a category was counted only for payloads where it could
+be constructed.
+
+    Provenance and Reproducibility. Table 4 records how each parameter
+was chosen and whether it changed after replay results were observed; no pa-
+rameter has a logged tuning procedure and nothing was tuned on replay results
+(the evaluator concept threshold and dampening were fixed on an earlier pilot,
+before replay, and the pilot records are not recoverable). Every condition uses
+one frozen PPO checkpoint, the deployed runtime policy (seed 123, SHA-256
+prefix 2ab8d514), trained once for a nominal 100,000 steps (100,352 executed)
+with Stable-Baselines3 PPO and frozen before the multi-agent evaluation; no
+result from any other checkpoint is used. Training was SIMULATED: a single
+Coordination, Specialization, and Bounded Authority in Interview Systems  11
+
+synthetic candidate (fixed skill  0.6, one persona, skill constant over time)
+generated scores, confidence, and hesitation for the six-dimensional state, with
+actions Easier, Same, and Harder. The candidate noise generator was not seeded,
+so training is not bit-reproducible; the training seed fixes the policy initialization,
+action sampling, and the environment's own random draws. The reward largely
+imitates a hand-coded rule oracle (agreement weight 0.60, outcome change 0.30,
+shaping 0.10), consistent with the small effect of disabling PPO (A9). Train-
+ing used horizon T = 15 with continuous difficulty steps, whereas the pipeline
+uses integer levels 1­5, which limits transferability; no multi-candidate, human-
+candidate, or online learning is involved.
+
+    The cross-encoder is called through the sentence-transformers predict in-
+terface; its single-output result r is mapped to R = clip((r - 0.20)/0.70, 0, 1),
+after which the concept threshold (0.30) and the dampening of S2 by 0.6 when
+R  0.30 apply. The library's default activation for a single-label head is a sig-
+moid, but the saved model configuration was not retained for confirmation, so
+we do not characterize r further. The checkpoint was trained under Windows
+11, Python 3.12.7, Stable-Baselines3 2.7.1, PyTorch 2.2.2 (CPU), NumPy 1.26.4,
+and Gymnasium 0.29.1 (recorded in the checkpoint file); the replay used Python
+3.11 with unrecorded, unrecoverable package versions (including those of the
+evaluator-related libraries), and replay hardware and operating system were not
+recorded.
+
+    Evaluator dependence (exploratory). Replay outcomes depend on
+recorded evaluator outputs, and evaluator validity is not evaluated here. A
+separate exploratory analysis on the 64 constructed answers found a Spearman
+correlation of  = 0.4832 between the cross-encoder signal R and the reference
+score,  = 0.3812 for the deployed composite, and  = 0.4897 for a word-count-
+only baseline. R was strongly associated with answer length ( = 0.6594, 95%
+CI [0.457, 0.831]), and the length-controlled partial correlation of R with the
+reference score was 0.2434 (95% CI [-0.008, 0.507]), so a length-independent
+contribution is not established; this neither shows that R carries no information
+nor validates the evaluator. The reference scores are internal scores from three
+raters, and rater provenance and ethics documentation are incomplete, so the
+analysis is exploratory; the replay itself does not use them. The 0.15/0.35/0.50
+weights are design-time weights, not tuned on the current replay study; R carries
+half of the composite weight and is associated with length in the exploratory
+analysis. Weight selection will be tested on development data with length-robust
+baselines (P5, Sect. 8).
+
+    Statistical Methodology. For session-level point estimates and paired
+differences, we compute standard non-parametric percentile bootstrap intervals
+with B = 10,000 resamples. For bounded completion, transition, and invariant
+proportions, we report exact Clopper­Pearson binomial confidence intervals [6].
+To account for the 8-cluster dependency, we implement a cluster bootstrap over
+the 8 underlying replay clusters following Field and Welsh [8] (B = 10,000),
+resampling entire replay clusters with replacement. We also report a leave-one-
+cluster-out (LOCO) sensitivity analysis. All intervals are descriptive; no signifi-
+cance tests or p-values are computed.
+12  Anonymous
+
+6 Results
+
+All results derive from deterministic REPLAY of recorded evaluator outputs
+unless noted, and sessions within a condition are dependent across question
+orders (Sect. 5). Table 8 lists every pre-specified prediction with its status; three
+were contradicted (A9, A10, B6).
+
+    Coordination: Trajectory Divergence and Reduced Level Changes
+(RQ1). Enabling the agent layer (M1) altered the difficulty trajectory relative
+to the frozen baseline (B0) in all 160 replay sessions (A7), with fewer level
+changes and reversals and lower agreement with the PPO action (Tables 5 and 6).
+Strategy remained the final action source in 6.669 decisions per session after
+guardrails (strat. in Table 5).
+
+    Cluster Dependence and Fragility. The effects differ in robustness.
+Omitting replay cluster k = 2 shifts the level-change difference to -3.76 (CI
+[-4.81, -2.78]), whereas omitting any other cluster makes the 95% interval in-
+clude zero; the sign is shared by 7 of the 8 clusters (Fig. 2). The cluster interval
+rests on only 8 clusters and is approximate, so we report the direction as con-
+sistent and the magnitude as uncertain. Reversals are similar (LOCO intervals
+exclude zero in 4 of 8), and PPO agreement is the most stable (8 of 8). The
+probe effect is the most fragile: the +0.59 turns per session arise in only 1 of 8
+clusters (k = 2), so it cannot be generalized.
+
+    Proposals and Overhead. The Strategy Agent generated 3,814 proposals
+(including 1,274 steady proposals at confidence 0.45) and no stretch proposals
+(0): the replayed candidates never met the sustained-performance criteria. The
+layer raised pooled median per-turn latency from 0.546 ms to 1.589 ms (+1.04 ms)
+and the 95th percentile from 2.056 ms to 4.411 ms, with 47.7 agent calls per
+session.
+
+    Arbitration and Admission Control (RQ3). Disabling the Strategy
+Agent (M2) reproduced the baseline difficulty, score, and question trajectories
+in 160 of 160 sessions (A4), so Strategy is the only channel through which the
+layer changes difficulty. In the arbitration and downstream admission-control
+bypass (M4), trajectories collapsed (2.225 level changes per session, PPO agree-
+ment 0.014) with guardrail bypass in 3 of 160 sessions. Because M4 removes
+several mechanisms at once, Experiment XC varies only the confidence thresh-
+old  (Table 7).
+
+    At  = 0.0 the trajectory collapses toward the bypassed regime (Table 7)
+with zero bypass, because steady proposals (confidence 0.45) override PPO on
+most RL decisions (16.1 of 19.6 per session). Behavior is flat across   [0.5, 0.7]
+because realized confidences take the discrete values 0.70 and 0.80; at  = 0.9 the
+threshold exceeds every realized confidence, so Strategy cannot supersede PPO
+and trajectories revert to B0. Because the confidence values are few and struc-
+tured, the sweep cannot resolve finer threshold effects, and  = 0.60 sits inside
+a stable plateau rather than at a demonstrated optimum. All five pre-specified
+XC predictions were supported. Disabling grounding (M5) or the Strategy-to-
+Coaching message (M6) left trajectories identical to M1 (A5), and disabling PPO
+(M7) altered only 4 of 160 sessions (2.5%), contradicting A9, because the Strat-
+egy heuristic usually reaches the same action as the non-RL fallback. Canonical
+guardrails changed no path (0/160, A10) because the divergent grid states (ex-
+Coordination, Specialization, and Bounded Authority in Interview Systems                        13
+
+Table 4. Parameter provenance. No parameter has a logged tuning procedure; "design-
+time" means chosen before the experiments without a recorded selection study. The
+last column rests on the protocol record; protocol identifiers are local commits.
+
+Parameter    Value                           How chosen                              Fixed      Changed after
+                                                                                     before     observing
+Strategy     persistent after 2 misses; at design-time constants; no                 replay?    replay?
+rules                                                                                yes        No
+             most 2 probes; recover score tuning record
+Coaching                                                                             yes        No
+rules        0.35; stretch score 0.8, EMA
+                                                                                     yes        No
+Confidence   0.7 ( = 0.5), last three                                                yes        No
+                                                                                     no         Not applicable
+XC sweep      0.6                                                                    (post-hoc  (post-hoc
+                                                                                     design)    design)
+Guardrails   hint if score < 0.6 and < 2 design-time constants; no                   yes        No (inherited)
+
+Agent        hints; depth detailed < 0.4, tuning record                              yes        No
+timeout                                                                                         No
+Breaker      brief  0.85;  2 emphasized                                                         No (inherited
+PPO                                                                                             checkpoint)
+checkpoint   concepts                                                                           No (inherited
+PPO                                                                                             checkpoint)
+training     min(0.95, 0.5 + 0.1n); steady design-time heuristic;
+settings                                                                                        No
+Evaluator    0.45                            uncalibrated
+weights                                                                                         No
+Evaluator    0.60                            design-time; fixed before
+thresholds                                                                                      No
+                                             XC, not tuned
+Fault rates                                                                                     No
+               {0, 0.5, 0.6, 0.7, 0.8, 0.9} designed after inspecting
+Replay
+design                                       XA and XB
+
+             levels 1­5; step  1; six rules inherited from the earlier
+                                                           controller; deployed and
+                                                           canonical copies
+
+             2 s (XA, XC); 150 ms (XB) experiment configuration
+
+             2 consecutive failures, 60 s    implementation default                  yes
+             cooldown
+             seed 123; nominal 100,000       trained once, not selected yes
+             steps (100,352 executed);       on replay
+             SHA-256 prefix 2ab8d514
+             lr 3 × 10-4, 2,048              library-style defaults in yes
+             steps/rollout, batch 64, 10     the training script; no
+             epochs,  = 0.99, clip 0.2,      search
+             GAE 0.95
+             0.15/0.35/0.50 (S1, S2eff , R)  design-time; no tuning                  yes
+                                             artifact survives                       (recorded
+             concept threshold 0.30;                                                 outputs)
+             dampening 0.6 if R  0.30;       concept threshold and                   yes
+             R = (r - 0.20)/0.70 clipped     dampening fixed on an                   (recorded
+                                             earlier pilot, before replay;           outputs)
+             0.3 per call (seeded);          pilot records and
+             adversarial and ungrounded      remaining details not                   yes
+             faults on every call            recoverable
+             8 clusters × order seeds        fixed in the protocol
+             0­19 (seed 0 original);
+             cluster bootstrap               fixed in the protocol                   yes
+             B = 10,000, seed 20270101
+
+treme hesitation or low voice confidence) were never reached under neutral replay
+acoustics.
+
+    Specialization: Trajectory Invariance under Functional Decomposi-
+tion (RQ2). Removing the Coaching Agent (M3) gave trajectories identical to
+M1 in all 160 sessions (A5). This follows from the topology (the coaching plan has
+no difficulty-control field and communication runs only from Strategy to Coach-
+ing), so M3  M1 is true by construction. The split-versus-unified comparison
+is likewise a consistency check, not evidence of a benefit. A unified controller
+that re-implements the same rule set with a joint ledger produced identical nor-
+malized decisions (difficulty action, mode, confidence, probe concept, and coach-
+ing plan fields) on all 1,280 matched open-loop turns, so P (Decisionunified =
+14         Anonymous
+
+Table 5. Replay ablation summary (160 sessions per condition; mean per session unless
+noted). compl./auth./trans.: sessions completing, keeping committed scores authorita-
+tive, and preserving valid transitions. chg./rev.: level changes and reversals; agr.: frac-
+tion of final actions equal to the PPO action (below 1 in B0 because guardrails override
+PPO); gfire: guardrail overrides; strat.: decisions where Strategy was the final action
+source; byp.: sessions with guardrail bypass; p50/p95: pooled per-turn latency (ms);
+calls: agent calls per session. M4 is the arbitration and downstream admission-control
+bypass.
+
+Cond. compl. auth. trans. chg. rev. agr. gfire strat. byp. p50 p95 calls
+
+B0             160 160  160 15.119 11.744 0.626 9.588 0.0  0 0.546 2.056                 ­
+B7             160 160
+B0c            160 160  160 2.675 1.256  ­ 3.831 0.0       0 0.463 1.059                 ­
+M1             160 160
+M2             160 160  160 15.119 11.744 0.626 9.588 0.0  0 0.553 2.004                 ­
+M3             160 160
+M4             160 160  160 12.45 9.869 0.4 6.838 6.669    0 1.589 4.411 47.68
+M5             160 160
+M6             160 160  160 15.119 11.744 0.626 9.588 0.0  0 1.218 3.513 23.25
+M8             160 160
+M7             160 160  160 12.45 9.869 0.4 6.838 6.669    0 1.118 3.189 23.84
+M1c            160 160
+                        160 2.225  1.0 0.014 0.0 19.619    3 1.573 4.357 47.68
+
+                        160 12.45 9.869 0.4 6.838 6.669    0 1.581 4.553 47.68
+
+                        160 12.45 9.869 0.4 6.838 6.669    0 1.592 4.46 47.68
+
+                        160 12.45 9.869 0.4 6.838 6.669    0 1.575 4.35 47.68
+
+                        160 2.706 1.312  ­ 3.812 9.037     0 1.502 2.968 47.68
+
+                        160 12.45 9.869 0.4 6.838 6.669    0 1.573 4.534 47.68
+
+Table 6. Paired M1 - B0 differences over the 160 sessions. Naive intervals resample
+sessions and are descriptive only; cluster intervals resample the 8 replay clusters (B =
+10,000) and are the primary inference. LOCO: range of the mean difference over the
+eight leave-one-cluster-out analyses (number of 95% intervals excluding zero); Same
+sign: clusters whose own difference shares the sign of the point estimate. Latency was
+not analyzed by cluster. Paired path, level-change, reversal, and agreement differences
+are zero for M2 vs. B0, M3, M5, M6, M8 vs. M1, B0c vs. B0 and M1c vs. M1.
+
+M1 - B0 (per session)   Point Naive 95% CI Cluster 95% CI LOCO range (CI excl. 0) Same sign
+
+Level changes           -2.669 [-3.188, -2.131] [-4.50, -0.24] [-3.76, -2.20] (1/8)      7/8
+
+Reversals               -1.875 [-2.275, -1.462] [-3.12, -0.27] [-2.57, -1.52] (4/8)      7/8
+
+PPO agreement           -0.226 [-0.244, -0.208] [-0.284, -0.170] [-0.244, -0.203] (8/8)  8/8
+
+Follow-up (probe) turns +0.588 [+0.338, +0.850] [0.000, +1.763] [0.000, +0.671] (0/8)    1/8
+
+Median turn latency (ms) +1.043 [+1.000, +1.079] not computed not computed                  ­
+
+Decisionsplit) = 1.0, with identical difficulty and probe paths. Dispatch latency
+was 0.0440 ms (split) versus 0.0401 ms (unified, -8.9%) and validating two typed
+models took 0.0092 ms versus 0.0038 ms for one (-58.7%); these are descriptive
+single-run measurements, distinct from the end-to-end +1.04 ms overhead of M1
+over B0. No behavioral advantage of specialization was observed in this con-
+trolled setting. The comparison could not have shown one.
+
+    Bounded Authority: Invariant Enforcement and Containment
+(RQ4). Every condition completed all 160 sessions, kept committed scores
+equal to the recorded evaluator output, and enforced bounds in [1, 5] with
+steps of at most one level (A1­A3; exact Clopper­Pearson 95% lower bound
+for 160/160: 0.977 [6]); this is completion and containment under the specified
+protocol, not general fault tolerance. Under full bounded authority (M1) and
+throughout XC, guardrail bypass stayed at zero. In fault injection (Table 9;
+40 sessions per cell), adversarial-valid proposals bypassed guardrails in 38 of
+40 sessions without arbitration (95% CI [0.831, 0.994]) and in 0 of 40 with it
+(95% CI [0.000, 0.088]), and ungrounded concepts were emphasized in 40 of
+40 sessions without the grounding check and in 0 of 40 with it. The circuit
+breaker opened in 29 of 40 sessions (72.5%, 95% CI [0.561, 0.854]), below the
+pre-specified 80% expectation (B6). Timing-out proposals gave a p95 turn
+Coordination, Specialization, and Bounded Authority in Interview Systems                                          15
+
+Table 7. Experiment XC (REPLAY, 160 ses-                                         level changes  reversals
+sions per row, mean per session): only the
+confidence threshold  varies; evidence checks        M1 - B0, per session  5.0
+and guardrails remain active. Column defini-
+tions as in Table 5 (strat. precedes gfire here).                          2.5
+
+        chg. rev. agr. strat. gfire byp.                                   0.0
+
+    0.0 2.225 1.000 0.014 16.075 3.544 0                                   -2.5
+    0.5 12.450 9.869 0.400 6.669 6.838 0
+    0.6 12.450 9.869 0.400 6.669 6.838 0                                   -5.0
+    0.7 12.450 9.869 0.400 6.669 6.838 0
+    0.8 12.450 9.819 0.404 6.594 6.863 0                                         12345678
+    0.9 15.119 11.744 0.626 0.000 9.588 0                                                       replay cluster k
+
+                                                     Fig. 2. Per-cluster difference M1 - B0
+                                                     in level changes and reversals per ses-
+                                                     sion (mean over the 20 question or-
+                                                     ders of each cluster; computed from the
+                                                     XA run file). The dashed line is the
+                                                     pooled level-change difference (-2.67).
+                                                     Only cluster k = 2 has the opposite
+                                                     sign.
+
+latency of 154.4 ms (each call bounded by the 150 ms timeout). In the lexical
+probe (XD), unsupported paraphrased credit was accepted in 57 of 57 applicable
+authored cases (95% CI [0.937, 1.000]): the validator enforces a lexical evidence
+contract, not semantic verification.
+
+Table 8. Pre-specified predictions and status (A: Experiment XA, B: XB, C: XC;
+internal protocol record, not external preregistration). Ceiling rows hold in every con-
+dition and do not discriminate between conditions. Rows A8 and B5 also have wide
+margins and do not discriminate. Three predictions were contradicted (A9, A10, B6).
+
+ID     Predicted property                            Observed                                   Status
+
+A1­A3  completion 100%; committed scores equal       160/160 in every condition                 Supported
+
+A4     evaluator output; levels in [1, 5], steps  1  160/160 sessions                           Supported
+A5     M2 reproduces B0 paths                        identical paths                            Supported
+A6     M3, M5, M6, M8 reproduce M1                   3/160 vs 0/160                             Supported
+A7     M4 bypass in  1 session, M1 none              160/160                                    Supported
+A8     M1 = B0 in  50% of sessions                   +1.043 ms                                  Supported
+A9     median latency M1 - B0 < 50 ms                4/160 (2.5%)                               Contradicted
+A10    M7 = B7 in  50% of sessions                   0/160                                      Contradicted
+B1     canonical guardrails change  1 path           all cells 40/40, 0, 0                      Supported
+B2     full path: contained, no bypass or leak       152 by authority check vs                  Supported
+       forbidden key: authority vs schema            152 by schema; 40/40
+B3                                                   contained                                  Supported
+B4     rejection                                     38/40 vs 0/40                              Supported
+B5                                                   40/40 vs 0/40                              Supported
+B6     adversarial: bypass without arbitration       154.4 vs 4.4 ms                            Contradicted
+C1     ungrounded: leak without grounding            29/40 (72.5%)                              Supported
+       timeout raises p95 by  100 ms                 0.014, 2.225, 0
+C2     breaker opens in  80% of sessions                                                        Supported
+C3      = 0: agreement < 0.10, changes < 5.0,        identical                                  Supported
+C4                                                   identical                                  Supported
+C5     no bypass                                     6.669, 6.669, 6.594, 0                     Supported
+        = 0.6 reproduces M1                          0 vs 6.669
+        = 0.5 equals  = 0.6
+       Strategy decisions non-increasing in 
+        = 0.9 below half of  = 0.6
+
+    Containment is a ceiling result in every cell; discrimination comes only from
+the removed-mechanism variants, and removing the authority check changed no
+outcome because schema validation alone contained the forbidden-key faults (B2
+in Table 8; Table 10). Removing arbitration produced bypass in 34 of 40 ses-
+16  Anonymous
+
+sions in the non-adversarial Strategy fault cells, which is not comparable with
+the 3 of 160 sessions of M4 in XA: there the faulted calls open the breaker,
+the Strategy proposal is absent on many decisions (449 of 938 Strategy calls in
+the full-path crash cell were rejected as breaker-open), and with arbitration re-
+moved the guardrail layer is skipped, so the unguarded base action is committed.
+Bypass counts correlate negatively with Strategy-sourced decisions per session
+(Spearman  = -0.62 over the 240 such sessions); this mechanism reading is
+descriptive, and the correlation does not establish causality. The single bypass
+in each Coaching cell without arbitration is the same session in all four Coaching
+fault types, so it comes from the unfaulted Strategy path, whose proposals are
+committed without the guardrail layer, and not from the Coaching fault.
+
+Table 9. Fault injection (FAULT-INJECTED, 40 sessions per cell). Contained: the
+session completed, committed scores equaled evaluator output, and all transitions were
+valid. Bypass: sessions with guardrail bypass; Leak: sessions with ungrounded-concept
+emphasis; Breaker: sessions in which the circuit breaker opened. See text; not compa-
+rable with XA M4.
+
+Fault (injected calls per cell) Variant           Sess. Contained Bypass Leak Breaker
+
+Strategy crash, timeout,          full path       40     40  0   0  29
+malformed, stale, NaN,
+forbidden key (152 each;
+identical rows)
+
+                                  no authority check 40  40  0   0  29
+
+                                  no arbitration  40     40  34  0  29
+
+                                  no grounding    40     40  0   0  29
+
+Strategy adversarial-valid        full path       40     40  0   0  0
+(930)
+
+                                  no authority check 40  40  0   0  0
+
+                                  no arbitration  40     40  38  0  0
+
+                                  no grounding    40     40  0   0  0
+
+Coaching crash, malformed,        full path       40     40  0   0  29
+
+stale (154 each; identical rows)
+
+                                  no authority check 40  40  0   0  29
+
+                                  no arbitration  40     40  1   0  29
+
+                                  no grounding    40     40  0   0  29
+
+Coaching ungrounded (950)         full path       40     40  0   0  0
+
+                                  no authority check 40  40  0   0  0
+
+                                  no arbitration  40     40  1   0  0
+
+                                  no grounding    40     40  0 40   0
+
+7 Discussion
+
+Admission of agent proposals changes behavior; role splitting pre-
+served it. Under the tested replay conditions, introducing the agent layer
+altered the difficulty trajectory relative to the frozen baseline (B0), whereas reor-
+ganizing identical responsibilities into specialized versus unified components did
+not alter matched per-turn decisions. This is consistent with the change aris-
+ing from the introduction and admission of auxiliary recommendations, while
+specialization reorganizes responsibility and state boundaries. The split-versus-
+unified result is a consistency check on a re-implementation of the same rules,
+not evidence that specialization has or lacks value in general.
+
+    Arbitration as the control point. Ablating Strategy (M2) reproduced
+the baseline, whereas removing Coaching (M3) or the peer message (M6) left
+the trajectory unchanged: Strategy influenced difficulty only through the ar-
+bitration/admission pathway, since neither agent has state-write authority, and
+Coordination, Specialization, and Bounded Authority in Interview Systems  17
+
+Table 10. Threat model and safeguard matrix. Columns are mechanisms (Sch.:
+schema; Aut.: authority; Ver.: version; Gnd.: grounding; Arb.: arbitration; Brk.:
+breaker). R: rejects the threat in the logged reason codes; N: removal changed the
+outcome; O: removal tested, no change; P: the proposal passes the check; ­: not ap-
+plicable. No single safeguard covers every fault class; only authority, arbitration, and
+grounding were ablated.
+
+Threat (source)             Sch. Aut. Ver. Gnd. Arb. Brk. Tested result
+
+Forbidden key, unauthorized R R,O ­   ­  ­  R contained; schema alone suffices
+
+write (faulty agent)                        R contained
+
+Malformed, NaN, or stale    R­R ­        ­  ­ 40/40 leak without grounding
+
+proposal (faulty agent)                     ­ 38/40 bypass without
+                                                   arbitration
+Ungrounded coaching         ­ ­ ­ R,N O
+                                            R breaker opened in 29/40; not
+emphasis (faulty agent)                            ablated
+
+Adversarial-valid Strategy  POP O N         R p95 154.4 ms; sessions complete
+                                            ­ step-bound guardrail; bounds
+proposal (well-formed,
+                                                   held in all cells
+evidence-opposing)                          ­ not contained (57/57 accepted)
+
+Repeatedly failing agent    ­   ­  ­  ­  ­
+
+Slow proposal               ­   ­  ­  ­  ­
+
+Invalid transition magnitude ­  ­  ­  ­  ­
+
+Wrong but lexically         ­­­P ­
+grounded content
+
+Coaching has no authority over difficulty. Removing arbitration and downstream
+admission control (M4) collapsed the trajectory, and the threshold sweep indi-
+cated that  controls proposal admission. M1 versus B0 adds the Strategy rules,
+the confidence gate, and the agent structure together; the ablations (M2, M4,
+XC) place the change in the Strategy proposal and its admission, but the study
+cannot separate the added rules from an agent layer. PPO has little influence
+here: disabling it changed 4 of 160 sessions (A9).
+
+    Lower volatility is not better adaptation. M1 showed fewer level
+changes and reversals than B0 (Table 6), but removing arbitration gave an even
+flatter trajectory while abandoning PPO alignment and allowing bypass. Stabil-
+ity and adaptation are distinct objectives, and stability is a systems metric, not
+a pedagogical criterion.
+
+    Authority and containment. Fault injection supports a narrow contain-
+ment claim under the tested fault model: schema validation, forbidden-key scan-
+ning, and version checks intercepted malformed, unauthorized, and stale propos-
+als; grounding addressed unsupported attribution; the breaker handled repeated
+failures; and arbitration contained adversarial-valid proposals. This is a layered
+safeguard picture, not a proof of general safety, and structural or lexical valida-
+tion does not establish semantic correctness.
+
+    Design lessons from this case study. (i) Separate proposal generation
+from authoritative state mutation (Tables 2 and 9). (ii) In the tested setting,
+central arbitration was more behaviorally consequential than role splitting (Ta-
+bles 6 and 5). Role splitting could not change decisions here, because the unified
+controller applies the same rules. (iii) Safety controls should operate downstream
+of proposal generation, and overlapping safeguards cannot be told apart without
+ablation (Tables 9, 10, 5). (iv) Different fault classes need different safeguards
+(Tables 9 and 10). (v) Negative specialization results are useful: organization
+alone produced no behavioral benefit here (Sect. 6); the check shows that reor-
+ganizing preserved behavior, not that a benefit is absent.
+18  Anonymous
+
+8 Limitations and Threats to Validity
+
+Table 11 lists the limitations.
+    Data and ethics. No human participants were involved, no live interviews
+
+were conducted, and the replay corpus contains no personal data. No institu-
+tional ethics review was sought or is claimed; any future human evaluation will
+require approval. In real deployment, voice and answer data can constitute per-
+sonal data, and the communication-confidence signal is not a validated psycho-
+logical measure; accent, speech-pattern, or recording-condition differences could
+introduce bias, and any deployment would require explicit consent, a retention
+policy, and appropriate governance. None of these properties was evaluated here.
+
+Table 11. Limitations, their effect on claims, and planned future work (P1­P8, Sect. 8).
+
+Limitation                                   Effect on claims                          Future
+                                                                                       work
+
+Deterministic replay of 64 constructed       Metrics describe decision dynamics, not   P2, P8
+answers (8 clusters, 20 orders); no human    learning or pedagogical efficacy;
+ratings in the replay; pre-computed          level-change effect is cluster-sensitive  P1, P2
+candidate responses; no closed-loop
+adaptation                                   Coordination comparison is                P4
+One frozen PPO checkpoint trained on one     checkpoint-specific; no PPO benefit for   P2
+synthetic constant-skill candidate with      real candidates                           P5
+unseeded noise and a rule-imitating reward;                                            P6
+simulator horizon and continuous difficulty  No equivalence claim for stochastic
+differ from the integer-level pipeline       agents, live LLMs, or closed-loop         ­
+Split-versus-unified agreement holds for     settings                                  P8
+deterministic rule- and ledger-based agents  Harder branch and acoustic effects
+under open-loop replay                       untested                                  P3, P7
+No acoustic waveforms; stretch branch and    Evaluator errors propagate into
+guardrail-disagreement region unexercised    decisions; weights unvalidated
+Evaluator outputs fixed; evaluator not
+externally validated; exploratory length     Thresholds not claimed optimal; no
+association                                  external timestamps
+ = 0.60 is a design-time operating point;
+confidence is an uncalibrated discrete       Limits exact reproduction; latency not
+heuristic; XC designed after XA/XB;          portable
+design-time parameters (Table 4); local
+protocol commits                             No fairness claims
+Replay package versions (including
+evaluator libraries), hardware, and          No universal fault tolerance or
+operating system unrecorded                  semantic-correctness guarantee
+No fairness, adverse-impact, or
+psychometric analysis;
+communication-confidence signal
+unvalidated; accent and recording-condition
+bias unevaluated
+Fault injection covers tested defects only;
+lexical grounding accepted unsupported
+paraphrase (57/57)
+
+    Artifact availability and reproducibility. Code, configurations, seeds,
+aggregate results, and table-generation scripts exist in the authors' repository
+and are not publicly released at submission; the cross-encoder weights have in-
+complete provenance and are not claimed to be redistributable. Replay inputs,
+clusters, seeds, conditions, checkpoint identity, protocol values, bootstrap param-
+eters, fault rates, and analysis definitions are documented here; replay package
+versions (including evaluator libraries), hardware, and operating system are un-
+recoverable, which limits exact environment reproduction.
+
+    Planned extensions. Planned extensions (protocols only, not run): P1
+stronger baselines, P2 closed-loop simulator, P3 semantic grounding, P4 LLM-
+Coordination, Specialization, and Bounded Authority in Interview Systems  19
+
+backed Strategy Agent, P5 evaluator validation, P6 continuous confidence, P7
+property-based authority tests, P8 small human study (ethics approval required).
+
+9 Conclusion
+
+This study asked whether any change in the decisions of an adaptive technical-
+interview system stems from specialization or from coordination and arbitration.
+Across 160 deterministic replay sessions per condition, adding the agent layer
+with confidence-gated arbitration altered difficulty trajectories relative to the
+frozen single-policy baseline, although the magnitude was sensitive to the eight
+replay clusters. A matched open-loop comparison of the specialized and unified
+designs produced identical decisions on all 1,280 turns, a consistency check on the
+re-implementation: under the tested replay conditions, role splitting preserved
+behavior. Bounded-authority mechanisms gave mechanism-specific containment
+of the evaluated injected faults.
+
+    The evaluation does not establish human-candidate efficacy, pedagogical ben-
+efit, online candidate learning, equivalence for live stochastic LLM agents, gen-
+eral semantic correctness, universal fault tolerance, or general superiority of spe-
+cialization or PPO. Specialization structures responsibility and private state,
+whereas coordination and arbitration determine which proposal becomes au-
+thoritative. Future work should test these boundaries across policy checkpoints,
+human candidates, and generative multi-agent architectures (Sect. 8).
+
+References
+
+ 1. Alshiekh, M., Bloem, R., Ehlers, R., Könighofer, B., Niekum, S., Topcu, U.: Safe
+     reinforcement learning via shielding. In: Proceedings of the AAAI Conference on
+     Artificial Intelligence. pp. 2669­2678 (2018)
+
+ 2. Anderson, L.W., Krathwohl, D.R. (eds.): A Taxonomy for Learning, Teaching, and
+     Assessing: A Revision of Bloom's Taxonomy of Educational Objectives. Longman,
+     New York (2001)
+
+ 3. Bloom, B.S., Engelhart, M.D., Furst, E.J., Hill, W.H., Krathwohl, D.R.: Taxonomy
+     of Educational Objectives: The Classification of Educational Goals. Handbook I:
+     Cognitive Domain. David McKay, New York (1956)
+
+ 4. Buoniu, L., Babuska, R., De Schutter, B.: A comprehensive survey of multiagent
+     reinforcement learning. IEEE Transactions on Systems, Man, and Cybernetics,
+     Part C: Applications and Reviews 38(2), 156­172 (2008)
+
+ 5. Cemri, M., Pan, M.Z., Yang, S., Agrawal, L.A., Chopra, B., Tiwari, R., Keutzer,
+     K., Parameswaran, A., Klein, D., Ramchandran, K., Zaharia, M., Gonzalez, J.E.,
+     Stoica, I.: Why do multi-agent LLM systems fail? arXiv preprint arXiv:2503.13657
+     (2025)
+
+ 6. Clopper, C.J., Pearson, E.S.: The use of confidence or fiducial limits illustrated in
+     the case of the binomial. Biometrika 26(4), 404­413 (1934)
+
+ 7. Doroudi, S., Aleven, V., Brunskill, E.: Where's the reward? A review of reinforce-
+     ment learning for instructional sequencing. International Journal of Artificial In-
+     telligence in Education 29(4), 568­620 (2019)
+
+ 8. Field, C.A., Welsh, A.H.: Bootstrapping clustered data. Journal of the Royal
+     Statistical Society: Series B (Statistical Methodology) 69(3), 369­390 (2007).
+     https://doi.org/10.1111/j.1467-9868.2007.00593.x
+
+ 9. García, J., Fernández, F.: A comprehensive survey on safe reinforcement learning.
+     Journal of Machine Learning Research 16, 1437­1480 (2015)
+20  Anonymous
+
+10. Gomez, N., Batham, S.S., Volonte, M., Do, T.D.: Virtual interviewers, real re-
+     sults: Exploring AI-driven mock technical interviews on student readiness and
+     confidence. In: Companion Publication of the ACM Conference on Computer-
+     Supported Cooperative Work and Social Computing (CSCW Companion '25)
+     (2025), arXiv:2506.16542
+
+11. Hong, S., Zhuge, M., Chen, J., et al.: MetaGPT: Meta programming for a multi-
+     agent collaborative framework. In: International Conference on Learning Repre-
+     sentations (ICLR) (2024)
+
+12. Huang, J.T., Zhou, J., Jin, T., Zhou, X., Chen, Z., Wang, W., Yuan, Y., Lyu,
+     M., Sap, M.: On the resilience of LLM-based multi-agent collaboration with faulty
+     agents. In: Proceedings of the 42nd International Conference on Machine Learning
+     (ICML), PMLR 267. pp. 26202­26226 (2025)
+
+13. Jia, J., Deng, Z., Chen, Z., Wang, Y., Zheng, Z.: MAS-FIRE: Fault injection
+     and reliability evaluation for LLM-based multi-agent systems. arXiv preprint
+     arXiv:2602.19843 (2026)
+
+14. Kim, Y., Gu, K., Park, C., Park, C., Schmidgall, S., Heydari, A.A., et al.: Capa-
+     ble language models can outgrow the benefits of collaboration. Nature Machine
+     Intelligence 8, 1157­1172 (2026). https://doi.org/10.1038/s42256-026-01268-y
+
+15. Narvekar, S., Peng, B., Leonetti, M., Sinapov, J., Taylor, M.E., Stone, P.: Curricu-
+     lum learning for reinforcement learning domains: A framework and survey. Journal
+     of Machine Learning Research 21(181), 1­50 (2020)
+
+16. Nygard, M.T.: Release It! Design and Deploy Production-Ready Software. Prag-
+     matic Bookshelf (2007)
+
+17. Raffin, A., Hill, A., Gleave, A., Kanervisto, A., Ernestus, M., Dormann, N.: Stable-
+     Baselines3: Reliable reinforcement learning implementations. Journal of Machine
+     Learning Research 22(268) (2021)
+
+18. Reimers, N., Gurevych, I.: Sentence-BERT: Sentence embeddings using Siamese
+     BERT-networks. In: Proceedings of the 2019 Conference on Empirical Methods
+     in Natural Language Processing and the 9th International Joint Conference on
+     Natural Language Processing (EMNLP-IJCNLP). pp. 3982­3992 (2019). https:
+     //doi.org/10.18653/v1/D19-1410
+
+19. Saltzer, J.H., Schroeder, M.D.: The protection of information in computer systems.
+     Proceedings of the IEEE 63(9), 1278­1308 (1975). https://doi.org/10.1109/PROC.
+     1975.9939
+
+20. Schulman, J., Wolski, F., Dhariwal, P., Radford, A., Klimov, O.: Proximal policy
+     optimization algorithms. arXiv preprint arXiv:1707.06347 (2017)
+
+21. Vaishampayan, S., Brown, C.: Will you trust me more than ChatGPT? Evaluating
+     LLM-generated code feedback for mock technical interviews. In: Cooperative and
+     Human Aspects of Software Engineering (CHASE) (2025)
+
+22. Wooldridge, M., Jennings, N.R.: Intelligent agents: theory and practice. The
+     Knowledge Engineering Review 10(2), 115­152 (1995). https://doi.org/10.1017/
+     S0269888900008122
+
+23. Wu, Q., Bansal, G., Zhang, J., Wu, Y., Li, B., Zhu, E., Jiang, L., Zhang, X.,
+     Zhang, S., Liu, J., Awadallah, A.H., White, R.W., Burger, D., Wang, C.: AutoGen:
+     Enabling next-gen LLM applications via multi-agent conversation. arXiv preprint
+     arXiv:2308.08155 (2023)
+
+24. Yazdani, N., Mahajan, A., Ansari, A.: Zara: An LLM-based candidate interview
+     feedback system. arXiv preprint arXiv:2507.02869 (2025)
+
+25. Zheng, L., Chiang, W.L., Sheng, Y., et al.: Judging LLM-as-a-judge with MT-
+     bench and Chatbot Arena. In: Advances in Neural Information Processing Systems
+     36 (NeurIPS 2023), Datasets and Benchmarks Track (2023)
+

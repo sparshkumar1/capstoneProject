@@ -40,6 +40,13 @@ export const api = {
   // Questions
   getQuestions: (topic) => req("GET", `/api/questions?topic=${topic}`),
 
+  // Learner insights (read-only, derived from stored attempts)
+  getDashboard: (candidateId, tz = 0) => req("GET", `/api/candidates/${encodeURIComponent(candidateId)}/dashboard?tz_offset_minutes=${tz}`),
+  getAnalytics: (candidateId, tz = 0) => req("GET", `/api/candidates/${encodeURIComponent(candidateId)}/analytics?tz_offset_minutes=${tz}`),
+  getWeaknessMap: (candidateId) => req("GET", `/api/candidates/${encodeURIComponent(candidateId)}/weakness-map`),
+  compareAttempts: (candidateId, questionId) =>
+    req("GET", `/api/candidates/${encodeURIComponent(candidateId)}/compare/${encodeURIComponent(questionId)}`),
+
   // Admin
   getAllSessions: (params = {}) => {
     const q = new URLSearchParams(params).toString();

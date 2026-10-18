@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { SessionContext } from "./contexts";
-import Topbar from "./Topbar";
+import Shell from "./Shell";
 import { api } from "./api";
 import "./TopicSelector.css";
 
@@ -35,7 +35,7 @@ const DURATIONS = [
 ];
 
 export default function TopicSelector({ navigate }) {
-  const { candidate, setSession } = useContext(SessionContext);
+  const { candidate, setSession, setCandidate } = useContext(SessionContext);
   const [selectedC, setSelectedC] = useState([]);
   const [selectedDSA, setSelectedDSA] = useState([]);
   const [duration, setDuration] = useState(30);
@@ -82,20 +82,9 @@ export default function TopicSelector({ navigate }) {
 
 
   return (
-    <div className="topic-page page">
-      <Topbar navigate={navigate} showNav={false} />
-
-      <div className="topic-content">
-        <div className="topic-hero fade-up">
-          <div className="badge badge-accent" style={{ marginBottom: 16 }}>
-            Step 2 of 3 — Configure Interview
-          </div>
-          <h1>Choose your topics</h1>
-          <p style={{ color: "var(--text-2)", marginTop: 8, maxWidth: 480 }}>
-            Select the C language concepts and DSA topics you want to be tested on.
-            The AI will adaptively mix questions based on your performance.
-          </p>
-        </div>
+    <Shell page="topics" navigate={navigate} title="Choose your topics"
+      subtitle="Select the C and DSA topics to be tested on. Difficulty adapts to your answers during the interview.">
+      <div className="topic-content" style={{ padding: 0 }}>
 
         <div className="topic-layout">
           {/* Main topic panels */}
@@ -243,7 +232,7 @@ export default function TopicSelector({ navigate }) {
           </aside>
         </div>
       </div>
-    </div>
+    </Shell>
   );
 }
 

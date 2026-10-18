@@ -1,3 +1,4 @@
+import { Icon } from "./ui";
 import { useState, useContext, useEffect, useRef } from "react";
 import { SessionContext } from "./contexts";
 import MonacoEditor from "./MonacoEditor";
@@ -313,6 +314,15 @@ export default function InterviewRoom({ navigate }) {
           <div className={`conn-indicator ${connected ? "online" : "offline"}`}>
             {connected ? "Connected" : "Reconnecting…"}
           </div>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              if (window.confirm("Leave this interview? Answers already submitted are saved and will appear in your progress.")) navigate("dashboard");
+            }}
+          >
+            <Icon name="logout" size={14} /> Leave
+          </button>
         </div>
       </div>
 

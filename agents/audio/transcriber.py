@@ -62,6 +62,12 @@ except ImportError:
     from audio_io import decode_audio, frame_rms
 
 
+import logging
+import threading
+
+# Serialises model loading and inference: the shared model is loaded once and is not
+# guaranteed to be thread-safe, and the backend now calls this from worker threads.
+_MODEL_LOCK = threading.RLock()
 _MODEL = None
 _ALIGN_MODEL = None
 _METADATA = None
@@ -136,6 +142,13 @@ def _fallback_energy_timing(audio_path: str) -> dict:
 
 def _get_models(device="cpu"):
     global _MODEL, _ALIGN_MODEL, _METADATA
+    with _MODEL_LOCK:
+        _load_models_locked(device)
+    return _MODEL, _ALIGN_MODEL, _METADATA
+
+
+def _load_models_locked(device="cpu"):
+    global _MODEL, _ALIGN_MODEL, _METADATA
     if _MODEL is None:
         if not _WHISPERX_AVAILABLE:
             raise ImportError("whisperx is not installed")
@@ -155,7 +168,6 @@ def _get_models(device="cpu"):
             _ALIGN_MODEL, _METADATA = whisperx.load_align_model(language_code="en", device=device)
         finally:
             torch.load = _orig_torch_load
-    return _MODEL, _ALIGN_MODEL, _METADATA
 
 
 def normalize_transcript_text(text: str) -> str:
@@ -170,6 +182,11 @@ def normalize_transcript_text(text: str) -> str:
 
 
 def transcribe_and_align(audio_path: str) -> dict:
+    with _MODEL_LOCK:
+        return _transcribe_and_align_impl(audio_path)
+
+
+def _transcribe_and_align_impl(audio_path: str) -> dict:
     if not _WHISPERX_AVAILABLE:
         return _fallback_energy_timing(audio_path)
 
@@ -236,6 +253,8 @@ def transcribe_and_align(audio_path: str) -> dict:
             "alignment_source": "whisperx",
         }
     except Exception:
+        logging.getLogger("prepaired.audio").exception(
+            "WhisperX transcription failed; falling back to energy-based timing (no transcript)")
         return _fallback_energy_timing(audio_path)
 
 
