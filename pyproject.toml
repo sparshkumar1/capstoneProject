@@ -12,3 +12,4 @@ pythonpath = ["."]
 [tool.pyright]
 pythonVersion = "3.12"
 include = ["agents", "apps/backend", "services"]
+
