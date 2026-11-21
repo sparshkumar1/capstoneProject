@@ -1,0 +1,12 @@
+test_id,integration_boundary,scenario,status
+INT-001,Frontend-protocol<->Backend<->Orchestrator<->Question Selector,WS 'start' -> first question,PASS
+INT-002,Orchestrator<->Evaluator(S1+S2+R)<->Strategy/Guardrails,WS 'voice_answer' (strong answer) -> scored feedback,PASS
+INT-003,Orchestrator<->Evaluator<->Strategy/Guardrails (adaptive path),WS 'voice_answer' (weak answer) -> low score + difficulty decision,PASS
+MOD-QWEN-002,Orchestrator<->Qwen (HTTP :8001),WS 'request_hint' -> expected hint message,FAIL (DEF-001)
+INT-004,Orchestrator<->Coding Sandbox (Docker),WS 'code_submission' while Docker unreachable,BLOCKED (handling itself PASS)
+INT-005,Orchestrator<->Question Selector,WS 'next_question' -> distinct next question,PASS
+INT-006,Orchestrator<->Reporting,WS 'end_session' -> report id,PASS
+INT-007,Backend<->Database,GET history reflects persisted attempts,PASS
+E2E-006,Orchestrator/Reporting<->Database<->API,GET session report matches actual turns,PASS
+NEG-001,Backend<->WS session validation,WS connect to nonexistent session_id,PASS
+NEG-002,Backend<->WS input validation,Malformed JSON over open WS,PASS

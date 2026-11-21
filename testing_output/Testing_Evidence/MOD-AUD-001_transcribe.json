@@ -1,0 +1,21 @@
+{
+  "status_code": 200,
+  "latency_s": 2.1521148681640625,
+  "body": {
+    "transcript": "",
+    "browser_preview_transcript": "",
+    "stt_status": "stt_unavailable",
+    "transcript_source": "unavailable",
+    "alignment_source": "wav_energy_fallback",
+    "words": [],
+    "pauses": [],
+    "total_pause_time": 1.237,
+    "total_speech_time": 11.28,
+    "true_speaking_rate": 0.0,
+    "session_id": "",
+    "audio_analysis_ready": true,
+    "audio_init_status": "ready",
+    "stt_error": "STT produced no transcript (alignment_source=wav_energy_fallback)",
+    "audio_analysis": null
+  }
+}

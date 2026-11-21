@@ -1,0 +1,12 @@
+{
+  "session_id": "63715d77-def3-4628-8550-1529fd81dea6",
+  "question": {
+    "qid": "1",
+    "question_text": "Explain your logic to find the two indices in an array that sum up to a target value.",
+    "topic": "Arrays",
+    "difficulty": 0.4,
+    "blooms_level": "Apply"
+  },
+  "qid": "1",
+  "timestamp": "2026-11-13T09:54:07.669370"
+}

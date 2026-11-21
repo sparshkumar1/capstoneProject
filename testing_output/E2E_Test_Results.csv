@@ -1,0 +1,8 @@
+scenario_id,scenario_name,status,notes
+E2E-01,Complete interview lifecycle,PASS,"1 embedded, separately-counted defect (MOD-QWEN-002); all other steps correct"
+E2E-02,Audio-based interview,BLOCKED,WhisperX not installed; transcription step produces no transcript (DEF-002)
+E2E-03,Text-based interview,PASS,Same verbal-answer path as E2E-01
+E2E-04,Adaptive interview (state->PPO->guardrail->next question),PASS,"Strong/weak answers produced consistent, guardrail-verified difficulty decisions"
+E2E-05,Failure and recovery,PARTIAL,"3 of 7 sub-scenarios executed (invalid input, and 2 unintentional-but-informative dependency-failure cases); 4 disclosed as not executed"
+E2E-06,Session and report consistency,PASS,Report content matches actual session turns
+E2E-07,Repeated sessions,NOT FULLY EXECUTED,Only 1 of N sessions run in this exercise; cross-session isolation not directly re-verified

@@ -24,6 +24,15 @@ STEPS    = 100_000
 SEED     = 123
 
 def make_env():
+    """Build one InterviewEnv instance for the training vec-env factory.
+
+    Args:
+        None.
+
+    Returns:
+        InterviewEnv: A fresh environment instance that logs its turns to
+            `retrain_log.csv` under this run's checkpoint directory.
+    """
     env = InterviewEnv(log_file=str(SAVE_DIR / "retrain_log.csv"))
     return env
 

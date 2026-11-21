@@ -1,0 +1,20 @@
+{
+  "status_code": 200,
+  "body": {
+    "candidate_id": "5fe5c64f-c065-4e84-8886-3b7eb0e3e1e6",
+    "history": [
+      {
+        "question_id": "fu_292cc91d",
+        "total_attempts": 2,
+        "max_score": 0.35,
+        "last_attempt_at": "2026-11-13T04:06:24.916567+00:00"
+      },
+      {
+        "question_id": "1",
+        "total_attempts": 1,
+        "max_score": 0.0,
+        "last_attempt_at": "2026-11-13T04:04:42.495544+00:00"
+      }
+    ]
+  }
+}

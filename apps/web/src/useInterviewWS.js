@@ -52,6 +52,7 @@ export function useInterviewWS(sessionId, handlers = {}) {
           case "difficulty_update": h.onDifficulty?.(msg.payload); break;
           case "session_end":     h.onEnd?.(msg.payload);          break;
           case "code_result":     h.onCodeResult?.(msg.payload);   break;
+          case "hint":             h.onHint?.(msg.payload);        break;
           case "error":           h.onError?.(msg.payload);        break;
           default:                h.onRaw?.(msg);
 

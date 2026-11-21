@@ -38,6 +38,16 @@ VERBAL_PARTIAL_FLOOR = 0.40
 
 
 def _as_dict(value: Any) -> Dict[str, Any]:
+    """Coerce a value to a dict, parsing it as JSON first if it's a string.
+
+    Args:
+        value (Any): A dict, a JSON-encoded string, or anything else.
+
+    Returns:
+        Dict[str, Any]: `value` itself if already a dict, the parsed object
+            if `value` is a JSON string encoding a dict, or `{}` otherwise
+            (including parse failures and non-dict JSON values).
+    """
     if isinstance(value, dict):
         return value
     if isinstance(value, str) and value.strip():
@@ -50,6 +60,15 @@ def _as_dict(value: Any) -> Dict[str, Any]:
 
 
 def _score(value: Any) -> Optional[float]:
+    """Coerce a value to a finite float, or None if that's not possible.
+
+    Args:
+        value (Any): Value to convert.
+
+    Returns:
+        Optional[float]: The finite float value, or None if `value` isn't
+            numeric or is NaN/infinite.
+    """
     try:
         s = float(value)
     except (TypeError, ValueError):
@@ -58,7 +77,23 @@ def _score(value: Any) -> Optional[float]:
 
 
 def classify_attempt(attempt: Dict[str, Any]) -> str:
-    """Return 'correct', 'partial' or 'incorrect' from the attempt's authoritative evaluation fields."""
+    """Classify one attempt as correct, partial, or incorrect using authoritative evaluation fields.
+
+    For code attempts, an explicit sandbox verdict in `feedback_json`
+    (`status`/`passed`) is authoritative and fails closed — any verdict
+    other than "accepted" is at best partial (only if at least one test
+    passed), never correct; the validated score is consulted only when no
+    sandbox verdict was recorded at all. For verbal attempts (or code
+    attempts with no verdict), classification follows the evaluator's own
+    grade boundaries on `validated_score`.
+
+    Args:
+        attempt (Dict[str, Any]): One attempt record, with `answer_type`,
+            `feedback_json` (dict or JSON string), and `validated_score`.
+
+    Returns:
+        str: One of `CORRECT`, `PARTIAL`, `INCORRECT`.
+    """
     fb = _as_dict(attempt.get("feedback_json"))
     if str(attempt.get("answer_type", "verbal")).lower() == "code":
         status = str(fb.get("status", "")).strip().lower()
@@ -84,10 +119,31 @@ def classify_attempt(attempt: Dict[str, Any]) -> str:
 
 
 def is_eligible(attempt: Dict[str, Any]) -> bool:
+    """Check whether an attempt is eligible to be the authoritative best answer.
+
+    Args:
+        attempt (Dict[str, Any]): One attempt record (see
+            `classify_attempt`).
+
+    Returns:
+        bool: True if `classify_attempt(attempt)` is `CORRECT` or
+            `PARTIAL`.
+    """
     return classify_attempt(attempt) in ELIGIBLE_LABELS
 
 
 def _missing_count(attempt: Dict[str, Any]) -> int:
+    """Count the missing concepts recorded for an attempt.
+
+    Args:
+        attempt (Dict[str, Any]): One attempt record; its
+            `missing_concepts` field may be a list or a JSON-encoded list
+            string.
+
+    Returns:
+        int: Number of missing concepts, or 0 if the field is absent,
+            unparseable, or not a list/tuple.
+    """
     m = attempt.get("missing_concepts")
     if isinstance(m, str):
         try:
@@ -98,13 +154,33 @@ def _missing_count(attempt: Dict[str, Any]) -> int:
 
 
 def ranking_key(attempt: Dict[str, Any]):
-    """Pre-existing deterministic ranking (unchanged): score, fewest missing concepts, most recent attempt."""
+    """Build a sort key for ranking attempts: highest score, fewest missing concepts, most recent.
+
+    Args:
+        attempt (Dict[str, Any]): One attempt record.
+
+    Returns:
+        tuple: `(validated_score, -missing_concept_count, attempt_number)`,
+            suitable for `max()`/`sorted()` (higher score wins first, then
+            fewer missing concepts, then the later attempt).
+    """
     return (float(_score(attempt.get("validated_score")) or 0.0), -_missing_count(attempt),
             int(attempt.get("attempt_number", 0)))
 
 
 def select_best(attempts: Iterable[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    """The authoritative best attempt, or None when no attempt is eligible. Follow-up attempts are excluded."""
+    """Select the authoritative best primary attempt among a question's attempts.
+
+    Args:
+        attempts (Iterable[Dict[str, Any]]): All attempts for a question;
+            follow-up attempts (`attempt_type != "primary"`) are excluded
+            before ranking.
+
+    Returns:
+        Optional[Dict[str, Any]]: The eligible primary attempt with the
+            highest `ranking_key`, or None if no primary attempt is
+            eligible (see `is_eligible`).
+    """
     pool = [a for a in attempts
             if str(a.get("attempt_type", "primary")).lower() == "primary" and is_eligible(a)]
     return max(pool, key=ranking_key) if pool else None

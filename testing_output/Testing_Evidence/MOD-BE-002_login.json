@@ -1,0 +1,24 @@
+{
+  "request": {
+    "name": "QA Harness Candidate",
+    "email": "qa_harness_804e9062@example.com",
+    "college": "Test College",
+    "year": "4",
+    "roll": "QA001",
+    "primary_lang": "C"
+  },
+  "status_code": 200,
+  "body": {
+    "id": "5fe5c64f-c065-4e84-8886-3b7eb0e3e1e6",
+    "email": "qa_harness_804e9062@example.com",
+    "name": "QA Harness Candidate",
+    "college": "Test College",
+    "year": "4",
+    "roll": "QA001",
+    "primary_lang": "C",
+    "experience": "intermediate",
+    "is_admin": 0,
+    "created_at": "2026-11-13T04:04:14.519245+00:00",
+    "last_login_at": "2026-11-13T04:04:14.519245+00:00"
+  }
+}

@@ -3,6 +3,7 @@ import { SessionContext } from "./contexts";
 import Topbar from "./Topbar";
 import ScoreRing from "./ScoreRing";
 import { api } from "./api";
+import { LineChart, formatDate } from "./ui";
 import "./AdminDashboard.css";
 
 const FILTERS = ["all", "today", "this_week", "this_month"];
@@ -26,6 +27,9 @@ export default function AdminDashboard({ navigate }) {
   const [detailLoading, setDetailLoading] = useState(false);
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 10;
+  const [candidateDrill, setCandidateDrill] = useState(null);
+  const [candidateDrillLoading, setCandidateDrillLoading] = useState(false);
+  const [candidateDrillError, setCandidateDrillError] = useState("");
 
   const fetchDashboardData = () => {
     setLoading(true);
@@ -55,6 +59,22 @@ export default function AdminDashboard({ navigate }) {
       setSelectedSession(sess);
     } finally {
       setDetailLoading(false);
+    }
+  };
+
+  const openCandidate = async (sess) => {
+    const key = sess.candidate_id || sess.candidate_email;
+    if (!key) return;
+    setCandidateDrill({ candidate_name: sess.candidate_name, candidate_email: sess.candidate_email });
+    setCandidateDrillLoading(true);
+    setCandidateDrillError("");
+    try {
+      const data = await api.getCandidateSessions(key);
+      setCandidateDrill(data);
+    } catch (err) {
+      setCandidateDrillError(err.message || "Could not load this candidate's sessions.");
+    } finally {
+      setCandidateDrillLoading(false);
     }
   };
 
@@ -165,7 +185,7 @@ export default function AdminDashboard({ navigate }) {
               <p>No sessions found.</p>
             </div>
           ) : paginated.map((sess) => (
-            <SessionRow key={sess.id} sess={sess} onClick={() => openDetail(sess)} />
+            <SessionRow key={sess.id} sess={sess} onClick={() => openDetail(sess)} onCandidateClick={() => openCandidate(sess)} />
           ))}
         </div>
 
@@ -189,6 +209,17 @@ export default function AdminDashboard({ navigate }) {
           session={selectedSession}
           loading={detailLoading}
           onClose={() => setSelectedSession(null)}
+        />
+      )}
+
+      {/* Candidate drill-down drawer */}
+      {candidateDrill && (
+        <CandidateDrawer
+          data={candidateDrill}
+          loading={candidateDrillLoading}
+          error={candidateDrillError}
+          onClose={() => setCandidateDrill(null)}
+          onOpenSession={(sess) => { setCandidateDrill(null); openDetail(sess); }}
         />
       )}
     </div>
@@ -217,7 +248,7 @@ function StatsStrip({ stats }) {
   );
 }
 
-function SessionRow({ sess, onClick }) {
+function SessionRow({ sess, onClick, onCandidateClick }) {
   const scorePct = Math.round((sess.overall_score || 0) * 100);
   const scoreColor = scorePct >= 70 ? "var(--success)" : scorePct >= 40 ? "var(--warn)" : "var(--danger)";
   const statusColor = {
@@ -227,7 +258,12 @@ function SessionRow({ sess, onClick }) {
   return (
     <div className="table-row" onClick={onClick}>
       <div className="td">
-        <div className="candidate-cell">
+        <div
+          className="candidate-cell"
+          onClick={(e) => { e.stopPropagation(); onCandidateClick?.(); }}
+          title="View all sessions for this candidate"
+          style={{ cursor: onCandidateClick ? "pointer" : undefined }}
+        >
           <div className="avatar">
             {(sess.candidate_name?.[0] || "?").toUpperCase()}
           </div>
@@ -460,6 +496,95 @@ function SessionDrawer({ session, loading, onClose }) {
                 </div>
               </div>
             )}
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+/** Aggregate, candidate-level view: all of one candidate's sessions plus a score trend,
+ * reached by clicking their name/email in the flat session table (Feature: Admin
+ * per-candidate drill-down). Reuses the same ScoreRing component as SessionDrawer for
+ * visual consistency, and the shared ui.jsx LineChart for the trend. */
+function CandidateDrawer({ data, loading, error, onClose, onOpenSession }) {
+  const sessions = data?.sessions || [];
+  const avgPct = data?.avg_score != null ? Math.round(data.avg_score * 100) : null;
+
+  // Oldest-first for a left-to-right trend; the API returns newest-first.
+  const trendPoints = [...sessions].reverse()
+    .filter((s) => s.overall_score !== null && s.overall_score !== undefined)
+    .map((s) => ({
+      label: formatDate(s.created_at, { month: "short", day: "numeric" }),
+      value: s.overall_score,
+      detail: `${Math.round((s.overall_score || 0) * 100)}%`,
+    }));
+
+  return (
+    <>
+      <div className="drawer-backdrop" onClick={onClose} />
+      <div className="drawer">
+        <div className="drawer-header">
+          <div>
+            <h3 style={{ fontFamily: "Syne", fontWeight: 700 }}>{data?.candidate_name || "Candidate"}</h3>
+            <div style={{ fontSize: 11, color: "var(--text-3)", marginTop: 3 }}>{data?.candidate_email}</div>
+          </div>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={onClose}>✕</button>
+        </div>
+
+        {loading ? (
+          <div style={{ padding: 24 }}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="skeleton" style={{ height: 24, marginBottom: 12, borderRadius: 6 }} />
+            ))}
+          </div>
+        ) : error ? (
+          <div style={{ padding: 24, color: "var(--danger)", fontSize: 13 }}>{error}</div>
+        ) : (
+          <div className="drawer-body">
+            <div className="drawer-scores">
+              <ScoreRing score={avgPct ?? 0} size={100} label="Avg score"
+                color={avgPct >= 70 ? "var(--success)" : avgPct >= 40 ? "var(--warn)" : "var(--danger)"} />
+            </div>
+
+            <div className="drawer-section">
+              <div className="drawer-section-title">Overview</div>
+              <div className="drawer-kv"><span>Total sessions</span><span>{data?.total_sessions ?? sessions.length}</span></div>
+              <div className="drawer-kv"><span>Average score</span><span>{avgPct != null ? `${avgPct}%` : "—"}</span></div>
+            </div>
+
+            {trendPoints.length >= 2 && (
+              <div className="drawer-section">
+                <div className="drawer-section-title">Score trend</div>
+                <LineChart ariaLabel={`Score trend for ${data?.candidate_name || "candidate"}`} points={trendPoints} height={140} />
+              </div>
+            )}
+
+            <div className="drawer-section">
+              <div className="drawer-section-title">All sessions ({sessions.length})</div>
+              <div className="drawer-questions">
+                {sessions.map((s) => {
+                  const sPct = s.overall_score != null ? Math.round(s.overall_score * 100) : null;
+                  const sColor = sPct == null ? "var(--text-3)" : sPct >= 70 ? "var(--success)" : sPct >= 40 ? "var(--warn)" : "var(--danger)";
+                  return (
+                    <button
+                      type="button"
+                      key={s.id}
+                      className="drawer-question"
+                      style={{ width: "100%", textAlign: "left", cursor: "pointer", font: "inherit", display: "block" }}
+                      onClick={() => onOpenSession(s)}
+                    >
+                      <div className="drawer-question-summary">
+                        <span className="dq-title">
+                          {formatDate(s.created_at, { month: "short", day: "numeric", year: "numeric" })} · {(s.topics || []).slice(0, 2).map((t) => t.replace(/_/g, " ")).join(", ") || "Mixed topics"}
+                        </span>
+                        <span className="dq-score" style={{ color: sColor }}>{sPct != null ? `${sPct}%` : "—"}</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         )}
       </div>

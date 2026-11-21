@@ -8,11 +8,12 @@ import InterviewRoom from "./InterviewRoom";
 import Report from "./Report";
 import AdminDashboard from "./AdminDashboard";
 import Demo from "./Demo";
+import Bookmarks from "./Bookmarks";
 import { ThemeContext, SessionContext } from "./contexts";
 import "./App.css";
 
 const CANDIDATE_KEY = "prepaired.candidate";
-const PAGES = ["login", "demo", "dashboard", "weakness", "analytics", "topics", "interview", "report", "admin"];
+const PAGES = ["login", "demo", "dashboard", "weakness", "analytics", "topics", "interview", "report", "admin", "bookmarks"];
 
 function loadTheme() {
   try {
@@ -65,7 +66,7 @@ export default function App() {
   }, [setCandidate]);
 
   const navigate = (p) => {
-    if (!candidate && ["dashboard", "weakness", "analytics"].includes(p)) {
+    if (!candidate && ["dashboard", "weakness", "analytics", "bookmarks"].includes(p)) {
       setPage("login");
       return;
     }
@@ -83,6 +84,7 @@ export default function App() {
           {current === "demo" && <Demo navigate={navigate} />}
           {current === "dashboard" && <Dashboard navigate={navigate} />}
           {current === "weakness" && <WeaknessMap navigate={navigate} />}
+          {current === "bookmarks" && <Bookmarks navigate={navigate} />}
           {current === "analytics" && <Analytics navigate={navigate} />}
           {current === "topics" && <TopicSelector navigate={navigate} />}
           {current === "interview" && <InterviewRoom navigate={navigate} />}

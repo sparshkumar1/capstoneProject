@@ -23,6 +23,34 @@ def aggregate_scores(
     theory_weights: dict | None = None,
     coding_weights: dict | None = None,
 ) -> dict:
+    """Combine semantic, conceptual, and (optionally) coding sub-scores into one raw score.
+
+    Clamps each input sub-score to [0, 1], then applies a fixed weighted sum
+    — the coding weight set if `is_coding` is True, otherwise the theory
+    weight set — to produce a single raw score.
+
+    Args:
+        semantic_score (float): Semantic-similarity sub-score, any range
+            (clamped to [0, 1] internally).
+        conceptual_score (float): Concept-coverage sub-score, any range
+            (clamped to [0, 1] internally).
+        coding_score (float | None): Code-execution sub-score, or None if
+            not applicable; treated as 0.0 when `is_coding` is True and this
+            is None.
+        is_coding (bool): Whether this turn is a coding question (selects
+            `coding_weights` over `theory_weights`).
+        theory_weights (dict | None): Override for the semantic/conceptual
+            weighting on non-coding turns; defaults to
+            `DEFAULT_THEORY_WEIGHTS`.
+        coding_weights (dict | None): Override for the
+            semantic/conceptual/coding weighting on coding turns; defaults
+            to `DEFAULT_CODING_WEIGHTS`.
+
+    Returns:
+        dict: `raw_score` (float, 0-1), the clamped `semantic_score`,
+            `conceptual_score`, and `coding_score` used, and the
+            `active_weights` dict that was actually applied.
+    """
     tw = theory_weights or DEFAULT_THEORY_WEIGHTS
     cw = coding_weights or DEFAULT_CODING_WEIGHTS
 
@@ -58,6 +86,33 @@ class ScoreValidator:
     coding_failure_multiplier: float = 0.7
 
     def validate(self, raw_score: Any, evidence: Optional[dict] = None, is_coding: bool = False) -> dict:
+        """Apply deterministic post-hoc corrections to a raw evaluator score.
+
+        Runs the raw score through, in order: type/NaN/Inf sanitization, a
+        mandatory-concept cap (if the rubric's mandatory logic wasn't fully
+        covered), a mistake penalty, a coding-execution-failure multiplier
+        (coding turns only), and a final clamp to [0, 1]. Every correction
+        actually applied is recorded in the returned trace, and the turn's
+        evaluation/infrastructure status is determined from `evidence`.
+
+        Args:
+            raw_score (Any): The evaluator's raw score, expected to be
+                numeric but handled defensively if it is None, non-numeric,
+                NaN, or infinite.
+            evidence (dict | None): Supporting evidence dict, e.g.
+                `mandatory_pass`, `mistake_penalty`, `execution_status`,
+                `evaluation_status`, `decision_source`. Treated as empty if
+                not a dict.
+            is_coding (bool): Whether this turn is a coding question, which
+                enables the coding-execution-failure multiplier.
+
+        Returns:
+            dict: `validated_score` (float, 0-1, after all corrections),
+                `raw_score` (float, the sanitized input score before
+                corrections), `evaluation_status` ("success" or a failure
+                reason string), `is_infrastructure_failure` (bool), and
+                `validation_trace` (list of dicts, one per rule that fired).
+        """
         import math
         trace = []
 

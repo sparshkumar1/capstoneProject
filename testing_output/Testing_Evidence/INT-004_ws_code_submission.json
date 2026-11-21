@@ -1,0 +1,71 @@
+{
+  "received": [
+    {
+      "type": "feedback",
+      "payload": {
+        "status": "wrong_answer",
+        "final_score": 0.35,
+        "grade": "F",
+        "score_breakdown": {
+          "functional_correctness": 0.35,
+          "tests_passed": 0,
+          "tests_total": 0
+        },
+        "strong_points": [
+          "Return value handled correctly"
+        ],
+        "incorrect_or_incomplete": [],
+        "missing_concepts": [],
+        "how_to_improve": [
+          "After passing tests, always consider: what happens with empty input? max-size input? negative values?",
+          "Debug strategy: add printf statements at each step, check intermediate values",
+          "Add inline comments explaining WHY each block exists, not just what it does"
+        ],
+        "communication_tips": [
+          "Code is 1 lines \u2014 concise",
+          "No comments detected \u2014 add comments for complex logic and edge case handling"
+        ],
+        "covered_concepts": [],
+        "trend": "improving",
+        "trend_note": "Score improving: 0.00 \u2192 0.35 (+0.35)",
+        "justification": "[Attempt #2] Score change: +0.00. Code grade F (35%). 0/0 tests passed.",
+        "transcript": "",
+        "decision_source": "sandbox_evaluator",
+        "vague_points": [
+          "After passing tests, always consider: what happens with empty input? max-size input? negative values?",
+          "Debug strategy: add printf statements at each step, check intermediate values",
+          "Add inline comments explaining WHY each block exists, not just what it does"
+        ],
+        "attempt_number": 2,
+        "comparison": {
+          "has_previous_best": false,
+          "previous_best_score": null,
+          "previous_best_answer": "",
+          "previous_best_attempt_number": null,
+          "score_delta": 0.0,
+          "resolved_concepts": [],
+          "remaining_concepts": [
+            "Correct test cases"
+          ],
+          "newly_missed_concepts": [],
+          "newly_introduced_errors": [],
+          "has_improvement": false
+        },
+        "validation_trace": [],
+        "tests_passed": 0,
+        "tests_total": 0,
+        "passed": false,
+        "pass_rate": 0.0,
+        "raw_evaluator_score": 0.35,
+        "timing_modifier": 0.0,
+        "timing_score": 0.85,
+        "time_ratio": 1.0,
+        "time_taken_sec": 0.0,
+        "allowed_time_sec": 180.0,
+        "is_best": false,
+        "authoritative_best_answer": false,
+        "best_answer": null
+      }
+    }
+  ]
+}

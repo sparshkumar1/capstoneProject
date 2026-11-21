@@ -1,0 +1,48 @@
+{
+  "status_code": 200,
+  "body": {
+    "sessions": [
+      {
+        "id": "f892af6f-13bc-4022-8bee-d1aad241594d",
+        "candidate_name": "QA Harness Candidate",
+        "candidate_email": "qa_harness_804e9062@example.com",
+        "college": "Test College",
+        "year": "4",
+        "overall_score": 0.087,
+        "c_score": null,
+        "dsa_score": null,
+        "topics": [
+          "pointers"
+        ],
+        "final_difficulty": 2,
+        "duration_minutes": 10,
+        "total_questions": 15,
+        "status": "completed",
+        "created_at": "2026-11-13T04:04:21.089851+00:00",
+        "strengths": [],
+        "missing_concepts": [],
+        "behaviour": null
+      },
+      {
+        "id": "5f65fb02-b4e3-448a-aad2-42aed7d2e735",
+        "candidate_name": null,
+        "candidate_email": null,
+        "college": null,
+        "year": null,
+        "overall_score": null,
+        "c_score": null,
+        "dsa_score": null,
+        "topics": [],
+        "final_difficulty": 2,
+        "duration_minutes": 30,
+        "total_questions": 15,
+        "status": "created",
+        "created_at": "2026-11-13T04:04:18.998133+00:00",
+        "strengths": [],
+        "missing_concepts": [],
+        "behaviour": null
+      }
+    ],
+    "total": 2
+  }
+}

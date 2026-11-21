@@ -1,0 +1,105 @@
+{
+  "received": [
+    {
+      "type": "question",
+      "payload": {
+        "id": "18",
+        "text": "Explain the logic to find the middle node of a linked list in a single pass.",
+        "type": "verbal",
+        "difficulty": 2,
+        "difficulty_float": 0.5,
+        "topic": "linkedlists",
+        "category": "dsa",
+        "time_limit_sec": 75,
+        "bloom_level": "L3",
+        "expected_concepts": [
+          "slow pointer (one step)",
+          "fast pointer (two steps)",
+          "initialize both at head",
+          "slow at middle when fast at end",
+          "Fast pointer reaches end when slow reaches middle",
+          "No need to count nodes first",
+          "termination: while(fast && fast->next) gives second middle for even-length lists",
+          "invariant: when fast moves 2k steps total, slow has moved k \u2014 so slow is always at the midpoint of fast's coverage"
+        ],
+        "mandatory_concepts": [
+          "slow pointer (one step)",
+          "fast pointer (two steps)"
+        ],
+        "common_mistakes": [
+          "Using extra memory like arrays",
+          "Incorrect handling of even-length lists",
+          "counts nodes first then traverses to n/2 \u2014 two passes instead of one",
+          "wrong termination condition for even-length lists \u2014 returns wrong middle",
+          "fast starts at head->next giving different middle for even-length lists"
+        ],
+        "reference_answer": "The middle node of a linked list is found using two pointers: a slow pointer moving one step at a time and a fast pointer moving two steps at a time. When fast reaches the end, slow is at the middle.",
+        "possible_followups": [
+          "when fast reaches last node, slow is at middle (for odd length)",
+          "when fast becomes null, slow is at second middle (for even length)",
+          "choice of termination condition determines which middle for even-length lists",
+          "O(n) time single pass \u2014 avoids counting nodes then traversing again",
+          "O(1) space \u2014 no array or extra storage",
+          "used as subroutine in merge sort for linked lists"
+        ],
+        "rubric": {
+          "qid": "18",
+          "topic": "LinkedLists",
+          "type": "logic_approach",
+          "logic_context": "The middle node of a linked list is found using two pointers: a slow pointer moving one step at a time and a fast pointer moving two steps at a time. When fast reaches the end, slow is at the middle.",
+          "logic_markers": {
+            "mandatory": [
+              "slow pointer (one step)",
+              "fast pointer (two steps)"
+            ],
+            "concept_groups": [
+              [
+                "initialize both at head",
+                "move until fast reaches end"
+              ],
+              [
+                "slow at middle when fast at end",
+                "single traversal"
+              ]
+            ],
+            "advanced_bonus": [
+              "when fast reaches last node, slow is at middle (for odd length)",
+              "when fast becomes null, slow is at second middle (for even length)",
+              "choice of termination condition determines which middle for even-length lists",
+              "O(n) time single pass \u2014 avoids counting nodes then traversing again",
+              "O(1) space \u2014 no array or extra storage",
+              "used as subroutine in merge sort for linked lists"
+            ]
+          },
+          "semantic_targets": [
+            "Fast pointer reaches end when slow reaches middle",
+            "No need to count nodes first",
+            "termination: while(fast && fast->next) gives second middle for even-length lists",
+            "invariant: when fast moves 2k steps total, slow has moved k \u2014 so slow is always at the midpoint of fast's coverage"
+          ],
+          "common_mistakes": [
+            "Using extra memory like arrays",
+            "Incorrect handling of even-length lists",
+            "counts nodes first then traverses to n/2 \u2014 two passes instead of one",
+            "wrong termination condition for even-length lists \u2014 returns wrong middle",
+            "fast starts at head->next giving different middle for even-length lists"
+          ],
+          "evaluation_rubric": {
+            "focus": "Two-pointer efficiency"
+          },
+          "scoring_policy": {
+            "mandatory_required_for_full_score": true,
+            "mandatory_cap": 0.65
+          }
+        },
+        "constraints": "",
+        "code_template": "",
+        "turn_index": 4,
+        "total_questions": 15,
+        "is_followup": false,
+        "primary_question_index": 2,
+        "parent_question_index": null
+      }
+    }
+  ]
+}

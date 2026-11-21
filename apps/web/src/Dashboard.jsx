@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { SessionContext } from "./contexts";
 import Shell from "./Shell";
 import { api } from "./api";
@@ -78,9 +78,8 @@ function TopicBars({ items, empty }) {
   );
 }
 
-function PrepPlan({ candidateId, topics }) {
-  const [plan, setPlan] = useState(() => readJSON(PLAN_KEY(candidateId), { date: "", minutes: 30 }));
-  const update = (patch) => { const next = { ...plan, ...patch }; setPlan(next); writeJSON(PLAN_KEY(candidateId), next); };
+function PrepPlan({ plan, onChange, topics }) {
+  const update = (patch) => onChange({ ...plan, ...patch });
 
   const daysLeft = plan.date ? Math.ceil((new Date(plan.date + "T23:59:59") - new Date()) / 86400000) : null;
   const focus = topics.filter((t) => t.band !== "strong").sort((a, b) => (a.avg_score ?? 1) - (b.avg_score ?? 1));
@@ -140,8 +139,34 @@ export default function Dashboard({ navigate }) {
   const [busy, setBusy] = useState("");
   const [actionError, setActionError] = useState("");
   const [goal, setGoal] = useState(() => readJSON(GOAL_KEY(cid), 3));
+  const [plan, setPlan] = useState(() => readJSON(PLAN_KEY(cid), { date: "", minutes: 30 }));
 
-  const setGoalValue = (n) => { const v = Math.max(1, Math.min(14, n)); setGoal(v); writeJSON(GOAL_KEY(cid), v); };
+  // Server-synced goal/plan (Feature 5): the API is the source of truth once it answers;
+  // localStorage (seeded above for instant render) remains the offline fallback/cache if the
+  // API call fails, and is kept in sync on every change so a later offline load still works.
+  useEffect(() => {
+    if (!cid) return;
+    api.getStudyGoal(cid).then((g) => {
+      if (!g) return;
+      if (g.target_date || g.minutes_per_day) {
+        setPlan((p) => ({ date: g.target_date || p.date, minutes: g.minutes_per_day || p.minutes }));
+      }
+      if (g.plan?.weeklyGoal) setGoal(g.plan.weeklyGoal);
+    }).catch(() => { /* offline fallback already seeded from localStorage */ });
+  }, [cid]);
+
+  const persistGoalPlan = (nextGoal, nextPlan) => {
+    writeJSON(GOAL_KEY(cid), nextGoal);
+    writeJSON(PLAN_KEY(cid), nextPlan);
+    api.saveStudyGoal(cid, {
+      target_date: nextPlan.date || "",
+      minutes_per_day: nextPlan.minutes || 30,
+      plan: { weeklyGoal: nextGoal },
+    }).catch(() => { /* localStorage above already has it; sync retried on next change/load */ });
+  };
+
+  const setGoalValue = (n) => { const v = Math.max(1, Math.min(14, n)); setGoal(v); persistGoalPlan(v, plan); };
+  const updatePlan = (nextPlan) => { setPlan(nextPlan); persistGoalPlan(goal, nextPlan); };
 
   const launch = async (label, fn) => {
     setBusy(label); setActionError("");
@@ -346,7 +371,7 @@ export default function Dashboard({ navigate }) {
               )}
             </section>
 
-            <PrepPlan candidateId={cid} topics={data.topics} />
+            <PrepPlan plan={plan} onChange={updatePlan} topics={data.topics} />
           </div>
 
           {!hasHistory && (

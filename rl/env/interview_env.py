@@ -97,6 +97,62 @@ class InterviewEnv(gym.Env):
         oscillation_penalty=-0.10,
         followup_overuse_limit=2,
     ):
+        """Construct the Gymnasium interview environment and its reward configuration.
+
+        Args:
+            simulated_candidate: A `SimulatedCandidate` instance to drive
+                answers; a default one is created if None.
+            max_steps (int): Questions per episode (default 15).
+            strict_logging (bool): If True, raise on a CSV logging failure
+                instead of just warning (default False).
+            initial_difficulty (float | None): Fixed starting difficulty for
+                evaluation runs; if None, `reset()` samples uniformly from
+                [0.3, 0.7].
+            reward_mode (str): One of "oracle", "outcome", "hybrid"
+                (default "hybrid") — which reward formulation `step()` uses.
+            log_file (str): CSV path for per-step training logs.
+            oracle_scale (float): Scale factor for the oracle-only reward
+                mode.
+            hybrid_decision_weight, hybrid_outcome_weight,
+                hybrid_shaping_weight (float): Relative weights of the
+                three hybrid-reward components (auto-normalized to sum to
+                1).
+            critical_mismatch_penalty, critical_match_bonus (float): Reward
+                adjustment when the action does/doesn't match the oracle in
+                a "critical" state.
+            outcome_delta_clip, outcome_tanh_gain (float): Clipping and gain
+                for the outcome (score-improvement) reward component; both
+                must be > 0.
+            repeat_easier_penalty (float): Penalty for choosing Easier twice
+                in a row.
+            conf_weight_low_perf, conf_weight_high_perf,
+                conf_perf_threshold (float): Confidence weighting in the
+                shaping component, switched at the performance threshold.
+            hesitation_weight, time_weight (float): Shaping-component
+                weights for hesitation and normalized response time.
+            delta_transform_gain (float): If > 0, applies a tanh transform
+                to the raw score delta before clipping.
+            persona_bonus_nervous, persona_bonus_lucky,
+                persona_bonus_overconfident, persona_bonus_junior (float):
+                Fixed reward bias per simulated-candidate persona.
+            guardrails_enabled (bool): Whether `_apply_guardrails` can
+                override the proposed action (default True).
+            medium_difficulty_min, medium_difficulty_max (float): Bounds of
+                the "medium difficulty" band used by guardrail G1; must
+                satisfy 0 <= min <= max <= 1.
+            oscillation_penalty (float): Penalty for an Easier<->Harder
+                zigzag between consecutive steps.
+            followup_overuse_limit (int): Unused by the current reward
+                logic; reserved for follow-up-overuse shaping.
+
+        Returns:
+            None.
+
+        Raises:
+            ValueError: If `reward_mode` is invalid, `outcome_delta_clip`
+                or `outcome_tanh_gain` isn't positive, the medium-difficulty
+                bounds are invalid, or the hybrid weights sum to <= 0.
+        """
         super().__init__()
 
         self.max_steps = max_steps
@@ -204,6 +260,13 @@ class InterviewEnv(gym.Env):
           R5: 0.40 < perf < 0.65 and avg_perf < 0.60  -> Same        (partial understanding)
           R6: gap > 0.25                               -> Harder      (strong gap)
           R7: else                                     -> Same        (default)
+
+        Args:
+            obs: 6-element observation
+                `[perf, avg_perf, conf, hes, time_norm, difficulty]`.
+
+        Returns:
+            int: Oracle action index (0=Easier, 1=Same, 2=Harder).
         """
         perf, avg_perf, conf, hes, time_norm, difficulty = [float(x) for x in obs]
         gap = perf - difficulty
@@ -227,6 +290,24 @@ class InterviewEnv(gym.Env):
     # ─────────────────────────────────────────────────────────────────
 
     def _apply_guardrails(self, pre_obs, proposed_action):
+        """Apply the post-inference guardrail rules to a proposed action.
+
+        Delegates to the canonical `rl.guardrails.apply_canonical_guardrails`
+        when importable; otherwise falls back to a dormant inline copy of
+        the same rules (kept in sync so a broken import can't silently
+        reintroduce an already-fixed safety gap). A no-op if
+        `self.guardrails_enabled` is False.
+
+        Args:
+            pre_obs: 6-element observation from before this step,
+                `[perf, avg_perf, conf, hes, progress, difficulty]`.
+            proposed_action (int): The action the policy (or oracle)
+                proposed, before guardrail review.
+
+        Returns:
+            tuple[int, bool, str]: `(final_action, was_overridden,
+                guardrail_id)`.
+        """
         if not self.guardrails_enabled:
             return int(proposed_action), False, "none"
 
@@ -260,7 +341,18 @@ class InterviewEnv(gym.Env):
             return 1, True, "g2_anxiety_stabilizer_same"
 
         # G5: Partial understanding — stay at Same
-        if (0.40 < perf < 0.65 and avg_perf < 0.60):
+        # Boundary widened 2026-11-13 to perf>=0.30 to match the fix already applied in
+        # rl/guardrails.py (2026-11-12, see testing_and_evaluation/Phase4_Diagnosis_and_Fixes.md):
+        # perf in [0.30, 0.40) was previously unguarded by this inline fallback (it falls through
+        # to `return action, False, "none"` below, i.e. no safety override), reproducing the exact
+        # gap rl/guardrails.py already closed. This path only executes if the normal
+        # `from rl.guardrails import apply_canonical_guardrails` import fails (see the branch
+        # above) -- it is a dormant duplicate, kept in sync so a broken import cannot silently
+        # reintroduce an already-fixed safety gap. Guardrail logic only; the separate, protected
+        # reward-function oracle (`oracle_action_from_obs`, R5) and the reward's own
+        # `critical_state` detection intentionally keep their original 0.40 boundary and are not
+        # touched by this change.
+        if (0.30 <= perf < 0.65 and avg_perf < 0.60):
             return 1, True, "g5_partial_same"
 
         # G6: Strong candidate with big gap -> always Harder
@@ -273,12 +365,31 @@ class InterviewEnv(gym.Env):
 
     @staticmethod
     def _is_zigzag_transition(prev_action, current_action):
+        """Check whether two consecutive actions form an Easier<->Harder zigzag.
+
+        Args:
+            prev_action (int | None): Previous step's final action index.
+            current_action (int): This step's final action index.
+
+        Returns:
+            bool: True if one action was Easier (0) and the other Harder
+                (2), in either order.
+        """
         return bool(
             (prev_action == 0 and current_action == 2)
             or (prev_action == 2 and current_action == 0)
         )
 
     def _persona_bias_correction(self):
+        """Look up the fixed reward bias configured for the current candidate's persona.
+
+        Args:
+            None.
+
+        Returns:
+            float: The matching `persona_bonus_*` value, or 0.0 for
+                personas without a configured bias (including "normal").
+        """
         persona = getattr(self.sim_candidate, "persona", "normal")
         if persona == "nervous_expert":     return self.persona_bonus_nervous
         if persona == "lucky_guesser":      return self.persona_bonus_lucky
@@ -287,6 +398,17 @@ class InterviewEnv(gym.Env):
         return 0.0
 
     def _normalize_time(self, response_time, difficulty):
+        """Normalize a response time against a difficulty-scaled ideal time.
+
+        Args:
+            response_time (float): Raw response time in seconds.
+            difficulty (float): Question difficulty in [0, 1], used to
+                scale the "ideal" expected time.
+
+        Returns:
+            float: Normalized time in [0, 1] (response_time / (2x ideal
+                time), clamped).
+        """
         ideal_time = 3.0 + 6.0 * difficulty
         return float(np.clip(response_time / (ideal_time * 2.0), 0.0, 1.0))
 
@@ -295,6 +417,19 @@ class InterviewEnv(gym.Env):
     # ─────────────────────────────────────────────────────────────────
 
     def reset(self, *, seed=None, options=None):
+        """Start a new episode (Gymnasium API).
+
+        Args:
+            seed (int | None): Seed for this episode's RNG.
+            options (dict | None): Unused; accepted for Gymnasium API
+                compatibility.
+
+        Returns:
+            tuple[np.ndarray, dict]: `(obs, info)` — the initial 6D
+                observation (zeroed performance/confidence history, at a
+                difficulty from `initial_difficulty` or sampled uniformly
+                from [0.3, 0.7]) and an empty info dict.
+        """
         super().reset(seed=seed)
         self.current_step = 0
         self.scores = []
@@ -311,6 +446,27 @@ class InterviewEnv(gym.Env):
         return obs, {}
 
     def step(self, action):
+        """Advance the episode by one question (Gymnasium API).
+
+        Computes the oracle action for the pre-step state, applies
+        guardrails to the proposed action, simulates the candidate's
+        answer, computes the configured reward (oracle/outcome/hybrid, plus
+        stability/critical-state/persona adjustments), updates difficulty,
+        appends a row to the CSV training log, and builds the next
+        observation.
+
+        Args:
+            action (int): Proposed action index from the policy (0=Easier,
+                1=Same, 2=Harder), before guardrail review.
+
+        Returns:
+            tuple[np.ndarray, float, bool, bool, dict]: `(obs, reward,
+                terminated, truncated, info)` — the next 6D observation,
+                the scalar reward, whether the episode ended
+                (`current_step >= max_steps`), always `truncated=False`,
+                and an `info` dict with the guardrail/oracle/reward-
+                component detail for this step.
+        """
         self.current_step += 1
         pre_action = int(action)
         prev_obs = self.last_obs.copy()

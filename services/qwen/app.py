@@ -52,7 +52,20 @@ GGUF_MODEL_PATH = ROOT_DIR / "models" / "gguf" / "qwen2.5-1.5b-instruct-q4_k_m.g
 
 
 def _ensure_ml_imports():
-    """Import heavy ML dependencies lazily to avoid blocking startup."""
+    """Import heavy ML dependencies lazily to avoid blocking startup.
+
+    Tries `llama_cpp.Llama` (GGUF/CPU inference) and PyTorch/Transformers
+    independently; either or both may fail without raising (checked later
+    via the module-level globals being None or not).
+
+    Args:
+        None.
+
+    Returns:
+        None: Sets the module-level `torch`, `AutoModelForCausalLM`,
+            `AutoTokenizer`, `BitsAndBytesConfig`, `TextIteratorStreamer`,
+            `Llama` globals.
+    """
     global torch, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TextIteratorStreamer, Llama
     with _ML_IMPORT_LOCK:
         # 1. Import llama_cpp for CPU GGUF inference if not yet imported
@@ -95,6 +108,14 @@ class ModelRegistry:
     _instance: Optional["ModelRegistry"] = None
 
     def __init__(self):
+        """Initialize empty model/tokenizer/loading-state registries.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
         self.models: dict = {}
         self.model_types: dict[str, str] = {}  # "gguf" or "transformers"
         self.tokenizers: dict = {}
@@ -103,12 +124,33 @@ class ModelRegistry:
 
     @classmethod
     def get(cls) -> "ModelRegistry":
+        """Get the process-wide singleton registry, creating it on first call.
+
+        Args:
+            None.
+
+        Returns:
+            ModelRegistry: The singleton instance.
+        """
         if cls._instance is None:
             cls._instance = ModelRegistry()
         return cls._instance
 
     def load_gguf_model(self, key: str, gguf_path: str | Path):
-        """Load a quantized GGUF model using llama.cpp for ultra-fast CPU inference."""
+        """Load a quantized GGUF model using llama.cpp for fast CPU inference.
+
+        Args:
+            key (str): Registry key to store the loaded model under.
+            gguf_path (str | Path): Path to the `.gguf` model file.
+
+        Returns:
+            None: Registers the model under `self.models[key]` with
+                `self.model_types[key] = "gguf"`.
+
+        Raises:
+            RuntimeError: If `llama_cpp` is not installed.
+            FileNotFoundError: If `gguf_path` does not exist.
+        """
         _ensure_ml_imports()
         if Llama is None:
             raise RuntimeError("llama_cpp library not installed.")
@@ -133,7 +175,24 @@ class ModelRegistry:
 
 
     def load_model(self, key: str, model_id: str, use_4bit: bool = True):
-        """Load a Transformers PyTorch model."""
+        """Load a Hugging Face Transformers PyTorch model (GPU 4-bit if available).
+
+        No-op if `key` is already loaded.
+
+        Args:
+            key (str): Registry key to store the loaded model under.
+            model_id (str): Hugging Face model ID to load.
+            use_4bit (bool): Whether to use 4-bit quantization when a CUDA
+                GPU is available (default True).
+
+        Returns:
+            None: Registers the model and tokenizer under `self.models[key]`
+                / `self.tokenizers[key]`, with
+                `self.model_types[key] = "transformers"`.
+
+        Raises:
+            RuntimeError: If PyTorch/Transformers aren't available.
+        """
         if key in self.models:
             return
 
@@ -178,7 +237,23 @@ class ModelRegistry:
         print(f"[QwenService] Transformers {key} ready in {elapsed:.1f}s", flush=True)
 
     def generate_full(self, key: str, prompt: str, max_new_tokens: int = 256) -> str:
-        """Execute full-text generation for structured JSON responses."""
+        """Run one blocking text-generation call against a loaded model.
+
+        Dispatches to llama.cpp (wrapping the prompt in ChatML if not
+        already formatted) or Transformers greedy decoding, depending on
+        how `key` was loaded. Blocking — callers run it in an executor.
+
+        Args:
+            key (str): Registry key of a previously loaded model.
+            prompt (str): Prompt text (plain or ChatML-formatted).
+            max_new_tokens (int): Maximum tokens to generate (default 256).
+
+        Returns:
+            str: The generated text (stripped), excluding the prompt.
+
+        Raises:
+            KeyError: If `key` is not loaded.
+        """
         if key not in self.models:
             raise KeyError(f"Model {key} not loaded.")
 
@@ -240,6 +315,19 @@ WARMUP_TASK: Optional[asyncio.Task] = None
 
 
 async def _warm_models_background():
+    """Load the best available model in the background during service startup.
+
+    Prefers the local GGUF model (CPU, fast); falls back to a GPU
+    Transformers model only if `ENABLE_GPU_RESEARCH_MODELS` is set; sets
+    `MOCK_MODE = True` if nothing loads, so endpoints fall back to the
+    deterministic structured responses.
+
+    Args:
+        None.
+
+    Returns:
+        None.
+    """
     global MOCK_MODE
     registry = ModelRegistry.get()
     loop = asyncio.get_running_loop()
@@ -299,6 +387,15 @@ async def _warm_models_background():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """FastAPI lifespan: kick off background model warmup, clean up on shutdown.
+
+    Args:
+        app (FastAPI): The FastAPI application instance.
+
+    Returns:
+        None: An async context manager (generator); yields control to the
+            running app between startup and shutdown.
+    """
     global WARMUP_TASK
     print("[QwenService] Service initializing...", flush=True)
     WARMUP_TASK = asyncio.create_task(_warm_models_background())
@@ -414,6 +511,17 @@ class ReportResponse(BaseModel):
 # ── Prompt Builders ───────────────────────────────────────────────────────────
 
 def _build_followup_prompt(req: FollowupRequest) -> str:
+    """Build the ChatML prompt instructing the LLM to generate one grounded follow-up question.
+
+    Args:
+        req (FollowupRequest): Follow-up request with the original
+            question, topic, candidate answer, structured evaluation, and
+            concept/misconception lists.
+
+    Returns:
+        str: ChatML-formatted prompt text asking for a JSON object with
+            `followup`, `reason`, and `target_concepts`.
+    """
     ev = req.structured_evaluation
     score = ev.get("final_score", 0.5)
     grade = ev.get("grade", "Average")
@@ -458,6 +566,20 @@ Return ONLY a JSON object in this exact schema:
 
 
 def _build_feedback_prompt(req: FeedbackRequest) -> str:
+    """Build the ChatML prompt instructing the LLM to generate grounded narrative feedback.
+
+    Includes a re-attempt context block (previous best score/concepts) when
+    `req.attempt_number > 1`.
+
+    Args:
+        req (FeedbackRequest): Feedback request with the question,
+            candidate answer, structured evaluation, and (optionally)
+            prior-attempt comparison fields.
+
+    Returns:
+        str: ChatML-formatted prompt text asking for a JSON object
+            matching the `FeedbackResponse` schema's narrative fields.
+    """
     ev = req.structured_evaluation
     score = ev.get("final_score", 0.5)
     grade = ev.get("grade", "Average")
@@ -519,6 +641,23 @@ Return ONLY a JSON object in this exact schema:
 # ── Structured Fallback Generators (sub-50ms deterministic recovery) ─────────
 
 def _synthesize_structured_followup(req: FollowupRequest) -> FollowupResponse:
+    """Deterministically generate a follow-up question without calling an LLM.
+
+    Picks a template based on, in priority order: a detected misconception,
+    a missing concept, a strong score (probe scaling trade-offs), or a
+    generic weakest-gap probe; then checks the result against previously
+    asked questions/follow-ups and substitutes an alternative if it looks
+    like a near-duplicate.
+
+    Args:
+        req (FollowupRequest): Follow-up request (see
+            `_build_followup_prompt`).
+
+    Returns:
+        FollowupResponse: `followup`, `reason`, `target_concepts`,
+            `decision_source="non_llm_structured_recovery"`,
+            `llm_status="llm_unavailable"`.
+    """
     ev = req.structured_evaluation
     misconceptions = req.misconceptions or req.incorrect_concepts or ev.get("incorrect_claims", [])
     missing = req.missing_concepts or ev.get("missing_concepts", [])
@@ -561,7 +700,44 @@ def _synthesize_structured_followup(req: FollowupRequest) -> FollowupResponse:
     )
 
 
+def _as_str_list(value) -> list[str]:
+    """Defensively coerce an LLM-produced JSON field into a list[str].
+
+    The local GGUF model occasionally emits a plain JSON string for a field
+    the schema defines as an array (e.g. "what_was_correct": "A pointer
+    stores a memory address." instead of ["A pointer stores a memory
+    address."]). A bare `[str(x) for x in value]` over a Python string
+    iterates it character-by-character, silently shredding the sentence into
+    single-letter list items. This wraps a scalar as a one-element list
+    instead of iterating it, and otherwise behaves like the previous
+    list-comprehension call sites it replaces."""
+    if isinstance(value, list):
+        return [str(x) for x in value if x is not None and str(x).strip()]
+    if value is None:
+        return []
+    text = str(value).strip()
+    return [text] if text else []
+
+
 def _validate_feedback_output(data: Optional[dict], req: FeedbackRequest) -> bool:
+    """Reject an LLM-generated feedback payload that is too generic or contradicts the evaluator.
+
+    Checks: `data` is a dict; `narrative_feedback` and `how_to_answer` are
+    long enough and not generic filler ("good job", "keep practicing",
+    etc.); `what_was_correct` doesn't list a concept the evaluator recorded
+    as missing; the narrative doesn't leak raw evaluator score text.
+
+    Args:
+        data (Optional[dict]): Parsed LLM JSON output, or None if parsing
+            failed.
+        req (FeedbackRequest): The originating request, for cross-checking
+            against `structured_evaluation`.
+
+    Returns:
+        bool: True if the output passes all checks and may be used; False
+            if it should be discarded in favor of
+            `_synthesize_structured_feedback`.
+    """
     if not isinstance(data, dict):
         return False
     narrative = str(data.get("narrative_feedback", "")).strip()
@@ -584,8 +760,8 @@ def _validate_feedback_output(data: Optional[dict], req: FeedbackRequest) -> boo
 
     # Check for contradictions against authoritative evaluator structured facts
     ev = req.structured_evaluation if isinstance(req.structured_evaluation, dict) else {}
-    missing = [str(m).lower().strip() for m in ev.get("missing_concepts", []) if m]
-    what_correct = [str(c).lower().strip() for c in data.get("what_was_correct", []) if c]
+    missing = [m.lower() for m in _as_str_list(ev.get("missing_concepts", []))]
+    what_correct = [c.lower() for c in _as_str_list(data.get("what_was_correct", []))]
 
     for m in missing:
         if m in what_correct:
@@ -601,6 +777,22 @@ def _validate_feedback_output(data: Optional[dict], req: FeedbackRequest) -> boo
 
 
 def _synthesize_structured_feedback(req: FeedbackRequest) -> FeedbackResponse:
+    """Deterministically generate the full feedback response without calling an LLM.
+
+    Selects narrative templates by grade band (Excellent/Good/Average/
+    Poor), fills them in with the evaluator's correct/missing/incorrect
+    concept lists, and prepends a re-attempt summary when
+    `req.attempt_number > 1`.
+
+    Args:
+        req (FeedbackRequest): Feedback request (see
+            `_build_feedback_prompt`).
+
+    Returns:
+        FeedbackResponse: Fully populated response with
+            `decision_source="non_llm_structured_recovery"` and
+            `llm_status="llm_unavailable"`.
+    """
     ev = req.structured_evaluation
     score = float(ev.get("final_score", 0.5))
     grade = str(ev.get("grade", "Average"))
@@ -708,6 +900,18 @@ def _synthesize_structured_feedback(req: FeedbackRequest) -> FeedbackResponse:
 # ── JSON Parser Helper ────────────────────────────────────────────────────────
 
 def _extract_json_from_llm(raw: str) -> Optional[dict]:
+    """Extract and parse the first JSON object found in raw LLM output.
+
+    Strips markdown code-fence markers, then greedily matches the first
+    `{...}` span.
+
+    Args:
+        raw (str): Raw text generated by the LLM.
+
+    Returns:
+        Optional[dict]: The parsed JSON object, or None if no JSON object
+            was found or it failed to parse.
+    """
     cleaned = re.sub(r"```(?:json)?", "", raw).strip()
     match = re.search(r"\{.*\}", cleaned, re.DOTALL)
     if not match:
@@ -723,6 +927,17 @@ def _extract_json_from_llm(raw: str) -> Optional[dict]:
 @app.get("/health")
 @app.get("/api/qwen/health")
 async def health():
+    """Report this microservice's model-loading status.
+
+    Args:
+        None.
+
+    Returns:
+        dict: `status`, `service`, `version`, `mock_mode`, `models_loaded`,
+            `model_types`, `models_loading`, `model_errors`, and
+            `primary_demo_engine` (a human-readable description of which
+            engine is active).
+    """
     registry = ModelRegistry.get()
     return {
         "status": "ok",
@@ -755,7 +970,7 @@ async def generate_followup(req: FollowupRequest):
                 return FollowupResponse(
                     followup=str(data["followup"]).strip(),
                     reason=str(data.get("reason", "Targeted probe on candidate gap")).strip(),
-                    target_concepts=[str(c).strip() for c in data.get("target_concepts", [])],
+                    target_concepts=_as_str_list(data.get("target_concepts", [])),
                     decision_source="qwen_1.5b_llm",
                     llm_status="available",
                 )
@@ -798,13 +1013,13 @@ async def generate_feedback(req: FeedbackRequest):
                 source_label = "qwen_7b_llm" if active_key == "qwen_7b" else "qwen_1.5b_llm"
                 return FeedbackResponse(
                     what_candidate_said=str(data.get("what_candidate_said", req.candidate_answer[:120])),
-                    what_was_correct=[str(x) for x in data.get("what_was_correct", [])],
-                    what_was_incorrect=[str(x) for x in data.get("what_was_incorrect", [])],
-                    what_was_incomplete=[str(x) for x in data.get("what_was_incomplete", [])],
-                    missing_concepts=[str(x) for x in data.get("missing_concepts", [])],
+                    what_was_correct=_as_str_list(data.get("what_was_correct", [])),
+                    what_was_incorrect=_as_str_list(data.get("what_was_incorrect", [])),
+                    what_was_incomplete=_as_str_list(data.get("what_was_incomplete", [])),
+                    missing_concepts=_as_str_list(data.get("missing_concepts", [])),
                     how_to_answer=str(data.get("how_to_answer", "")),
                     stronger_answer_guide=str(data.get("stronger_answer_guide", "")),
-                    actionable_improvements=[str(x) for x in data.get("actionable_improvements", [])],
+                    actionable_improvements=_as_str_list(data.get("actionable_improvements", [])),
                     narrative_feedback=str(data.get("narrative_feedback", "")),
                     final_score=float(ev.get("final_score", 0.5)),
                     grade=str(ev.get("grade", "Average")),

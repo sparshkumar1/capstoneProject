@@ -1,8 +1,29 @@
 def _clamp(value, minimum=0.0, maximum=1.0):
+    """Clamp a numeric value to the inclusive range [minimum, maximum].
+
+    Args:
+        value (float): Value to clamp.
+        minimum (float): Lower bound (default 0.0).
+        maximum (float): Upper bound (default 1.0).
+
+    Returns:
+        float: `value` restricted to [minimum, maximum].
+    """
     return max(minimum, min(maximum, value))
 
 
 def _get(dct, key, default=0.0):
+    """Safely read a numeric field from a dict, coercing to float.
+
+    Args:
+        dct (dict): Dict to read from.
+        key (str): Key to look up.
+        default (float): Value to use if the key is missing or the stored
+            value can't be converted to float (default 0.0).
+
+    Returns:
+        float: The field's value as a float, or `default`.
+    """
     try:
         value = dct.get(key, default)
         return float(value)
@@ -11,6 +32,23 @@ def _get(dct, key, default=0.0):
 
 
 def _compute_components(prosodic, transcription, linguistic):
+    """Derive the individual sub-scores that feed the final confidence score.
+
+    Args:
+        prosodic (dict): Prosodic features (`jitter`, `shimmer`, `hnr`,
+            `pitch_stddev`).
+        transcription (dict): Transcription/timing features
+            (`total_speech_time`, `total_pause_time`, `true_speaking_rate`,
+            `pause_count`, `transcription_confidence`).
+        linguistic (dict): Linguistic-confidence output (`linguistic_score`).
+
+    Returns:
+        dict: `voice_quality`, `fluency_score`, `rate_score`,
+            `rhythm_score`, `ling_score`, `asr_confidence`, the voice-quality
+            sub-scores (`jitter_score`, `shimmer_score`, `hnr_score`,
+            `pitch_var_score`), and the raw `pause_ratio` — all floats, most
+            in [0, 1].
+    """
     jitter = _get(prosodic, "jitter")
     shimmer = _get(prosodic, "shimmer")
     hnr = _get(prosodic, "hnr")
@@ -65,6 +103,22 @@ def _compute_components(prosodic, transcription, linguistic):
 
 
 def score(prosodic, transcription, linguistic):
+    """Compute the final blended speech-confidence score.
+
+    Weighted blend of voice quality (28%), linguistic confidence (27%),
+    fluency (22%), speaking rate (13%), and rhythm (10%); the weight on
+    transcript-derived factors is reduced when ASR confidence is low.
+
+    Args:
+        prosodic (dict): Prosodic features, see `_compute_components`.
+        transcription (dict): Transcription/timing features, see
+            `_compute_components`.
+        linguistic (dict): Linguistic-confidence output, see
+            `_compute_components`.
+
+    Returns:
+        float: Final confidence score in [0, 1], rounded to 4 decimals.
+    """
     c = _compute_components(prosodic, transcription, linguistic)
 
     final = (
@@ -83,6 +137,21 @@ def score(prosodic, transcription, linguistic):
 
 
 def score_breakdown(prosodic, transcription, linguistic):
+    """Compute the final confidence score together with every sub-component.
+
+    Args:
+        prosodic (dict): Prosodic features, see `_compute_components`.
+        transcription (dict): Transcription/timing features, see
+            `_compute_components`.
+        linguistic (dict): Linguistic-confidence output, see
+            `_compute_components`.
+
+    Returns:
+        dict: `final_score` (as from `score`) plus the rounded sub-scores
+            `voice_quality`, `fluency_score`, `rate_score`, `rhythm_score`,
+            `ling_score`, `asr_confidence`, `pause_ratio`, `jitter_score`,
+            `shimmer_score`, `hnr_score`, and `pitch_var_score`.
+    """
     c = _compute_components(prosodic, transcription, linguistic)
 
     return {

@@ -1,0 +1,14 @@
+{
+  "counts": {
+    "candidates": 3,
+    "sessions": 27,
+    "question_attempts": 55
+  },
+  "orphan_attempts": 0,
+  "orphan_sessions": 0,
+  "before_counts": {
+    "candidates": 2,
+    "sessions": 26,
+    "question_attempts": 52
+  }
+}

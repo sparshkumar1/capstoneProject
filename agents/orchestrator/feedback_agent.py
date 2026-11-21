@@ -18,6 +18,7 @@ Output contract (all keys always present):
 
 from __future__ import annotations
 import asyncio
+import os
 from typing import Optional
 
 try:
@@ -26,7 +27,7 @@ try:
 except ImportError:
     _HTTPX = False
 
-QWEN_URL = "http://localhost:8001"
+QWEN_URL = os.getenv("QWEN_URL", "http://localhost:8001")
 QWEN_TIMEOUT = 6.0
 
 # Topic-specific misconceptions: (trigger phrase, correction, severity)
@@ -77,6 +78,16 @@ class FeedbackAgent:
     """Async-safe, Qwen-optional rich feedback generator."""
 
     def __init__(self, qwen_url: str = QWEN_URL):
+        """Create a feedback agent targeting a given Qwen microservice.
+
+        Args:
+            qwen_url (str): Base URL of the Qwen feedback microservice
+                (default from `QWEN_URL` env var or
+                "http://localhost:8001").
+
+        Returns:
+            None.
+        """
         self.qwen_url = qwen_url
         self._qwen_ok: Optional[bool] = None  # None = untested
 
@@ -94,7 +105,51 @@ class FeedbackAgent:
         attempt_number: int = 1,
         comparison: Optional[dict] = None,
     ) -> dict:
-        """Build and return rich feedback dict."""
+        """Build the full structured feedback dict for one verbal/theory turn.
+
+        Combines the evaluator's score breakdown and concept details with
+        audio-derived signals (confidence, hesitation, fillers) and session
+        trend, then tries the Qwen feedback microservice for a richer
+        narrative; falls back to a deterministic justification and template
+        tips if Qwen is unreachable or returns nothing usable. Note:
+        `covered_concepts`/`missing_concepts` here come directly from
+        `eval_result`/`raw["concept_details"]`, not from
+        `_strong_points`/`_detect_incorrect` (which are not called by this
+        method).
+
+        Args:
+            transcript (str): Candidate's answer transcript.
+            question (dict): Question record (`topic`, `text`, etc.).
+            eval_result (dict): Evaluator output (`final_score`, `raw`,
+                `covered_concepts`/`missing_concepts`/`incorrect_claims` or
+                their `what_was_*` aliases, `grade`, `decision_source`).
+            audio_result (Optional[dict]): Audio-pipeline output
+                (`confidence_score`, `hesitation`, `linguistic`), if
+                available.
+            session_history (Optional[list]): Prior turn scores, for trend
+                analysis.
+            turn_number (int): 1-based turn index (default 1).
+            is_code (bool): Unused by this method (code turns are handled
+                by `generate_code_feedback`); accepted for call-site
+                compatibility.
+            attempt_number (int): 1-based attempt index within this turn
+                (default 1).
+            comparison (Optional[dict]): Prior-attempt comparison info
+                (`resolved_concepts`, `score_delta`, etc.) when
+                `attempt_number > 1`.
+
+        Returns:
+            dict: The full feedback contract (see module docstring) —
+                `final_score`, `grade`, `score_breakdown`,
+                `strong_points`/`what_was_correct`,
+                `incorrect_or_incomplete`/`what_was_incorrect`,
+                `missing_concepts`/`what_was_incomplete`,
+                `how_to_improve`/`actionable_improvements`,
+                `communication_tips`, `covered_concepts`, `trend`,
+                `trend_note`, `justification`/`narrative_feedback`,
+                `transcript`, `decision_source`, `llm_status`,
+                `vague_points`, `attempt_number`, `comparison`.
+        """
         score = float(eval_result.get("final_score", 0.5))
         raw = eval_result.get("raw") or {}
 
@@ -251,7 +306,42 @@ class FeedbackAgent:
         attempt_number: int = 1,
         comparison: Optional[dict] = None,
     ) -> dict:
-        """Rich feedback for code submissions."""
+        """Build the structured feedback dict for one code-submission turn.
+
+        Derives a rule-based (not LLM-generated) set of strengths, issues,
+        and tips by pattern-matching the submitted code (NULL checks,
+        malloc/free pairing, comments, etc.) and the sandbox's pass/fail
+        output.
+
+        Args:
+            code (str): Candidate's submitted source code.
+            passed (bool): Whether the sandbox judged the submission
+                accepted.
+            tests_passed (int): Number of test cases passed.
+            tests_total (int): Total number of test cases.
+            stdout (str): Captured stdout from the sandbox run.
+            stderr (str): Captured stderr (or compiler output) from the
+                sandbox run.
+            question (dict): Question record (`topic`, etc.).
+            session_history (Optional[list]): Prior turn scores, for trend
+                analysis.
+            turn_number (int): 1-based turn index (default 1).
+            attempt_number (int): 1-based attempt index within this turn
+                (default 1).
+            comparison (Optional[dict]): Prior-attempt comparison info
+                (`score_delta`) when `attempt_number > 1`.
+
+        Returns:
+            dict: `status` (accepted/wrong_answer/compilation_error/
+                sandbox_error), `final_score`, `grade`, `score_breakdown`,
+                `strong_points`, `incorrect_or_incomplete` (list of
+                `{what_was_said, correction, severity}`), `missing_concepts`
+                (always empty here), `how_to_improve`,
+                `communication_tips`, `covered_concepts` (always empty),
+                `trend`, `trend_note`, `justification`, `transcript`
+                (always empty), `decision_source`, `vague_points`,
+                `attempt_number`, `comparison`.
+        """
         score = (tests_passed / max(tests_total, 1)) if tests_total > 0 else (0.85 if passed else 0.35)
         grade = self._grade(score)
         trend, trend_note = self._trend(score, session_history or [], turn_number)
@@ -362,6 +452,15 @@ class FeedbackAgent:
     # ── Private helpers ───────────────────────────────────────────────────
 
     def _grade(self, score: float) -> str:
+        """Map a numeric score to a letter grade.
+
+        Args:
+            score (float): Score in [0, 1].
+
+        Returns:
+            str: "A" (>=0.85), "B" (>=0.70), "C" (>=0.55), "D" (>=0.40), or
+                "F".
+        """
         if score >= 0.85: return "A"
         if score >= 0.70: return "B"
         if score >= 0.55: return "C"
@@ -369,6 +468,24 @@ class FeedbackAgent:
         return "F"
 
     def _strong_points(self, eval_result: dict, transcript: str, s1: float, s2: float, r: float) -> list[str]:
+        """Derive a list of strengths from the evaluator scores and transcript text.
+
+        Note: this method is defined but is dead code — `generate()` does
+        not call it; the live `strong_points`/`what_was_correct` fields
+        come from `eval_result`'s own `covered_concepts` instead.
+
+        Args:
+            eval_result (dict): Evaluator output; its own `strong_points`
+                is used first if rich enough.
+            transcript (str): Candidate's answer transcript.
+            s1 (float): Semantic-similarity sub-score.
+            s2 (float): Concept-coverage sub-score.
+            r (float): Reasoning sub-score.
+
+        Returns:
+            list[str]: Up to 5 strength statements, or a single generic
+                fallback if none apply.
+        """
         # Use evaluator's strong_points if rich enough
         ev_strong = [p for p in (eval_result.get("strong_points") or []) if len(p) > 10]
         if len(ev_strong) >= 2:
@@ -398,6 +515,27 @@ class FeedbackAgent:
         return pts or ["Answer attempted — be more specific about the core concept"]
 
     def _detect_incorrect(self, transcript: str, question: dict, concept_details: list) -> list[dict]:
+        """Flag misconceptions and other issues in a transcript via substring matching.
+
+        Checks the transcript against `_MISCONCEPTIONS`'s topic-keyed
+        trigger phrases, unjustified absolute claims ("always"/"never"
+        without "because"/"since"), and answers under 25 words.
+
+        Note: this method is defined but is dead code — `generate()` does
+        not call it; the live `incorrect_or_incomplete`/`what_was_incorrect`
+        fields come from the evaluator's own `incorrect_claims` instead.
+
+        Args:
+            transcript (str): Candidate's answer transcript.
+            question (dict): Question record; `topic` selects which
+                misconception set to check.
+            concept_details (list): Unused by the current implementation;
+                accepted for call-site compatibility.
+
+        Returns:
+            list[dict]: Issues found, each `{what_was_said, correction,
+                severity}`.
+        """
         text = (transcript or "").lower()
         topic = (question.get("topic") or "").lower()
         issues: list[dict] = []
@@ -436,6 +574,26 @@ class FeedbackAgent:
         return issues
 
     def _improvement_tips(self, transcript: str, question: dict, s1: float, s2: float, r: float, missing: list) -> list[str]:
+        """Generate actionable improvement tips from the score breakdown and transcript.
+
+        Note: this method is defined but is dead code — `generate()` does
+        not call it; the live `how_to_improve`/`actionable_improvements`
+        fields are built from `missing_concepts` directly (or from Qwen).
+
+        Args:
+            transcript (str): Candidate's answer transcript.
+            question (dict): Question record (`topic`, `text`).
+            s1 (float): Semantic-similarity sub-score.
+            s2 (float): Concept-coverage sub-score.
+            r (float): Reasoning sub-score.
+            missing (list): Missing concept labels.
+
+        Returns:
+            list[str]: Improvement tips, always including a general
+                structure tip plus any triggered by low sub-scores, missing
+                complexity/example discussion, or a topic-specific
+                structure tip from `_TOPIC_STRUCTURE_TIPS`.
+        """
         text  = (transcript or "").lower()
         topic = (question.get("topic") or "")
         tips: list[str] = []
@@ -464,6 +622,21 @@ class FeedbackAgent:
         return tips
 
     def _comm_tips(self, word_count: int, filler_count: int, hesitation_rate: float, uncertainty: list, conf: float) -> list[str]:
+        """Generate delivery/communication tips from audio-derived signals.
+
+        Args:
+            word_count (int): Number of words in the answer.
+            filler_count (int): Count of filler words (um/uh/like) detected.
+            hesitation_rate (float): Hesitation score in [0, 1].
+            uncertainty (list): Hedging-phrase strings detected in the
+                transcript.
+            conf (float): Vocal confidence score in [0, 1].
+
+        Returns:
+            list[str]: Tips covering answer length, filler words, hedging
+                language, hesitation, and vocal confidence — always
+                non-empty.
+        """
         tips: list[str] = []
 
         if word_count < 40:
@@ -493,6 +666,21 @@ class FeedbackAgent:
         return tips
 
     def _trend(self, current: float, history: list, turn: int) -> tuple[str, str]:
+        """Classify the candidate's score trend against their recent rolling average.
+
+        Args:
+            current (float): This turn's score.
+            history (list): Prior turn scores; the last 3 (or fewer) are
+                used as the rolling-average baseline.
+            turn (int): 1-based turn index, used only in the "not enough
+                history" message.
+
+        Returns:
+            tuple[str, str]: `(trend, trend_note)` where `trend` is
+                "improving" (delta >= +0.08), "declining" (delta <= -0.08),
+                or "stable", and `trend_note` is a human-readable
+                explanation.
+        """
         if len(history) < 2:
             return "stable", f"Turn {turn} — not enough history yet for trend analysis"
         recent = history[-3:] if len(history) >= 3 else history
@@ -505,6 +693,28 @@ class FeedbackAgent:
         return "stable", f"Score stable around {avg:.2f} (current {current:.2f})"
 
     def _justification(self, score, grade, s1, s2, r, conf, word_count, strong, missing, question) -> str:
+        """Build the deterministic fallback narrative used when Qwen is unreachable.
+
+        Args:
+            score (float): Final weighted score.
+            grade (str): Letter grade.
+            s1 (float): Semantic-similarity sub-score.
+            s2 (float): Concept-coverage sub-score.
+            r (float): Reasoning sub-score.
+            conf (float): Vocal confidence score.
+            word_count (int): Number of words in the answer.
+            strong (list): Covered-concept labels (first one is quoted if
+                present).
+            missing (list): Missing-concept labels (first two are quoted if
+                present).
+            question (dict): Question record; `topic` is used in the
+                opening sentence.
+
+        Returns:
+            str: A short, human-readable justification sentence sequence
+                covering grade, sub-scores, and any missing-concept/
+                brevity flags.
+        """
         topic = question.get("topic", "general")
         parts = [
             f"Grade {grade} ({score:.0%}) on {topic}.",
@@ -532,7 +742,32 @@ class FeedbackAgent:
         attempt_number: int = 1,
         comparison: Optional[dict] = None,
     ) -> Optional[dict]:
-        """Query Qwen microservice /api/qwen/feedback for grounded rich feedback with retry."""
+        """Query the Qwen feedback microservice for grounded narrative feedback.
+
+        Tries `/api/qwen/feedback` then `/feedback` on the configured Qwen
+        URL, with one retry (0.1s backoff) on connection/timeout errors.
+        Never raises — any failure results in None, signaling the caller to
+        use the deterministic fallback.
+
+        Args:
+            transcript (str): Candidate's answer transcript.
+            question (dict): Question record (`text`/`question_text`,
+                `topic`).
+            eval_result (dict): Evaluator output, sent as
+                `structured_evaluation`.
+            candidate_state (dict): Current confidence/hesitation/turn
+                state.
+            history (list): Prior turn scores; up to the last 3 numeric
+                entries are sent.
+            attempt_number (int): 1-based attempt index (default 1).
+            comparison (Optional[dict]): Prior-attempt comparison info,
+                merged into the payload if present.
+
+        Returns:
+            Optional[dict]: The Qwen service's JSON response if a call
+                succeeded (HTTP 200 with a `what_candidate_said` key), else
+                None. Also sets `self._qwen_ok`.
+        """
         if not _HTTPX:
             return None
 

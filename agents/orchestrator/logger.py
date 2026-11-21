@@ -5,7 +5,19 @@ from datetime import datetime
 
 
 class SessionLogger:
+    """Appends per-turn JSON records to disk and produces a session summary."""
+
     def __init__(self, base_dir: str = "orchestrator_logs"):
+        """Create a new, timestamp-named log directory for this session.
+
+        Args:
+            base_dir (str): Parent directory under which a fresh
+                `session_<timestamp>/` directory is created (default
+                "orchestrator_logs").
+
+        Returns:
+            None.
+        """
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         self.session_id = f"session_{timestamp}"
         self.session_dir = os.path.join(base_dir, self.session_id)
@@ -16,11 +28,33 @@ class SessionLogger:
         self.turns = []
 
     def log_turn(self, payload: dict) -> None:
+        """Record one turn, in memory and appended to `turns.jsonl`.
+
+        Args:
+            payload (dict): Turn record to log (question metadata, scores,
+                action, timing, etc.) — written as-is as one JSON line.
+
+        Returns:
+            None.
+        """
         self.turns.append(payload)
         with open(self.turns_path, "a", encoding="utf-8") as fp:
             fp.write(json.dumps(payload, ensure_ascii=False) + "\n")
 
     def finalize(self, extra: dict | None = None) -> dict:
+        """Compute and persist the session-level summary to `summary.json`.
+
+        Args:
+            extra (dict | None): Additional fields to merge into the
+                summary (e.g. candidate/session metadata); overrides
+                computed fields of the same name.
+
+        Returns:
+            dict: The summary written to disk — always `session_id` and
+                `total_turns`; if any turns were logged, also
+                `average_validated_score`, `average_time_taken_sec`, and
+                `action_distribution`.
+        """
         extra = extra or {}
 
         total_turns = len(self.turns)

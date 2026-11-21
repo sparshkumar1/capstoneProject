@@ -12,10 +12,12 @@ Requires: fastapi, uvicorn, python-multipart
 from __future__ import annotations
 
 import asyncio
+import hmac
 import json
 import os
 import pickle
 import re
+import secrets
 import sys
 import logging
 import tempfile
@@ -33,10 +35,10 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, UploadFile, File, Form
+from fastapi import Depends, FastAPI, Header, WebSocket, WebSocketDisconnect, HTTPException, UploadFile, File, Form
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, EmailStr
 
 np = None
@@ -333,20 +335,52 @@ async def _lifespan(_app):
 # ── App ─────────────────────────────────────────────────────────────────
 app = FastAPI(title="PrepAIred API", version="1.0.0", lifespan=_lifespan)
 
+_DEFAULT_CORS_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+_cors_env = os.getenv("CORS_ORIGINS", "")
+CORS_ORIGINS = [o.strip() for o in _cors_env.split(",") if o.strip()] or _DEFAULT_CORS_ORIGINS
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3001",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ── Admin auth ──────────────────────────────────────────────────────────
+# Minimal real gate: admin elevation requires ADMIN_PASSWORD (set via deployment
+# secret, never committed); a verified login gets a short-lived bearer token that
+# admin routes require. No ADMIN_PASSWORD configured => admin login always rejected
+# (previously the client's unauthenticated `admin: true` flag was trusted outright).
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
+ADMIN_TOKEN_TTL_S = 12 * 3600
+_ADMIN_TOKENS: Dict[str, float] = {}  # token -> expiry (epoch seconds)
+
+
+def _issue_admin_token() -> str:
+    token = secrets.token_urlsafe(32)
+    _ADMIN_TOKENS[token] = time.time() + ADMIN_TOKEN_TTL_S
+    return token
+
+
+def _check_admin_password(candidate_pass: str) -> bool:
+    if not ADMIN_PASSWORD:
+        return False
+    return hmac.compare_digest(candidate_pass or "", ADMIN_PASSWORD)
+
+
+async def require_admin_token(x_admin_token: Optional[str] = Header(default=None)):
+    expiry = _ADMIN_TOKENS.get(x_admin_token or "")
+    if expiry is None or expiry < time.time():
+        _ADMIN_TOKENS.pop(x_admin_token or "", None)
+        raise HTTPException(status_code=401, detail="Admin session required or expired.")
 
 # ── Storage Layer Initialization ──────────────────────────────────────────
 try:
@@ -387,6 +421,17 @@ class CreateSessionRequest(BaseModel):
 class RunCodeRequest(BaseModel):
     code: str
     session_id: str = ""
+
+
+class BookmarkRequest(BaseModel):
+    question_id: str
+    note: str = ""
+
+
+class StudyGoalRequest(BaseModel):
+    target_date: str = ""
+    minutes_per_day: int = 30
+    plan: dict = {}
 
 # ── Question bank (subset — expand from qns.json in Evaluator/) ─────────
 QUESTION_BANK = {
@@ -541,6 +586,22 @@ def _load_question_bank_from_qns() -> Optional[Dict[str, List[dict]]]:
                     "cprogramming", "preprocessor", "linkage", "enum", "structsunions", "bitmanipulation", "advancedc"
                 } else "dsa"
 
+                # qns.json's raw test-case schema (input/expected_output/hidden) does not
+                # match agents.coding_executor's schema (input/expected/is_hidden/is_mandatory);
+                # translate once here so the Docker sandbox receives real test cases instead
+                # of silently scoring against an empty list.
+                test_cases = []
+                for tc_idx, tc in enumerate(row.get("test_cases") or [], 1):
+                    if not isinstance(tc, dict):
+                        continue
+                    test_cases.append({
+                        "id": str(tc.get("id", f"tc_{tc_idx}")),
+                        "input": str(tc.get("input", tc.get("stdin", ""))),
+                        "expected": str(tc.get("expected", tc.get("expected_output", tc.get("stdout", "")))),
+                        "is_hidden": bool(tc.get("is_hidden", tc.get("hidden", False))),
+                        "is_mandatory": bool(tc.get("is_mandatory", False)),
+                    })
+
                 question = {
                     "id": qid,
                     "text": q_text,
@@ -559,6 +620,7 @@ def _load_question_bank_from_qns() -> Optional[Dict[str, List[dict]]]:
                     "rubric": rubric,
                     "constraints": row.get("constraints", ""),
                     "code_template": row.get("code_template") or row.get("starter_code") or "",
+                    "test_cases": test_cases,
                 }
                 grouped.setdefault(topic_key, []).append(question)
 
@@ -814,6 +876,10 @@ async def health():
 @app.post("/api/login")
 async def login(req: LoginRequest):
     """Register/login a candidate with persistent identity across sessions."""
+    granted_admin = bool(req.admin) and _check_admin_password(req.adminPass)
+    if req.admin and not granted_admin:
+        raise HTTPException(status_code=401, detail="Incorrect admin password.")
+    admin_token = _issue_admin_token() if granted_admin else None
     try:
         from services.storage.database import get_or_create_candidate
         candidate = get_or_create_candidate(
@@ -824,9 +890,12 @@ async def login(req: LoginRequest):
             roll=req.roll,
             primary_lang=req.primary_lang,
             experience=req.experience,
-            is_admin=req.admin,
+            is_admin=granted_admin,
         )
         cid = candidate["id"]
+        candidate["is_admin"] = granted_admin
+        if admin_token:
+            candidate["admin_token"] = admin_token
         CANDIDATES[cid] = candidate
         return candidate
     except Exception as exc:
@@ -840,9 +909,11 @@ async def login(req: LoginRequest):
             "roll": req.roll,
             "primary_lang": req.primary_lang,
             "experience": req.experience,
-            "is_admin": req.admin,
+            "is_admin": granted_admin,
             "created_at": datetime.now(UTC).isoformat(),
         }
+        if admin_token:
+            candidate["admin_token"] = admin_token
         CANDIDATES[cid] = candidate
         return candidate
 
@@ -908,6 +979,70 @@ async def candidate_compare_attempts(candidate_id: str, question_id: str):
         return build_compare(candidate_id, question_id, _question_lookup())
     except Exception as exc:
         raise HTTPException(500, f"Could not compare attempts: {exc}")
+
+
+# ── Bookmarks ──────────────────────────────────────────────────────────────
+
+@app.get("/api/candidates/{candidate_id}/bookmarks")
+async def list_candidate_bookmarks(candidate_id: str):
+    """List all bookmarked questions for a candidate, with question text/topic attached."""
+    try:
+        from services.storage.database import list_bookmarks
+        bookmarks = list_bookmarks(candidate_id)
+        lookup = _question_lookup()
+        for b in bookmarks:
+            q = lookup.get(str(b.get("question_id")), {})
+            b["question_text"] = q.get("text", "")
+            b["topic"] = q.get("topic", "")
+            b["difficulty"] = q.get("difficulty")
+        return {"bookmarks": bookmarks}
+    except Exception as exc:
+        raise HTTPException(500, f"Could not list bookmarks: {exc}")
+
+
+@app.post("/api/candidates/{candidate_id}/bookmarks")
+async def create_candidate_bookmark(candidate_id: str, req: BookmarkRequest):
+    """Create or update (if already bookmarked) a bookmark with an optional note."""
+    try:
+        from services.storage.database import add_bookmark
+        return add_bookmark(candidate_id, req.question_id, req.note)
+    except Exception as exc:
+        raise HTTPException(500, f"Could not save bookmark: {exc}")
+
+
+@app.delete("/api/candidates/{candidate_id}/bookmarks/{question_id}")
+async def delete_candidate_bookmark(candidate_id: str, question_id: str):
+    try:
+        from services.storage.database import remove_bookmark
+        removed = remove_bookmark(candidate_id, question_id)
+        if not removed:
+            raise HTTPException(404, "Bookmark not found")
+        return {"status": "removed"}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(500, f"Could not remove bookmark: {exc}")
+
+
+# ── Study goal (server-synced; localStorage remains the offline fallback) ──
+
+@app.get("/api/candidates/{candidate_id}/study-goal")
+async def get_candidate_study_goal(candidate_id: str):
+    try:
+        from services.storage.database import get_study_goal
+        goal = get_study_goal(candidate_id)
+        return goal or {"candidate_id": candidate_id, "target_date": "", "minutes_per_day": 30, "plan": {}}
+    except Exception as exc:
+        raise HTTPException(500, f"Could not load study goal: {exc}")
+
+
+@app.put("/api/candidates/{candidate_id}/study-goal")
+async def put_candidate_study_goal(candidate_id: str, req: StudyGoalRequest):
+    try:
+        from services.storage.database import save_study_goal
+        return save_study_goal(candidate_id, req.target_date, req.minutes_per_day, req.plan)
+    except Exception as exc:
+        raise HTTPException(500, f"Could not save study goal: {exc}")
 
 
 @app.post("/api/sessions")
@@ -1047,6 +1182,118 @@ async def get_report(session_id: str):
     raise HTTPException(404, "Report not found")
 
 
+@app.get("/api/sessions/{session_id}/report/pdf")
+async def get_report_pdf(session_id: str):
+    """Render the same report data already assembled by `get_report` as a downloadable PDF.
+    Reuses that endpoint's lookup/finalize logic rather than duplicating it -- this route only
+    adds the PDF rendering step on top of an already-correct report dict."""
+    report = await get_report(session_id)
+    try:
+        pdf_bytes = _render_report_pdf(report)
+    except Exception as exc:
+        raise HTTPException(500, f"Could not render PDF report: {exc}")
+    filename = f"prepaired_report_{session_id[:8]}.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+def _render_report_pdf(r: dict) -> bytes:
+    """Build a formatted PDF of a session report dict (the same shape `get_report` returns)
+    using reportlab. Kept in `main.py` next to its only caller rather than as a shared module --
+    it has no other consumer."""
+    import io
+    from reportlab.lib import colors
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import mm
+    from reportlab.platypus import (
+        SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, ListFlowable, ListItem,
+    )
+
+    styles = getSampleStyleSheet()
+    h1 = ParagraphStyle("h1", parent=styles["Heading1"], fontSize=18, spaceAfter=10)
+    h2 = ParagraphStyle("h2", parent=styles["Heading2"], fontSize=13, spaceBefore=14, spaceAfter=6)
+    body = styles["BodyText"]
+    small = ParagraphStyle("small", parent=styles["BodyText"], fontSize=9, textColor=colors.grey)
+
+    buf = io.BytesIO()
+    doc = SimpleDocTemplate(buf, pagesize=A4, topMargin=18 * mm, bottomMargin=18 * mm)
+    story = []
+
+    story.append(Paragraph("PrepAIred — Session Report", h1))
+    meta_bits = []
+    if r.get("session_date"):
+        meta_bits.append(f"Date: {r['session_date']}")
+    if r.get("duration_minutes"):
+        meta_bits.append(f"Duration: {r['duration_minutes']} min")
+    if r.get("total_questions"):
+        meta_bits.append(f"Questions: {r['total_questions']}")
+    if meta_bits:
+        story.append(Paragraph(" &nbsp;|&nbsp; ".join(meta_bits), small))
+    story.append(Spacer(1, 10))
+
+    score_rows = [["Metric", "Score"]]
+    for label, key in [("Overall", "overall_score"), ("C Language", "c_score"), ("DSA", "dsa_score")]:
+        val = r.get(key)
+        score_rows.append([label, f"{round(val * 100)}%" if isinstance(val, (int, float)) else "—"])
+    score_table = Table(score_rows, colWidths=[90 * mm, 40 * mm])
+    score_table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1f2937")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#d1d5db")),
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f3f4f6")]),
+    ]))
+    story.append(score_table)
+
+    def bullet_section(title: str, items: list):
+        if not items:
+            return
+        story.append(Paragraph(title, h2))
+        story.append(ListFlowable(
+            [ListItem(Paragraph(str(it), body)) for it in items],
+            bulletType="bullet",
+        ))
+
+    bullet_section("Strengths", r.get("strengths") or [])
+    bullet_section("Gaps to address", r.get("missing_concepts") or [])
+    bullet_section("Study recommendations", r.get("recommendations") or [])
+
+    topic_scores = r.get("topic_scores") or {}
+    if topic_scores:
+        story.append(Paragraph("Topic breakdown", h2))
+        rows = [["Topic", "Average score"]]
+        for topic, score in topic_scores.items():
+            rows.append([str(topic).replace("_", " "), f"{round(score * 100)}%" if isinstance(score, (int, float)) else "—"])
+        t = Table(rows, colWidths=[90 * mm, 40 * mm])
+        t.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1f2937")),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#d1d5db")),
+            ("FONTSIZE", (0, 0), (-1, -1), 10),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f3f4f6")]),
+        ]))
+        story.append(t)
+
+    questions = r.get("question_results") or []
+    if questions:
+        story.append(Paragraph("Question-by-question", h2))
+        for i, q in enumerate(questions, 1):
+            qscore = q.get("score")
+            qpct = f"{round(qscore * 100)}%" if isinstance(qscore, (int, float)) else "—"
+            story.append(Paragraph(
+                f"<b>Q{i} ({qpct})</b> — {q.get('question_text', 'Question')}", body,
+            ))
+            if q.get("feedback"):
+                story.append(Paragraph(q["feedback"], small))
+            story.append(Spacer(1, 6))
+
+    doc.build(story)
+    return buf.getvalue()
+
 
 @app.post("/api/transcribe")
 async def transcribe_audio(
@@ -1161,6 +1408,17 @@ async def transcribe_audio(
         tmp_path.unlink(missing_ok=True)
 
 
+def _resolve_active_test_cases(sess, question_id: str = "") -> list:
+    """Server-side lookup of the active question's test cases. Never trust
+    client-supplied test results for scoring — callers must re-run the code
+    against these test cases themselves."""
+    if hasattr(sess, "_get_current_question"):
+        curr_q = sess._get_current_question(question_id or None)
+        if isinstance(curr_q, dict) and curr_q.get("test_cases"):
+            return curr_q["test_cases"]
+    return []
+
+
 @app.post("/api/run_code")
 async def run_code(req: RunCodeRequest):
     """Run C code in authoritative Docker sandbox."""
@@ -1169,10 +1427,7 @@ async def run_code(req: RunCodeRequest):
     test_cases = []
     # If session and question are active, try to fetch question test cases
     if req.session_id and req.session_id in SESSIONS:
-        sess = SESSIONS[req.session_id]
-        curr_q = getattr(sess, "_current_question", None)
-        if isinstance(curr_q, dict) and curr_q.get("test_cases"):
-            test_cases = curr_q["test_cases"]
+        test_cases = _resolve_active_test_cases(SESSIONS[req.session_id])
 
     result = evaluate_c_submission(req.code, test_cases=test_cases)
     return result
@@ -1181,14 +1436,50 @@ async def run_code(req: RunCodeRequest):
 
 # ── Admin routes ─────────────────────────────────────────────────────────
 
-@app.get("/api/admin/sessions")
-async def admin_sessions(filter: str = "all", sort: str = "date_desc"):
-    sessions_list = []
+def _admin_sessions_merged() -> list[dict]:
+    """Merge persisted (SQLite) sessions with the current process's live in-memory
+    sessions, so the admin view survives a backend restart instead of only reflecting
+    sessions created since the process last started. In-memory data wins on id
+    collision (it is richer -- live score/behaviour detail the `sessions` table does
+    not persist); DB-only rows (from a prior process) are included with the subset of
+    fields the schema actually stores, rather than being silently dropped."""
+    merged: dict[str, dict] = {}
+    try:
+        from services.storage.database import list_sessions as _db_list_sessions
+        for row in _db_list_sessions():
+            sid = str(row.get("id") or "")
+            if not sid:
+                continue
+            merged[sid] = {
+                "id": sid,
+                "candidate_id": row.get("candidate_id"),
+                "candidate_name": row.get("candidate_name"),
+                "candidate_email": row.get("candidate_email"),
+                "college": row.get("college"),
+                "year": row.get("year"),
+                "overall_score": row.get("overall_score"),
+                "c_score": None,
+                "dsa_score": None,
+                "topics": row.get("topics", []),
+                "final_difficulty": None,
+                "duration_minutes": row.get("duration_minutes"),
+                "total_questions": row.get("num_questions"),
+                "status": row.get("status", "unknown"),
+                "created_at": row.get("created_at"),
+                "strengths": [],
+                "missing_concepts": [],
+                "behaviour": None,
+                "source": "persisted",
+            }
+    except Exception as exc:
+        print(f"[ADMIN] Could not load persisted sessions: {exc}", flush=True)
+
     for sid in list(SESSIONS.keys()):
         s = _get_session_dict(sid)
         cand = CANDIDATES.get(s.get("candidate_id", ""), {})
-        entry = {
+        merged[sid] = {
             "id": sid,
+            "candidate_id": s.get("candidate_id"),
             "candidate_name": cand.get("name"),
             "candidate_email": cand.get("email"),
             "college": cand.get("college"),
@@ -1205,8 +1496,14 @@ async def admin_sessions(filter: str = "all", sort: str = "date_desc"):
             "strengths": s.get("strengths", []),
             "missing_concepts": s.get("missing_concepts", []),
             "behaviour": s.get("behaviour"),
+            "source": "live",
         }
-        sessions_list.append(entry)
+    return list(merged.values())
+
+
+@app.get("/api/admin/sessions", dependencies=[Depends(require_admin_token)])
+async def admin_sessions(filter: str = "all", sort: str = "date_desc"):
+    sessions_list = _admin_sessions_merged()
 
     # Sort
     reverse = "desc" in sort
@@ -1216,15 +1513,15 @@ async def admin_sessions(filter: str = "all", sort: str = "date_desc"):
     return {"sessions": sessions_list, "total": len(sessions_list)}
 
 
-@app.get("/api/admin/stats")
+@app.get("/api/admin/stats", dependencies=[Depends(require_admin_token)])
 async def admin_stats():
-    total = len(SESSIONS)
-    all_s = [_get_session_dict(sid) for sid in SESSIONS]
+    all_s = _admin_sessions_merged()
+    total = len(all_s)
     scores = [s.get("overall_score", 0) for s in all_s if s.get("overall_score") is not None]
     today = date.today().isoformat()
     active_today = sum(1 for s in all_s if (s.get("created_at") or "")[:10] == today)
-    unique_cands = len(set(s.get("candidate_id") for s in all_s))
-    durations = [s.get("duration_minutes", 0) for s in all_s]
+    unique_cands = len(set(s.get("candidate_email") or s.get("id") for s in all_s))
+    durations = [s.get("duration_minutes") or 0 for s in all_s]
     pass_rate = sum(1 for sc in scores if sc >= 0.6) / max(len(scores), 1)
 
     return {
@@ -1237,14 +1534,54 @@ async def admin_stats():
     }
 
 
-@app.get("/api/admin/sessions/{session_id}")
+@app.get("/api/admin/sessions/{session_id}", dependencies=[Depends(require_admin_token)])
 async def admin_session_detail(session_id: str):
-    if session_id not in SESSIONS:
-        raise HTTPException(404, "Session not found")
-    s = _get_session_dict(session_id)
-    cand = CANDIDATES.get(s.get("candidate_id", ""), {})
-    report = REPORTS.get(s.get("report_id", ""), {})
-    return {**s, **report, "candidate_name": cand.get("name"), "candidate_email": cand.get("email")}
+    if session_id in SESSIONS:
+        s = _get_session_dict(session_id)
+        cand = CANDIDATES.get(s.get("candidate_id", ""), {})
+        report = REPORTS.get(s.get("report_id", ""), {})
+        return {**s, **report, "candidate_name": cand.get("name"), "candidate_email": cand.get("email"), "source": "live"}
+
+    # Not in this process's live memory -- fall back to the persisted record (survives restart).
+    try:
+        from services.storage.database import list_sessions as _db_list_sessions
+        for row in _db_list_sessions():
+            if str(row.get("id")) == session_id:
+                return {**row, "source": "persisted"}
+    except Exception as exc:
+        print(f"[ADMIN] Could not load persisted session {session_id}: {exc}", flush=True)
+
+    raise HTTPException(404, "Session not found")
+
+
+@app.get("/api/admin/candidates/{candidate_id}/sessions", dependencies=[Depends(require_admin_token)])
+async def admin_candidate_sessions(candidate_id: str):
+    """Aggregate, per-candidate view: every session (live or persisted) for one candidate,
+    newest first, plus a lightweight score trend -- for the admin drill-down panel so a
+    faculty/evaluator reviewing one candidate doesn't have to find each session individually
+    in the flat admin table."""
+    all_sessions = _admin_sessions_merged()
+    matches = [
+        s for s in all_sessions
+        if (s.get("candidate_id") and s.get("candidate_id") == candidate_id)
+        or (s.get("candidate_email") and s.get("candidate_email") == candidate_id)
+    ]
+    if not matches:
+        raise HTTPException(404, "No sessions found for this candidate")
+
+    matches.sort(key=lambda s: s.get("created_at") or "", reverse=True)
+    scores = [s.get("overall_score") for s in matches if s.get("overall_score") is not None]
+    candidate_name = next((s.get("candidate_name") for s in matches if s.get("candidate_name")), None)
+    candidate_email = next((s.get("candidate_email") for s in matches if s.get("candidate_email")), candidate_id)
+
+    return {
+        "candidate_id": candidate_id,
+        "candidate_name": candidate_name,
+        "candidate_email": candidate_email,
+        "total_sessions": len(matches),
+        "avg_score": round(sum(scores) / len(scores), 3) if scores else None,
+        "sessions": matches,
+    }
 
 
 # ── WebSocket Interview Handler ───────────────────────────────────────────
@@ -1332,14 +1669,22 @@ async def interview_ws(websocket: WebSocket, session_id: str):
                 await dispatch_answer(result)
 
             elif mtype == "code_submission":
+                from agents.coding_executor.coding_executor import evaluate_c_submission
+
+                submitted_code = payload.get("code", "")
+                submitted_qid = payload.get("question_id", "")
+                # Never trust client-supplied passed/tests_passed/tests_total: re-run
+                # the code server-side against the active question's real test cases.
+                test_cases = _resolve_active_test_cases(orch, submitted_qid)
+                sandbox_result = evaluate_c_submission(submitted_code, test_cases=test_cases)
                 result = await orch.handle_code_submission(
-                    payload.get("code", ""),
-                    payload.get("question_id", ""),
-                    bool(payload.get("passed", False)),
-                    int(payload.get("tests_passed", 0)),
-                    int(payload.get("tests_total", 0)),
-                    payload.get("stdout", ""),
-                    payload.get("stderr", ""),
+                    submitted_code,
+                    submitted_qid,
+                    bool(sandbox_result.get("passed", False)),
+                    int(sandbox_result.get("tests_passed", 0)),
+                    int(sandbox_result.get("tests_total", 0)),
+                    "",
+                    sandbox_result.get("compiler_output", ""),
                 )
                 await dispatch_answer(result)
 
@@ -1361,6 +1706,13 @@ async def interview_ws(websocket: WebSocket, session_id: str):
                     await send("question", res.get("payload", res))
                 else:
                     await send("error", {"message": res.get("message", "Retry failed")})
+
+            elif mtype == "request_hint":
+                res = await orch.request_hint(payload.get("question_id", ""))
+                if res.get("status") == "error":
+                    await send("error", {"message": res.get("text", "Hint unavailable")})
+                else:
+                    await send("hint", {"text": res.get("text", "")})
 
             elif mtype == "skip_question":
 

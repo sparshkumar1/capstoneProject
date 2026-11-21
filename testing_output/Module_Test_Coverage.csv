@@ -1,0 +1,15 @@
+module_id,module_name,main_files,test_cases_executed,test_cases_passed,observations
+MOD-FE,Frontend SPA,apps/web/src/*,28,28,Component-level: full; browser/pixel-level: not performed this exercise
+MOD-BE,Backend orchestration layer,apps/backend/main.py,9,9,All tested routes correct except the WS request_hint gap (tracked under MOD-QWEN/Integration)
+MOD-ORCH,Interview Orchestrator,agents/orchestrator/interview_orchestrator.py,6,6,Exercised via live WS integration flow
+MOD-QS,Question Selector,agents/question_selector/question_selector.py,11,11,Re-run fresh (T-N10) + confirmed live via INT-001/005
+MOD-AUD,Audio/STT pipeline,agents/audio/*,3,2,"1 FAIL (real transcription unavailable, WhisperX not installed); 2 diagnostic confirmations"
+MOD-EVAL,Composite Evaluator,services/evaluator/app.py,19,19,10 adversarial + 7 API contract (both re-run fresh) + 2 live-scoring confirmations
+MOD-QWEN,Qwen feedback/hint service,services/qwen/app.py,4,3,"1 FAIL (WS request_hint dispatch gap, DEF-001)"
+MOD-PPO,Strategy layer (PPO + guardrails),"agents/strategy/hybrid_orchestrator.py, rl/guardrails.py",25,25,"10+13 re-run fresh (T-N02/T-N03), 0 mismatches; 2 live confirmations"
+MOD-SBX,Coding Sandbox (Docker),agents/coding_executor/*,2,1,1 BLOCKED (Docker daemon unreachable); 1 PASS (orchestrator handling of the blocked state)
+MOD-DB,Persistence (SQLite),services/storage/database.py,2,2,Referential integrity + real write-growth confirmed
+MOD-REPORT,Reporting/Analytics,services/storage/analytics.py,2,2,Report content matches actual session turns
+MOD-ADMIN,Admin dashboard (backend),apps/backend/main.py admin routes,2,2,"Confirmed reads in-memory session dict (known characteristic, not a new defect)"
+MOD-VALID,Score Validator,agents/validation/score_validator.py,7,7,"New module, previously untested; all cases pass"
+MOD-TIMER,Question Timer,agents/timing/timer.py,6,6,"New module, previously untested; all cases pass after this exercise's own test-script self-correction"

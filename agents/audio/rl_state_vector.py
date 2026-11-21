@@ -2,15 +2,24 @@
 Builds S = [Performance, Confidence, Hesitation, Time, Difficulty]
 for the PrepAIred PPO agent from audio analysis outputs.
 """
+
 from __future__ import annotations
 import time
 
 _sessions: dict[str, dict] = {}
 
-
 def _clamp(v, lo=0.0, hi=1.0):
-    return max(lo, min(hi, float(v)))
+    """Clamp a numeric value to the inclusive range [lo, hi].
 
+    Args:
+        v (float): Value to clamp (coerced to float).
+        lo (float): Lower bound (default 0.0).
+        hi (float): Upper bound (default 1.0).
+
+    Returns:
+        float: `v` restricted to [lo, hi].
+    """
+    return max(lo, min(hi, float(v)))
 
 def build_state_vector(
     confidence_score: float,
@@ -22,15 +31,36 @@ def build_state_vector(
     question_index: int = 0,
     max_questions: int = 10,
 ) -> dict:
-    """
-    Returns S = [Performance, Confidence, Hesitation, Time, Difficulty]
-    All values normalised to [0, 1].
+    """Build the 5-D audio-pipeline state vector S = [Performance, Confidence,
+    Hesitation, Time, Difficulty], and a rule-based action recommendation.
 
-    Performance  — how well the candidate answered (ASR conf + linguistic)
-    Confidence   — acoustic + linguistic confidence blend
-    Hesitation   — from hesitation_scorer
-    Time         — normalised time used relative to session budget
-    Difficulty   — current question difficulty level
+    Updates in-memory per-session timing/history state as a side effect, so
+    repeated calls with the same `session_id` accumulate a turn history used
+    for the (currently unused) average-performance calculation.
+
+    Args:
+        confidence_score (float): Blended confidence score in [0, 1] from
+            `confidence_scorer.score`.
+        hesitation (dict): Output of `score_hesitation`; its
+            `hesitation_score` field is used.
+        transcription (dict): Transcription output; `transcription_confidence`
+            and `audio_duration` are used.
+        linguistic (dict): Linguistic-confidence output; `linguistic_score`
+            is used.
+        session_id (str): Session identifier for timing/history tracking
+            (default "default").
+        current_difficulty (float): Current question difficulty, normalized
+            in [0, 1] (default 0.5).
+        question_index (int): Zero-based index of the current question
+            (default 0).
+        max_questions (int): Total questions in the session, used to budget
+            the `Time` component (default 10).
+
+    Returns:
+        dict: `state_vector` (the 5 rounded floats S), `labels` (their
+            names), `recommended_action` ("harder"/"easier"/"hint"/"same"),
+            `session_id`, `question_index`, and `components` (the same five
+            values as a named dict).
     """
     # Track session timing
     sess = _sessions.setdefault(session_id, {"start": time.time(), "q_times": []})
@@ -101,4 +131,13 @@ def build_state_vector(
 
 
 def reset_session(session_id: str = "default"):
+    """Discard the in-memory timing/history state for a session.
+
+    Args:
+        session_id (str): Session identifier to clear (default "default").
+
+    Returns:
+        None: Removes the session's entry from the module-level `_sessions`
+            cache if present; no error if it doesn't exist.
+    """
     _sessions.pop(session_id, None)

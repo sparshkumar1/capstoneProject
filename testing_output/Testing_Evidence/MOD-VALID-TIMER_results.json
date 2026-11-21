@@ -1,0 +1,80 @@
+[
+  {
+    "id": "MOD-VALID-001",
+    "description": "Positive: valid score, mandatory_pass=True passes through unmodified",
+    "status": "PASS",
+    "detail": "{\"validated_score\": 0.85, \"raw_score\": 0.85, \"evaluation_status\": \"success\", \"is_infrastructure_failure\": false, \"validation_trace\": []}"
+  },
+  {
+    "id": "MOD-VALID-002",
+    "description": "Boundary: mandatory_pass=False caps score at mandatory_cap (0.65)",
+    "status": "PASS",
+    "detail": "{\"validated_score\": 0.65, \"raw_score\": 0.9, \"evaluation_status\": \"success\", \"is_infrastructure_failure\": false, \"validation_trace\": [{\"rule\": \"mandatory_cap\", \"before\": 0.9, \"after\": 0.65, \"reason\": \""
+  },
+  {
+    "id": "MOD-VALID-003",
+    "description": "Negative: None raw_score is coerced to 0.0, not a crash",
+    "status": "PASS",
+    "detail": "{\"validated_score\": 0.0, \"raw_score\": 0.0, \"evaluation_status\": \"unavailable\", \"is_infrastructure_failure\": true, \"validation_trace\": [{\"rule\": \"missing_score\", \"before\": null, \"after\": 0.0, \"reason\":"
+  },
+  {
+    "id": "MOD-VALID-004",
+    "description": "Negative: non-numeric raw_score is coerced to 0.0, not a crash",
+    "status": "PASS",
+    "detail": "{\"validated_score\": 0.0, \"raw_score\": 0.0, \"evaluation_status\": \"success\", \"is_infrastructure_failure\": false, \"validation_trace\": [{\"rule\": \"type_error\", \"before\": \"not_a_number\", \"after\": 0.0, \"reas"
+  },
+  {
+    "id": "MOD-VALID-005",
+    "description": "Boundary: NaN score is replaced with 0.0",
+    "status": "PASS",
+    "detail": "{\"validated_score\": 0.0, \"raw_score\": 0.0, \"evaluation_status\": \"success\", \"is_infrastructure_failure\": false, \"validation_trace\": [{\"rule\": \"non_finite_score\", \"before\": \"nan\", \"after\": 0.0, \"reason\""
+  },
+  {
+    "id": "MOD-VALID-006",
+    "description": "Negative: coding runtime_error applies the coding_failure_multiplier (0.7x)",
+    "status": "PASS",
+    "detail": "{\"validated_score\": 0.63, \"raw_score\": 0.9, \"evaluation_status\": \"success\", \"is_infrastructure_failure\": false, \"validation_trace\": [{\"rule\": \"coding_execution_penalty\", \"before\": 0.9, \"after\": 0.63, "
+  },
+  {
+    "id": "MOD-VALID-007",
+    "description": "Negative: malformed (non-dict) evidence is handled gracefully, not a crash",
+    "status": "PASS",
+    "detail": "{\"validated_score\": 0.8, \"raw_score\": 0.8, \"evaluation_status\": \"success\", \"is_infrastructure_failure\": false, \"validation_trace\": [{\"rule\": \"malformed_evidence\", \"reason\": \"Expected dict evidence, go"
+  },
+  {
+    "id": "MOD-TIMER-001",
+    "description": "Positive: start/stop measures elapsed time within allowed budget (no overrun)",
+    "status": "PASS",
+    "detail": "{\"time_taken_sec\": 0.313, \"allowed_time_sec\": 1.0, \"time_overrun_sec\": 0.0, \"time_ratio\": 0.313, \"time_norm\": 0.313, \"is_overrun\": false, \"attempts\": 1, \"retries\": 0, \"question_id\": \"q1\", \"question_type\": \"verbal\"}"
+  },
+  {
+    "id": "MOD-TIMER-002a",
+    "description": "Observation: start() enforces a minimum allowed_time_sec floor of 1.0s",
+    "status": "PASS",
+    "detail": "start(allowed_time_sec=0.2) actually produced allowed_time_sec=1.0 in the prior run (see MOD-VALID-TIMER_results.json run 1) -- a real, by-design floor, not a defect."
+  },
+  {
+    "id": "MOD-TIMER-002",
+    "description": "Boundary: response exceeding the (floor-enforced) allowed time is flagged is_overrun=True",
+    "status": "PASS",
+    "detail": "{\"time_taken_sec\": 1.297, \"allowed_time_sec\": 1.0, \"time_overrun_sec\": 0.297, \"time_ratio\": 1.297, \"time_norm\": 1.0, \"is_overrun\": true, \"attempts\": 1, \"retries\": 0, \"question_id\": \"q2\", \"question_type\": \"verbal\"}"
+  },
+  {
+    "id": "MOD-TIMER-003",
+    "description": "Positive: fast + correct answer (S>=0.70, tau<=0.50) receives a positive speed bonus",
+    "status": "PASS",
+    "detail": "{\"raw_score\": 0.9, \"time_ratio\": 0.3, \"timing_score\": 1.0, \"timing_modifier\": 0.027, \"final_score\": 0.927, \"is_fast\": true, \"is_overrun\": false, \"speed_bonus_eligible\": true}"
+  },
+  {
+    "id": "MOD-TIMER-004",
+    "description": "Negative/Guarantee: fast + WRONG answer (S<0.70) must NOT receive a speed bonus",
+    "status": "PASS",
+    "detail": "{\"raw_score\": 0.4, \"time_ratio\": 0.3, \"timing_score\": 1.0, \"timing_modifier\": 0.0, \"final_score\": 0.4, \"is_fast\": true, \"is_overrun\": false, \"speed_bonus_eligible\": false}"
+  },
+  {
+    "id": "MOD-TIMER-005",
+    "description": "Boundary: severe timeout (tau>1.0) applies a negative penalty, bounded by delta_overrun",
+    "status": "PASS",
+    "detail": "{\"raw_score\": 0.9, \"time_ratio\": 1.5, \"timing_score\": 0.6, \"timing_modifier\": -0.05, \"final_score\": 0.85, \"is_fast\": false, \"is_overrun\": true, \"speed_bonus_eligible\": false}"
+  }
+]

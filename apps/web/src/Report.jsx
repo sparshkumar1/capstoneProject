@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { SessionContext } from "./contexts";
 import Shell from "./Shell";
 import ScoreRing from "./ScoreRing";
+import BookmarkToggle from "./BookmarkToggle";
 import { api } from "./api";
 import "./Report.css";
 
@@ -34,6 +35,22 @@ export default function Report({ navigate }) {
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [bookmarkedIds, setBookmarkedIds] = useState(() => new Set());
+
+  useEffect(() => {
+    if (!candidate?.id) return;
+    api.getBookmarks(candidate.id)
+      .then((d) => setBookmarkedIds(new Set((d?.bookmarks || []).map((b) => String(b.question_id)))))
+      .catch(() => {});
+  }, [candidate?.id]);
+
+  const toggleBookmark = (questionId, isBookmarked) => {
+    setBookmarkedIds((prev) => {
+      const next = new Set(prev);
+      if (isBookmarked) next.add(String(questionId)); else next.delete(String(questionId));
+      return next;
+    });
+  };
 
   const fetchReport = () => {
     const id = session?.report_id || session?.id;
@@ -156,7 +173,9 @@ export default function Report({ navigate }) {
         </div>
 
         {activeTab === "overview"   && <OverviewTab   r={r} />}
-        {activeTab === "questions"  && <QuestionsTab  r={r} />}
+        {activeTab === "questions"  && (
+          <QuestionsTab r={r} candidateId={candidate?.id} bookmarkedIds={bookmarkedIds} onToggleBookmark={toggleBookmark} />
+        )}
         {activeTab === "timeline"   && <TimelineTab   r={r} />}
         {activeTab === "concepts"   && <ConceptsTab   r={r} />}
         {activeTab === "behaviour"  && <BehaviourTab  r={r} />}
@@ -172,6 +191,13 @@ export default function Report({ navigate }) {
           <button type="button" className="btn btn-ghost btn-lg" onClick={() => navigate("dashboard") }>
             Back to dashboard
           </button>
+          <a
+            className="btn btn-ghost btn-lg"
+            href={api.reportPdfUrl(session?.report_id || session?.id || r.session_id || r.id)}
+            download
+          >
+            ⬇ Download PDF
+          </a>
         </div>
       </div>
     </Shell>
@@ -257,7 +283,7 @@ function OverviewTab({ r }) {
 }
 
 // ── Questions tab — full rich feedback per question ───────────────
-function QuestionsTab({ r }) {
+function QuestionsTab({ r, candidateId, bookmarkedIds, onToggleBookmark }) {
   const [expanded, setExpanded] = useState(null);
   const questions = r.question_results || [];
 
@@ -293,6 +319,14 @@ function QuestionsTab({ r }) {
                   </div>
                 </div>
                 <div className="q-row-right">
+                  {candidateId && q.question_id && (
+                    <BookmarkToggle
+                      candidateId={candidateId}
+                      questionId={q.question_id}
+                      bookmarked={bookmarkedIds.has(String(q.question_id))}
+                      onChange={(next) => onToggleBookmark(q.question_id, next)}
+                    />
+                  )}
                   <span className="badge badge-neutral" style={{ fontSize: 11 }}>Evaluated</span>
                   <span style={{ color: "var(--text-3)", fontSize: 12 }}>{expanded === i ? "▲" : "▼"}</span>
                 </div>

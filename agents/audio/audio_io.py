@@ -16,6 +16,17 @@ except Exception:
 
 
 def _pcm_to_float(buffer: bytes, sample_width: int) -> np.ndarray:
+    """Convert raw little-endian PCM bytes to float32 samples in [-1, 1].
+
+    Args:
+        buffer (bytes): Raw PCM sample bytes.
+        sample_width (int): Bytes per sample (1, 2, or 4); any other width
+            yields an empty array.
+
+    Returns:
+        np.ndarray: float32 samples, or an empty array if `buffer` is empty
+            or `sample_width` is unsupported.
+    """
     if not buffer:
         return np.zeros(0, dtype=np.float32)
 
@@ -33,6 +44,17 @@ def _pcm_to_float(buffer: bytes, sample_width: int) -> np.ndarray:
 
 
 def _read_wav_bytes(wav_bytes: bytes) -> tuple[np.ndarray, int]:
+    """Decode an in-memory WAV byte string into mono float32 samples.
+
+    Args:
+        wav_bytes (bytes): Complete contents of a WAV file.
+
+    Returns:
+        tuple[np.ndarray, int]: `(samples, sample_rate)`. Multi-channel
+            audio is downmixed to mono by averaging channels. Returns an
+            empty array (with the file's sample rate) if decoding yields no
+            usable samples.
+    """
     with wave.open(io.BytesIO(wav_bytes), "rb") as wav_file:
         sample_rate = wav_file.getframerate()
         channels = wav_file.getnchannels()
@@ -54,6 +76,24 @@ def _read_wav_bytes(wav_bytes: bytes) -> tuple[np.ndarray, int]:
 
 
 def decode_audio(audio_path: str | Path, target_sr: int = 16000) -> tuple[np.ndarray, int, str]:
+    """Decode an audio file to mono float32 samples, preferring ffmpeg.
+
+    Tries, in order: ffmpeg transcoding to mono WAV at `target_sr` (if
+    ffmpeg is available), then a direct WAV read for `.wav` files. Never
+    raises; falls back to an empty array if every method fails or the file
+    is missing.
+
+    Args:
+        audio_path (str | Path): Path to the source audio file.
+        target_sr (int): Target sample rate in Hz for the ffmpeg path
+            (default 16000); the direct-WAV fallback keeps the file's own
+            rate.
+
+    Returns:
+        tuple[np.ndarray, int, str]: `(samples, sample_rate, source)`,
+            where `source` is one of "ffmpeg", "wav", "missing" (file not
+            found), or "unavailable" (decoding failed).
+    """
     path = Path(audio_path)
     if not path.exists():
         return np.zeros(0, dtype=np.float32), target_sr, "missing"
@@ -101,6 +141,19 @@ def decode_audio(audio_path: str | Path, target_sr: int = 16000) -> tuple[np.nda
 
 
 def frame_rms(samples: np.ndarray, frame_length: int = 1024, hop_length: int = 256) -> np.ndarray:
+    """Compute per-frame RMS energy over a sliding window.
+
+    Args:
+        samples (np.ndarray): Mono audio samples.
+        frame_length (int): Window size in samples (default 1024).
+        hop_length (int): Step size between windows in samples (default
+            256).
+
+    Returns:
+        np.ndarray: One RMS value per frame. Returns a single-element array
+            (the whole signal's RMS) if `samples` is shorter than
+            `frame_length`, or an empty array if `samples` is empty.
+    """
     data = np.asarray(samples, dtype=np.float32)
     if data.size == 0:
         return np.zeros(0, dtype=np.float32)

@@ -11,9 +11,23 @@ Guardrail Hierarchy and Rules:
   - G4 (Stuck Candidate): perf < 0.30 and hes > 0.60 -> Easier (Action 0) [Highest Priority]
   - G1 (Overload Protection): perf < 0.30 and 0.4 <= diff <= 0.7 -> Easier (Action 0)
   - G2 (Anxiety Stabilizer): conf < 0.30 and hes > 0.70 and perf < 0.80 -> Easier if hes > 0.85 else Same (Action 1)
-  - G3 / G5 (Partial Understanding): 0.40 < perf < 0.65 and avg_perf < 0.60 and consec < 2 -> Same (Action 1)
+  - G3 / G5 (Partial Understanding): 0.30 <= perf < 0.65 and avg_perf < 0.60 and consec < 2 -> Same (Action 1)
   - G6 (Strong Performer): perf >= 0.90 and gap > 0.25 and not nervous_expert -> Harder (Action 2)
   - Boundary Clamp: Difficulty remains strictly within [1, 5] (or [0.2, 1.0]).
+
+Fix (2026-11-12, testing_and_evaluation/baseline_results/Full_Suite_Baseline_Results.md /
+Baseline_Record.md T-N02/T-N03): G5's lower bound was widened from the original
+`0.40 < perf` to `0.30 <= perf` to close a gap found during Phase-2 testing. Under the
+original boundary, perf in [0.30, 0.40) was covered by no guardrail (G4/G1 require
+perf < 0.30; G5 required perf > 0.40), so a below-average-scoring candidate
+(e.g. perf=0.35, moderate confidence/hesitation) could have difficulty escalated to
+Harder by the raw policy with no safety check intervening. This widening is a minimal,
+single-boundary change: it does not alter G1/G4/G2/G6's conditions, the action each rule
+returns, or the priority order. It is not applied to any already-generated frozen result
+file (research/results/paper3/*, research/CANONICAL_SCIENTIFIC_TRUTH_CURRENT.md) -- those
+describe the guardrail behavior as it existed when they were generated and remain
+historically accurate for that version; this fix changes only the live/current behavior
+of this file going forward.
 """
 
 from typing import Tuple, Optional
@@ -88,9 +102,11 @@ def apply_canonical_guardrails(
         return ACTION_SAME, True, "g2_anxiety_stabilizer_same"
 
     # 5. G3 / G5: Partial Understanding — Hold at Same
-    # Intermediate scores (0.40 < perf < 0.65) with low historical average
-    # indicate partial understanding requiring reinforcement at current level.
-    if 0.40 < perf < 0.65 and avg_perf < 0.60 and consecutive_failures < 2:
+    # Intermediate-to-below-average scores (0.30 <= perf < 0.65) with low historical
+    # average indicate partial understanding requiring reinforcement at current level.
+    # Lower bound widened from 0.40 to 0.30 (2026-11-12 fix) to close a gap where
+    # perf in [0.30, 0.40) was covered by no guardrail -- see module docstring.
+    if 0.30 <= perf < 0.65 and avg_perf < 0.60 and consecutive_failures < 2:
         return ACTION_SAME, True, "g5_partial_same"
 
     # 6. G6: Strong Performer — Push Harder

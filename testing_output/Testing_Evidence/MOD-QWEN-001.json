@@ -1,0 +1,21 @@
+{
+  "url": "http://localhost:8001/health",
+  "status_code": 200,
+  "body": {
+    "status": "ok",
+    "service": "prepaired-qwen-microservice",
+    "version": "2.1.0",
+    "mock_mode": false,
+    "models_loaded": [
+      "qwen_1b"
+    ],
+    "model_types": {
+      "qwen_1b": "gguf"
+    },
+    "models_loading": {
+      "qwen_1b": false
+    },
+    "model_errors": {},
+    "primary_demo_engine": "llama.cpp (CPU)"
+  }
+}
