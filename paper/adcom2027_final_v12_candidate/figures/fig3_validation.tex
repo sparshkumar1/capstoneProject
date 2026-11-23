@@ -1,0 +1,20 @@
+\begin{tikzpicture}[font=\scriptsize, node distance=2.2mm,
+  s/.style={draw, rounded corners=1pt, minimum height=8mm, minimum width=15.5mm, align=center, inner sep=1.5pt},
+  r/.style={draw, dashed, rounded corners=1pt, minimum height=7mm, minimum width=16mm, align=center, fill=red!6, inner sep=1.5pt},
+  arr/.style={-{Stealth[length=1.5mm]}, thin}]
+\node[s, fill=orange!22] (raw) {agent\\output};
+\node[s, right=of raw] (au) {forbidden\\keys?};
+\node[s, right=of au] (sc) {schema\\valid?};
+\node[s, right=of sc] (sv) {version\\current?};
+\node[s, right=of sv] (gr) {concepts\\grounded?};
+\node[s, right=of gr, fill=gray!12] (ar) {arbitration\\+ guardrails};
+\node[s, right=of ar, fill=green!10] (cm) {hub\\commit};
+\foreach \a/\b in {raw/au,au/sc,sc/sv,sv/gr,gr/ar,ar/cm} \draw[arr] (\a) -- (\b);
+\node[r, below=6mm of raw] (f0) {timeout,\\crash, breaker};
+\node[r, below=6mm of au] (f1) {authority\\violation};
+\node[r, below=6mm of sc] (f2) {schema\\violation};
+\node[r, below=6mm of sv] (f3) {stale\\state};
+\node[r, below=6mm of gr] (f4) {ungrounded\\concept};
+\foreach \a/\b in {raw/f0,au/f1,sc/f2,sv/f3,gr/f4} \draw[arr, red!60!black] (\a) -- (\b);
+\node[below=4mm of f2, text width=9cm, align=center] {each rejection yields no proposal, so the default policy (PPO action, template feedback) decides; an agent never touches the hub's state};
+\end{tikzpicture}

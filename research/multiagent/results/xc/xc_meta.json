@@ -1,0 +1,17 @@
+{
+  "conditions": [
+    "TAU0",
+    "TAU5",
+    "TAU6",
+    "TAU7",
+    "TAU8",
+    "TAU9"
+  ],
+  "config_sha256": "27ab30671c379032a2ac35685341655a7e2fc142c9122ed528b0ff98680f62cb",
+  "git": {
+    "branch": "research/adcom2027-multiagent-final",
+    "commit": "01186fbcb3c4a54660f1b12d34eb9f2469f6d91a",
+    "dirty": false
+  },
+  "protocol": "MA-XC-v1"
+}

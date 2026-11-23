@@ -1,0 +1,15 @@
+{
+ "V0": {
+  "guardrail_g1": 51,
+  "guardrail_g3": 23,
+  "ppo": 76
+ },
+ "V2": {
+  "ppo": 150
+ },
+ "V3": {
+  "guardrail_g1": 1,
+  "guardrail_g3": 24,
+  "non_rl_heuristic_recovery": 125
+ }
+}

@@ -1,0 +1,10 @@
+{
+  "arm": "B2",
+  "training_seed": 123,
+  "timesteps": 24576,
+  "extended_budget": false,
+  "config": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\scripts\\e1_config.json",
+  "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2_seed123.csv",
+  "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_123\\ppo_final.zip",
+  "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training\\B2\\seed_123\\vecnormalize.pkl"
+}

@@ -14,7 +14,16 @@ Contract Design:
   - Attribution:
       * When Qwen 1.5B generates: decision_source = "qwen_1.5b_llm", llm_status = "available"
       * When Qwen 7B generates: decision_source = "qwen_7b_llm", llm_status = "available"
+      * When a hosted OpenAI-compatible endpoint generates: decision_source = "qwen_hosted_llm", llm_status = "available"
       * When fallback occurs: decision_source = "non_llm_structured_recovery", llm_status = "llm_unavailable"
+
+Hosted mode:
+  Setting LLM_BASE_URL switches this service from the local GGUF/Transformers
+  engine to a hosted OpenAI-compatible chat completions endpoint (e.g. Groq
+  serving a Qwen model). LLM_API_KEY and LLM_MODEL are read alongside it.
+  Leaving LLM_BASE_URL unset preserves the original local-only behavior
+  exactly. The existing deterministic structured fallback still applies if a
+  hosted call fails (rate limit, 5xx, network error, bad JSON).
 """
 
 from __future__ import annotations
@@ -313,6 +322,76 @@ FEEDBACK_MAX_NEW_TOKENS = int(os.getenv("QWEN_FEEDBACK_MAX_NEW_TOKENS", "512"))
 WARMUP_EXECUTOR = ThreadPoolExecutor(max_workers=1, thread_name_prefix="qwen_warmup")
 WARMUP_TASK: Optional[asyncio.Task] = None
 
+# ── Hosted OpenAI-compatible endpoint (optional) ─────────────────────────────
+# Unset LLM_BASE_URL (the default) preserves the original local-only GGUF/
+# Transformers behavior exactly; setting it swaps to a hosted chat
+# completions API (e.g. Groq) instead of loading any local model.
+LLM_BASE_URL = os.environ.get("LLM_BASE_URL", "").strip()
+LLM_API_KEY = os.environ.get("LLM_API_KEY", "").strip()
+LLM_MODEL = os.environ.get("LLM_MODEL", "").strip()
+HOSTED_MODE = bool(LLM_BASE_URL)
+
+_openai_client = None
+
+
+def _get_openai_client():
+    """Lazily construct the OpenAI-compatible client for hosted mode.
+
+    Returns:
+        openai.OpenAI: Client configured with LLM_BASE_URL/LLM_API_KEY.
+    """
+    global _openai_client
+    if _openai_client is None:
+        from openai import OpenAI
+        _openai_client = OpenAI(base_url=LLM_BASE_URL, api_key=LLM_API_KEY or "unused")
+    return _openai_client
+
+
+def _chatml_to_messages(chat_prompt: str) -> list[dict]:
+    """Convert an existing ChatML-formatted prompt into OpenAI chat messages.
+
+    Reuses the same prompt text the local GGUF path already builds
+    (`_build_followup_prompt` / `_build_feedback_prompt`) instead of
+    maintaining a second copy of the prompt content for hosted mode.
+
+    Args:
+        chat_prompt (str): ChatML string with `<|im_start|>role ... <|im_end|>` blocks.
+
+    Returns:
+        list[dict]: `[{"role": ..., "content": ...}, ...]` for system/user
+            blocks (the trailing open `<|im_start|>assistant` cue has no
+            closing tag and is intentionally not included).
+    """
+    messages = []
+    for role, content in re.findall(r"<\|im_start\|>(system|user)\n(.*?)<\|im_end\|>", chat_prompt, re.DOTALL):
+        content = content.strip()
+        if content:
+            messages.append({"role": role, "content": content})
+    return messages or [{"role": "user", "content": chat_prompt.strip()}]
+
+
+def _generate_hosted(chat_prompt: str, max_tokens: int) -> str:
+    """Run one blocking chat-completion call against the hosted endpoint.
+
+    Blocking — callers run it in an executor, matching the local
+    `ModelRegistry.generate_full` calling convention.
+
+    Args:
+        chat_prompt (str): ChatML-formatted prompt (parsed into messages).
+        max_tokens (int): Maximum tokens to generate.
+
+    Returns:
+        str: The generated text (stripped).
+    """
+    client = _get_openai_client()
+    response = client.chat.completions.create(
+        model=LLM_MODEL,
+        messages=_chatml_to_messages(chat_prompt),
+        max_tokens=max_tokens,
+        temperature=0.1,
+    )
+    return (response.choices[0].message.content or "").strip()
+
 
 async def _warm_models_background():
     """Load the best available model in the background during service startup.
@@ -329,6 +408,10 @@ async def _warm_models_background():
         None.
     """
     global MOCK_MODE
+    if HOSTED_MODE:
+        print(f"[QwenService] Hosted mode active: LLM_BASE_URL={LLM_BASE_URL} model={LLM_MODEL or '(unset)'}", flush=True)
+        return
+
     registry = ModelRegistry.get()
     loop = asyncio.get_running_loop()
     any_loaded = False
@@ -939,11 +1022,23 @@ async def health():
             engine is active).
     """
     registry = ModelRegistry.get()
+    if HOSTED_MODE:
+        return {
+            "status": "ok",
+            "service": "prepaired-qwen-microservice",
+            "version": "2.1.0",
+            "mock_mode": False,
+            "llm_mode": "hosted",
+            "hosted_base_url": LLM_BASE_URL,
+            "hosted_model": LLM_MODEL or "(unset)",
+            "primary_demo_engine": f"hosted:{LLM_MODEL or '(unset)'}",
+        }
     return {
         "status": "ok",
         "service": "prepaired-qwen-microservice",
         "version": "2.1.0",
         "mock_mode": MOCK_MODE,
+        "llm_mode": "local",
         "models_loaded": list(registry.models.keys()),
         "model_types": registry.model_types,
         "models_loading": {k: bool(v) for k, v in registry.loading.items()},
@@ -956,7 +1051,25 @@ async def health():
 @app.post("/api/qwen/generate-follow-up", response_model=FollowupResponse)
 @app.post("/followup", response_model=FollowupResponse)
 async def generate_followup(req: FollowupRequest):
-    """Generate candidate-specific, grounded follow-up question via GGUF / LLM or fallback."""
+    """Generate candidate-specific, grounded follow-up question via hosted / GGUF LLM or fallback."""
+    if HOSTED_MODE:
+        try:
+            prompt = _build_followup_prompt(req)
+            loop = asyncio.get_running_loop()
+            raw = await loop.run_in_executor(None, _generate_hosted, prompt, 128)
+            data = _extract_json_from_llm(raw)
+            if data and "followup" in data and len(str(data["followup"]).strip()) > 5:
+                return FollowupResponse(
+                    followup=str(data["followup"]).strip(),
+                    reason=str(data.get("reason", "Targeted probe on candidate gap")).strip(),
+                    target_concepts=_as_str_list(data.get("target_concepts", [])),
+                    decision_source="qwen_hosted_llm",
+                    llm_status="available",
+                )
+        except Exception as exc:
+            print(f"[QwenService] Hosted follow-up generation error: {exc}", flush=True)
+        return _synthesize_structured_followup(req)
+
     registry = ModelRegistry.get()
     if not MOCK_MODE and "qwen_1b" in registry.models:
         try:
@@ -985,11 +1098,6 @@ async def generate_followup(req: FollowupRequest):
 @app.post("/feedback", response_model=FeedbackResponse)
 async def generate_feedback(req: FeedbackRequest):
     """Generate rich, personalized feedback based on Evaluator output."""
-    registry = ModelRegistry.get()
-
-    # Check for Research Qwen-7B first, then Live Demo Qwen-1.5B
-    active_key = "qwen_7b" if "qwen_7b" in registry.models else ("qwen_1b" if "qwen_1b" in registry.models else None)
-
     comparison_dict = None
     if req.attempt_number > 1 or req.previous_best_score is not None:
         comparison_dict = {
@@ -999,6 +1107,39 @@ async def generate_feedback(req: FeedbackRequest):
             "resolved_concepts": req.resolved_concepts,
             "remaining_concepts": req.remaining_concepts,
         }
+
+    if HOSTED_MODE:
+        try:
+            prompt = _build_feedback_prompt(req)
+            loop = asyncio.get_running_loop()
+            raw = await loop.run_in_executor(None, _generate_hosted, prompt, FEEDBACK_MAX_NEW_TOKENS)
+            data = _extract_json_from_llm(raw)
+            if _validate_feedback_output(data, req):
+                ev = req.structured_evaluation
+                return FeedbackResponse(
+                    what_candidate_said=str(data.get("what_candidate_said", req.candidate_answer[:120])),
+                    what_was_correct=_as_str_list(data.get("what_was_correct", [])),
+                    what_was_incorrect=_as_str_list(data.get("what_was_incorrect", [])),
+                    what_was_incomplete=_as_str_list(data.get("what_was_incomplete", [])),
+                    missing_concepts=_as_str_list(data.get("missing_concepts", [])),
+                    how_to_answer=str(data.get("how_to_answer", "")),
+                    stronger_answer_guide=str(data.get("stronger_answer_guide", "")),
+                    actionable_improvements=_as_str_list(data.get("actionable_improvements", [])),
+                    narrative_feedback=str(data.get("narrative_feedback", "")),
+                    final_score=float(ev.get("final_score", 0.5)),
+                    grade=str(ev.get("grade", "Average")),
+                    decision_source="qwen_hosted_llm",
+                    llm_status="available",
+                    attempt_number=req.attempt_number,
+                    comparison=comparison_dict,
+                )
+        except Exception as exc:
+            print(f"[QwenService] Hosted feedback generation error: {exc}", flush=True)
+        return _synthesize_structured_feedback(req)
+
+    registry = ModelRegistry.get()
+    # Check for Research Qwen-7B first, then Live Demo Qwen-1.5B
+    active_key = "qwen_7b" if "qwen_7b" in registry.models else ("qwen_1b" if "qwen_1b" in registry.models else None)
 
     if not MOCK_MODE and active_key:
         try:
@@ -1037,6 +1178,7 @@ async def generate_feedback(req: FeedbackRequest):
 @app.post("/api/qwen/hint", response_model=HintResponse)
 @app.post("/hint", response_model=HintResponse)
 async def generate_hint(req: HintRequest):
+    """Build a template-based hint nudging the candidate from a strong point toward the first missing concept."""
     strong = req.strong_points[0] if req.strong_points else "the initial setup"
     missing = req.missing_concepts[0] if req.missing_concepts else "the core mechanism"
     hint_text = f"You have identified {strong}. Consider how {missing} connects to the problem constraints and what invariant must hold."
@@ -1050,6 +1192,7 @@ async def generate_hint(req: HintRequest):
 @app.post("/api/qwen/report", response_model=ReportResponse)
 @app.post("/report", response_model=ReportResponse)
 async def generate_report(req: ReportRequest):
+    """Build a template-based end-of-session summary from the candidate's overall score and difficulty history."""
     report_text = (
         f"{req.candidate_name}, you completed the technical session with an overall score of {req.overall_score:.0%}. "
         f"Your performance in theoretical questions reached difficulty level {max(req.difficulty_history, default=3)}/5. "

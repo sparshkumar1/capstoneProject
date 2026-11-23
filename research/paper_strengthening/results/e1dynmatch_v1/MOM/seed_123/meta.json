@@ -1,0 +1,10 @@
+{
+  "arm": "MOM",
+  "factor_a": "matched",
+  "factor_b": "original",
+  "factor_c": "matched",
+  "training_seed": 123,
+  "elapsed_sec": 72.29,
+  "final_model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1dynmatch_v1\\MOM\\seed_123\\MOM_seed123_final_24576.zip",
+  "final_vecnorm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1dynmatch_v1\\MOM\\seed_123\\MOM_seed123_vecnormalize_final_24576.pkl"
+}

@@ -1,0 +1,384 @@
+{
+  "n_cases": 32,
+  "n_questions": 4,
+  "matched_qids": [
+    1,
+    3,
+    10,
+    41
+  ],
+  "seed": 20270901,
+  "n_bootstrap": 5000,
+  "method": "Live, current-code re-score via services.evaluator.app.evaluate() against benchmark_dataset.csv's self-contained question/candidate_answer, restricted to the 4 qid-clean questions. Not read from the frozen paper2_case_level_results.csv (confirmed stale for 6/32 of these cases relative to current evaluator code).",
+  "consistency_check_against_ninth_pass_final_score_only": {
+    "expected_from_ninth_pass_matched_subset_evaluation_json": 0.655,
+    "computed_this_script": 0.655,
+    "matches_within_rounding": true
+  },
+  "provenance_note": "This supersedes reanalyze_evaluator_ablation_matched_subset.py's frozen-CSV-based attempt for the matched subset specifically. The ORIGINAL Table X (full 64-case, in FINAL_MANUSCRIPT_EVIDENCE_V2.md Section XI.1) still uses the frozen CSV and is not recomputed here; it carries both the qid-mismatch contamination (32/64 cases) AND this same staleness caveat, disclosed but not corrected for the full 64-case table in this pass.",
+  "selection_limitation": "Reduced, non-random subset of the original 8-question design (4 of 8 questions), not a fresh sample matched to its intended power. Question-clustered bootstrap CIs resample only 4 clusters and are correspondingly wide.",
+  "configurations": {
+    "S1 only": {
+      "item_level_spearman_rho": 0.4635,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.5172,
+        "ci95_low": 0.3194,
+        "ci95_high": 0.8182
+      }
+    },
+    "S2 only": {
+      "item_level_spearman_rho": 0.7707,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.7844,
+        "ci95_low": 0.6547,
+        "ci95_high": 0.8977
+      }
+    },
+    "R only": {
+      "item_level_spearman_rho": 0.5838,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.5863,
+        "ci95_low": 0.536,
+        "ci95_high": 0.6368
+      }
+    },
+    "S1+S2 (0.30/0.70)": {
+      "item_level_spearman_rho": 0.7366,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.7621,
+        "ci95_low": 0.595,
+        "ci95_high": 0.8961
+      }
+    },
+    "S1+R (0.23/0.77)": {
+      "item_level_spearman_rho": 0.6377,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.645,
+        "ci95_low": 0.55,
+        "ci95_high": 0.7316
+      }
+    },
+    "S2+R (0.41/0.59)": {
+      "item_level_spearman_rho": 0.7729,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.7794,
+        "ci95_low": 0.6801,
+        "ci95_high": 0.8799
+      }
+    },
+    "Full composite (live final_score, incl. bonus/penalty/cap)": {
+      "item_level_spearman_rho": 0.655,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.6715,
+        "ci95_low": 0.4987,
+        "ci95_high": 0.8095
+      }
+    }
+  },
+  "paired_full_vs_R_only": {
+    "mean_abs_error_full": 0.2524,
+    "mean_abs_error_R_only": 0.2644,
+    "question_clustered_bootstrap_of_mean_diff_full_minus_R": {
+      "mean": -0.0119,
+      "ci95_low": -0.0323,
+      "ci95_high": 0.0103
+    }
+  },
+  "per_case": [
+    {
+      "case_id": "BM-001",
+      "qid": 1,
+      "S1": 0.405,
+      "S2": 0.75,
+      "R": 0.607,
+      "final_score": 0.6,
+      "human_gold_score": 0.9167
+    },
+    {
+      "case_id": "BM-002",
+      "qid": 1,
+      "S1": 0.553,
+      "S2": 1.0,
+      "R": 0.686,
+      "final_score": 0.8359,
+      "human_gold_score": 0.98
+    },
+    {
+      "case_id": "BM-003",
+      "qid": 1,
+      "S1": 0.238,
+      "S2": 0.5,
+      "R": 0.433,
+      "final_score": 0.4173,
+      "human_gold_score": 0.73
+    },
+    {
+      "case_id": "BM-004",
+      "qid": 1,
+      "S1": 0.247,
+      "S2": 0.25,
+      "R": 0.24,
+      "final_score": 0.0097,
+      "human_gold_score": 0.5267
+    },
+    {
+      "case_id": "BM-005",
+      "qid": 1,
+      "S1": 0.293,
+      "S2": 0.25,
+      "R": 0.509,
+      "final_score": 0.386,
+      "human_gold_score": 0.1433
+    },
+    {
+      "case_id": "BM-006",
+      "qid": 1,
+      "S1": 0.316,
+      "S2": 0.5,
+      "R": 0.371,
+      "final_score": 0.408,
+      "human_gold_score": 0.28
+    },
+    {
+      "case_id": "BM-007",
+      "qid": 1,
+      "S1": 0.257,
+      "S2": 0.0,
+      "R": 0.329,
+      "final_score": 0.203,
+      "human_gold_score": 0.06
+    },
+    {
+      "case_id": "BM-008",
+      "qid": 1,
+      "S1": 0.281,
+      "S2": 0.5,
+      "R": 0.307,
+      "final_score": 0.3707,
+      "human_gold_score": 0.1867
+    },
+    {
+      "case_id": "BM-009",
+      "qid": 3,
+      "S1": 0.364,
+      "S2": 1.0,
+      "R": 0.679,
+      "final_score": 0.6,
+      "human_gold_score": 0.92
+    },
+    {
+      "case_id": "BM-010",
+      "qid": 3,
+      "S1": 0.478,
+      "S2": 1.0,
+      "R": 0.838,
+      "final_score": 0.8709,
+      "human_gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-011",
+      "qid": 3,
+      "S1": 0.273,
+      "S2": 0.5,
+      "R": 0.376,
+      "final_score": 0.4041,
+      "human_gold_score": 0.5067
+    },
+    {
+      "case_id": "BM-012",
+      "qid": 3,
+      "S1": 0.175,
+      "S2": 0.0,
+      "R": 0.414,
+      "final_score": 0.2333,
+      "human_gold_score": 0.0833
+    },
+    {
+      "case_id": "BM-013",
+      "qid": 3,
+      "S1": 0.394,
+      "S2": 0.5,
+      "R": 0.616,
+      "final_score": 0.542,
+      "human_gold_score": 0.1667
+    },
+    {
+      "case_id": "BM-014",
+      "qid": 3,
+      "S1": 0.338,
+      "S2": 0.75,
+      "R": 0.561,
+      "final_score": 0.5937,
+      "human_gold_score": 0.3
+    },
+    {
+      "case_id": "BM-015",
+      "qid": 3,
+      "S1": 0.302,
+      "S2": 0.5,
+      "R": 0.459,
+      "final_score": 0.4499,
+      "human_gold_score": 0.1167
+    },
+    {
+      "case_id": "BM-016",
+      "qid": 3,
+      "S1": 0.382,
+      "S2": 1.0,
+      "R": 0.466,
+      "final_score": 0.5601,
+      "human_gold_score": 0.86
+    },
+    {
+      "case_id": "BM-017",
+      "qid": 10,
+      "S1": 0.542,
+      "S2": 1.0,
+      "R": 0.617,
+      "final_score": 0.7396,
+      "human_gold_score": 0.9067
+    },
+    {
+      "case_id": "BM-018",
+      "qid": 10,
+      "S1": 0.611,
+      "S2": 1.0,
+      "R": 0.754,
+      "final_score": 0.8185,
+      "human_gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-019",
+      "qid": 10,
+      "S1": 0.549,
+      "S2": 0.5,
+      "R": 0.381,
+      "final_score": 0.4479,
+      "human_gold_score": 0.55
+    },
+    {
+      "case_id": "BM-020",
+      "qid": 10,
+      "S1": 0.319,
+      "S2": 0.0,
+      "R": 0.243,
+      "final_score": 0.0,
+      "human_gold_score": 0.1167
+    },
+    {
+      "case_id": "BM-021",
+      "qid": 10,
+      "S1": 0.391,
+      "S2": 0.25,
+      "R": 0.525,
+      "final_score": 0.4088,
+      "human_gold_score": 0.1133
+    },
+    {
+      "case_id": "BM-022",
+      "qid": 10,
+      "S1": 0.546,
+      "S2": 0.75,
+      "R": 0.516,
+      "final_score": 0.6024,
+      "human_gold_score": 0.3
+    },
+    {
+      "case_id": "BM-023",
+      "qid": 10,
+      "S1": 0.347,
+      "S2": 0.5,
+      "R": 0.28,
+      "final_score": 0.297,
+      "human_gold_score": 0.1367
+    },
+    {
+      "case_id": "BM-024",
+      "qid": 10,
+      "S1": 0.513,
+      "S2": 0.5,
+      "R": 0.37,
+      "final_score": 0.437,
+      "human_gold_score": 0.14
+    },
+    {
+      "case_id": "BM-025",
+      "qid": 41,
+      "S1": 0.571,
+      "S2": 0.75,
+      "R": 0.379,
+      "final_score": 0.4074,
+      "human_gold_score": 0.9033
+    },
+    {
+      "case_id": "BM-026",
+      "qid": 41,
+      "S1": 0.673,
+      "S2": 1.0,
+      "R": 0.643,
+      "final_score": 0.7227,
+      "human_gold_score": 0.9833
+    },
+    {
+      "case_id": "BM-027",
+      "qid": 41,
+      "S1": 0.621,
+      "S2": 0.75,
+      "R": 0.275,
+      "final_score": 0.3281,
+      "human_gold_score": 0.6333
+    },
+    {
+      "case_id": "BM-028",
+      "qid": 41,
+      "S1": 0.486,
+      "S2": 0.5,
+      "R": 0.212,
+      "final_score": 0.304,
+      "human_gold_score": 0.06
+    },
+    {
+      "case_id": "BM-029",
+      "qid": 41,
+      "S1": 0.503,
+      "S2": 0.75,
+      "R": 0.328,
+      "final_score": 0.442,
+      "human_gold_score": 0.0567
+    },
+    {
+      "case_id": "BM-030",
+      "qid": 41,
+      "S1": 0.547,
+      "S2": 0.75,
+      "R": 0.338,
+      "final_score": 0.5234,
+      "human_gold_score": 0.28
+    },
+    {
+      "case_id": "BM-031",
+      "qid": 41,
+      "S1": 0.402,
+      "S2": 0.5,
+      "R": 0.313,
+      "final_score": 0.3216,
+      "human_gold_score": 0.1567
+    },
+    {
+      "case_id": "BM-032",
+      "qid": 41,
+      "S1": 0.601,
+      "S2": 0.75,
+      "R": 0.327,
+      "final_score": 0.3862,
+      "human_gold_score": 0.7833
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "n_eligible": 122,
+  "split": {
+    "dev_topics": [
+      "BitManipulation",
+      "DynamicProgramming",
+      "Graphs",
+      "Heaps",
+      "LinkedLists",
+      "Strings"
+    ],
+    "dev_n_questions": 26,
+    "confirmatory_topics": [
+      "Advanced C",
+      "Amortized Analysis",
+      "Arrays",
+      "Backtracking",
+      "Binary Search Tree",
+      "Binary Trees",
+      "BinarySearch",
+      "C Preprocessor",
+      "C Variables",
+      "C_Programming",
+      "DSA_Theory",
+      "Data Structures",
+      "Enum",
+      "Expressions",
+      "Functions",
+      "Graph Representation",
+      "Graph Traversal",
+      "Hashing",
+      "Linkage",
+      "Matrix",
+      "Memory Allocation",
+      "Memory Management",
+      "Pointers",
+      "Preprocessor",
+      "Programming Concepts",
+      "Recursion",
+      "Sorting",
+      "Stack",
+      "Stack Applications",
+      "Storage Classes",
+      "Trees"
+    ],
+    "confirmatory_n_questions": 67,
+    "confirmatory_topic_sizes": {
+      "Advanced C": 1,
+      "Amortized Analysis": 1,
+      "Arrays": 8,
+      "Backtracking": 1,
+      "Binary Search Tree": 1,
+      "Binary Trees": 2,
+      "BinarySearch": 2,
+      "C Preprocessor": 1,
+      "C Variables": 1,
+      "C_Programming": 8,
+      "DSA_Theory": 8,
+      "Data Structures": 1,
+      "Enum": 1,
+      "Expressions": 1,
+      "Functions": 1,
+      "Graph Representation": 1,
+      "Graph Traversal": 1,
+      "Hashing": 1,
+      "Linkage": 1,
+      "Matrix": 2,
+      "Memory Allocation": 1,
+      "Memory Management": 2,
+      "Pointers": 1,
+      "Preprocessor": 1,
+      "Programming Concepts": 1,
+      "Recursion": 2,
+      "Sorting": 3,
+      "Stack": 4,
+      "Stack Applications": 1,
+      "Storage Classes": 2,
+      "Trees": 5
+    },
+    "cap_excess_reserved_for_dev_only": {
+      "Arrays": 2,
+      "C_Programming": 17,
+      "DSA_Theory": 10
+    }
+  },
+  "metamorphic_margin_check": {
+    "MG1_paraphrase_deltas": [
+      -0.0386,
+      -0.0506,
+      -0.0431
+    ],
+    "MG1_criterion": "Score approximately stable (|delta| <= 0.10)",
+    "MG5_keyword_injection_scores": [
+      0.4251,
+      0.5781,
+      0.6644
+    ],
+    "MG5_n_failed": 2,
+    "MG5_n_total": 3
+  },
+  "precision_projection_illustrative_only": {
+    "8": {
+      "ci95": [
+        -0.0151,
+        0.0497
+      ],
+      "half_width": 0.0324
+    },
+    "31": {
+      "ci95": [
+        -0.0004,
+        0.0326
+      ],
+      "half_width": 0.0165
+    },
+    "67": {
+      "ci95": [
+        0.0043,
+        0.0271
+      ],
+      "half_width": 0.0114
+    }
+  }
+}

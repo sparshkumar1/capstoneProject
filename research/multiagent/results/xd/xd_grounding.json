@@ -1,0 +1,264 @@
+{
+ "ALL": {
+  "categories": {
+   "C0_faithful": {
+    "accepted": 47,
+    "applicable": 64,
+    "disagree_ci95": [
+     0.163,
+     0.3909
+    ],
+    "disagree_with_intended_label": 17,
+    "excluded": 0,
+    "rejected": 17
+   },
+   "C1_verbatim_missing_as_correct": {
+    "accepted": 0,
+    "applicable": 57,
+    "disagree_ci95": [
+     0.0,
+     0.0627
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 7,
+    "rejected": 57
+   },
+   "C2_verbatim_incorrect_as_correct": {
+    "accepted": 0,
+    "applicable": 10,
+    "disagree_ci95": [
+     0.0,
+     0.3085
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 54,
+    "rejected": 10
+   },
+   "C3_narrative_correctly_explained_missing": {
+    "accepted": 0,
+    "applicable": 57,
+    "disagree_ci95": [
+     0.0,
+     0.0627
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 7,
+    "rejected": 57
+   },
+   "C4_truncated_paraphrase_credit": {
+    "accepted": 40,
+    "applicable": 57,
+    "disagree_ci95": [
+     0.566,
+     0.8157
+    ],
+    "disagree_with_intended_label": 40,
+    "excluded": 7,
+    "rejected": 17
+   },
+   "C5_score_leak": {
+    "accepted": 0,
+    "applicable": 64,
+    "disagree_ci95": [
+     0.0,
+     0.056
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 0,
+    "rejected": 64
+   },
+   "C6_generic_fluff": {
+    "accepted": 0,
+    "applicable": 64,
+    "disagree_ci95": [
+     0.0,
+     0.056
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 0,
+    "rejected": 64
+   }
+  },
+  "n_payloads": 64
+ },
+ "NO_OVERLAP": {
+  "categories": {
+   "C0_faithful": {
+    "accepted": 47,
+    "applicable": 47,
+    "disagree_ci95": [
+     0.0,
+     0.0755
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 0,
+    "rejected": 0
+   },
+   "C1_verbatim_missing_as_correct": {
+    "accepted": 0,
+    "applicable": 40,
+    "disagree_ci95": [
+     0.0,
+     0.0881
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 7,
+    "rejected": 40
+   },
+   "C2_verbatim_incorrect_as_correct": {
+    "accepted": 0,
+    "applicable": 4,
+    "disagree_ci95": [
+     0.0,
+     0.6024
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 43,
+    "rejected": 4
+   },
+   "C3_narrative_correctly_explained_missing": {
+    "accepted": 0,
+    "applicable": 40,
+    "disagree_ci95": [
+     0.0,
+     0.0881
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 7,
+    "rejected": 40
+   },
+   "C4_truncated_paraphrase_credit": {
+    "accepted": 40,
+    "applicable": 40,
+    "disagree_ci95": [
+     0.9119,
+     1.0
+    ],
+    "disagree_with_intended_label": 40,
+    "excluded": 7,
+    "rejected": 0
+   },
+   "C5_score_leak": {
+    "accepted": 0,
+    "applicable": 47,
+    "disagree_ci95": [
+     0.0,
+     0.0755
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 0,
+    "rejected": 47
+   },
+   "C6_generic_fluff": {
+    "accepted": 0,
+    "applicable": 47,
+    "disagree_ci95": [
+     0.0,
+     0.0755
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 0,
+    "rejected": 47
+   }
+  },
+  "n_payloads": 47
+ },
+ "RELABELLED": {
+  "categories": {
+   "C0_faithful": {
+    "accepted": 64,
+    "applicable": 64,
+    "disagree_ci95": [
+     0.0,
+     0.056
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 0,
+    "rejected": 0
+   },
+   "C1_verbatim_missing_as_correct": {
+    "accepted": 0,
+    "applicable": 57,
+    "disagree_ci95": [
+     0.0,
+     0.0627
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 7,
+    "rejected": 57
+   },
+   "C2_verbatim_incorrect_as_correct": {
+    "accepted": 0,
+    "applicable": 10,
+    "disagree_ci95": [
+     0.0,
+     0.3085
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 54,
+    "rejected": 10
+   },
+   "C3_narrative_correctly_explained_missing": {
+    "accepted": 0,
+    "applicable": 57,
+    "disagree_ci95": [
+     0.0,
+     0.0627
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 7,
+    "rejected": 57
+   },
+   "C4_truncated_paraphrase_credit": {
+    "accepted": 57,
+    "applicable": 57,
+    "disagree_ci95": [
+     0.9373,
+     1.0
+    ],
+    "disagree_with_intended_label": 57,
+    "excluded": 7,
+    "rejected": 0
+   },
+   "C5_score_leak": {
+    "accepted": 0,
+    "applicable": 64,
+    "disagree_ci95": [
+     0.0,
+     0.056
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 0,
+    "rejected": 64
+   },
+   "C6_generic_fluff": {
+    "accepted": 0,
+    "applicable": 64,
+    "disagree_ci95": [
+     0.0,
+     0.056
+    ],
+    "disagree_with_intended_label": 0,
+    "excluded": 0,
+    "rejected": 64
+   }
+  },
+  "n_payloads": 64
+ },
+ "_checks": {
+  "ALL_equals_stored_E3": true,
+  "overlap_and_placeholder": 17,
+  "payloads_with_overlap": 17,
+  "payloads_with_placeholder": 64
+ },
+ "meta": {
+  "git": {
+   "branch": "research/adcom2027-multiagent-final",
+   "commit": "2d987bf820fe02c617cac9ab74a16e01961f6b2b",
+   "dirty": true
+  },
+  "input_sha256": "8309e5255056e2ae73a04c5d3cb4b2be77e5766029be02834f3a5cacc43774c8",
+  "protocol": "MA-XA-XB-v1",
+  "validator": "services.qwen.app._validate_feedback_output"
+ }
+}

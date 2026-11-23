@@ -14,7 +14,11 @@ Canonical Observation Space (6D):
   [1] avg_performance  (float in [0, 1]): Rolling mean of last 5 scores
   [2] confidence       (float in [0, 1]): Measured or estimated candidate confidence
   [3] hesitation       (float in [0, 1]): Measured or estimated candidate hesitation
-  [4] time_norm        (float in [0, 1]): Normalized response latency
+  [4] progress         (float in [0, 1]): Normalized session turn-progress ratio (t / T).
+                       NOTE: the training simulator (rl/env/interview_env.py) defines this
+                       dimension as normalized per-question response latency instead; this
+                       runtime/training split is a documented, deliberate limitation, not a
+                       bug -- see research/audit/rl_state_definition.md, dimension s4.
   [5] difficulty       (float in [0, 1]): Current difficulty normalized (diff / 5.0)
 """
 

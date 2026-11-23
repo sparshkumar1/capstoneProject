@@ -1,0 +1,20 @@
+{
+  "training_seed": 789,
+  "elapsed_sec": 216.71,
+  "checkpoint_interval": 8192,
+  "checkpoints_saved": [
+    8192,
+    16384,
+    24576,
+    32768,
+    40960,
+    49152,
+    57344,
+    65536,
+    73728,
+    81920,
+    90112,
+    98304
+  ],
+  "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2v2ckpt_seed789.csv"
+}

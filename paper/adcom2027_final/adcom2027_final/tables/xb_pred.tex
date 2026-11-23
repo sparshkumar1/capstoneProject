@@ -1,0 +1,12 @@
+\begin{tabular}{lp{7.6cm}l}
+\toprule
+ID & Prediction & Outcome\\
+\midrule
+B1 & variant=full: every fault cell completes, keeps committed scores authoritative and transitions valid; no guardrail bypass, no ungrounded leak & Supported \\
+B2 & forbidden\_key: full -> authority\_violation>0 and schema\_violation==0; no\_authority -> authority\_violation==0, schema\_violation>0; containment 100\% in both & Supported \\
+B3 & adversarial\_valid: no\_arbitration has guardrail\_bypass>0 in >=1 session; full has 0 & Supported \\
+B4 & ungrounded coaching: no\_grounding leaks (>=1 session); full has 0 leaks and rejects plans & Supported \\
+B5 & strategy timeout (full): pooled p95 per-turn latency exceeds the clean M1 p95 by >=100 ms & Supported \\
+B6 & at fault rate 0.3, >=80\% of sessions see the per-agent breaker open at least once (crash/malformed/stale/nan cells) & Contradicted \\
+\bottomrule
+\end{tabular}

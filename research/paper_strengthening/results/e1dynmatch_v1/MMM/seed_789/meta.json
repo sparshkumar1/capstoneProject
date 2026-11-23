@@ -1,0 +1,10 @@
+{
+  "arm": "MMM",
+  "factor_a": "matched",
+  "factor_b": "matched",
+  "factor_c": "matched",
+  "training_seed": 789,
+  "elapsed_sec": 71.74,
+  "final_model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1dynmatch_v1\\MMM\\seed_789\\MMM_seed789_final_24576.zip",
+  "final_vecnorm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1dynmatch_v1\\MMM\\seed_789\\MMM_seed789_vecnormalize_final_24576.pkl"
+}

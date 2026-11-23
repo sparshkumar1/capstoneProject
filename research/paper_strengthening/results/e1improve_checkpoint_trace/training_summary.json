@@ -1,0 +1,27 @@
+[
+  {
+    "seed": 42,
+    "elapsed_sec": 405.62052059173584,
+    "wandb_run_id": "rfeezxp3"
+  },
+  {
+    "seed": 123,
+    "elapsed_sec": 408.26848340034485,
+    "wandb_run_id": "yn29t6wi"
+  },
+  {
+    "seed": 456,
+    "elapsed_sec": 440.1669545173645,
+    "wandb_run_id": "kpypad8a"
+  },
+  {
+    "seed": 789,
+    "elapsed_sec": 430.4749631881714,
+    "wandb_run_id": "6vz5itmq"
+  },
+  {
+    "seed": 999,
+    "elapsed_sec": 421.24157524108887,
+    "wandb_run_id": "jtfasezj"
+  }
+]

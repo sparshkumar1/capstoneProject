@@ -1,0 +1,59 @@
+# Synthetic Category-Discrimination Benchmark for the Hybrid Evaluator — V5
+
+**Status: complete protocol, NOT executed, NOT registered.** V1–V4 preserved unmodified. This version makes two materially substantive changes to V4 (§1, §2 below), which is why a new version was created rather than an addendum — everything else is unchanged from V4 and is carried forward by reference, not restated, except where a change ripples into it.
+
+## What changed from V4, and why it warranted a new version
+
+1. **Removed the S2 non-inferiority test as a formal hypothesis.** No independently defensible practical margin for S2 could be established (checked below, §1) — the only S2-level decision threshold in the whole system is a single point (0.60), not two, so there is no "gap between adjacent thresholds" to derive a margin from the way `final_score`'s margin was cross-checked in V4. S2's own coverage of C1-vs-C4 is now reported **descriptively only**: an effect estimate with a topic-clustered CI, no significance claim, no margin.
+2. **Added a new, sharper, formally prespecified primary component to the keyword-stuffing analysis: a dampening-disabled comparison.** Rather than only asking "does the deployed evaluator separate C1 from C4" (which V4 already answered as an estimation claim), this adds "is the dampening mechanism *specifically* responsible for that separation" — a difference-in-differences test comparing the deployed (dampened) formula against an otherwise-identical formula with only the dampening step turned off. This requires **no new model inference**: it is a pure arithmetic recomputation from the same S1/S2/R values the confirmatory run already collects, exactly as V2–V4's minor "dampening ablation" (§6.6 in prior versions) already scoped as requiring no additional scoring calls — this version simply promotes that idea from a secondary ablation to a formally prespecified, primary-family component, because it is a materially stronger test of the actual design claim.
+
+Both changes restructure the internal composition of the "keyword-stuffing" hypothesis enough that reusing V4's Part A/Part B labels would be confusing rather than a copy-edit, hence a new version.
+
+## 1. Why the S2 margin could not be independently justified (resolves the specific instruction)
+
+Checked in this pass: the system's only S2-level decision threshold is the single "Coverage–Reasoning Gap" follow-up trigger (`S2 ≥ 0.60 ∧ R < 0.35`, Table V). A single threshold gives no "smallest gap between adjacent thresholds" to borrow, unlike `final_score`'s margin in V4 §4, which had multiple thresholds (0.30/0.45/0.60/0.75/0.80/0.90) to compare. Separately: most rubrics in the eligible set have only 2–3 `mandatory`/`concept_groups` entries (§ eligibility audit, V3 §1), so S2 for a typical question can only take a handful of discrete-like values (e.g., 0, 0.5, 1.0 for a 2-concept question) — its natural step size is generally *coarser* than 0.10, so treating 0.10 as a meaningful continuous margin for S2 specifically would not even match how the quantity behaves. No independent, defensible practical margin was found. **Per the instructed fallback: the S2(C4) vs. S2(C1) contrast is removed from the confirmatory hypothesis family and reported descriptively** — point estimate and topic-clustered 95% CI (same bootstrap machinery as everything else, §8 of V4, unchanged), with no claim of significance or non-inferiority attached to it. It remains a useful contextual number (readers can see whether coverage stayed high on keyword-stuffed items even without a formal test), but it is no longer part of what the paper claims to have statistically established.
+
+**Note on P2 (paraphrase TOST), left untouched:** the same concern does not apply there. MG-1, the metamorphic-protocol precedent behind the 0.10 margin, was itself measured on `final_score` under paraphrase — exactly the quantity and exactly the transformation P2 tests. P2's use of 0.10 is the one context where that margin is directly validated by existing evidence, not an extrapolation; only S2's borrowed use of it (V4 §2.1) was the extrapolation, and that is what has been removed.
+
+## 2. Strengthened keyword-stuffing analysis: a prespecified dampening-disabled, difference-in-differences test
+
+### 2.1 What "dampening disabled" means, precisely
+For a given item, the deployed formula computes `S2_eff = S2 if R > 0.30 else 0.6·S2`, then `final_score = clamp(0.15·S1 + 0.35·S2_eff + 0.50·R + bonus − penalty, 0, 1)`, with the mandatory-cap rule (Eq. 9) applied after. The **only** change in the dampening-disabled recomputation is substituting `S2_eff = S2` unconditionally (i.e., the dampening branch never fires); every other term (S1, S2, R, bonus, penalty, the mandatory cap) is computed identically, from the same already-obtained component values. **No new model call, no new item, no new score is generated** — this is arithmetic on data the confirmatory run already collects for every item, computed for C1 and C4 specifically (the two categories this comparison needs).
+
+### 2.2 Estimand
+For question *i*, define the dampening effect on category *X* as `g_i(X) = final_score_damped(X) − final_score_undamped(X)` (how much the deployed formula's score differs from the undamped formula's score, for that category, on that question). The estimand of interest is the **differential dampening effect**:
+
+`Δ_interaction = mean_i[g_i(C4)] − mean_i[g_i(C1)]`
+
+**Prediction, stated before any confirmatory data exists:** dampening should have little effect on C1 (which is constructed to have R > 0.30, so the dampening branch should not fire) and a negative effect on C4 where it does fire (R ≤ 0.30), giving `Δ_interaction < 0` if the mechanism works as designed.
+
+### 2.3 Hypotheses and test (no external margin needed — this is the point)
+- **H0:** Δ_interaction ≥ 0 (dampening does not differentially suppress keyword-stuffed answers relative to correct ones).
+- **H1:** Δ_interaction < 0 (it does).
+- **Rejection criterion:** topic-clustered bootstrap (same procedure as V4 §8: resample the 31 confirmatory topics with replacement, B=5000, pool all of a resampled topic's per-question `g_i(C4) − g_i(C1)` values, compute the mean); reject H0 if the **95th percentile** of the resulting distribution is < 0 (a one-sided test at α=0.05, testing against the natural, non-arbitrary null of "no differential effect," which needs no externally justified margin — the null is zero by construction, side-stepping the exact problem §1 identifies for S2).
+
+### 2.4 Restructured keyword-stuffing primary family
+The "does the hybrid design's anti-keyword-stuffing mechanism work" claim is now formally two components, both threshold-0 one-sided tests, both required (intersection–union structure, no internal correction between them, same reasoning as V4 §2.4):
+- **P1-i** (carried from V4's Part B, unchanged in substance): `final_score(C1) − final_score(C4)` under the deployed, dampened formula is significantly positive (H0: mean ≤ 0). Reported primarily as an effect size with CI, per V4's own downgrade from a threshold-test; the significance check itself needs no margin.
+- **P1-ii** (new, §2.2–2.3): the differential dampening effect is significantly negative.
+- **S2(C4) vs. S2(C1)** is no longer P1's "Part A" — it is a labeled **descriptive companion report**, not a hypothesis, per §1.
+
+**Family-wise correction, restated:** the primary family remains exactly 2 top-level claims — {P1 (now P1-i AND P1-ii, an intersection–union compound, no internal correction needed), P2 (paraphrase TOST)} — Holm-corrected at overall α=0.05, unchanged in structure from V4, not inflated by adding P1-ii internally.
+
+## 3. Everything else — carried forward from V4 unchanged (referenced, not restated)
+
+Eligibility audit (122/125), the exact split (26 dev / 67 confirmatory / 29 cap-excess reserve, 31 confirmatory topics), the C5a/C5b redesign and its lexical controls, the full per-category construction-validity table, the blind spot-check (extended to ask both category and correctness), the aggregation hierarchy and topic-cluster bootstrap mechanics, the manipulation check's diagnose-don't-suppress rule and single-remediation cap, and the generalization-limits statement are all unchanged from `SYNTHETIC_EVALUATOR_BENCHMARK_PROTOCOL_V4.md` §§1, 3, 5–8 and apply here without modification. **Item counts are unchanged** (P1-ii uses only C1 and C4's already-planned S1/S2/R values; no new item or category was added).
+
+**One extension to V4's stopping/integrity rules (§8):** the dampening-disabled recomputation code (§2.1) is written and hashed as part of the registered protocol, before any confirmatory score exists, on the same footing as the rest of the analysis code — no formula choice for this comparison is made after seeing results.
+
+## 4. Final complete-design audit (sample split, construction, estimands, tests, stopping rules)
+
+Conducted as a single pass over the whole design as it now stands, not a re-litigation of settled points:
+
+- **Sample split:** 122/125 eligible; 26 development questions (6 topics, deliberately excluding the 3 oversized topics); 67 confirmatory questions (31 topics, the 3 oversized topics capped at 8 each); 29 cap-excess questions reserved for development-only piloting. Exact, disclosed, seeded (20260921 for the split; a separate, registration-time seed for the analysis bootstrap). No issue found.
+- **Category construction:** 8 effective categories (C1, C2, C3-high, C3-low, C4, C5a, C5b, C6, C7 — 9 counting C3's two levels separately), each with a disclosed construction rule, an automated text-only validity check, and an explicit statement of what still needs human judgment (V4 §5's table). C1/C2 no longer use verbatim rubric phrasing (V3 fix, still in force); C5 no longer risks the lookup-circularity problem (V4 fix, this pass confirmed it still holds under the new P1-ii analysis, since P1-ii only uses C1/C4, not C5 at all — no interaction between the two fixes). No new issue found.
+- **Estimands:** every formal hypothesis (P1-i, P1-ii, P2, M1) now has an exact estimand, exact null/alternative, and exact rejection rule, stated in V4 §2 and this document's §2. The one previously-unjustified margin (S2 non-inferiority) has been removed rather than patched. No hypothesis in the current design relies on an unexamined or unjustified numeric threshold — P1-i and P1-ii test against a natural zero; P2 tests against the one context where the 0.10 margin is directly, not extrapolatively, supported by existing evidence.
+- **Statistical tests:** identical topic-clustered bootstrap machinery (B=5000, resample topics with replacement, pool all of a resampled topic's per-question values) is used for every hypothesis and the S2 descriptive report, so results are methodologically comparable to each other and to `EXISTING_EVIDENCE_ANALYSIS.md`'s treatment of the human benchmark. Multiplicity: Holm across exactly 2 top-level primary claims, with the two internal-to-P1 components correctly treated as an intersection–union pair needing no separate correction. No issue found.
+- **Stopping rules:** the manipulation check (M1) is always reported and diagnosed, never silently suppressed, with a hard one-remediation-pass cap (V4 §7, unchanged). All analysis code, including the new dampening-disabled recomputation, is hashed before any confirmatory score exists (§3 of this document). No issue found.
+
+**Conclusion of this audit: no further substantive issue was found.** The design is ready, at the scope disclosed across V1–V5 (most explicitly, V4 §9's residual limitations, all still standing and unresolved by this pass: single-team construction validation; project-internal, not externally validated, margins; unverified topic-taxonomy homogeneity), for the registration package below.

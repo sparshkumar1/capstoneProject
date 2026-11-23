@@ -1,0 +1,71 @@
+\documentclass[runningheads,a4paper]{llncs}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage{tikz}
+
+\renewcommand{\topfraction}{.95}\renewcommand{\bottomfraction}{.90}\renewcommand{\textfraction}{.05}\renewcommand{\floatpagefraction}{.85}
+\setlength{\textfloatsep}{4pt plus 1pt minus 1pt}
+\setlength{\floatsep}{3pt plus 1pt minus 1pt}
+\setlength{\intextsep}{3pt plus 1pt minus 1pt}
+\setlength{\abovecaptionskip}{2pt}
+\setlength{\belowcaptionskip}{0pt}
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+                       {-6\p@ \@plus -1\p@ \@minus -1\p@}%
+                       {3\p@ \@plus 1\p@ \@minus 1\p@}%
+                       {\normalfont\large\bfseries\boldmath
+                        \rightskip=\z@ \@plus 8em\pretolerance=10000 }}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                          {-5\p@ \@plus -1\p@ \@minus -1\p@}%
+                          {2\p@ \@plus 1\p@ \@minus 1\p@}%
+                          {\normalfont\normalsize\bfseries\boldmath
+                           \rightskip=\z@ \@plus 8em\pretolerance=10000 }}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                         {3\p@ \@plus 1\p@ \@minus 1\p@}%
+                         {-0.5em}%
+                         {\normalfont\normalsize\bfseries}}
+\makeatother
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
+\input{numbers}
+\emergencystretch=2em
+\begin{document}
+
+\title{Bounded-Authority Agent Specialization for Adaptive Technical Interview Systems: Coordination, Safeguards, and Empirical Trade-offs}
+\titlerunning{Bounded-Authority Agent Specialization for Adaptive Interview Systems}
+\author{Anonymous Author(s)}
+\authorrunning{Anonymous}
+\institute{Anonymous Institution}
+\maketitle
+\vspace{-1.2em}
+\begin{abstract}
+Interview-practice systems may be described as multi-agent even when one controller invokes components procedurally. We ask whether two bounded-authority agents, a Strategy Agent and a Coaching Agent, with threshold-gated arbitration over a frozen Proximal Policy Optimization (PPO) policy, change decisions, and whether any change arises from specialization or from coordination. Across 160 deterministic replay sessions (no live LLM), the agent layer altered difficulty trajectories, with fewer level changes ($15.12 \to 12.45$) and lower PPO agreement ($0.626 \to 0.400$); leave-one-cluster-out analysis showed sensitivity to the eight replay clusters. Split and unified implementations produced identical decisions in open-loop replay ($1{,}280/1{,}280$ turns), and the layer added $+1.04$\,ms median latency. Fault injection showed containment of the tested adversarial proposals ($0/40$ vs $38/40$ sessions with guardrail bypass, with and without arbitration). Results are limited to deterministic replay; no human-learning claims are made.
+\keywords{multi-agent coordination \and agent specialization \and decision-making \and trajectory dynamics \and interview practice \and arbitration}
+\end{abstract}
+
+\input{sec_intro}
+\input{sec_related}
+\input{sec_arch}
+\input{sec_method}
+\input{sec_results}
+\input{sec_disc}
+\input{sec_limits}
+\input{sec_concl}
+
+\let\oldthebibliography\thebibliography
+\let\endoldthebibliography\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+  \begin{oldthebibliography}{#1}%
+    \setlength{\itemsep}{0pt}%
+    \setlength{\parsep}{0pt}%
+}{%
+  \end{oldthebibliography}%
+}
+
+\enlargethispage{2\baselineskip}
+\bibliographystyle{splncs04}
+\bibliography{refs}
+\end{document}

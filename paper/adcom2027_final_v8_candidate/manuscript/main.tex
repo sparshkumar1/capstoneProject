@@ -1,0 +1,39 @@
+\documentclass[runningheads]{llncs}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage{tikz}
+
+\renewcommand{\topfraction}{.9}\renewcommand{\bottomfraction}{.8}\renewcommand{\textfraction}{.08}\renewcommand{\floatpagefraction}{.75}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
+\input{numbers}
+\emergencystretch=2em
+\begin{document}
+
+\title{Bounded-Authority Agents in an Orchestrated Interview-Practice System: Coordination, Arbitration and Fault Containment}
+\titlerunning{Bounded-authority agents in an orchestrated system}
+\author{Anonymous Author(s)}
+\authorrunning{Anonymous}
+\institute{Anonymous Institution}
+\maketitle
+
+\begin{abstract}
+Systems that wrap a learned scorer, rules, a small language model and a reinforcement-learning policy are often called multi-agent although one controller calls each part. We extend an existing spoken technical-interview practice system, preserving its workflow, evaluator and PPO policy, with two stateful agents: a Strategy Agent (difficulty proposals and follow-up probes from a private weakness ledger) and a Coaching Agent (feedback depth, hints and emphasis). The agents only propose; typed, validated proposals pass a deterministic coordinator and arbitrator, and the hub alone commits state. The agents are rule-based, the architecture stays centralised, and PPO is not multi-agent RL. On replayed recorded evaluator outputs for 64 constructed answers (no language model ran), registered experiments show that the agents change the difficulty path in all 160 sessions per condition (level changes 15.1 to 12.5 per session; the sessions reuse 8 recorded answer sets) while committed scores stay authoritative, that the layer is transparent when no agent contributes, and that setting only the confidence threshold to zero collapses the Strategy Agent into a near-constant policy. Fault injection into agent output (1,760 sessions) shows containment at ceiling in every variant, so safeguards differ in guardrail bypass (38/40 sessions without arbitration, 0/40 with) and ungrounded emphasis (40/40 without the check, 0/40 with); well-formed but wrong proposals are not detected. Three of 16 registered predictions were contradicted; five predictions of a follow-up threshold experiment held. Correcting an earlier audit gives 13 of 14 predictions, a narrower malformed-score claim and a byte-reproducible historical configuration; a rebuilt grounding probe shows that 17 rejections were artefacts while paraphrased unsupported credit is accepted in 57 of 57 unambiguous cases. We make no claim about coaching quality or learning.
+\keywords{bounded-authority agents \and orchestration \and arbitration \and fault injection \and ablation \and interview practice}
+\end{abstract}
+
+\input{sec_intro}
+\input{sec_related}
+\input{sec_arch}
+\input{sec_method}
+\input{sec_results}
+\input{sec_carry}
+\input{sec_disc}
+\input{sec_limits}
+\input{sec_concl}
+
+\bibliographystyle{splncs04}
+\bibliography{refs}
+\end{document}

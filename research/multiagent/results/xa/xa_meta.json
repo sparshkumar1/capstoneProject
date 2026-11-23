@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    "B0",
+    "B7",
+    "B0c",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "M7",
+    "M8",
+    "M1c"
+  ],
+  "config_sha256": "96d3df00d9336af4d9d2f7f8b9a95edbcd3f897cc420e05195c3871018794e18",
+  "git": {
+    "branch": "research/adcom2027-multiagent-final",
+    "commit": "380fb36d9665d43abba8d2ad843e5c08c3ff2431",
+    "dirty": false
+  },
+  "protocol": "MA-XA-XB-v1",
+  "seeds": 20
+}

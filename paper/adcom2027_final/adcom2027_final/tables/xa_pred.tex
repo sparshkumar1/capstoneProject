@@ -1,0 +1,16 @@
+\begin{tabular}{lp{7.6cm}l}
+\toprule
+ID & Prediction & Outcome\\
+\midrule
+A1 & completion 100\% in every condition & Supported \\
+A2 & committed scores equal the recorded evaluator output in every session of every condition & Supported \\
+A3 & difficulty levels stay within [1,5], and every RL-phase decision moves by at most one level, in every session of every condition & Supported \\
+A4 & M2 (no Strategy Agent) reproduces B0 (difficulty, score and question paths) in every session & Supported \\
+A5 & M3, M5, M6, M8 reproduce M1's difficulty/score/question paths in every session (fault-free) & Supported \\
+A6 & M4 (no arbitration) has guardrail\_bypass>0 in >=1 session; M1 has 0 in all & Supported \\
+A7 & M1 differs from B0 in difficulty path in >=50\% of sessions & Supported \\
+A8 & median per-turn latency M1 - B0 < 50 ms (pooled turns) & Supported \\
+A9 & with PPO unavailable, M7 differs from B7 in difficulty path in >=50\% of sessions & Contradicted \\
+A10 & canonical guardrails change the difficulty path in >=1 session vs legacy (B0c vs B0) & Contradicted \\
+\bottomrule
+\end{tabular}

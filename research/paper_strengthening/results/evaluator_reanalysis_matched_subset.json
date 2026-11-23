@@ -1,0 +1,94 @@
+{
+  "n_cases": 32,
+  "n_questions": 4,
+  "matched_qids": [
+    1,
+    3,
+    10,
+    41
+  ],
+  "seed": 20270901,
+  "n_bootstrap": 5000,
+  "provenance": "Restricted to the 4 of 8 benchmark questions (qid 1, 3, 10, 41) whose benchmark_dataset.csv question text still matches the live get_rubric(qid) question text, per evaluator_qid_rubric_mismatch_diagnosis.json (seventh pass) and the ninth pass's evaluator_benchmark_repair_package/qid_mapping.json. The excluded 32 cases (qid 7, 15, 22, 50) were scored, via the live production get_rubric(qid) lookup baked into paper2_case_level_results.csv, against a rubric for a different question than the one the benchmark's human raters saw.",
+  "consistency_check_against_ninth_pass": {
+    "expected_item_level_rho_from_matched_subset_evaluation_json": 0.655,
+    "computed_item_level_rho_this_script": 0.7092,
+    "matches_within_rounding": false
+  },
+  "selection_limitation": "This is a reduced, non-random subset of the original 8-question design, not a fresh sample matched to its intended power. All seven configurations' question-clustered bootstrap CIs now resample only 4 clusters and are correspondingly wide; do not treat this table as replacing the original 8-question design's intended coverage.",
+  "configurations": {
+    "S1 only": {
+      "item_level_spearman_rho": 0.4635,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.5172,
+        "ci95_low": 0.3194,
+        "ci95_high": 0.8182
+      }
+    },
+    "S2 only": {
+      "item_level_spearman_rho": 0.7707,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.7844,
+        "ci95_low": 0.6547,
+        "ci95_high": 0.8977
+      }
+    },
+    "R only": {
+      "item_level_spearman_rho": 0.5838,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.5863,
+        "ci95_low": 0.536,
+        "ci95_high": 0.6368
+      }
+    },
+    "S1+S2 (0.30/0.70)": {
+      "item_level_spearman_rho": 0.7366,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.7621,
+        "ci95_low": 0.595,
+        "ci95_high": 0.8961
+      }
+    },
+    "S1+R (0.23/0.77)": {
+      "item_level_spearman_rho": 0.6377,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.645,
+        "ci95_low": 0.55,
+        "ci95_high": 0.7316
+      }
+    },
+    "S2+R (0.41/0.59)": {
+      "item_level_spearman_rho": 0.7729,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.7794,
+        "ci95_low": 0.6801,
+        "ci95_high": 0.8799
+      }
+    },
+    "Full composite (stored final_score, incl. bonus/penalty/cap)": {
+      "item_level_spearman_rho": 0.7092,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 5000,
+        "mean": 0.7214,
+        "ci95_low": 0.6261,
+        "ci95_high": 0.8333
+      }
+    }
+  },
+  "paired_full_vs_R_only": {
+    "mean_abs_error_full": 0.2462,
+    "mean_abs_error_R_only": 0.2644,
+    "question_clustered_bootstrap_of_mean_diff_full_minus_R": {
+      "mean": -0.0181,
+      "ci95_low": -0.0377,
+      "ci95_high": 0.0009
+    },
+    "interpretation": "CI excludes 0 => full composite's error is significantly different from R-only's, at the question-clustered level (now only 4 independent questions -- a much weaker basis for this comparison than the original 8-question design). CI includes 0 => no significant difference detectable."
+  }
+}
