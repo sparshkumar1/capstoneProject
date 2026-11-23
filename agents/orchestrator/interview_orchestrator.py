@@ -17,11 +17,14 @@ Usage in frontend/main.py:
 from __future__ import annotations
 
 import asyncio
+import os
 import uuid
 import re
 from collections import Counter
 from datetime import UTC, datetime
 from typing import Any, Dict, List, Optional, Tuple
+
+QWEN_URL = os.getenv("QWEN_URL", "http://localhost:8001")
 
 # ── Guarded sub-agent imports ────────────────────────────────────────────
 
@@ -1505,7 +1508,7 @@ class InterviewOrchestrator:
             }
             async with httpx.AsyncClient(timeout=6.0) as client:
                 for ep in ("/api/qwen/hint", "/hint"):
-                    resp = await client.post(f"http://localhost:8001{ep}", json=payload)
+                    resp = await client.post(f"{QWEN_URL}{ep}", json=payload)
                     if resp.status_code == 200:
                         data = resp.json()
                         text = data.get("hint") or data.get("text") or ""
@@ -1790,7 +1793,7 @@ class InterviewOrchestrator:
                 try:
                     async with httpx.AsyncClient(timeout=6.0) as client:
                         for ep in ("/api/qwen/followup", "/followup"):
-                            resp = await client.post(f"http://localhost:8001{ep}", json=payload)
+                            resp = await client.post(f"{QWEN_URL}{ep}", json=payload)
                             if resp.status_code == 200:
                                 data = resp.json()
                                 if isinstance(data, dict) and "followup" in data and len(data["followup"].strip()) > 15:
@@ -2188,6 +2191,7 @@ class InterviewOrchestrator:
                 hints_used += 1
 
             q_results.append({
+                "question_id": qid,
                 "question_text": q.get("text", ""),
                 "topic": topic,
                 "type": qtype,

@@ -8,6 +8,7 @@ const NAV = [
   { id: "topics", label: "Practice", icon: "play" },
   { id: "weakness", label: "Weakness Map", icon: "target" },
   { id: "analytics", label: "Progress", icon: "chart" },
+  { id: "bookmarks", label: "Bookmarks", icon: "bookmark" },
 ];
 
 function initials(name = "") {

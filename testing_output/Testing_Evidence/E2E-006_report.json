@@ -1,0 +1,493 @@
+{
+  "status_code": 200,
+  "body": {
+    "id": "1e6f2bed-28f2-4109-bf5f-bd1ca422d5e3",
+    "session_id": "f892af6f-13bc-4022-8bee-d1aad241594d",
+    "candidate_id": "5fe5c64f-c065-4e84-8886-3b7eb0e3e1e6",
+    "session_date": "2026-11-13T04:04:21.089851+00:00",
+    "duration_minutes": 10,
+    "total_questions": 4,
+    "overall_score": 0.087,
+    "raw_technical_score": 0.087,
+    "c_score": 0.0,
+    "dsa_score": 0.0,
+    "strengths": [
+      "Attempted question",
+      "Return value handled correctly"
+    ],
+    "missing_concepts": [
+      "single pass iteration",
+      "store value-to-index mapping",
+      "Return indices not values",
+      "hash map enables O(1) complement lookup replacing inner loop"
+    ],
+    "covered_concepts": [],
+    "topic_scores": {},
+    "difficulty_history": [
+      2
+    ],
+    "score_history": [
+      0.0,
+      0.0,
+      0.35,
+      0.0
+    ],
+    "raw_score_history": [
+      0.0,
+      0.0,
+      0.35,
+      0.0
+    ],
+    "question_results": [
+      {
+        "question_text": "Explain your logic to find the two indices in an array that sum up to a target value.",
+        "topic": "arrays",
+        "type": "verbal",
+        "difficulty": 2,
+        "raw_score": 0.0,
+        "validated_score": 0.0,
+        "best_score": 0.0,
+        "attempt_number": 1,
+        "score": 0.0,
+        "timing_score": 1.0,
+        "timing_modifier": 0.0,
+        "transcript": "A pointer stores the memory address of another variable. Incrementing an int pointer advances it by sizeof(int) bytes, while incrementing a char pointer advances it by 1 byte, because pointer arithmetic scales by the size of the pointed-to type.",
+        "code_submitted": "",
+        "feedback_full": {
+          "final_score": 0.0,
+          "grade": "Poor",
+          "score_breakdown": {
+            "semantic_similarity": 0.152,
+            "concept_coverage": 0.0,
+            "reasoning_quality": 0.0,
+            "confidence_signal": 0.5,
+            "overall": 0.0
+          },
+          "what_candidate_said": "A pointer stores the memory address of another variable. Incrementing an int pointer advances it by sizeof(int) bytes, while incrementing a char point",
+          "what_was_correct": [],
+          "what_was_incorrect": [],
+          "what_was_incomplete": [
+            "single pass iteration",
+            "store value-to-index mapping",
+            "Return indices not values",
+            "hash map enables O(1) complement lookup replacing inner loop"
+          ],
+          "missing_concepts": [
+            "single pass iteration",
+            "store value-to-index mapping",
+            "Return indices not values",
+            "hash map enables O(1) complement lookup replacing inner loop"
+          ],
+          "how_to_answer": "Review standard optimal algorithm for arrays.",
+          "stronger_answer_guide": "Explain invariants, step-by-step logic, and complexity trade-offs clearly.",
+          "how_to_improve": [
+            "Cover missing concept: single pass iteration",
+            "Cover missing concept: store value-to-index mapping",
+            "Cover missing concept: Return indices not values"
+          ],
+          "actionable_improvements": [
+            "Cover missing concept: single pass iteration",
+            "Cover missing concept: store value-to-index mapping",
+            "Cover missing concept: Return indices not values"
+          ],
+          "strong_points": [
+            "Attempted question"
+          ],
+          "communication_tips": [
+            "Answer too short (39 words). Aim for 80\u2013120 words minimum for theory questions.",
+            "No filler words detected \u2014 clean, confident delivery."
+          ],
+          "covered_concepts": [],
+          "trend": "stable",
+          "trend_note": "Turn 1 \u2014 not enough history yet for trend analysis",
+          "justification": "Grade Poor (0%) on arrays. Semantic 15% | Concept coverage 0% | Reasoning 0% | Confidence 50%. Missing: single pass iteration, store value-to-index mapping. Concept coverage below 50% \u2014 key ideas were not addressed. Answer too brief (39 words) to demonstrate depth.",
+          "narrative_feedback": "Grade Poor (0%) on arrays. Semantic 15% | Concept coverage 0% | Reasoning 0% | Confidence 50%. Missing: single pass iteration, store value-to-index mapping. Concept coverage below 50% \u2014 key ideas were not addressed. Answer too brief (39 words) to demonstrate depth.",
+          "transcript": "A pointer stores the memory address of another variable. Incrementing an int pointer advances it by sizeof(int) bytes, while incrementing a char pointer advances it by 1 byte, because pointer arithmetic scales by the size of the pointed-to type.",
+          "decision_source": "evaluator_cross_encoder",
+          "llm_status": "llm_unavailable",
+          "vague_points": [
+            "Cover missing concept: single pass iteration",
+            "Cover missing concept: store value-to-index mapping",
+            "Cover missing concept: Return indices not values"
+          ],
+          "attempt_number": 1,
+          "comparison": {
+            "has_previous_best": false,
+            "previous_best_score": null,
+            "previous_best_answer": "",
+            "previous_best_attempt_number": null,
+            "score_delta": 0.0,
+            "resolved_concepts": [],
+            "remaining_concepts": [
+              "single pass iteration",
+              "store value-to-index mapping",
+              "Return indices not values",
+              "hash map enables O(1) complement lookup replacing inner loop"
+            ],
+            "newly_missed_concepts": [],
+            "newly_introduced_errors": [],
+            "has_improvement": false
+          },
+          "raw_evaluator_score": 0.0,
+          "timing_modifier": 0.0,
+          "timing_score": 1.0,
+          "time_ratio": 0.0,
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 40.0,
+          "is_best": false,
+          "authoritative_best_answer": false,
+          "best_answer": null
+        },
+        "feedback": "Grade Poor (0%) on arrays. Semantic 15% | Concept coverage 0% | Reasoning 0% | Confidence 50%. Missing: single pass iteration, store value-to-index mapping. Concept coverage below 50% \u2014 key ideas were not addressed. Answer too brief (39 words) to demonstrate depth.",
+        "grade": "Poor",
+        "score_breakdown": {
+          "semantic_similarity": 0.152,
+          "concept_coverage": 0.0,
+          "reasoning_quality": 0.0,
+          "confidence_signal": 0.5,
+          "overall": 0.0
+        },
+        "strong_points": [
+          "Attempted question"
+        ],
+        "incorrect_or_incomplete": [],
+        "missing_concepts": [
+          "single pass iteration",
+          "store value-to-index mapping",
+          "Return indices not values",
+          "hash map enables O(1) complement lookup replacing inner loop"
+        ],
+        "covered_concepts": [],
+        "how_to_improve": [
+          "Cover missing concept: single pass iteration",
+          "Cover missing concept: store value-to-index mapping",
+          "Cover missing concept: Return indices not values"
+        ],
+        "communication_tips": [
+          "Answer too short (39 words). Aim for 80\u2013120 words minimum for theory questions.",
+          "No filler words detected \u2014 clean, confident delivery."
+        ],
+        "trend": "stable",
+        "trend_note": "Turn 1 \u2014 not enough history yet for trend analysis"
+      },
+      {
+        "question_text": "You covered the initial setup well. How would you specifically handle the single pass iteration to ensure optimal efficiency?",
+        "topic": "arrays",
+        "type": "verbal",
+        "difficulty": 2,
+        "raw_score": 0.0,
+        "validated_score": 0.0,
+        "best_score": 0.0,
+        "attempt_number": 1,
+        "score": 0.0,
+        "timing_score": 1.0,
+        "timing_modifier": 0.0,
+        "transcript": "I don't really remember, maybe it's something to do with arrays? Not sure.",
+        "code_submitted": "",
+        "feedback_full": {
+          "final_score": 0.0,
+          "grade": "Poor",
+          "score_breakdown": {
+            "semantic_similarity": 0.198,
+            "concept_coverage": 0.0,
+            "reasoning_quality": 0.0,
+            "confidence_signal": 0.5,
+            "overall": 0.0
+          },
+          "what_candidate_said": "I don't really remember, maybe it's something to do with arrays? Not sure.",
+          "what_was_correct": [],
+          "what_was_incorrect": [],
+          "what_was_incomplete": [
+            "single pass iteration",
+            "store value-to-index mapping",
+            "Return indices not values",
+            "hash map enables O(1) complement lookup replacing inner loop"
+          ],
+          "missing_concepts": [
+            "single pass iteration",
+            "store value-to-index mapping",
+            "Return indices not values",
+            "hash map enables O(1) complement lookup replacing inner loop"
+          ],
+          "how_to_answer": "Review standard optimal algorithm for arrays.",
+          "stronger_answer_guide": "Explain invariants, step-by-step logic, and complexity trade-offs clearly.",
+          "how_to_improve": [
+            "Cover missing concept: single pass iteration",
+            "Cover missing concept: store value-to-index mapping",
+            "Cover missing concept: Return indices not values"
+          ],
+          "actionable_improvements": [
+            "Cover missing concept: single pass iteration",
+            "Cover missing concept: store value-to-index mapping",
+            "Cover missing concept: Return indices not values"
+          ],
+          "strong_points": [
+            "Attempted question"
+          ],
+          "communication_tips": [
+            "Answer too short (13 words). Aim for 80\u2013120 words minimum for theory questions.",
+            "No filler words detected \u2014 clean, confident delivery."
+          ],
+          "covered_concepts": [],
+          "trend": "stable",
+          "trend_note": "Turn 2 \u2014 not enough history yet for trend analysis",
+          "justification": "Grade Poor (0%) on arrays. Semantic 20% | Concept coverage 0% | Reasoning 0% | Confidence 50%. Missing: single pass iteration, store value-to-index mapping. Concept coverage below 50% \u2014 key ideas were not addressed. Answer too brief (13 words) to demonstrate depth.",
+          "narrative_feedback": "Grade Poor (0%) on arrays. Semantic 20% | Concept coverage 0% | Reasoning 0% | Confidence 50%. Missing: single pass iteration, store value-to-index mapping. Concept coverage below 50% \u2014 key ideas were not addressed. Answer too brief (13 words) to demonstrate depth.",
+          "transcript": "I don't really remember, maybe it's something to do with arrays? Not sure.",
+          "decision_source": "evaluator_cross_encoder",
+          "llm_status": "llm_unavailable",
+          "vague_points": [
+            "Cover missing concept: single pass iteration",
+            "Cover missing concept: store value-to-index mapping",
+            "Cover missing concept: Return indices not values"
+          ],
+          "attempt_number": 1,
+          "comparison": {
+            "has_previous_best": false,
+            "previous_best_score": null,
+            "previous_best_answer": "",
+            "previous_best_attempt_number": null,
+            "score_delta": 0.0,
+            "resolved_concepts": [],
+            "remaining_concepts": [
+              "single pass iteration",
+              "store value-to-index mapping",
+              "Return indices not values",
+              "hash map enables O(1) complement lookup replacing inner loop"
+            ],
+            "newly_missed_concepts": [],
+            "newly_introduced_errors": [],
+            "has_improvement": false
+          },
+          "raw_evaluator_score": 0.0,
+          "timing_modifier": 0.0,
+          "timing_score": 1.0,
+          "time_ratio": 0.0,
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 40.0,
+          "is_best": false,
+          "authoritative_best_answer": false,
+          "best_answer": null
+        },
+        "feedback": "Grade Poor (0%) on arrays. Semantic 20% | Concept coverage 0% | Reasoning 0% | Confidence 50%. Missing: single pass iteration, store value-to-index mapping. Concept coverage below 50% \u2014 key ideas were not addressed. Answer too brief (13 words) to demonstrate depth.",
+        "grade": "Poor",
+        "score_breakdown": {
+          "semantic_similarity": 0.198,
+          "concept_coverage": 0.0,
+          "reasoning_quality": 0.0,
+          "confidence_signal": 0.5,
+          "overall": 0.0
+        },
+        "strong_points": [
+          "Attempted question"
+        ],
+        "incorrect_or_incomplete": [],
+        "missing_concepts": [
+          "single pass iteration",
+          "store value-to-index mapping",
+          "Return indices not values",
+          "hash map enables O(1) complement lookup replacing inner loop"
+        ],
+        "covered_concepts": [],
+        "how_to_improve": [
+          "Cover missing concept: single pass iteration",
+          "Cover missing concept: store value-to-index mapping",
+          "Cover missing concept: Return indices not values"
+        ],
+        "communication_tips": [
+          "Answer too short (13 words). Aim for 80\u2013120 words minimum for theory questions.",
+          "No filler words detected \u2014 clean, confident delivery."
+        ],
+        "trend": "stable",
+        "trend_note": "Turn 2 \u2014 not enough history yet for trend analysis"
+      },
+      {
+        "question_text": "You covered the initial setup well. How would you specifically handle the single pass iteration to ensure optimal efficiency?",
+        "topic": "arrays",
+        "type": "verbal",
+        "difficulty": 2,
+        "raw_score": 0.35,
+        "validated_score": 0.35,
+        "best_score": 0.35,
+        "attempt_number": 2,
+        "score": 0.35,
+        "timing_score": 0.85,
+        "timing_modifier": 0.0,
+        "transcript": "",
+        "code_submitted": "int main(){return 0;}",
+        "feedback_full": {
+          "status": "wrong_answer",
+          "final_score": 0.35,
+          "grade": "F",
+          "score_breakdown": {
+            "functional_correctness": 0.35,
+            "tests_passed": 0,
+            "tests_total": 0
+          },
+          "strong_points": [
+            "Return value handled correctly"
+          ],
+          "incorrect_or_incomplete": [],
+          "missing_concepts": [],
+          "how_to_improve": [
+            "After passing tests, always consider: what happens with empty input? max-size input? negative values?",
+            "Debug strategy: add printf statements at each step, check intermediate values",
+            "Add inline comments explaining WHY each block exists, not just what it does"
+          ],
+          "communication_tips": [
+            "Code is 1 lines \u2014 concise",
+            "No comments detected \u2014 add comments for complex logic and edge case handling"
+          ],
+          "covered_concepts": [],
+          "trend": "improving",
+          "trend_note": "Score improving: 0.00 \u2192 0.35 (+0.35)",
+          "justification": "[Attempt #2] Score change: +0.00. Code grade F (35%). 0/0 tests passed.",
+          "transcript": "",
+          "decision_source": "sandbox_evaluator",
+          "vague_points": [
+            "After passing tests, always consider: what happens with empty input? max-size input? negative values?",
+            "Debug strategy: add printf statements at each step, check intermediate values",
+            "Add inline comments explaining WHY each block exists, not just what it does"
+          ],
+          "attempt_number": 2,
+          "comparison": {
+            "has_previous_best": false,
+            "previous_best_score": null,
+            "previous_best_answer": "",
+            "previous_best_attempt_number": null,
+            "score_delta": 0.0,
+            "resolved_concepts": [],
+            "remaining_concepts": [
+              "Correct test cases"
+            ],
+            "newly_missed_concepts": [],
+            "newly_introduced_errors": [],
+            "has_improvement": false
+          },
+          "validation_trace": [],
+          "tests_passed": 0,
+          "tests_total": 0,
+          "passed": false,
+          "pass_rate": 0.0,
+          "raw_evaluator_score": 0.35,
+          "timing_modifier": 0.0,
+          "timing_score": 0.85,
+          "time_ratio": 1.0,
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 180.0,
+          "is_best": false,
+          "authoritative_best_answer": false,
+          "best_answer": null
+        },
+        "feedback": "[Attempt #2] Score change: +0.00. Code grade F (35%). 0/0 tests passed.",
+        "grade": "F",
+        "score_breakdown": {
+          "functional_correctness": 0.35,
+          "tests_passed": 0,
+          "tests_total": 0
+        },
+        "strong_points": [
+          "Return value handled correctly"
+        ],
+        "incorrect_or_incomplete": [],
+        "missing_concepts": [],
+        "covered_concepts": [],
+        "how_to_improve": [
+          "After passing tests, always consider: what happens with empty input? max-size input? negative values?",
+          "Debug strategy: add printf statements at each step, check intermediate values",
+          "Add inline comments explaining WHY each block exists, not just what it does"
+        ],
+        "communication_tips": [
+          "Code is 1 lines \u2014 concise",
+          "No comments detected \u2014 add comments for complex logic and edge case handling"
+        ],
+        "trend": "improving",
+        "trend_note": "Score improving: 0.00 \u2192 0.35 (+0.35)"
+      }
+    ],
+    "all_concepts": {
+      "single pass iteration": 0.3,
+      "store value-to-index mapping": 0.3,
+      "Return indices not values": 0.3,
+      "hash map enables O(1) complement lookup replacing inner loop": 0.3
+    },
+    "recommendations": [
+      "Review and practice: single pass iteration",
+      "Review and practice: store value-to-index mapping",
+      "Review and practice: Return indices not values",
+      "Practice single-pass hash map patterns for constant-time complement and frequency lookups."
+    ],
+    "trend_summary": "improving",
+    "component_breakdown": {
+      "technical_score": 0.087,
+      "concept_score": 0.087,
+      "reasoning_score": 0.087,
+      "communication_score": 0.217,
+      "timing_score": 0.713,
+      "coding_score": null,
+      "final_overall": 0.087
+    },
+    "timing_analysis": {
+      "avg_timing_score": 0.713,
+      "net_timing_modifier": 0.0,
+      "response_timing": [
+        {
+          "question_id": "1",
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 40.0,
+          "time_ratio": 0.0,
+          "time_norm": 0.0,
+          "is_overrun": false,
+          "timing_score": 1.0,
+          "timing_modifier": 0.0,
+          "raw_evaluator_score": 0.0,
+          "final_score": 0.0
+        },
+        {
+          "question_id": "fu_292cc91d",
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 40.0,
+          "time_ratio": 0.0,
+          "time_norm": 0.0,
+          "is_overrun": false,
+          "timing_score": 1.0,
+          "timing_modifier": 0.0,
+          "raw_evaluator_score": 0.0,
+          "final_score": 0.0
+        },
+        {
+          "question_id": "fu_292cc91d",
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 180.0,
+          "time_ratio": 1.0,
+          "time_norm": 0.0,
+          "is_overrun": false,
+          "timing_score": 0.85,
+          "timing_modifier": 0.0,
+          "raw_evaluator_score": 0.35,
+          "final_score": 0.35
+        },
+        {
+          "question_id": "fu_292cc91d",
+          "time_taken_sec": 0.0,
+          "allowed_time_sec": 180.0,
+          "time_ratio": 1.0,
+          "time_norm": 0.0,
+          "is_overrun": false,
+          "timing_score": 0.85,
+          "timing_modifier": 0.0,
+          "raw_evaluator_score": 0.35,
+          "final_score": 0.35
+        }
+      ]
+    },
+    "behaviour": {
+      "avg_confidence": 0.5,
+      "hesitation_rate": 0.15,
+      "clarity_score": 0.217,
+      "completeness": 0.2,
+      "code_quality": 0.0,
+      "hints_used": 0
+    }
+  }
+}

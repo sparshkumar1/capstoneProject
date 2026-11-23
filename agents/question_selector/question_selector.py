@@ -197,7 +197,14 @@ session_state = {
 
 
 def reset_session_state():
+    """Reset this module's global session state (topic counts, history, asked questions).
 
+    Args:
+        None.
+
+    Returns:
+        None.
+    """
     session_state["topic_count"] = defaultdict(int)
     session_state["previous_topic"] = None
     session_state["questions_asked"] = set()
@@ -207,7 +214,17 @@ AVAILABLE_DIFFICULTIES = sorted({float(q["difficulty"]) for q in question_bank})
 
 
 def nearest_difficulty(target_difficulty):
+    """Snap a requested difficulty to the closest value actually present in the question bank.
 
+    Args:
+        target_difficulty (float): Difficulty requested by the caller
+            (e.g. the RL policy).
+
+    Returns:
+        float: The value in `AVAILABLE_DIFFICULTIES` closest to
+            `target_difficulty`, or `target_difficulty` itself (coerced to
+            float) if the question bank has no difficulty values at all.
+    """
     if not AVAILABLE_DIFFICULTIES:
         return float(target_difficulty)
 
@@ -221,7 +238,15 @@ def nearest_difficulty(target_difficulty):
 # -----------------------------------
 
 def filter_by_difficulty(difficulty):
+    """Return every question bank entry at an exact difficulty value.
 
+    Args:
+        difficulty (float): Exact difficulty value to match (typically
+            produced by `nearest_difficulty`).
+
+    Returns:
+        list[dict]: Matching question records, in question-bank order.
+    """
     candidates = []
 
     for q in question_bank:
@@ -236,7 +261,18 @@ def filter_by_difficulty(difficulty):
 # -----------------------------------
 
 def get_valid_topics(questions):
+    """Filter candidate questions' topics down to ones still eligible this session.
 
+    Excludes any topic that has already reached `TOPIC_LIMIT` uses, and the
+    immediately previous turn's topic (to force rotation).
+
+    Args:
+        questions (list[dict]): Candidate question records (each with a
+            `topic` key), typically the output of `filter_by_difficulty`.
+
+    Returns:
+        list[str]: Distinct eligible topic names (unordered).
+    """
     valid_topics = set()
 
     for q in questions:
@@ -259,7 +295,17 @@ def get_valid_topics(questions):
 # -----------------------------------
 
 def select_topic(valid_topics):
+    """Randomly pick among the least-used eligible topics.
 
+    Args:
+        valid_topics (list[str]): Eligible topic names, e.g. from
+            `get_valid_topics`.
+
+    Returns:
+        str | None: One topic name chosen uniformly at random among those
+            tied for the lowest usage count, or None if `valid_topics` is
+            empty.
+    """
     if not valid_topics:
         return None
 
@@ -281,7 +327,17 @@ def select_topic(valid_topics):
 # -----------------------------------
 
 def select_question_from_topic(topic, difficulty):
+    """Randomly pick an unasked question matching a topic and difficulty.
 
+    Args:
+        topic (str): Topic name to match.
+        difficulty (float): Exact difficulty value to match.
+
+    Returns:
+        dict | None: One question record chosen uniformly at random from
+            the matching, not-yet-asked candidates, or None if there are
+            none.
+    """
     candidates = []
 
     for q in question_bank:
@@ -308,7 +364,24 @@ def select_question_from_topic(topic, difficulty):
 # -----------------------------------
 
 def select_next_question(difficulty):
+    """Select the next question for a given target difficulty (baseline/research selector).
 
+    Not the production path — see `apps.backend.main.select_questions` for
+    the deterministic, no-randomness production selector. This one snaps to
+    the nearest available difficulty, filters to eligible topics (enforcing
+    `TOPIC_LIMIT` and no-topic-repeat), picks a topic via `random.choice`
+    among least-used ones, then picks a question within that topic/
+    difficulty via `random.choice`, and updates the module-level
+    `session_state` as a side effect.
+
+    Args:
+        difficulty (float): Requested difficulty, typically from an RL
+            policy.
+
+    Returns:
+        dict | None: The selected question record, or None if no eligible
+            topic or question could be found.
+    """
     target_difficulty = nearest_difficulty(difficulty)
 
     # Step 1: difficulty filter

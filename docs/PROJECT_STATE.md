@@ -1,11 +1,13 @@
 # Project State (tooling/infrastructure phase)
 
-Recorded 2026-09-19 at branch `workspace/human-eval-clean-push`. This file records state and open decisions only;
-scientific facts live in `research/CANONICAL_SCIENTIFIC_TRUTH.md`.
+Recorded 2026-09-19 at branch `workspace/human-eval-clean-push`, pointer corrected 2026-11-13. This file records
+state and open decisions only; scientific facts live in `research/CANONICAL_SCIENTIFIC_TRUTH_CURRENT.md` (the sole
+current authority — see `research/audit/SCIENTIFIC_TRUTH_SUPERSESSION.md`). The original `research/CANONICAL_SCIENTIFIC_TRUTH.md`
+referenced below is superseded/historical, not current, and is kept only as a frozen historical record.
 
 ## FROZEN / AUDITED (do not modify)
 - Paper 1, Paper 2, Paper 3 packages and results (`research/papers/*`, `research/results/paper3/*`, SHA-256 list in `research/CLAUDE_HANDOFF/PAPER3_FINAL_FREEZE.md`)
-- `research/CANONICAL_SCIENTIFIC_TRUTH.md`
+- `research/CANONICAL_SCIENTIFIC_TRUTH.md` (superseded/historical — see note above)
 - `research/data/evaluator_benchmark/final_human_gold.csv`
 - Existing validated experiment artifacts (`research/experiments/paper3/frozen_config.yaml`, `research/audit/*`, `research/CLAUDE_HANDOFF/*`, existing `experiments/*` results and figures)
 

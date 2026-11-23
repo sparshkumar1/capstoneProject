@@ -1,0 +1,20 @@
+{
+  "url": "http://localhost:8000/health",
+  "status_code": 200,
+  "body": {
+    "status": "ok",
+    "pipeline_ready": true,
+    "audio": {
+      "state": "ready",
+      "error": null,
+      "ready": true,
+      "warmup_seconds": {
+        "started_after_boot_s": 0.95,
+        "rl_import": 7.46,
+        "audio_imports": 26.28,
+        "total": 33.74
+      }
+    },
+    "timestamp": "2026-11-13T04:04:08.339114+00:00"
+  }
+}

@@ -11,6 +11,7 @@ Authoritative source of truth for:
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import threading
 import uuid
@@ -21,13 +22,25 @@ from typing import Any, Dict, List, Optional, Tuple
 from services.storage.best_answer import select_best
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-DEFAULT_DB_PATH = ROOT_DIR / "data" / "prepaired.db"
+# PREPAIRED_DB_PATH lets a deployment point this at a mounted persistent volume
+# (e.g. the cloud deployment's persistent VM disk) instead of the repo-relative default.
+DEFAULT_DB_PATH = Path(os.getenv("PREPAIRED_DB_PATH", "")) if os.getenv("PREPAIRED_DB_PATH") else ROOT_DIR / "data" / "prepaired.db"
 
 _LOCK = threading.Lock()
 
 
 def get_connection(db_path: Optional[Path | str] = None) -> sqlite3.Connection:
-    """Return a configured sqlite3 connection with Row factory."""
+    """Open a SQLite connection configured for this app's concurrency model.
+
+    Args:
+        db_path (Optional[Path | str]): Database file path; defaults to
+            `DEFAULT_DB_PATH` (repo-relative or `PREPAIRED_DB_PATH` env
+            var). Parent directories are created if missing.
+
+    Returns:
+        sqlite3.Connection: Connection with `row_factory = sqlite3.Row`,
+            WAL journal mode, and foreign keys enabled.
+    """
     path = Path(db_path) if db_path else DEFAULT_DB_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(path), timeout=30.0, check_same_thread=False)
@@ -38,7 +51,19 @@ def get_connection(db_path: Optional[Path | str] = None) -> sqlite3.Connection:
 
 
 def init_db(db_path: Optional[Path | str] = None) -> None:
-    """Initialize SQLite schema and indices."""
+    """Create the database schema and indices if they don't already exist.
+
+    Creates `candidates`, `sessions`, `question_attempts`, `bookmarks`, and
+    `study_goals` tables plus their indices. Idempotent (`CREATE TABLE/
+    INDEX IF NOT EXISTS`).
+
+    Args:
+        db_path (Optional[Path | str]): Database file path; defaults to
+            `DEFAULT_DB_PATH`.
+
+    Returns:
+        None.
+    """
     with _LOCK:
         conn = get_connection(db_path)
         try:
@@ -125,8 +150,39 @@ def init_db(db_path: Optional[Path | str] = None) -> None:
                 )
                 conn.execute(
                     """
-                    CREATE INDEX IF NOT EXISTS idx_attempts_session 
+                    CREATE INDEX IF NOT EXISTS idx_attempts_session
                     ON question_attempts(session_id);
+                    """
+                )
+
+                conn.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS bookmarks (
+                        id TEXT PRIMARY KEY,
+                        candidate_id TEXT NOT NULL REFERENCES candidates(id),
+                        question_id TEXT NOT NULL,
+                        note TEXT DEFAULT '',
+                        created_at TEXT NOT NULL,
+                        UNIQUE(candidate_id, question_id)
+                    );
+                    """
+                )
+                conn.execute(
+                    """
+                    CREATE INDEX IF NOT EXISTS idx_bookmarks_candidate
+                    ON bookmarks(candidate_id);
+                    """
+                )
+
+                conn.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS study_goals (
+                        candidate_id TEXT PRIMARY KEY REFERENCES candidates(id),
+                        target_date TEXT DEFAULT '',
+                        minutes_per_day INTEGER DEFAULT 30,
+                        plan_json TEXT DEFAULT '{}',
+                        updated_at TEXT NOT NULL
+                    );
                     """
                 )
         finally:
@@ -146,9 +202,28 @@ def get_or_create_candidate(
     is_admin: bool = False,
     db_path: Optional[Path | str] = None,
 ) -> Dict[str, Any]:
-    """
-    Look up candidate by normalized email or create persistent record.
-    Guarantees: Same email returns same persistent candidate ID across all sessions.
+    """Look up a candidate by normalized email, or create a new persistent record.
+
+    Guarantees the same (normalized) email always returns the same
+    persistent candidate ID across all sessions. On an existing match,
+    updates `last_login_at` and any non-empty profile fields supplied.
+
+    Args:
+        email (str): Candidate's email; normalized (trimmed, lowercased).
+            An empty value gets a generated guest email.
+        name (str): Display name.
+        college (str): College/institution (optional).
+        year (str): Academic year (optional).
+        roll (str): Roll number (optional).
+        primary_lang (str): Preferred language (default "C").
+        experience (str): Experience level (default "intermediate").
+        is_admin (bool): Whether to grant admin status (only ever upgrades,
+            never revokes, an existing record).
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        Dict[str, Any]: The full candidate row (existing, updated, or
+            newly created).
     """
     norm_email = (email or "").strip().lower()
     if not norm_email:
@@ -213,7 +288,15 @@ def get_or_create_candidate(
 
 
 def get_candidate_by_id(candidate_id: str, db_path: Optional[Path | str] = None) -> Optional[Dict[str, Any]]:
-    """Retrieve candidate profile by persistent UUID."""
+    """Retrieve a candidate's profile by their persistent UUID.
+
+    Args:
+        candidate_id (str): Candidate's persistent ID.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        Optional[Dict[str, Any]]: The candidate row, or None if not found.
+    """
     conn = get_connection(db_path)
     try:
         row = conn.execute("SELECT * FROM candidates WHERE id = ?;", (str(candidate_id),)).fetchone()
@@ -225,7 +308,19 @@ def get_candidate_by_id(candidate_id: str, db_path: Optional[Path | str] = None)
 # ── Session Storage ───────────────────────────────────────────────────────────
 
 def save_session(session_data: Dict[str, Any], db_path: Optional[Path | str] = None) -> None:
-    """Create or update session record in SQLite."""
+    """Insert a new session row, or update its status/score/completion on conflict.
+
+    Args:
+        session_data (Dict[str, Any]): Session fields — `id`,
+            `candidate_id` (both required; no-op if either is empty),
+            `interview_mode`, `c_topics`, `dsa_topics`, `duration_minutes`,
+            `num_questions`, `start_difficulty`, `status`, `overall_score`,
+            `created_at`, `completed_at`.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        None.
+    """
     sid = str(session_data.get("id") or "")
     cid = str(session_data.get("candidate_id") or "")
     if not sid or not cid:
@@ -269,6 +364,17 @@ def save_session(session_data: Dict[str, Any], db_path: Optional[Path | str] = N
 # ── Attempt Recording & Deterministic Best-Answer Selection ───────────────────
 
 def _decode_attempt_row(row: sqlite3.Row) -> Dict[str, Any]:
+    """Convert a raw `question_attempts` row into a dict with JSON columns parsed.
+
+    Args:
+        row (sqlite3.Row): One row from `question_attempts`.
+
+    Returns:
+        Dict[str, Any]: The row as a dict, with `covered_concepts`,
+            `missing_concepts`, `incorrect_claims`, `strong_points`
+            (defaulting to `[]`) and `feedback_json` (defaulting to `{}`)
+            parsed from their stored JSON strings.
+    """
     d = dict(row)
     for key in ("covered_concepts", "missing_concepts", "incorrect_claims", "strong_points"):
         d[key] = json.loads(d.get(key) or "[]")
@@ -277,10 +383,22 @@ def _decode_attempt_row(row: sqlite3.Row) -> Dict[str, Any]:
 
 
 def _authoritative_best(conn: sqlite3.Connection, cid: str, qid: str) -> Optional[Dict[str, Any]]:
-    """Authoritative best primary attempt, derived from the stored evaluations (never from the stored flag).
+    """Derive the authoritative best primary attempt from the stored evaluations.
 
-    Only attempts classified correct/partial are eligible (services/storage/best_answer.py); None if there are
-    none. Deriving it here also corrects any legacy `is_best` flag that points at an incorrect attempt."""
+    Never trusts the stored `is_best` flag — recomputes from
+    `services.storage.best_answer.select_best`, so a legacy flag pointing
+    at an incorrect attempt gets silently corrected.
+
+    Args:
+        conn (sqlite3.Connection): Open database connection.
+        cid (str): Candidate ID.
+        qid (str): Question ID.
+
+    Returns:
+        Optional[Dict[str, Any]]: The best eligible primary attempt (see
+            `best_answer.select_best`), or None if no primary attempt for
+            this (candidate, question) is classified correct or partial.
+    """
     rows = conn.execute(
         "SELECT * FROM question_attempts WHERE candidate_id = ? AND question_id = ? AND attempt_type = 'primary';",
         (cid, qid),
@@ -305,6 +423,25 @@ def save_attempt(
     4. Tie-breaker 2: Most recent attempt (attempt_number DESC).
     5. At most ONE attempt has is_best = 1 (exactly one when any attempt is eligible).
     6. Follow-up attempts NEVER overwrite primary question best answer.
+
+    Args:
+        attempt_data (Dict[str, Any]): Attempt fields — `id` (optional,
+            generated if absent), `candidate_id`, `session_id`,
+            `question_id` (all required), `question_version`,
+            `attempt_type` ("primary" or a follow-up type),
+            `parent_question_id`, `answer_type`, `raw_score`,
+            `validated_score`, `transcript`, `code_submitted`,
+            `covered_concepts`, `missing_concepts`, `incorrect_claims`,
+            `weakest_gap`, `strong_points`, `evaluation_confidence`,
+            `feedback_json`, `created_at`.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        Dict[str, Any]: `attempt_id`, `attempt_number` (lifetime),
+            `session_attempt_number`, `is_best` (bool, only meaningful for
+            primary attempts), `previous_best` (attempt dict or None, from
+            before this insert), `current_best` (attempt dict or None,
+            after this insert).
     """
     aid = str(attempt_data.get("id") or uuid.uuid4())
     cid = str(attempt_data["candidate_id"])
@@ -427,7 +564,18 @@ def get_best_attempt(
     question_id: str,
     db_path: Optional[Path | str] = None,
 ) -> Optional[Dict[str, Any]]:
-    """Retrieve the single authoritative best attempt, or None when no attempt is correct/partially correct."""
+    """Retrieve the single authoritative best attempt for a (candidate, question) pair.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        question_id (str): Question ID.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        Optional[Dict[str, Any]]: The best eligible attempt (with
+            `is_best` forced to 1), or None if no attempt is correct or
+            partially correct.
+    """
     conn = get_connection(db_path)
     try:
         res = _authoritative_best(conn, str(candidate_id), str(question_id))
@@ -443,7 +591,17 @@ def get_question_attempts(
     question_id: str,
     db_path: Optional[Path | str] = None,
 ) -> List[Dict[str, Any]]:
-    """Retrieve all historical attempts for a candidate and question, ordered by attempt_number."""
+    """Retrieve all historical attempts for a candidate/question pair, oldest first.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        question_id (str): Question ID.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        List[Dict[str, Any]]: Attempt rows ordered by `attempt_number`
+            ascending, with JSON columns parsed.
+    """
     conn = get_connection(db_path)
     try:
         rows = conn.execute(
@@ -474,9 +632,26 @@ def compare_with_previous_best(
     current_eval: Dict[str, Any],
     db_path: Optional[Path | str] = None,
 ) -> Dict[str, Any]:
-    """
-    Derive objective comparison facts between the current evaluation and the previous best attempt.
-    Grounded strictly in evaluator evidence without LLM fabrication.
+    """Derive objective comparison facts between the current evaluation and the previous best attempt.
+
+    Grounded strictly in evaluator evidence (score and concept sets), with
+    no LLM fabrication.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        question_id (str): Question ID.
+        current_eval (Dict[str, Any]): Current turn's evaluation
+            (`validated_score`/`final_score`, `covered_concepts`/
+            `correct_claims`, `missing_concepts`, `incorrect_claims`).
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        Dict[str, Any]: `has_previous_best` (bool); if True, also
+            `previous_best_score`, `previous_best_answer`,
+            `previous_best_attempt_number`, `score_delta`,
+            `resolved_concepts` (missing->covered), `remaining_concepts`
+            (still missing), `newly_missed_concepts` (covered->missing),
+            `newly_introduced_errors`, and `has_improvement` (bool).
     """
     prev_best = get_best_attempt(candidate_id, question_id, db_path=db_path)
     if not prev_best:
@@ -534,8 +709,236 @@ def compare_with_previous_best(
     }
 
 
+def list_sessions(db_path: Optional[Path | str] = None, limit: int = 500) -> List[Dict[str, Any]]:
+    """Read-only listing of persisted sessions, joined with candidate profile fields.
+
+    Lets the admin dashboard show sessions from before the current backend
+    process started, not just the process-local in-memory `SESSIONS` dict
+    (see `apps/backend/main.py`'s admin routes, which merge this with any
+    live in-memory sessions). Only returns columns `sessions` actually
+    persists (see `save_session`) — adds no new persistence or schema.
+
+    Args:
+        db_path (Optional[Path | str]): Database file path override.
+        limit (int): Maximum rows to return (default 500).
+
+    Returns:
+        List[Dict[str, Any]]: Session rows (most recent `created_at`
+            first), each with `candidate_name`/`candidate_email`/`college`/
+            `year` joined in and a combined `topics` list (`c_topics` +
+            `dsa_topics`) in place of the two separate JSON columns.
+    """
+    conn = get_connection(db_path)
+    try:
+        rows = conn.execute(
+            """
+            SELECT s.id, s.candidate_id, s.interview_mode, s.c_topics, s.dsa_topics,
+                   s.duration_minutes, s.num_questions, s.start_difficulty, s.status,
+                   s.overall_score, s.created_at, s.completed_at,
+                   c.name AS candidate_name, c.email AS candidate_email,
+                   c.college AS college, c.year AS year
+            FROM sessions s
+            LEFT JOIN candidates c ON c.id = s.candidate_id
+            ORDER BY s.created_at DESC
+            LIMIT ?;
+            """,
+            (int(limit),),
+        ).fetchall()
+        out = []
+        for r in rows:
+            d = dict(r)
+            try:
+                c_topics = json.loads(d.pop("c_topics") or "[]")
+            except (TypeError, ValueError):
+                c_topics = []
+            try:
+                dsa_topics = json.loads(d.pop("dsa_topics") or "[]")
+            except (TypeError, ValueError):
+                dsa_topics = []
+            d["topics"] = c_topics + dsa_topics
+            out.append(d)
+        return out
+    finally:
+        conn.close()
+
+
+# ── Bookmarks (Feature: Question Bookmarks & Notes) ──────────────────────────
+
+def add_bookmark(candidate_id: str, question_id: str, note: str = "",
+                  db_path: Optional[Path | str] = None) -> Dict[str, Any]:
+    """Create or update (upsert) a bookmark for a candidate/question pair.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        question_id (str): Question ID.
+        note (str): Optional free-text note (default "").
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        Dict[str, Any]: The upserted bookmark row, or `{}` if it somehow
+            couldn't be re-read after the upsert.
+    """
+    conn = get_connection(db_path)
+    try:
+        bookmark_id = str(uuid.uuid4())
+        now = datetime.now(UTC).isoformat()
+        with conn:
+            conn.execute(
+                """
+                INSERT INTO bookmarks (id, candidate_id, question_id, note, created_at)
+                VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT(candidate_id, question_id)
+                DO UPDATE SET note = excluded.note;
+                """,
+                (bookmark_id, str(candidate_id), str(question_id), note or "", now),
+            )
+        row = conn.execute(
+            "SELECT * FROM bookmarks WHERE candidate_id = ? AND question_id = ?;",
+            (str(candidate_id), str(question_id)),
+        ).fetchone()
+        return dict(row) if row else {}
+    finally:
+        conn.close()
+
+
+def remove_bookmark(candidate_id: str, question_id: str, db_path: Optional[Path | str] = None) -> bool:
+    """Delete a bookmark for a candidate/question pair.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        question_id (str): Question ID.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        bool: True if a row was actually removed, False if none matched.
+    """
+    conn = get_connection(db_path)
+    try:
+        with conn:
+            cur = conn.execute(
+                "DELETE FROM bookmarks WHERE candidate_id = ? AND question_id = ?;",
+                (str(candidate_id), str(question_id)),
+            )
+        return cur.rowcount > 0
+    finally:
+        conn.close()
+
+
+def list_bookmarks(candidate_id: str, db_path: Optional[Path | str] = None) -> List[Dict[str, Any]]:
+    """List all bookmarks for a candidate, most recent first.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        List[Dict[str, Any]]: Bookmark rows (`id`, `candidate_id`,
+            `question_id`, `note`, `created_at`), newest first.
+    """
+    conn = get_connection(db_path)
+    try:
+        rows = conn.execute(
+            """
+            SELECT id, candidate_id, question_id, note, created_at
+            FROM bookmarks
+            WHERE candidate_id = ?
+            ORDER BY created_at DESC;
+            """,
+            (str(candidate_id),),
+        ).fetchall()
+        return [dict(r) for r in rows]
+    finally:
+        conn.close()
+
+
+# ── Study goals (Feature: Server-Synced Study Goals) ─────────────────────────
+
+def get_study_goal(candidate_id: str, db_path: Optional[Path | str] = None) -> Optional[Dict[str, Any]]:
+    """Return a candidate's persisted study goal/plan.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        Optional[Dict[str, Any]]: The study-goal row with `plan` parsed
+            from JSON, or None if the candidate has never set one.
+    """
+    conn = get_connection(db_path)
+    try:
+        row = conn.execute(
+            "SELECT * FROM study_goals WHERE candidate_id = ?;",
+            (str(candidate_id),),
+        ).fetchone()
+        if not row:
+            return None
+        d = dict(row)
+        try:
+            d["plan"] = json.loads(d.pop("plan_json") or "{}")
+        except (TypeError, ValueError):
+            d["plan"] = {}
+            d.pop("plan_json", None)
+        return d
+    finally:
+        conn.close()
+
+
+def save_study_goal(
+    candidate_id: str,
+    target_date: str = "",
+    minutes_per_day: int = 30,
+    plan: Optional[Dict[str, Any]] = None,
+    db_path: Optional[Path | str] = None,
+) -> Dict[str, Any]:
+    """Create or update (upsert) a candidate's study goal/plan.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        target_date (str): Target completion date, as a string (default
+            "").
+        minutes_per_day (int): Study-time budget per day (default 30).
+        plan (Optional[Dict[str, Any]]): Arbitrary plan payload, stored as
+            JSON.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        Dict[str, Any]: The upserted study-goal row (via
+            `get_study_goal`), or `{}` if somehow not found after upsert.
+    """
+    conn = get_connection(db_path)
+    try:
+        now = datetime.now(UTC).isoformat()
+        plan_json = json.dumps(plan or {})
+        with conn:
+            conn.execute(
+                """
+                INSERT INTO study_goals (candidate_id, target_date, minutes_per_day, plan_json, updated_at)
+                VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT(candidate_id)
+                DO UPDATE SET target_date = excluded.target_date,
+                              minutes_per_day = excluded.minutes_per_day,
+                              plan_json = excluded.plan_json,
+                              updated_at = excluded.updated_at;
+                """,
+                (str(candidate_id), target_date or "", int(minutes_per_day), plan_json, now),
+            )
+        return get_study_goal(candidate_id, db_path) or {}
+    finally:
+        conn.close()
+
+
 def get_candidate_history(candidate_id: str, db_path: Optional[Path | str] = None) -> List[Dict[str, Any]]:
-    """Retrieve full candidate activity grouped by question with best attempts highlighted."""
+    """Summarize a candidate's attempt history, grouped by question.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        List[Dict[str, Any]]: One row per question attempted
+            (`question_id`, `total_attempts`, `max_score`,
+            `last_attempt_at`), most recently attempted first.
+    """
     conn = get_connection(db_path)
     try:
         rows = conn.execute(

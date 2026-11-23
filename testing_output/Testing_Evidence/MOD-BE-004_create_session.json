@@ -1,0 +1,110 @@
+{
+  "request": {
+    "candidate_id": "5fe5c64f-c065-4e84-8886-3b7eb0e3e1e6",
+    "c_topics": [
+      "pointers"
+    ],
+    "dsa_topics": [],
+    "duration_minutes": 10,
+    "num_questions": 4,
+    "interview_mode": "demo_rl",
+    "baseline_questions": 1
+  },
+  "status_code": 200,
+  "body": {
+    "id": "f892af6f-13bc-4022-8bee-d1aad241594d",
+    "candidate_id": "5fe5c64f-c065-4e84-8886-3b7eb0e3e1e6",
+    "c_topics": [
+      "pointers"
+    ],
+    "dsa_topics": [],
+    "topics": [
+      "pointers"
+    ],
+    "duration_minutes": 10,
+    "num_questions": 15,
+    "start_difficulty": 2,
+    "current_difficulty": 2,
+    "interview_mode": "demo_rl",
+    "baseline_min_questions": 2,
+    "baseline_max_questions": 3,
+    "baseline_questions": 3,
+    "baseline_complete": false,
+    "rl_enabled": false,
+    "next_question_type": "verbal",
+    "last_question_type": "",
+    "code_streak": 0,
+    "verbal_streak": 0,
+    "last_topic": "",
+    "topic_counts": {},
+    "pending_next": false,
+    "question_ids": [
+      "52",
+      "1",
+      "2",
+      "15",
+      "20",
+      "23",
+      "31",
+      "37",
+      "C01",
+      "C03",
+      "C08",
+      "3",
+      "4",
+      "18",
+      "25"
+    ],
+    "question_index": 0,
+    "answers": [],
+    "scores": [],
+    "strengths": [],
+    "weaknesses": [],
+    "concepts_mastered": [],
+    "concepts_missed": [],
+    "misconceptions": [],
+    "topic_performance": {},
+    "recent_performance": [],
+    "difficulty_history": [
+      2
+    ],
+    "question_history": [
+      "52",
+      "1",
+      "2",
+      "15",
+      "20",
+      "23",
+      "31",
+      "37",
+      "C01",
+      "C03",
+      "C08",
+      "3",
+      "4",
+      "18",
+      "25"
+    ],
+    "followup_history": [],
+    "technical_performance": 0.0,
+    "communication_indicators": {},
+    "response_timing": [],
+    "coding_performance": {
+      "attempted": 0,
+      "passed": 0,
+      "pass_rate": 0.0
+    },
+    "rl_perf_history": [],
+    "rl_last_action": "Same",
+    "last_confidence_score": 0.5,
+    "last_audio_analysis": null,
+    "last_time_norm": 0.0,
+    "last_time_overrun": false,
+    "progress": 0.0,
+    "main_questions_count": 0,
+    "followups_count": 0,
+    "consecutive_followups": 0,
+    "status": "created",
+    "created_at": "2026-11-13T04:04:21.089851+00:00"
+  }
+}

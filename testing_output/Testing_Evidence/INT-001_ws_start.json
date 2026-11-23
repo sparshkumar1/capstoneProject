@@ -1,0 +1,115 @@
+{
+  "sent": {
+    "type": "start"
+  },
+  "received": [
+    {
+      "type": "question",
+      "payload": {
+        "id": "1",
+        "text": "Explain your logic to find the two indices in an array that sum up to a target value.",
+        "type": "verbal",
+        "difficulty": 2,
+        "difficulty_float": 0.4,
+        "topic": "arrays",
+        "category": "dsa",
+        "time_limit_sec": 75,
+        "bloom_level": "L3",
+        "expected_concepts": [
+          "hash map for storing values",
+          "complement calculation (target - current)",
+          "single pass iteration",
+          "store value-to-index mapping",
+          "Two-sum uses complement lookup",
+          "Hashing enables constant-time checks",
+          "Return indices not values",
+          "hash map enables O(1) complement lookup replacing inner loop",
+          "insert element into map AFTER checking complement \u2014 ensures you do not match element with itself"
+        ],
+        "mandatory_concepts": [
+          "hash map for storing values",
+          "complement calculation (target - current)"
+        ],
+        "common_mistakes": [
+          "Using nested loops only",
+          "Returning values instead of indices",
+          "Not handling duplicate values correctly",
+          "inserts before checking complement \u2014 matches element with itself",
+          "stores value instead of index in hash map \u2014 cannot return correct indices",
+          "uses nested loops instead of hashing \u2014 O(n\u00b2) not O(n)"
+        ],
+        "reference_answer": "The logic is to iterate through the array and for each element check whether the complement (target minus current value) has already been seen using a hash map.",
+        "possible_followups": [
+          "O(n) time complexity with O(n) space trade-off",
+          "insert element into map AFTER checking complement to handle edge cases like target=2*element",
+          "handles duplicate elements correctly by checking before inserting",
+          "index stored in map not value (avoid overwriting)",
+          "explains why O(n\u00b2) brute force uses no extra space vs this approach",
+          "extends to two-sum on sorted array using two-pointer in O(1) space",
+          "handles case where same element cannot be used twice"
+        ],
+        "rubric": {
+          "qid": "1",
+          "topic": "Arrays",
+          "type": "logic_approach",
+          "logic_context": "The logic is to iterate through the array and for each element check whether the complement (target minus current value) has already been seen using a hash map.",
+          "logic_markers": {
+            "mandatory": [
+              "hash map for storing values",
+              "complement calculation (target - current)"
+            ],
+            "concept_groups": [
+              [
+                "single pass iteration",
+                "one loop traversal",
+                "iterate once through array"
+              ],
+              [
+                "store value-to-index mapping",
+                "check complement existence"
+              ]
+            ],
+            "advanced_bonus": [
+              "O(n) time complexity with O(n) space trade-off",
+              "insert element into map AFTER checking complement to handle edge cases like target=2*element",
+              "handles duplicate elements correctly by checking before inserting",
+              "index stored in map not value (avoid overwriting)",
+              "explains why O(n\u00b2) brute force uses no extra space vs this approach",
+              "extends to two-sum on sorted array using two-pointer in O(1) space",
+              "handles case where same element cannot be used twice"
+            ]
+          },
+          "semantic_targets": [
+            "Two-sum uses complement lookup",
+            "Hashing enables constant-time checks",
+            "Return indices not values",
+            "hash map enables O(1) complement lookup replacing inner loop",
+            "insert element into map AFTER checking complement \u2014 ensures you do not match element with itself"
+          ],
+          "common_mistakes": [
+            "Using nested loops only",
+            "Returning values instead of indices",
+            "Not handling duplicate values correctly",
+            "inserts before checking complement \u2014 matches element with itself",
+            "stores value instead of index in hash map \u2014 cannot return correct indices",
+            "uses nested loops instead of hashing \u2014 O(n\u00b2) not O(n)"
+          ],
+          "evaluation_rubric": {
+            "focus": "Efficient logic using hashing"
+          },
+          "scoring_policy": {
+            "mandatory_required_for_full_score": true,
+            "mandatory_cap": 0.65
+          }
+        },
+        "constraints": "",
+        "code_template": "",
+        "turn_index": 1,
+        "total_questions": 15,
+        "is_followup": false,
+        "primary_question_index": 1,
+        "parent_question_index": null
+      }
+    }
+  ]
+}

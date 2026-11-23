@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile.evaluator
     command: python services/evaluator/app.py
     ports:
-      - "5000:5000"
+      - "127.0.0.1:5000:5000"
     environment:
       PYTHONUNBUFFERED: "1"
       EVALUATOR_MOCK_MODE: "0"
@@ -17,16 +17,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.backend
-    command: uvicorn apps.backend.main:app --host 0.0.0.0 --port 8000
+    command: uvicorn apps.backend.main:app --host 0.0.0.0 --port 8000 --workers 1
     depends_on:
       - evaluator
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     environment:
       PYTHONUNBUFFERED: "1"
       PYTHONPATH: /app
+      # Evaluator runs in-process inside the backend (apps/backend/main.py imports
+      # services.evaluator.app directly) -- the standalone evaluator container below
+      # is not actually called over HTTP by the backend; this var is unused today.
       PREPAIRED_EVALUATOR_URL: http://evaluator:5000
-      PREPAIRED_QWEN_URL: http://qwen:8001
+      QWEN_URL: http://qwen:8001
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in your .env, never commit it}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      PREPAIRED_DB_PATH: /app/data/prepaired.db
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
@@ -36,8 +42,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+      args:
+        VITE_API_URL: https://${PUBLIC_DOMAIN:?set PUBLIC_DOMAIN in your .env, e.g. prepaired.duckdns.org}
+        VITE_WS_URL: wss://${PUBLIC_DOMAIN:?set PUBLIC_DOMAIN in your .env, e.g. prepaired.duckdns.org}
     ports:
-      - "5173:80"
+      - "127.0.0.1:5173:80"
     depends_on:
       - backend
 
@@ -48,8 +57,31 @@ services:
       dockerfile: Dockerfile.qwen
     command: uvicorn services.qwen.app:app --host 0.0.0.0 --port 8001
     ports:
-      - "8001:8001"
+      - "127.0.0.1:8001:8001"
     environment:
       PYTHONUNBUFFERED: "1"
     volumes:
-      - ./services/qwen/models:/app/services/qwen/models
+      # services/qwen/app.py reads the GGUF file from <repo-root>/models/gguf/... (GGUF_MODEL_PATH),
+      # not from services/qwen/models -- run `python scripts/download_qwen_model.py` on the host first.
+      - ./models/gguf:/app/models/gguf:ro
+
+  # Single public entrypoint: terminates HTTPS and is the only service with a
+  # host port bound to 0.0.0.0 (everything else above binds 127.0.0.1-only).
+  caddy:
+    image: caddy:2-alpine
+    environment:
+      PUBLIC_DOMAIN: ${PUBLIC_DOMAIN:?set PUBLIC_DOMAIN in your .env, e.g. prepaired.duckdns.org}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  caddy_data:
+  caddy_config:

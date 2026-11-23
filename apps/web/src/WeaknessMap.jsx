@@ -1,8 +1,9 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { SessionContext } from "./contexts";
 import Shell from "./Shell";
 import { api } from "./api";
 import { startPractice } from "./practice";
+import BookmarkToggle from "./BookmarkToggle";
 import { Badge, EmptyState, ErrorState, Icon, Meter, OutcomeDots, Skeleton, formatDate, pct, useAsync } from "./ui";
 
 const CLASS_META = {
@@ -64,7 +65,7 @@ function RevisionCard({ card, rating, onRate }) {
   );
 }
 
-function ConceptDetail({ concept, onClose, onPractice, onCompare, busy, cid }) {
+function ConceptDetail({ concept, onClose, onPractice, onCompare, busy, cid, bookmarkedIds, onToggleBookmark }) {
   const [ratings, setRatings] = useState(() => readRatings(cid));
   const rate = (id) => {
     const next = { ...ratings, [concept.key]: id };
@@ -101,6 +102,12 @@ function ConceptDetail({ concept, onClose, onPractice, onCompare, busy, cid }) {
                 <Icon name="compare" size={14} /> Compare
               </button>
             )}
+            <BookmarkToggle
+              candidateId={cid}
+              questionId={q.question_id}
+              bookmarked={bookmarkedIds.has(String(q.question_id))}
+              onChange={(next) => onToggleBookmark(q.question_id, next)}
+            />
           </div>
         ))}
       </div>
@@ -131,6 +138,22 @@ export default function WeaknessMap({ navigate }) {
   const [selectedKey, setSelectedKey] = useState(null);
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState("");
+  const [bookmarkedIds, setBookmarkedIds] = useState(() => new Set());
+
+  useEffect(() => {
+    if (!cid) return;
+    api.getBookmarks(cid)
+      .then((d) => setBookmarkedIds(new Set((d?.bookmarks || []).map((b) => String(b.question_id)))))
+      .catch(() => {});
+  }, [cid]);
+
+  const toggleBookmark = (questionId, isBookmarked) => {
+    setBookmarkedIds((prev) => {
+      const next = new Set(prev);
+      if (isBookmarked) next.add(String(questionId)); else next.delete(String(questionId));
+      return next;
+    });
+  };
 
   const topics = useMemo(() => [...new Set((data?.concepts || []).map((c) => c.topic))].sort(), [data]);
   const visible = useMemo(
@@ -233,6 +256,7 @@ export default function WeaknessMap({ navigate }) {
                 </section>
                 {selected && (
                   <ConceptDetail concept={selected} cid={cid} busy={busy}
+                    bookmarkedIds={bookmarkedIds} onToggleBookmark={toggleBookmark}
                     onClose={() => setSelectedKey(null)} onPractice={practice} onCompare={compare} />
                 )}
               </div>

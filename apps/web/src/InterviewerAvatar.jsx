@@ -24,6 +24,10 @@ export default function InterviewerAvatar({
   isThinking = false,
   onSkip,
   connected = true,
+  onHint,
+  hintLoading = false,
+  hintDisabled = false,
+  hint = null,
 }) {
   const [phase, setPhase] = useState("idle");
   // phases: idle -> intro -> done -> thinking
@@ -306,6 +310,18 @@ export default function InterviewerAvatar({
                   ⏭ Skip Question
                 </button>
               )}
+              {!ttsActive && !isThinking && onHint && (
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm"
+                  onClick={onHint}
+                  disabled={hintDisabled || hintLoading}
+                  style={{ fontSize: 12 }}
+                  title={hintDisabled && !hintLoading ? "One hint per question" : "Get a hint for this question"}
+                >
+                  {hintLoading ? <span className="spinner" style={{ width: 12, height: 12 }} /> : "💡"} {hintLoading ? "Thinking…" : "Hint"}
+                </button>
+              )}
               {ttsActive && (
                 <span style={{ fontSize: 12, color: "var(--text-3)", display: "flex", alignItems: "center", gap: 4 }}>
                   🔊 Reading question aloud...
@@ -316,6 +332,16 @@ export default function InterviewerAvatar({
               Your turn — speak or write your answer
             </span>
           </div>
+
+          {hint && (
+            <div
+              className="constraints-box"
+              style={{ marginTop: 10, borderColor: "var(--accent-2)", background: "var(--accent-2-glow, rgba(0,229,200,0.08))" }}
+            >
+              <span style={{ fontWeight: 600, fontSize: 12, color: "var(--accent-2)" }}>💡 Hint: </span>
+              {hint}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,0 +1,11 @@
+{
+  "status_code": 200,
+  "body": {
+    "total_sessions": 2,
+    "avg_score": 0.087,
+    "active_today": 2,
+    "unique_candidates": 2,
+    "avg_duration_min": 20,
+    "pass_rate": 0.0
+  }
+}

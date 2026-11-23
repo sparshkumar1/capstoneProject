@@ -1,0 +1,8 @@
+{
+  "received": {
+    "type": "error",
+    "payload": {
+      "message": "Invalid JSON"
+    }
+  }
+}

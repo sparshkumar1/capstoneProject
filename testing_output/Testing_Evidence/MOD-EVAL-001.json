@@ -1,0 +1,14 @@
+{
+  "url": "http://localhost:5000/health",
+  "status_code": 200,
+  "body": {
+    "components": [
+      "s1",
+      "s2",
+      "r"
+    ],
+    "service": "prepaired-evaluator-microservice",
+    "status": "ok",
+    "timestamp": "2026-11-13T09:34:10.389317"
+  }
+}

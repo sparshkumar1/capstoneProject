@@ -11,13 +11,37 @@ _FILLERS = {
 }
 
 def _clamp(v, lo=0.0, hi=1.0):
+    """Clamp a numeric value to the inclusive range [lo, hi].
+
+    Args:
+        v (float): Value to clamp.
+        lo (float): Lower bound (default 0.0).
+        hi (float): Upper bound (default 1.0).
+
+    Returns:
+        float: `v` restricted to [lo, hi].
+    """
     return max(lo, min(hi, v))
 
 
 def score_hesitation(prosodic: dict, transcription: dict) -> dict:
-    """
-    Returns hesitation_score in [0,1] plus sub-components.
-    High score = high hesitation (bad for confidence).
+    """Compute a composite hesitation score from prosodic and transcription signals.
+
+    Combines six weighted sub-signals — pause ratio, pause frequency, long
+    pauses, filler-word density, pitch instability (jitter proxy), and
+    speaking-rate deviation from an optimal band — into one score. A higher
+    score means more hesitation (worse for perceived confidence).
+
+    Args:
+        prosodic (dict): Prosodic features for the answer, used here for the
+            `jitter` sub-score.
+        transcription (dict): Transcription/alignment output, used for word
+            list, pause timing/count, pause durations, and speaking rate.
+
+    Returns:
+        dict: `hesitation_score` (float, 0-1) plus its sub-component scores
+            (`pause_ratio`, `pause_frequency`, `long_pause_count`,
+            `filler_density`, `pitch_instability`, `rate_deviation`).
     """
     words = transcription.get("words", [])
     transcript = transcription.get("transcript", "").lower()

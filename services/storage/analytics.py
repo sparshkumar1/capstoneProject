@@ -37,6 +37,16 @@ DECLINE_DROP = 0.10
 # ── helpers ──────────────────────────────────────────────────────────────────
 
 def _parse_ts(value: Any) -> Optional[datetime]:
+    """Parse an ISO-8601 timestamp string into a timezone-aware datetime.
+
+    Args:
+        value (Any): Timestamp value (typically a string); anything falsy
+            or unparseable yields None.
+
+    Returns:
+        Optional[datetime]: The parsed datetime (assumed UTC if the string
+            carried no timezone), or None.
+    """
     if not value:
         return None
     try:
@@ -49,6 +59,17 @@ def _parse_ts(value: Any) -> Optional[datetime]:
 
 
 def _loads(value: Any, default: Any) -> Any:
+    """Parse a JSON-encoded column value, tolerating already-decoded or empty input.
+
+    Args:
+        value (Any): A JSON string, an already-parsed list/dict, None, or
+            "".
+        default (Any): Value to return if `value` is empty or unparseable.
+
+    Returns:
+        Any: The parsed value, `value` itself if already a list/dict, or
+            `default`.
+    """
     if value is None or value == "":
         return default
     if isinstance(value, (list, dict)):
@@ -60,6 +81,16 @@ def _loads(value: Any, default: Any) -> Any:
 
 
 def band_for(score: Optional[float]) -> str:
+    """Classify a score into the evaluator's existing grade bands.
+
+    Args:
+        score (Optional[float]): Average/validated score in [0, 1], or
+            None.
+
+    Returns:
+        str: "strong" (>= GOOD_FLOOR), "developing" (>= AVERAGE_FLOOR),
+            "needs_work", or "unknown" if `score` is None.
+    """
     if score is None:
         return "unknown"
     if score >= GOOD_FLOOR:
@@ -70,18 +101,55 @@ def band_for(score: Optional[float]) -> str:
 
 
 def pretty_topic(topic: str) -> str:
+    """Format a raw topic key for display.
+
+    Args:
+        topic (str): Raw topic key (e.g. "dynamic_programming").
+
+    Returns:
+        str: Underscore-free, trimmed display label (defaults to
+            "General" if `topic` is falsy).
+    """
     return str(topic or "General").replace("_", " ").strip()
 
 
 def _norm(text: Any) -> str:
+    """Normalize text for case/whitespace-insensitive comparison and grouping.
+
+    Args:
+        text (Any): Value to normalize (coerced to str).
+
+    Returns:
+        str: Lowercased text with runs of whitespace collapsed to single
+            spaces.
+    """
     return " ".join(str(text or "").lower().split())
 
 
 def _mean(values: List[float]) -> Optional[float]:
+    """Compute the mean of a list of numbers, rounded to 4 decimals.
+
+    Args:
+        values (List[float]): Values to average.
+
+    Returns:
+        Optional[float]: The rounded mean, or None if `values` is empty.
+    """
     return round(sum(values) / len(values), 4) if values else None
 
 
 def _load_attempts(candidate_id: str, db_path: Optional[Path | str]) -> List[Dict[str, Any]]:
+    """Load and decode all attempts for a candidate, oldest first.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        List[Dict[str, Any]]: Attempt rows with JSON concept columns
+            parsed, plus derived `score` (float or None) and `ts` (parsed
+            datetime or None) fields.
+    """
     conn = get_connection(db_path)
     try:
         rows = conn.execute(
@@ -110,6 +178,16 @@ def _load_attempts(candidate_id: str, db_path: Optional[Path | str]) -> List[Dic
 
 
 def _load_sessions(candidate_id: str, db_path: Optional[Path | str]) -> List[Dict[str, Any]]:
+    """Load and decode all sessions for a candidate, oldest first.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        List[Dict[str, Any]]: Session rows with `c_topics`/`dsa_topics`
+            parsed from JSON and a derived `ts` (parsed datetime or None).
+    """
     conn = get_connection(db_path)
     try:
         rows = conn.execute(
@@ -133,6 +211,19 @@ def _load_sessions(candidate_id: str, db_path: Optional[Path | str]) -> List[Dic
 
 
 def _question_info(qlookup: Dict[str, dict], qid: str, parent: str = "") -> Dict[str, Any]:
+    """Look up display metadata for a question, falling back to its parent question.
+
+    Args:
+        qlookup (Dict[str, dict]): Question bank indexed by question ID.
+        qid (str): Question ID to look up.
+        parent (str): Parent question ID to fall back to (used for
+            follow-up attempts) if `qid` isn't found (default "").
+
+    Returns:
+        Dict[str, Any]: `id`, `text`, `topic` (defaults to "general"),
+            `difficulty` (int or None), `type`, and `known` (bool, whether
+            either ID was found in `qlookup`).
+    """
     q = qlookup.get(str(qid)) or (qlookup.get(str(parent)) if parent else None) or {}
     return {
         "id": str(q.get("id") or qid),
@@ -145,13 +236,32 @@ def _question_info(qlookup: Dict[str, dict], qid: str, parent: str = "") -> Dict
 
 
 def _local_date(ts: Optional[datetime], tz_offset_minutes: int):
+    """Convert a UTC timestamp to the client's local calendar date.
+
+    Args:
+        ts (Optional[datetime]): UTC timestamp, or None.
+        tz_offset_minutes (int): Client's UTC offset in minutes.
+
+    Returns:
+        date | None: The local date, or None if `ts` is None.
+    """
     if ts is None:
         return None
     return (ts + timedelta(minutes=tz_offset_minutes)).date()
 
 
 def _streak(days: Iterable, today) -> Tuple[int, int]:
-    """Return (current streak, longest streak) over a set of activity dates."""
+    """Compute the current and longest daily-activity streaks.
+
+    Args:
+        days (Iterable): Dates with recorded activity.
+        today: Reference date; the current streak counts back from today
+            (or yesterday, if nothing happened today yet).
+
+    Returns:
+        Tuple[int, int]: `(current_streak, longest_streak)`, both in days;
+            `(0, 0)` if `days` is empty.
+    """
     day_set = set(days)
     if not day_set:
         return 0, 0
@@ -173,6 +283,21 @@ def _streak(days: Iterable, today) -> Tuple[int, int]:
 # ── core aggregations ────────────────────────────────────────────────────────
 
 def _topic_stats(primary: List[Dict[str, Any]], qlookup: Dict[str, dict]) -> List[Dict[str, Any]]:
+    """Aggregate per-topic score statistics and trend from primary attempts.
+
+    Args:
+        primary (List[Dict[str, Any]]): Primary-attempt rows (from
+            `_load_attempts`).
+        qlookup (Dict[str, dict]): Question bank indexed by question ID.
+
+    Returns:
+        List[Dict[str, Any]]: One entry per topic with `topic`, `label`,
+            `attempts`, `questions` (distinct count), `avg_score`,
+            `best_score`, `last_score`, `last_at`, `band`, `low_data`
+            (bool), and (if `attempts >= DECLINE_MIN_ATTEMPTS`) `trend`
+            ("improving"/"declining"/"stable") and `trend_delta` — sorted
+            weakest average first.
+    """
     by_topic: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     for a in primary:
         if a["score"] is None:
@@ -208,6 +333,20 @@ def _topic_stats(primary: List[Dict[str, Any]], qlookup: Dict[str, dict]) -> Lis
 
 
 def _session_rows(sessions: List[Dict[str, Any]], attempts: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Build a display row per session, joined with its scored primary attempts.
+
+    Args:
+        sessions (List[Dict[str, Any]]): Session rows (from
+            `_load_sessions`).
+        attempts (List[Dict[str, Any]]): Attempt rows (from
+            `_load_attempts`).
+
+    Returns:
+        List[Dict[str, Any]]: One row per session: `id`, `created_at`,
+            `mode`, `status`, `topics` (combined c/dsa topics),
+            `planned_questions`, `answered`, `avg_score`,
+            `stored_overall_score`, `has_activity` (bool).
+    """
     per_session: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     for a in attempts:
         if a["attempt_type"] == "primary" and a["score"] is not None:
@@ -233,6 +372,24 @@ def _session_rows(sessions: List[Dict[str, Any]], attempts: List[Dict[str, Any]]
 
 def _next_steps(topic_stats: List[Dict[str, Any]], weak: Dict[str, Any], retry_candidates: List[Dict[str, Any]],
                 has_history: bool) -> List[Dict[str, Any]]:
+    """Recommend up to 3 next actions for the candidate's dashboard.
+
+    Args:
+        topic_stats (List[Dict[str, Any]]): Per-topic stats (from
+            `_topic_stats`).
+        weak (Dict[str, Any]): Weakness-map result (from
+            `build_weakness_map`); its `revise_first` list is consulted.
+        retry_candidates (List[Dict[str, Any]]): Questions attempted more
+            than once (from `_comparable`).
+        has_history (bool): Whether the candidate has any attempts at all.
+
+    Returns:
+        List[Dict[str, Any]]: Up to 3 step dicts (`kind`, `title`,
+            `detail`, plus kind-specific fields), prioritized: a
+            first-session prompt if no history, else a weak-topic
+            suggestion, a most-missed-concept review, a retry suggestion,
+            or a generic "keep practicing" fallback.
+    """
     steps: List[Dict[str, Any]] = []
     if not has_history:
         steps.append({"kind": "start", "title": "Complete your first practice session",
@@ -259,6 +416,19 @@ def _next_steps(topic_stats: List[Dict[str, Any]], weak: Dict[str, Any], retry_c
 
 
 def _comparable(primary_all: List[Dict[str, Any]], qlookup: Dict[str, dict]) -> List[Dict[str, Any]]:
+    """Find questions attempted more than once and summarize score progress.
+
+    Args:
+        primary_all (List[Dict[str, Any]]): All primary-attempt rows.
+        qlookup (Dict[str, dict]): Question bank indexed by question ID.
+
+    Returns:
+        List[Dict[str, Any]]: One entry per question with >= 2 scored
+            attempts: `question_id`, `text`, `topic`, `attempts`,
+            `first_score`, `latest_score`, `best_score`, `delta`
+            (latest - first) — sorted by most attempts, then lowest latest
+            score first.
+    """
     by_q: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     for a in primary_all:
         if a["score"] is not None:
@@ -280,12 +450,49 @@ def _comparable(primary_all: List[Dict[str, Any]], qlookup: Dict[str, dict]) -> 
 
 def build_weakness_map(candidate_id: str, qlookup: Dict[str, dict], db_path: Optional[Path | str] = None,
                        attempts: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
+    """Build the candidate's concept-level weakness map from their verbal attempts.
+
+    Classifies each distinct concept text (normalized) as "strong"
+    (covered >= 80% of the time), "frequently_missed" (<= 34%), "partial",
+    or "not_enough_data" (fewer than `MIN_OBS_FOR_CLASS` observations), and
+    separately tracks repeated misconceptions (incorrect claims). Code
+    attempts are excluded, since their "concepts" are test results, not
+    conceptual coverage.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        qlookup (Dict[str, dict]): Question bank indexed by question ID.
+        db_path (Optional[Path | str]): Database file path override.
+        attempts (Optional[List[Dict[str, Any]]]): Pre-loaded attempts, to
+            avoid a redundant DB read when the caller already has them.
+
+    Returns:
+        Dict[str, Any]: `candidate_id`, `summary` (counts by
+            classification plus `repeated_misconceptions`,
+            `verbal_attempts_used`, `code_attempts_excluded`), `concepts`
+            (up to 150, each with classification, coverage rate, related
+            questions, and an optional revision card), `misconceptions`
+            (up to 30), `declining_topics`, `topic_stats`, `revise_first`
+            (top 5 frequently-missed concepts), and `notes`.
+    """
     attempts = attempts if attempts is not None else _load_attempts(candidate_id, db_path)
     verbal = [a for a in attempts if a["answer_type"] != "code"]
     stats: Dict[str, Dict[str, Any]] = {}
     mis: Dict[str, Dict[str, Any]] = {}
 
     def entry(store, key, display):
+        """Get-or-create one concept/misconception accumulator entry.
+
+        Args:
+            store (dict): `stats` or `mis`, keyed by normalized concept
+                text.
+            key (str): Normalized concept text.
+            display (str): Original (non-normalized) display text, counted
+                in the entry's `texts` tally for later display.
+
+        Returns:
+            dict: The (possibly newly created) accumulator entry.
+        """
         e = store.get(key)
         if e is None:
             e = {"concept": display, "covered": 0, "missing": 0, "incorrect": 0, "recent": [],
@@ -404,6 +611,30 @@ def build_weakness_map(candidate_id: str, qlookup: Dict[str, dict], db_path: Opt
 
 def build_dashboard(candidate_id: str, qlookup: Dict[str, dict], db_path: Optional[Path | str] = None,
                     tz_offset_minutes: int = 0, now: Optional[datetime] = None) -> Dict[str, Any]:
+    """Build the candidate's full dashboard summary.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        qlookup (Dict[str, dict]): Question bank indexed by question ID.
+        db_path (Optional[Path | str]): Database file path override.
+        tz_offset_minutes (int): Client's UTC offset in minutes, for
+            streak/week-window calculations (default 0).
+        now (Optional[datetime]): Reference "now" timestamp; defaults to
+            the current UTC time.
+
+    Returns:
+        Dict[str, Any]: `candidate_id`, `generated_at`, `has_history`,
+            `totals` (attempt/session counts, avg/best score),
+            `streak` (current/longest days, last active date), `week`
+            (this week's activity), `score_trend` (per active session),
+            `recent_vs_earlier` (score comparison across session windows,
+            if enough sessions), `topics` (from `_topic_stats`),
+            `difficulty` (score by difficulty level), `recent_sessions`
+            (last 8), `weakness_summary`/`revise_first`/
+            `declining_topics` (from `build_weakness_map`),
+            `comparable_questions` (from `_comparable`), `next_steps`,
+            `last_session_config`, and `notes`.
+    """
     attempts = _load_attempts(candidate_id, db_path)
     sessions = _load_sessions(candidate_id, db_path)
     now = now or datetime.now(UTC)
@@ -491,7 +722,21 @@ def build_dashboard(candidate_id: str, qlookup: Dict[str, dict], db_path: Option
 
 def build_analytics(candidate_id: str, qlookup: Dict[str, dict], db_path: Optional[Path | str] = None,
                     tz_offset_minutes: int = 0) -> Dict[str, Any]:
-    """Detailed analytics: per-attempt timeline, topic mastery, difficulty stats, comparable questions."""
+    """Build detailed analytics: dashboard plus a full per-attempt timeline.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        qlookup (Dict[str, dict]): Question bank indexed by question ID.
+        db_path (Optional[Path | str]): Database file path override.
+        tz_offset_minutes (int): Client's UTC offset in minutes (default
+            0).
+
+    Returns:
+        Dict[str, Any]: Everything from `build_dashboard`, plus
+            `attempt_timeline` (one entry per scored primary attempt:
+            date, score, question_id, topic, difficulty, answer_type) and
+            `by_answer_type` (avg score grouped by verbal vs. code).
+    """
     base = build_dashboard(candidate_id, qlookup, db_path, tz_offset_minutes)
     attempts = _load_attempts(candidate_id, db_path)
     timeline = []
@@ -511,6 +756,24 @@ def build_analytics(candidate_id: str, qlookup: Dict[str, dict], db_path: Option
 
 def build_compare(candidate_id: str, question_id: str, qlookup: Dict[str, dict],
                   db_path: Optional[Path | str] = None) -> Dict[str, Any]:
+    """Build a side-by-side comparison of all primary attempts at one question.
+
+    Args:
+        candidate_id (str): Candidate ID.
+        question_id (str): Question to compare attempts for.
+        qlookup (Dict[str, dict]): Question bank indexed by question ID.
+        db_path (Optional[Path | str]): Database file path override.
+
+    Returns:
+        Dict[str, Any]: `candidate_id`, `question` (from
+            `_question_info`), `attempts` (each with `n`, `attempt_number`,
+            `created_at`, `session_id`, `score`, `answer_type`, `answer`
+            (truncated to 4000 chars), `covered`/`missing`/`incorrect`),
+            and `summary` (`attempts` count; if >= 2, also
+            `first_score`/`latest_score`/`best_score`/`delta`,
+            `recovered_concepts`, `repeated_missing`, `newly_missed`,
+            `still_missing`, and word counts for the first/latest answer).
+    """
     attempts = [a for a in _load_attempts(candidate_id, db_path)
                 if a["question_id"] == str(question_id) and a["attempt_type"] == "primary"]
     info = _question_info(qlookup, question_id)

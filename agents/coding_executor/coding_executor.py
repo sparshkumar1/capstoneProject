@@ -46,6 +46,21 @@ class DockerCSandbox:
         pids_limit: int = DEFAULT_PIDS_LIMIT,
         cpus: float = DEFAULT_CPUS,
     ):
+        """Configure a Docker-backed C compile/execute sandbox.
+
+        Args:
+            image_name (str): Docker image to run code in (default from
+                `SANDBOX_DOCKER_IMAGE` env var or
+                "prepaired-c-sandbox:latest").
+            timeout_sec (float): Per-test-case execution timeout in seconds
+                (default 2.0).
+            memory_mb (int): Container memory limit in MB (default 128).
+            pids_limit (int): Container process-count limit (default 32).
+            cpus (float): Container CPU limit (default 1.0).
+
+        Returns:
+            None.
+        """
         self.image_name = image_name
         self.timeout_sec = timeout_sec
         self.memory_mb = memory_mb
@@ -54,7 +69,19 @@ class DockerCSandbox:
         self._cmd_prefix: Optional[List[str]] = None
 
     def _resolve_docker_prefix(self) -> Optional[List[str]]:
-        """Determine whether direct docker or WSL docker is active."""
+        """Determine and cache the working Docker command prefix (native or WSL).
+
+        Tries the native `docker` CLI first, then a WSL2 "Ubuntu-22.04"
+        Linux Docker daemon. Cached after the first successful resolution.
+
+        Args:
+            None.
+
+        Returns:
+            Optional[List[str]]: Command-line prefix to prepend to Docker
+                invocations (e.g. `["docker"]` or `["wsl", "-d",
+                "Ubuntu-22.04", ...]`), or None if neither is reachable.
+        """
         if self._cmd_prefix is not None:
             return self._cmd_prefix
 
@@ -95,11 +122,29 @@ class DockerCSandbox:
 
     @staticmethod
     def _new_container_name() -> str:
+        """Generate a unique, prefixed container name for one sandbox run.
+
+        Args:
+            None.
+
+        Returns:
+            str: A name of the form `prepaired-sbx-<12 hex chars>`.
+        """
         return f"prepaired-sbx-{uuid.uuid4().hex[:12]}"
 
     @staticmethod
     def _force_remove_container(docker_prefix: List[str], name: str) -> bool:
-        """Best-effort `docker rm -f <name>` after a client-side timeout; returns True if the command reported success."""
+        """Best-effort `docker rm -f <name>`, used after a client-side timeout.
+
+        Args:
+            docker_prefix (List[str]): Command-line prefix from
+                `_resolve_docker_prefix`.
+            name (str): Container name to remove.
+
+        Returns:
+            bool: True if the remove command reported success; False on any
+                failure or exception (never raises).
+        """
         try:
             res = subprocess.run(
                 docker_prefix + ["rm", "-f", name],
@@ -113,11 +158,26 @@ class DockerCSandbox:
             return False
 
     def is_docker_available(self) -> bool:
-        """Check if a functional Docker daemon is reachable."""
+        """Check whether a functional Docker daemon is reachable.
+
+        Args:
+            None.
+
+        Returns:
+            bool: True if `_resolve_docker_prefix` finds a working daemon.
+        """
         return self._resolve_docker_prefix() is not None
 
     def _to_mount_path(self, host_path: Path) -> str:
-        """Convert host directory path to container/WSL-compatible path."""
+        """Convert a host directory path to one the Docker daemon can mount.
+
+        Args:
+            host_path (Path): Host-side directory to bind-mount.
+
+        Returns:
+            str: POSIX path as-is for native Docker, or translated from
+                `C:/...` to `/mnt/c/...` when the resolved daemon is WSL.
+        """
         prefix = self._resolve_docker_prefix()
         posix_str = host_path.as_posix()
         if prefix and "wsl" in prefix[0].lower():
@@ -133,8 +193,33 @@ class DockerCSandbox:
         test_cases: Optional[List[Dict[str, Any]]] = None,
         timeout_sec: Optional[float] = None,
     ) -> Dict[str, Any]:
-        """
-        Execute candidate C code inside an isolated Docker sandbox container.
+        """Compile and run candidate C code against test cases inside an isolated Docker sandbox.
+
+        Pipeline: a static pre-flight safety check (`validate_source_safety`),
+        a Docker-availability check (fails closed — refuses to run
+        unsandboxed if no daemon is reachable), compilation in one
+        locked-down container, then one fresh locked-down container per test
+        case (non-root, no network, dropped capabilities, read-only root,
+        CPU/memory/PID limits), with output classified into
+        accepted/wrong_answer/timeout/memory_limit/runtime_error/
+        compilation_error/policy_blocked/sandbox_error.
+
+        Args:
+            code (str): Candidate C source code.
+            test_cases (Optional[List[Dict[str, Any]]]): Test cases, each
+                with `input`/`stdin`, `expected`/`stdout`, optional
+                `is_hidden`, `is_mandatory`, and `id`.
+            timeout_sec (Optional[float]): Per-test execution timeout
+                override; defaults to `self.timeout_sec`.
+
+        Returns:
+            Dict[str, Any]: `status`, `passed` (bool, requires at least one
+                test and all mandatory tests passing), `coding_score`
+                (0-1, capped at 0.30 if a mandatory test failed),
+                `tests_total`/`tests_passed`, public/hidden/mandatory
+                breakdowns, `pass_rate`, `failed_test_ids`, `test_results`
+                (hidden-test output obfuscated), `compiler_output`, and
+                `execution_time_ms`.
         """
         timeout = timeout_sec or self.timeout_sec
         test_cases = test_cases or []
@@ -435,7 +520,11 @@ class DockerCSandbox:
             else:
                 coding_score = pass_rate
 
-            is_accepted = (passed_count == total_tests) and (mandatory_passed == mandatory_total)
+            is_accepted = (
+                total_tests > 0
+                and passed_count == total_tests
+                and mandatory_passed == mandatory_total
+            )
             if not is_accepted and overall_status == "accepted":
                 overall_status = "wrong_answer"
 
@@ -466,8 +555,20 @@ def evaluate_c_submission(
     timeout_sec: float = DEFAULT_TIMEOUT_SEC,
     memory_mb: int = DEFAULT_MEMORY_MB,
 ) -> Dict[str, Any]:
-    """
-    Authoritative evaluation entry point for C coding submissions.
+    """Authoritative evaluation entry point for C coding submissions.
+
+    Args:
+        code (str): Candidate C source code.
+        test_cases (Optional[List[Dict[str, Any]]]): Test cases (see
+            `DockerCSandbox.compile_and_execute`).
+        timeout_sec (float): Per-test execution timeout (default
+            `DEFAULT_TIMEOUT_SEC`).
+        memory_mb (int): Container memory limit in MB (default
+            `DEFAULT_MEMORY_MB`).
+
+    Returns:
+        Dict[str, Any]: Same result dict as
+            `DockerCSandbox.compile_and_execute`.
     """
     sandbox = DockerCSandbox(timeout_sec=timeout_sec, memory_mb=memory_mb)
     return sandbox.compile_and_execute(code, test_cases=test_cases, timeout_sec=timeout_sec)
@@ -478,8 +579,16 @@ def evaluate_code_submission(
     test_cases: Optional[List[Dict[str, Any]]] = None,
     timeout_sec: float = DEFAULT_TIMEOUT_SEC,
 ) -> Dict[str, Any]:
-    """
-    Drop-in compatibility wrapper for evaluating code submissions.
-    Routes untrusted code to the authoritative Docker C Sandbox.
+    """Drop-in compatibility wrapper for evaluating code submissions.
+
+    Args:
+        code (str): Candidate C source code.
+        test_cases (Optional[List[Dict[str, Any]]]): Test cases (see
+            `DockerCSandbox.compile_and_execute`).
+        timeout_sec (float): Per-test execution timeout (default
+            `DEFAULT_TIMEOUT_SEC`).
+
+    Returns:
+        Dict[str, Any]: Same result dict as `evaluate_c_submission`.
     """
     return evaluate_c_submission(code, test_cases=test_cases, timeout_sec=timeout_sec)

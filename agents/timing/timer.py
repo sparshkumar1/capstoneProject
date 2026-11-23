@@ -41,6 +41,22 @@ class QuestionTimer:
         fast_threshold: float = 0.50,
         min_score_for_fast_bonus: float = 0.70,
     ):
+        """Configure the fast/overrun bonus-penalty thresholds for this timer.
+
+        Args:
+            delta_fast (float): Maximum positive speed-bonus modifier
+                (default 0.03).
+            delta_overrun (float): Maximum negative overrun-penalty modifier
+                (default 0.10).
+            fast_threshold (float): Time ratio at or below which an answer
+                counts as "fast" (default 0.50).
+            min_score_for_fast_bonus (float): Minimum raw technical score
+                required before a fast answer can earn a speed bonus
+                (default 0.70).
+
+        Returns:
+            None.
+        """
         self.delta_fast = float(delta_fast)
         self.delta_overrun = float(delta_overrun)
         self.fast_threshold = float(fast_threshold)
@@ -52,7 +68,19 @@ class QuestionTimer:
         question_id: str = "",
         question_type: str = "verbal",
     ) -> TimerSnapshot:
-        """Start stopwatch for a question."""
+        """Start the stopwatch for a question.
+
+        Args:
+            allowed_time_sec (float): Time budget for this question in
+                seconds (default 60.0; clamped to at least 1.0).
+            question_id (str): Identifier of the question being timed.
+            question_type (str): Question type, e.g. "verbal" or "coding"
+                (default "verbal").
+
+        Returns:
+            TimerSnapshot: Immutable snapshot recording the start time and
+                allotted time, to be passed to `stop()` later.
+        """
         allowed = max(float(allowed_time_sec or 60.0), 1.0)
         return TimerSnapshot(
             allowed_time_sec=allowed,
@@ -67,16 +95,24 @@ class QuestionTimer:
         attempts: int = 1,
         retries: int = 0,
     ) -> Dict[str, Any]:
-        """
-        Stop stopwatch and return timing metrics.
+        """Stop the stopwatch and compute timing metrics for this question.
+
+        Args:
+            snapshot (TimerSnapshot): The snapshot returned by `start()` for
+                this question.
+            attempts (int): Number of attempts the candidate made (default
+                1).
+            retries (int): Number of retries within those attempts (default
+                0).
 
         Returns:
-          time_taken_sec: Actual elapsed duration in seconds
-          allowed_time_sec: Target allocated time in seconds
-          time_overrun_sec: Duration exceeding allowed time (0 if on-time)
-          time_ratio: Unclamped ratio (time_taken / allowed)
-          time_norm: Clamped ratio in [0.0, 1.0] for RL state vector
-          is_overrun: True if candidate exceeded allowed duration
+            dict: `time_taken_sec` (actual elapsed duration),
+                `allowed_time_sec` (target budget), `time_overrun_sec`
+                (seconds over budget, 0 if on-time), `time_ratio`
+                (unclamped taken/allowed), `time_norm` (ratio clamped to
+                [0, 1], for the RL state vector), `is_overrun` (bool),
+                plus `attempts`, `retries`, `question_id`, and
+                `question_type` passed through from the snapshot/args.
         """
         elapsed = max(time.monotonic() - snapshot.started_at, 0.0)
         allowed = snapshot.allowed_time_sec
@@ -103,8 +139,7 @@ class QuestionTimer:
         delta_fast: Optional[float] = None,
         delta_overrun: Optional[float] = None,
     ) -> Dict[str, Any]:
-        """
-        Calculate the Stage 6 final score timing modifier f_time(tau, S_tech).
+        """Calculate the Stage 6 final-score timing modifier f_time(tau, S_tech).
 
         Mathematical Formulation:
           f_time(tau, S) =
@@ -116,6 +151,26 @@ class QuestionTimer:
           - S < 0.70 NEVER receives a positive modifier (Fast + Wrong -> 0 speed bonus).
           - Modifiers are strictly bounded [-delta_overrun, +delta_fast].
           - Final score is clamped in [0.0, 1.0].
+
+        Args:
+            raw_score (float): Raw technical score S_tech, coerced to a
+                finite value in [0, 1] (invalid/NaN/Inf input becomes 0.0).
+            time_ratio (float): Elapsed/allowed time ratio tau, coerced to a
+                finite non-negative value (invalid/NaN/Inf input becomes
+                1.0).
+            delta_fast (float | None): Override for this call's maximum
+                speed bonus; defaults to the instance's `delta_fast`.
+            delta_overrun (float | None): Override for this call's maximum
+                overrun penalty; defaults to the instance's
+                `delta_overrun`.
+
+        Returns:
+            dict: `raw_score`, `time_ratio` (sanitized inputs),
+                `timing_score` (continuous pacing-quality score in [0, 1]),
+                `timing_modifier` (the signed f_time value applied),
+                `final_score` (`raw_score + timing_modifier`, clamped to
+                [0, 1]), `is_fast`, `is_overrun`, and
+                `speed_bonus_eligible` (bools).
         """
         d_fast = float(self.delta_fast if delta_fast is None else delta_fast)
         d_over = float(self.delta_overrun if delta_overrun is None else delta_overrun)

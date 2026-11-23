@@ -17,6 +17,18 @@ _HESITANT_TERMS = {
 
 
 def _get_classifier():
+    """Lazily load and cache the zero-shot NLI classification pipeline.
+
+    Args:
+        None.
+
+    Returns:
+        transformers.Pipeline: The cached zero-shot-classification pipeline
+            (CPU, `cross-encoder/nli-MiniLM2-L6-H768`).
+
+    Raises:
+        ImportError: If the `transformers` package is not installed.
+    """
     global _CLASSIFIER
     if _CLASSIFIER is None:
         if pipeline is None:
@@ -30,6 +42,21 @@ def _get_classifier():
 
 
 def _safe_text_score(transcript: str) -> dict:
+    """Keyword-based fallback linguistic-confidence scorer (no ML model needed).
+
+    Scores confidence from the density of a small hand-picked list of
+    confident vs. hesitant terms in the transcript. Used when `transformers`
+    isn't installed, the transcript is empty, or the ML classifier fails.
+
+    Args:
+        transcript (str): Candidate's answer transcript.
+
+    Returns:
+        dict: `linguistic_score` (float, 0-1), `label` (one of "confident
+            and assertive", "neutral", "uncertain and hesitant"),
+            `label_scores` (dict of the three labels' scores), and
+            `analysis_source` ("heuristic_empty" or "heuristic").
+    """
     text = (transcript or "").strip().lower()
     if not text:
         return {
@@ -70,6 +97,22 @@ def _safe_text_score(transcript: str) -> dict:
 
 
 def analyze_linguistic_confidence(transcript: str) -> dict:
+    """Score how confident/assertive vs. hesitant a transcript reads.
+
+    Uses the zero-shot NLI classifier when available and the transcript is
+    non-empty; otherwise falls back to the keyword-based heuristic in
+    `_safe_text_score`. Never raises — classifier failures fall back
+    silently.
+
+    Args:
+        transcript (str): Candidate's answer transcript.
+
+    Returns:
+        dict: `linguistic_score` (float, 0-1), `label` (top predicted
+            label), `label_scores` (dict of all label scores), and
+            `analysis_source` ("transformers" or one of the heuristic
+            sources from `_safe_text_score`).
+    """
     if not transcript or not transcript.strip():
         return _safe_text_score(transcript)
 
@@ -103,4 +146,12 @@ def analyze_linguistic_confidence(transcript: str) -> dict:
 
 
 def analyze_text(transcript: str) -> dict:
+    """Alias for `analyze_linguistic_confidence`.
+
+    Args:
+        transcript (str): Candidate's answer transcript.
+
+    Returns:
+        dict: Same as `analyze_linguistic_confidence`.
+    """
     return analyze_linguistic_confidence(transcript)

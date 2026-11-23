@@ -19,6 +19,16 @@ except ImportError:
 
 
 def _safe_float(value, default=0.0):
+    """Coerce a value to float, falling back on None/NaN/conversion errors.
+
+    Args:
+        value: Value to convert.
+        default (float): Value to return if `value` is None, NaN, or not
+            convertible (default 0.0).
+
+    Returns:
+        float: The converted value, or `default`.
+    """
     try:
         if value is None:
             return default
@@ -30,6 +40,17 @@ def _safe_float(value, default=0.0):
 
 
 def _robust_mean(values, default=0.0):
+    """Compute a mean that trims non-finite values and (for n>=8) outlier tails.
+
+    Args:
+        values: Array-like of numeric values.
+        default (float): Value to return if no finite values remain
+            (default 0.0).
+
+    Returns:
+        float: Mean of the finite, (optionally trimmed to the 10th-90th
+            percentile) values, or `default` if none remain.
+    """
     arr = np.asarray(values, dtype=float)
     if arr.size == 0:
         return float(default)
@@ -45,6 +66,17 @@ def _robust_mean(values, default=0.0):
 
 
 def _robust_std(values, default=0.0):
+    """Compute a standard deviation that trims non-finite values and (for n>=8) outlier tails.
+
+    Args:
+        values: Array-like of numeric values.
+        default (float): Value to return if no finite values remain
+            (default 0.0).
+
+    Returns:
+        float: Standard deviation of the finite, (optionally trimmed)
+            values, or `default` if none remain.
+    """
     arr = np.asarray(values, dtype=float)
     if arr.size == 0:
         return float(default)
@@ -60,6 +92,18 @@ def _robust_std(values, default=0.0):
 
 
 def _spectral_flatness(samples: np.ndarray) -> float:
+    """Compute the Wiener spectral flatness (geometric/arithmetic mean of the power spectrum).
+
+    Used as a fallback proxy for voice quality (harmonics-to-noise ratio)
+    when parselmouth/Praat isn't available: a tonal (harmonic) voice has low
+    flatness, while a noisy signal has flatness closer to 1.
+
+    Args:
+        samples (np.ndarray): Mono audio samples for one frame/clip.
+
+    Returns:
+        float: Spectral flatness in (0, 1], or 1.0 for empty/silent input.
+    """
     data = np.asarray(samples, dtype=np.float32)
     if data.size == 0:
         return 1.0
@@ -72,6 +116,21 @@ def _spectral_flatness(samples: np.ndarray) -> float:
 
 
 def _estimate_pitch_track(samples: np.ndarray, sr: int) -> np.ndarray:
+    """Estimate a frame-by-frame pitch (F0) track via autocorrelation.
+
+    Fallback pitch estimator used when parselmouth/Praat isn't available.
+    Skips low-energy (silent) frames and frames whose best autocorrelation
+    peak isn't clearly periodic.
+
+    Args:
+        samples (np.ndarray): Mono audio samples.
+        sr (int): Sample rate in Hz.
+
+    Returns:
+        np.ndarray: Estimated pitch in Hz for each voiced frame detected
+            (searched over roughly 75-500 Hz); empty if `samples`/`sr` are
+            invalid or no voiced frames are found.
+    """
     data = np.asarray(samples, dtype=np.float32)
     if data.size == 0 or sr <= 0:
         return np.zeros(0, dtype=np.float32)
@@ -110,6 +169,22 @@ def _estimate_pitch_track(samples: np.ndarray, sr: int) -> np.ndarray:
 
 
 def extract_prosodic_features(audio_path):
+    """Extract prosodic/voice-quality features from an audio recording.
+
+    Uses parselmouth (Praat) for jitter, shimmer, HNR, and pitch when it's
+    installed; otherwise falls back to the numpy/ffmpeg-based estimators in
+    this module (`_estimate_pitch_track`, `_spectral_flatness`, etc.). All
+    outputs are clamped to plausible physical ranges.
+
+    Args:
+        audio_path (str | Path): Path to the audio recording.
+
+    Returns:
+        dict: `jitter`, `shimmer`, `hnr`, `pitch_mean`, `pitch_stddev`,
+            `signal_rms` (all floats), and `voice_quality_source`
+            ("parselmouth", "ffmpeg_numpy_fallback", or the decode-failure
+            reason from `decode_audio` if the file couldn't be read).
+    """
     if _PARSELMOUTH_AVAILABLE:
         snd = parselmouth.Sound(audio_path)
 
@@ -184,4 +259,12 @@ def extract_prosodic_features(audio_path):
 
 
 def extract_audio_features(audio_path):
+    """Alias for `extract_prosodic_features`.
+
+    Args:
+        audio_path (str | Path): Path to the audio recording.
+
+    Returns:
+        dict: Same as `extract_prosodic_features`.
+    """
     return extract_prosodic_features(audio_path)
