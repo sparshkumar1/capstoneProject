@@ -12,6 +12,7 @@ Source of truth for names/defaults is `.env.example` (root). This file adds the 
 | `PREPAIRED_DB_PATH` | `services/storage/database.py` | No (defaults to `<repo>/data/prepaired.db`) | **New.** Point at a mounted persistent volume for anything other than a single long-lived host. |
 | `PREPAIRED_GGUF_PATH` | `services/qwen/app.py` | No | Pre-existing. Override the GGUF model file location. |
 | `ENABLE_GPU_RESEARCH_MODELS` | `services/qwen/app.py` | No | Pre-existing. `1`/`true` allows a HF-`transformers` fallback download if the GGUF file is missing. Left `0` — the deployment is CPU-only, no GPU provisioned. |
+| `LLM_BASE_URL`, `LLM_API_KEY`, `LLM_MODEL` | `services/qwen/app.py` | No | **New.** Setting `LLM_BASE_URL` switches this service from the local GGUF engine to a hosted OpenAI-compatible chat completions endpoint (e.g. Groq); `decision_source` reports `qwen_hosted_llm` in that mode. Unset (default) = unchanged local GGUF behavior. `LLM_API_KEY` is a real secret — never commit it. |
 | `QWEN_FEEDBACK_MAX_NEW_TOKENS` | `services/qwen/app.py` | No | Pre-existing, default 512. |
 | `SANDBOX_DOCKER_IMAGE` | `agents/coding_executor/coding_executor.py` | No | Pre-existing. `.env.example` previously named this `DOCKER_SANDBOX_IMAGE` (wrong — never read). Moot for this deployment since the sandbox is disabled (no Docker daemon reachable from inside the backend container). |
 | `PREPAIRED_WARMUP_STT_MODELS`, `PREPAIRED_DISABLE_WARMUP`, `PREPAIRED_AUDIO_WAIT_TIMEOUT_S` | `apps/backend/main.py` | No | Pre-existing backend warmup tuning. |

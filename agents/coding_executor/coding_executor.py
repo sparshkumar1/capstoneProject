@@ -20,9 +20,7 @@ import time
 import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-
 from .sandbox_policy import validate_source_safety
-
 
 SANDBOX_IMAGE = os.getenv("SANDBOX_DOCKER_IMAGE", "prepaired-c-sandbox:latest")
 DEFAULT_TIMEOUT_SEC = 2.0
@@ -30,7 +28,6 @@ DEFAULT_MEMORY_MB = 128
 DEFAULT_PIDS_LIMIT = 32
 DEFAULT_CPUS = 1.0
 MAX_OUTPUT_BYTES = 65536
-
 
 class DockerCSandbox:
     """
