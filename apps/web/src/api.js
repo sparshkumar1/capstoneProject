@@ -1,7 +1,21 @@
 const BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const CANDIDATE_STORAGE_KEY = "prepaired.candidate";
+
+function _adminToken() {
+  try {
+    const raw = localStorage.getItem(CANDIDATE_STORAGE_KEY);
+    return raw ? JSON.parse(raw)?.admin_token || "" : "";
+  } catch {
+    return "";
+  }
+}
 
 async function req(method, path, body) {
   const opts = { method, headers: {} };
+  if (path.startsWith("/api/admin/")) {
+    const token = _adminToken();
+    if (token) opts.headers["X-Admin-Token"] = token;
+  }
   if (body instanceof FormData) {
     opts.body = body;
   } else if (body) {
@@ -40,6 +54,24 @@ export const api = {
   // Questions
   getQuestions: (topic) => req("GET", `/api/questions?topic=${topic}`),
 
+  // Learner insights (read-only, derived from stored attempts)
+  getDashboard: (candidateId, tz = 0) => req("GET", `/api/candidates/${encodeURIComponent(candidateId)}/dashboard?tz_offset_minutes=${tz}`),
+  getAnalytics: (candidateId, tz = 0) => req("GET", `/api/candidates/${encodeURIComponent(candidateId)}/analytics?tz_offset_minutes=${tz}`),
+  getWeaknessMap: (candidateId) => req("GET", `/api/candidates/${encodeURIComponent(candidateId)}/weakness-map`),
+  compareAttempts: (candidateId, questionId) =>
+    req("GET", `/api/candidates/${encodeURIComponent(candidateId)}/compare/${encodeURIComponent(questionId)}`),
+
+  // Bookmarks & notes
+  getBookmarks: (candidateId) => req("GET", `/api/candidates/${encodeURIComponent(candidateId)}/bookmarks`),
+  addBookmark: (candidateId, questionId, note = "") =>
+    req("POST", `/api/candidates/${encodeURIComponent(candidateId)}/bookmarks`, { question_id: questionId, note }),
+  removeBookmark: (candidateId, questionId) =>
+    req("DELETE", `/api/candidates/${encodeURIComponent(candidateId)}/bookmarks/${encodeURIComponent(questionId)}`),
+
+  // Server-synced study goal
+  getStudyGoal: (candidateId) => req("GET", `/api/candidates/${encodeURIComponent(candidateId)}/study-goal`),
+  saveStudyGoal: (candidateId, data) => req("PUT", `/api/candidates/${encodeURIComponent(candidateId)}/study-goal`, data),
+
   // Admin
   getAllSessions: (params = {}) => {
     const q = new URLSearchParams(params).toString();
@@ -47,6 +79,10 @@ export const api = {
   },
   getAdminStats: () => req("GET", "/api/admin/stats"),
   getSessionDetail: (id) => req("GET", `/api/admin/sessions/${id}`),
+  getCandidateSessions: (candidateId) => req("GET", `/api/admin/candidates/${encodeURIComponent(candidateId)}/sessions`),
+
+  // Report PDF export (direct URL -- downloaded via an <a>/window.open, not JSON fetch)
+  reportPdfUrl: (sessionId) => `${BASE}/api/sessions/${encodeURIComponent(sessionId)}/report/pdf`,
 
   // Code execution
   runCode: (code, sessionId) => req("POST", "/api/run_code", { code, session_id: sessionId }),

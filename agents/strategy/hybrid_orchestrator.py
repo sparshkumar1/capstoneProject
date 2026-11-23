@@ -33,6 +33,15 @@ _RL_READY = False
 
 
 def _try_load_rl() -> bool:
+    """Lazily import numpy and Stable-Baselines3's PPO, caching the result.
+
+    Args:
+        None.
+
+    Returns:
+        bool: True if both dependencies are importable (module-level `_np`
+            and `_PPO` are then set), False if either import failed.
+    """
     global _np, _PPO, _RL_READY
     if _RL_READY:
         return True
@@ -78,6 +87,19 @@ def build_rl_observation(
       [3] hes: Candidate hesitation signal from acoustic/filler analysis (float in [0.0, 1.0])
       [4] progress: Normalized session turn progress ratio (t / T) in [0.0, 1.0]
       [5] diff_norm: Current difficulty mapped linearly to [0.0, 1.0] (diff / 5.0)
+
+    Args:
+        score (float): Latest answer's evaluator score.
+        current_difficulty (int): Current difficulty level, 1-5.
+        session (dict): Session state dict; reads (with fallbacks)
+            `rl_perf_history`/`scores`, `last_confidence_score`/
+            `last_confidence`, `last_hesitation_score`/`last_hesitation`,
+            `progress`/`turn_progress`/`turn_idx`+`current_turn`, and
+            `last_time_norm`.
+
+    Returns:
+        numpy.ndarray: Shape (6,), dtype float32, each component clamped to
+            [0.0, 1.0] with NaN/Inf guarded to a safe default.
     """
     import numpy as np
 
@@ -174,6 +196,19 @@ class HybridOrchestrator:
         model_path: str = "rl/checkpoints/seed_123/ppo_final.zip",
         vec_path: str = "rl/checkpoints/seed_123/vecnormalize.pkl",
     ):
+        """Create the orchestrator and attempt to load the PPO checkpoint.
+
+        Args:
+            model_path (str): Path (relative to the repo root) to the PPO
+                checkpoint zip (default "rl/checkpoints/seed_123/
+                ppo_final.zip").
+            vec_path (str): Path (relative to the repo root) to the
+                matching VecNormalize pickle (default
+                "rl/checkpoints/seed_123/vecnormalize.pkl").
+
+        Returns:
+            None. Sets `self.ready`/`self.is_compatible` via `_try_load()`.
+        """
         self.model_path = model_path
         self.vec_path = vec_path
         self.model = None
@@ -191,9 +226,28 @@ class HybridOrchestrator:
         current_difficulty: int,
         session: dict,
     ) -> Tuple[int, str, str]:
-        """
-        Produce next difficulty proposal.
-        Returns: (new_difficulty: int, reason: str, action_name: str)
+        """Propose the next question's difficulty for this turn.
+
+        During the baseline phase (before RL activates), follows the fixed
+        `BASELINE_DIFFICULTY_SCHEDULE` instead of consulting the policy.
+        Otherwise builds the 6D observation and asks the loaded PPO model
+        for an action, falling back to `_heuristic_action` if the model
+        isn't ready/compatible or prediction raises. Note: this does not
+        apply the post-inference guardrail layer (see `rl/guardrails.py`
+        and `interview_orchestrator.py::_apply_guardrails` for that).
+
+        Args:
+            score (float): Latest answer's evaluator score.
+            current_difficulty (int): Current difficulty level, 1-5.
+            session (dict): Session state dict, mutated in place (appends
+                to `rl_perf_history`, sets `last_rl_observation`,
+                `rl_status`, `rl_source`, `rl_last_action`).
+
+        Returns:
+            Tuple[int, str, str]: `(new_difficulty, reason, action_name)` —
+                the proposed difficulty (clamped to [1, 5]), a
+                human-readable explanation, and the raw action name
+                ("Easier"/"Same"/"Harder"/"Baseline").
         """
         # Baseline check
         if not session.get("baseline_complete", True):
@@ -253,7 +307,17 @@ class HybridOrchestrator:
 
 
     def _heuristic_action(self, score: float, current_difficulty: int) -> str:
-        """Deterministic heuristic fallback when RL model is not available or incompatible."""
+        """Deterministic heuristic fallback when the RL model is unavailable or incompatible.
+
+        Args:
+            score (float): Latest answer's evaluator score.
+            current_difficulty (int): Current difficulty level, 1-5.
+
+        Returns:
+            str: "Harder" if score > 0.80 and not already at max difficulty,
+                "Easier" if score < 0.40 and not already at min difficulty,
+                otherwise "Same".
+        """
         if score > 0.80 and current_difficulty < 5:
             return "Harder"
         elif score < 0.40 and current_difficulty > 1:
@@ -261,7 +325,22 @@ class HybridOrchestrator:
         return "Same"
 
     def _try_load(self) -> None:
-        """Load and validate PPO model and VecNormalize state."""
+        """Load and validate the PPO checkpoint and VecNormalize state (once).
+
+        No-ops on subsequent calls (`self._attempted` guard). Rejects the
+        checkpoint — leaving `self.ready`/`self.is_compatible` False — if
+        dependencies are missing, the files don't exist, the action space
+        isn't `Discrete(3)`, the observation space isn't `Box(6,)`, or the
+        VecNormalize pickle is malformed or has the wrong dimension.
+
+        Args:
+            None.
+
+        Returns:
+            None: Sets `self.model`, `self.obs_mean`, `self.obs_var`,
+                `self.obs_dim`, `self.ready`, and `self.is_compatible` as a
+                side effect.
+        """
         if self._attempted:
             return
         self._attempted = True

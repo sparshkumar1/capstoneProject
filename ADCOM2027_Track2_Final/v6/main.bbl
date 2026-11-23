@@ -1,0 +1,137 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{alshiekh2018}
+Alshiekh, M., Bloem, R., Ehlers, R., K{\"o}nighofer, B., Niekum, S., Topcu, U.:
+  Safe reinforcement learning via shielding. In: Proceedings of the AAAI
+  Conference on Artificial Intelligence. pp. 2669--2678 (2018)
+
+\bibitem{anderson2001}
+Anderson, L.W., Krathwohl, D.R. (eds.): A Taxonomy for Learning, Teaching, and
+  Assessing: A Revision of Bloom's Taxonomy of Educational Objectives. Longman,
+  New York (2001)
+
+\bibitem{bloom1956}
+Bloom, B.S., Engelhart, M.D., Furst, E.J., Hill, W.H., Krathwohl, D.R.:
+  Taxonomy of Educational Objectives: The Classification of Educational Goals.
+  Handbook I: Cognitive Domain. David McKay, New York (1956)
+
+\bibitem{busoniu2008}
+Bu{\c{s}}oniu, L., Babu{\v{s}}ka, R., De~Schutter, B.: A comprehensive survey
+  of multiagent reinforcement learning. IEEE Transactions on Systems, Man, and
+  Cybernetics, Part C: Applications and Reviews  \textbf{38}(2),  156--172
+  (2008)
+
+\bibitem{cemri2025}
+Cemri, M., Pan, M.Z., Yang, S., Agrawal, L.A., Chopra, B., Tiwari, R., Keutzer,
+  K., Parameswaran, A., Klein, D., Ramchandran, K., Zaharia, M., Gonzalez,
+  J.E., Stoica, I.: Why do multi-agent {LLM} systems fail? arXiv preprint
+  arXiv:2503.13657  (2025)
+
+\bibitem{clopper1934}
+Clopper, C.J., Pearson, E.S.: The use of confidence or fiducial limits
+  illustrated in the case of the binomial. Biometrika  \textbf{26}(4),
+  404--413 (1934)
+
+\bibitem{doroudi2019}
+Doroudi, S., Aleven, V., Brunskill, E.: Where's the reward? {A} review of
+  reinforcement learning for instructional sequencing. International Journal of
+  Artificial Intelligence in Education  \textbf{29}(4),  568--620 (2019)
+
+\bibitem{field2007}
+Field, C.A., Welsh, A.H.: Bootstrapping clustered data. Journal of the Royal
+  Statistical Society: Series B (Statistical Methodology)  \textbf{69}(3),
+  369--390 (2007). \doi{10.1111/j.1467-9868.2007.00593.x}
+
+\bibitem{garcia2015}
+Garc{\'\i}a, J., Fern{\'a}ndez, F.: A comprehensive survey on safe
+  reinforcement learning. Journal of Machine Learning Research  \textbf{16},
+  1437--1480 (2015)
+
+\bibitem{gomez2025}
+Gomez, N., Batham, S.S., Volonte, M., Do, T.D.: Virtual interviewers, real
+  results: Exploring {AI}-driven mock technical interviews on student readiness
+  and confidence. In: Companion Publication of the ACM Conference on
+  Computer-Supported Cooperative Work and Social Computing (CSCW Companion '25)
+  (2025), arXiv:2506.16542
+
+\bibitem{hong2024}
+Hong, S., Zhuge, M., Chen, J., et~al.: {MetaGPT}: Meta programming for a
+  multi-agent collaborative framework. In: International Conference on Learning
+  Representations (ICLR) (2024)
+
+\bibitem{huang2025}
+Huang, J.T., Zhou, J., Jin, T., Zhou, X., Chen, Z., Wang, W., Yuan, Y., Lyu,
+  M., Sap, M.: On the resilience of {LLM}-based multi-agent collaboration with
+  faulty agents. In: Proceedings of the 42nd International Conference on
+  Machine Learning (ICML), PMLR 267. pp. 26202--26226 (2025)
+
+\bibitem{jia2026}
+Jia, J., Deng, Z., Chen, Z., Wang, Y., Zheng, Z.: {MAS-FIRE}: Fault injection
+  and reliability evaluation for {LLM}-based multi-agent systems. arXiv
+  preprint arXiv:2602.19843  (2026)
+
+\bibitem{kim2026outgrow}
+Kim, Y., Gu, K., Park, C., Park, C., Schmidgall, S., Heydari, A.A., et~al.:
+  Capable language models can outgrow the benefits of collaboration. Nature
+  Machine Intelligence  \textbf{8},  1157--1172 (2026).
+  \doi{10.1038/s42256-026-01268-y}
+
+\bibitem{narvekar2020}
+Narvekar, S., Peng, B., Leonetti, M., Sinapov, J., Taylor, M.E., Stone, P.:
+  Curriculum learning for reinforcement learning domains: A framework and
+  survey. Journal of Machine Learning Research  \textbf{21}(181),  1--50 (2020)
+
+\bibitem{nygard2007}
+Nygard, M.T.: Release It! Design and Deploy Production-Ready Software.
+  Pragmatic Bookshelf (2007)
+
+\bibitem{raffin2021}
+Raffin, A., Hill, A., Gleave, A., Kanervisto, A., Ernestus, M., Dormann, N.:
+  Stable-{B}aselines3: Reliable reinforcement learning implementations. Journal
+  of Machine Learning Research  \textbf{22}(268) (2021)
+
+\bibitem{reimers2019}
+Reimers, N., Gurevych, I.: {Sentence-BERT}: Sentence embeddings using {S}iamese
+  {BERT}-networks. In: Proceedings of the 2019 Conference on Empirical Methods
+  in Natural Language Processing and the 9th International Joint Conference on
+  Natural Language Processing (EMNLP-IJCNLP). pp. 3982--3992 (2019).
+  \doi{10.18653/v1/D19-1410}
+
+\bibitem{saltzer1975}
+Saltzer, J.H., Schroeder, M.D.: The protection of information in computer
+  systems. Proceedings of the IEEE  \textbf{63}(9),  1278--1308 (1975).
+  \doi{10.1109/PROC.1975.9939}
+
+\bibitem{schulman2017}
+Schulman, J., Wolski, F., Dhariwal, P., Radford, A., Klimov, O.: Proximal
+  policy optimization algorithms. arXiv preprint arXiv:1707.06347  (2017)
+
+\bibitem{vaishampayan2025}
+Vaishampayan, S., Brown, C.: Will you trust me more than {ChatGPT}?
+  {E}valuating {LLM}-generated code feedback for mock technical interviews. In:
+  Cooperative and Human Aspects of Software Engineering (CHASE) (2025)
+
+\bibitem{wooldridge1995}
+Wooldridge, M., Jennings, N.R.: Intelligent agents: theory and practice. The
+  Knowl\-edge Engi\-neer\-ing Re\-view  \textbf{10}(2),  115--152 (1995).
+  \doi{10.1017/S0269888900008122}
+
+\bibitem{wu2023}
+Wu, Q., Bansal, G., Zhang, J., Wu, Y., Li, B., Zhu, E., Jiang, L., Zhang, X.,
+  Zhang, S., Liu, J., Awadallah, A.H., White, R.W., Burger, D., Wang, C.:
+  {AutoGen}: Enabling next-gen {LLM} applications via multi-agent conversation.
+  arXiv preprint arXiv:2308.08155  (2023)
+
+\bibitem{yazdani2025}
+Yazdani, N., Mahajan, A., Ansari, A.: Zara: An {LLM}-based candidate interview
+  feedback system. arXiv preprint arXiv:2507.02869  (2025)
+
+\bibitem{zheng2023}
+Zheng, L., Chiang, W.L., Sheng, Y., et~al.: Judging {LLM}-as-a-judge with
+  {MT}-bench and {C}hatbot {A}rena. In: Advances in Neural Information
+  Processing Systems 36 (NeurIPS 2023), Datasets and Benchmarks Track (2023)
+
+\end{thebibliography}

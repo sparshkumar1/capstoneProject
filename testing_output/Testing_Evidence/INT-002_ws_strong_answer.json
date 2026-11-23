@@ -1,0 +1,94 @@
+{
+  "sent_transcript": "A pointer stores the memory address of another variable. Incrementing an int pointer advances it by sizeof(int) bytes, while incrementing a char pointer advances it by 1 byte, because pointer arithmetic scales by the size of the pointed-to type.",
+  "received": [
+    {
+      "type": "feedback",
+      "payload": {
+        "final_score": 0.0,
+        "grade": "Poor",
+        "score_breakdown": {
+          "semantic_similarity": 0.152,
+          "concept_coverage": 0.0,
+          "reasoning_quality": 0.0,
+          "confidence_signal": 0.5,
+          "overall": 0.0
+        },
+        "what_candidate_said": "A pointer stores the memory address of another variable. Incrementing an int pointer advances it by sizeof(int) bytes, while incrementing a char point",
+        "what_was_correct": [],
+        "what_was_incorrect": [],
+        "what_was_incomplete": [
+          "single pass iteration",
+          "store value-to-index mapping",
+          "Return indices not values",
+          "hash map enables O(1) complement lookup replacing inner loop"
+        ],
+        "missing_concepts": [
+          "single pass iteration",
+          "store value-to-index mapping",
+          "Return indices not values",
+          "hash map enables O(1) complement lookup replacing inner loop"
+        ],
+        "how_to_answer": "Review standard optimal algorithm for arrays.",
+        "stronger_answer_guide": "Explain invariants, step-by-step logic, and complexity trade-offs clearly.",
+        "how_to_improve": [
+          "Cover missing concept: single pass iteration",
+          "Cover missing concept: store value-to-index mapping",
+          "Cover missing concept: Return indices not values"
+        ],
+        "actionable_improvements": [
+          "Cover missing concept: single pass iteration",
+          "Cover missing concept: store value-to-index mapping",
+          "Cover missing concept: Return indices not values"
+        ],
+        "strong_points": [
+          "Attempted question"
+        ],
+        "communication_tips": [
+          "Answer too short (39 words). Aim for 80\u2013120 words minimum for theory questions.",
+          "No filler words detected \u2014 clean, confident delivery."
+        ],
+        "covered_concepts": [],
+        "trend": "stable",
+        "trend_note": "Turn 1 \u2014 not enough history yet for trend analysis",
+        "justification": "Grade Poor (0%) on arrays. Semantic 15% | Concept coverage 0% | Reasoning 0% | Confidence 50%. Missing: single pass iteration, store value-to-index mapping. Concept coverage below 50% \u2014 key ideas were not addressed. Answer too brief (39 words) to demonstrate depth.",
+        "narrative_feedback": "Grade Poor (0%) on arrays. Semantic 15% | Concept coverage 0% | Reasoning 0% | Confidence 50%. Missing: single pass iteration, store value-to-index mapping. Concept coverage below 50% \u2014 key ideas were not addressed. Answer too brief (39 words) to demonstrate depth.",
+        "transcript": "A pointer stores the memory address of another variable. Incrementing an int pointer advances it by sizeof(int) bytes, while incrementing a char pointer advances it by 1 byte, because pointer arithmetic scales by the size of the pointed-to type.",
+        "decision_source": "evaluator_cross_encoder",
+        "llm_status": "llm_unavailable",
+        "vague_points": [
+          "Cover missing concept: single pass iteration",
+          "Cover missing concept: store value-to-index mapping",
+          "Cover missing concept: Return indices not values"
+        ],
+        "attempt_number": 1,
+        "comparison": {
+          "has_previous_best": false,
+          "previous_best_score": null,
+          "previous_best_answer": "",
+          "previous_best_attempt_number": null,
+          "score_delta": 0.0,
+          "resolved_concepts": [],
+          "remaining_concepts": [
+            "single pass iteration",
+            "store value-to-index mapping",
+            "Return indices not values",
+            "hash map enables O(1) complement lookup replacing inner loop"
+          ],
+          "newly_missed_concepts": [],
+          "newly_introduced_errors": [],
+          "has_improvement": false
+        },
+        "raw_evaluator_score": 0.0,
+        "timing_modifier": 0.0,
+        "timing_score": 1.0,
+        "time_ratio": 0.0,
+        "time_taken_sec": 0.0,
+        "allowed_time_sec": 40.0,
+        "is_best": false,
+        "authoritative_best_answer": false,
+        "best_answer": null
+      }
+    }
+  ],
+  "latency_s": 33.32561469078064
+}

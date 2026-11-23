@@ -1,0 +1,704 @@
+{
+ "baseline": {
+  "judged_failures": {
+   "O1": false,
+   "O2": false,
+   "replay_error": false
+  },
+  "raw": {
+   "o1_failed": false,
+   "o1_failed_tests": [],
+   "replay": {
+    "o2": {
+     "coaching:crash": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "coaching:malformed": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "coaching:stale": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "coaching:ungrounded": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "nominal": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "strategy:adversarial_valid": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "strategy:crash": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "strategy:crash_always": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "strategy:forbidden_key": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "strategy:malformed": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "strategy:nan_confidence": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "strategy:stale": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     },
+     "strategy:timeout": {
+      "by_property": {},
+      "harness_errors": 0,
+      "violations": 0
+     }
+    },
+    "o3": {
+     "coaching:crash": {
+      "agent_call|coaching|accepted|valid": 114,
+      "agent_call|coaching|rejected|breaker_open": 33,
+      "agent_call|coaching|rejected|crash": 45,
+      "agent_call|strategy|accepted|valid": 192,
+      "coaching|coaching|accepted|validated_plan": 114,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 28,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 42,
+      "difficulty|ppo|accepted|default_policy": 74,
+      "difficulty|ppo|rejected|superseded_by_strategy": 31,
+      "difficulty|strategy|accepted|validated_proposal": 85,
+      "difficulty|strategy|rejected|low_confidence": 107,
+      "probe|hub_default|accepted|default_policy": 83,
+      "probe|strategy|accepted|proactive_probe": 3,
+      "probe|strategy|modified|retargeted_default_probe": 37
+     },
+     "coaching:malformed": {
+      "agent_call|coaching|accepted|valid": 114,
+      "agent_call|coaching|rejected|breaker_open": 33,
+      "agent_call|coaching|rejected|schema_violation": 45,
+      "agent_call|strategy|accepted|valid": 192,
+      "coaching|coaching|accepted|validated_plan": 114,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 28,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 42,
+      "difficulty|ppo|accepted|default_policy": 74,
+      "difficulty|ppo|rejected|superseded_by_strategy": 31,
+      "difficulty|strategy|accepted|validated_proposal": 85,
+      "difficulty|strategy|rejected|low_confidence": 107,
+      "probe|hub_default|accepted|default_policy": 83,
+      "probe|strategy|accepted|proactive_probe": 3,
+      "probe|strategy|modified|retargeted_default_probe": 37
+     },
+     "coaching:stale": {
+      "agent_call|coaching|accepted|valid": 114,
+      "agent_call|coaching|rejected|breaker_open": 33,
+      "agent_call|coaching|rejected|stale_state": 45,
+      "agent_call|strategy|accepted|valid": 192,
+      "coaching|coaching|accepted|validated_plan": 114,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 28,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 42,
+      "difficulty|ppo|accepted|default_policy": 74,
+      "difficulty|ppo|rejected|superseded_by_strategy": 31,
+      "difficulty|strategy|accepted|validated_proposal": 85,
+      "difficulty|strategy|rejected|low_confidence": 107,
+      "probe|hub_default|accepted|default_policy": 83,
+      "probe|strategy|accepted|proactive_probe": 3,
+      "probe|strategy|modified|retargeted_default_probe": 37
+     },
+     "coaching:ungrounded": {
+      "agent_call|coaching|accepted|valid": 192,
+      "agent_call|strategy|accepted|valid": 192,
+      "coaching|coaching|rejected|ungrounded_concept": 192,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 28,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 42,
+      "difficulty|ppo|accepted|default_policy": 74,
+      "difficulty|ppo|rejected|superseded_by_strategy": 31,
+      "difficulty|strategy|accepted|validated_proposal": 85,
+      "difficulty|strategy|rejected|low_confidence": 107,
+      "probe|hub_default|accepted|default_policy": 83,
+      "probe|strategy|accepted|proactive_probe": 3,
+      "probe|strategy|modified|retargeted_default_probe": 37
+     },
+     "nominal": {
+      "agent_call|coaching|accepted|valid": 192,
+      "agent_call|strategy|accepted|valid": 192,
+      "agent_call|strategy|rejected|duplicate": 8,
+      "coaching|coaching|accepted|validated_plan": 192,
+      "difficulty|arbitrator|accepted|hard_infrastructure_failure": 8,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 27,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 38,
+      "difficulty|ppo|accepted|default_policy": 71,
+      "difficulty|ppo|rejected|superseded_by_strategy": 31,
+      "difficulty|strategy|accepted|validated_proposal": 84,
+      "difficulty|strategy|rejected|low_confidence": 100,
+      "probe|hub_default|accepted|default_policy": 83,
+      "probe|strategy|accepted|proactive_probe": 3,
+      "probe|strategy|modified|retargeted_default_probe": 37
+     },
+     "strategy:adversarial_valid": {
+      "agent_call|coaching|accepted|valid": 192,
+      "agent_call|strategy|accepted|valid": 192,
+      "coaching|coaching|accepted|validated_plan": 192,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 14,
+      "difficulty|guardrail|modified|guardrail:g1_overload_protection": 34,
+      "difficulty|guardrail|modified|guardrail:g5_partial_same": 28,
+      "difficulty|ppo|rejected|superseded_by_strategy": 173,
+      "difficulty|strategy|accepted|validated_proposal": 133,
+      "difficulty|strategy|modified|bound_clamp": 59,
+      "probe|hub_default|accepted|default_policy": 123
+     },
+     "strategy:crash": {
+      "agent_call|coaching|accepted|valid": 192,
+      "agent_call|strategy|accepted|valid": 114,
+      "agent_call|strategy|rejected|breaker_open": 33,
+      "agent_call|strategy|rejected|crash": 45,
+      "coaching|coaching|accepted|validated_plan": 192,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 28,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 42,
+      "difficulty|ppo|accepted|default_policy": 99,
+      "difficulty|ppo|rejected|superseded_by_strategy": 12,
+      "difficulty|strategy|accepted|validated_proposal": 48,
+      "difficulty|strategy|rejected|low_confidence": 66,
+      "probe|hub_default|accepted|default_policy": 108,
+      "probe|strategy|modified|retargeted_default_probe": 15
+     },
+     "strategy:crash_always": {
+      "agent_call|coaching|accepted|valid": 192,
+      "agent_call|strategy|rejected|breaker_open": 144,
+      "agent_call|strategy|rejected|crash": 48,
+      "coaching|coaching|accepted|validated_plan": 192,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 28,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 42,
+      "difficulty|ppo|accepted|default_policy": 122,
+      "probe|hub_default|accepted|default_policy": 123
+     },
+     "strategy:forbidden_key": {
+      "agent_call|coaching|accepted|valid": 192,
+      "agent_call|strategy|accepted|valid": 114,
+      "agent_call|strategy|rejected|authority_violation": 45,
+      "agent_call|strategy|rejected|breaker_open": 33,
+      "coaching|coaching|accepted|validated_plan": 192,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 28,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 42,
+      "difficulty|ppo|accepted|default_policy": 99,
+      "difficulty|ppo|rejected|superseded_by_strategy": 12,
+      "difficulty|strategy|accepted|validated_proposal": 48,
+      "difficulty|strategy|rejected|low_confidence": 66,
+      "probe|hub_default|accepted|default_policy": 108,
+      "probe|strategy|modified|retargeted_default_probe": 15
+     },
+     "strategy:malformed": {
+      "agent_call|coaching|accepted|valid": 192,
+      "agent_call|strategy|accepted|valid": 114,
+      "agent_call|strategy|rejected|breaker_open": 33,
+      "agent_call|strategy|rejected|schema_violation": 45,
+      "coaching|coaching|accepted|validated_plan": 192,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 28,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 42,
+      "difficulty|ppo|accepted|default_policy": 99,
+      "difficulty|ppo|rejected|superseded_by_strategy": 12,
+      "difficulty|strategy|accepted|validated_proposal": 48,
+      "difficulty|strategy|rejected|low_confidence": 66,
+      "probe|hub_default|accepted|default_policy": 108,
+      "probe|strategy|modified|retargeted_default_probe": 15
+     },
+     "strategy:nan_confidence": {
+      "agent_call|coaching|accepted|valid": 192,
+      "agent_call|strategy|accepted|valid": 114,
+      "agent_call|strategy|rejected|breaker_open": 33,
+      "agent_call|strategy|rejected|schema_violation": 45,
+      "coaching|coaching|accepted|validated_plan": 192,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 28,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 42,
+      "difficulty|ppo|accepted|default_policy": 99,
+      "difficulty|ppo|rejected|superseded_by_strategy": 12,
+      "difficulty|strategy|accepted|validated_proposal": 48,
+      "difficulty|strategy|rejected|low_confidence": 66,
+      "probe|hub_default|accepted|default_policy": 108,
+      "probe|strategy|modified|retargeted_default_probe": 15
+     },
+     "strategy:stale": {
+      "agent_call|coaching|accepted|valid": 192,
+      "agent_call|strategy|accepted|valid": 114,
+      "agent_call|strategy|rejected|breaker_open": 33,
+      "agent_call|strategy|rejected|stale_state": 45,
+      "coaching|coaching|accepted|validated_plan": 192,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 28,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 42,
+      "difficulty|ppo|accepted|default_policy": 99,
+      "difficulty|ppo|rejected|superseded_by_strategy": 12,
+      "difficulty|strategy|accepted|validated_proposal": 48,
+      "difficulty|strategy|rejected|low_confidence": 66,
+      "probe|hub_default|accepted|default_policy": 108,
+      "probe|strategy|modified|retargeted_default_probe": 15
+     },
+     "strategy:timeout": {
+      "agent_call|coaching|accepted|valid": 192,
+      "agent_call|strategy|accepted|valid": 114,
+      "agent_call|strategy|rejected|breaker_open": 33,
+      "agent_call|strategy|rejected|timeout": 45,
+      "coaching|coaching|accepted|validated_plan": 192,
+      "difficulty|guardrail|accepted|guardrail:g1_overload_protection": 28,
+      "difficulty|guardrail|accepted|guardrail:g5_partial_same": 42,
+      "difficulty|ppo|accepted|default_policy": 99,
+      "difficulty|ppo|rejected|superseded_by_strategy": 12,
+      "difficulty|strategy|accepted|validated_proposal": 48,
+      "difficulty|strategy|rejected|low_confidence": 66,
+      "probe|hub_default|accepted|default_policy": 108,
+      "probe|strategy|modified|retargeted_default_probe": 15
+     }
+    },
+    "o4": {
+     "nominal_digest": "49db5424a306e30539cfcd1d1c23007fb61e157c0db47accf33770783e832fa4"
+    }
+   },
+   "seconds": 12.1
+  }
+ },
+ "driver_sha256": "cb2392e175700d5295aba380f99090c6f3a0c9f3b1fc1fa5f6b97da34250bf94",
+ "file_sha256_after": {
+  "agents/multiagent/arbitration.py": "ce4479cefaa7a6b73950668ee72b4a8590fca8a951310c258f3f28b9fe2a55fd",
+  "agents/multiagent/authority.py": "d1919c29275237aa91e78e7e680f0b1b883b4d1acc67742d21e9b765682caf96",
+  "agents/multiagent/coaching_render.py": "91da9ebce7d9d1b9dc8d09039f62411a8e7eb862013533ef18246cd99866e8d4",
+  "agents/multiagent/contracts.py": "af254c89040a6e24443c1aa960b335e8accd098bb2ac6b0ce802b6bd4e595875",
+  "agents/multiagent/coordinator.py": "0cc7c531159bfd3ca96de0e1cf08f0bbfa24df93c707e6fd782d4fc7147c4aa8",
+  "agents/multiagent/grounding.py": "0ee4568767cf8f7b582ee250849135ef00fc63ddc28b21554d5c9b82c6df72d2"
+ },
+ "file_sha256_before": {
+  "agents/multiagent/arbitration.py": "ce4479cefaa7a6b73950668ee72b4a8590fca8a951310c258f3f28b9fe2a55fd",
+  "agents/multiagent/authority.py": "d1919c29275237aa91e78e7e680f0b1b883b4d1acc67742d21e9b765682caf96",
+  "agents/multiagent/coaching_render.py": "91da9ebce7d9d1b9dc8d09039f62411a8e7eb862013533ef18246cd99866e8d4",
+  "agents/multiagent/contracts.py": "af254c89040a6e24443c1aa960b335e8accd098bb2ac6b0ce802b6bd4e595875",
+  "agents/multiagent/coordinator.py": "0cc7c531159bfd3ca96de0e1cf08f0bbfa24df93c707e6fd782d4fc7147c4aa8",
+  "agents/multiagent/grounding.py": "0ee4568767cf8f7b582ee250849135ef00fc63ddc28b21554d5c9b82c6df72d2"
+ },
+ "mutants": [
+  {
+   "description": "forbidden-key scan disabled",
+   "family": "authority",
+   "file": "agents/multiagent/authority.py",
+   "id": "MU01",
+   "killed": true,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [],
+   "o3_changed_scenarios": [
+    "strategy:forbidden_key"
+   ],
+   "oracles": {
+    "O1": false,
+    "O2": false,
+    "O3": true,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 11.2
+  },
+  {
+   "description": "'final_score' removed from forbidden keys",
+   "family": "authority",
+   "file": "agents/multiagent/authority.py",
+   "id": "MU02",
+   "killed": true,
+   "o1_failed_tests": [
+    "test_forbidden_keys_in_authority"
+   ],
+   "o2_violating_scenarios": [],
+   "o3_changed_scenarios": [
+    "strategy:forbidden_key"
+   ],
+   "oracles": {
+    "O1": true,
+    "O2": false,
+    "O3": true,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 10.9
+  },
+  {
+   "error": "pattern occurs 0 times",
+   "id": "MU03"
+  },
+  {
+   "error": "pattern occurs 0 times",
+   "id": "MU04"
+  },
+  {
+   "error": "pattern occurs 0 times",
+   "id": "MU05"
+  },
+  {
+   "description": "evidence requirement removed",
+   "family": "arbitration",
+   "file": "agents/multiagent/arbitration.py",
+   "id": "MU06",
+   "killed": false,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [],
+   "o3_changed_scenarios": [],
+   "oracles": {
+    "O1": false,
+    "O2": false,
+    "O3": false,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 12.2
+  },
+  {
+   "error": "pattern occurs 0 times",
+   "id": "MU07"
+  },
+  {
+   "description": "follow-up hard cap 2 -> 3",
+   "family": "arbitration",
+   "file": "agents/multiagent/arbitration.py",
+   "id": "MU08",
+   "killed": true,
+   "o1_failed_tests": [
+    "test_arbitrate_probe_hard_cap"
+   ],
+   "o2_violating_scenarios": [
+    "coaching:crash",
+    "coaching:malformed",
+    "coaching:stale",
+    "coaching:ungrounded",
+    "nominal",
+    "strategy:adversarial_valid",
+    "strategy:crash",
+    "strategy:crash_always",
+    "strategy:forbidden_key",
+    "strategy:malformed",
+    "strategy:nan_confidence",
+    "strategy:stale",
+    "strategy:timeout"
+   ],
+   "o3_changed_scenarios": [
+    "coaching:crash",
+    "coaching:malformed",
+    "coaching:stale",
+    "coaching:ungrounded",
+    "nominal",
+    "strategy:adversarial_valid",
+    "strategy:crash",
+    "strategy:crash_always",
+    "strategy:forbidden_key",
+    "strategy:malformed",
+    "strategy:nan_confidence",
+    "strategy:stale",
+    "strategy:timeout"
+   ],
+   "oracles": {
+    "O1": true,
+    "O2": true,
+    "O3": true,
+    "O4": true
+   },
+   "replay_error": null,
+   "seconds": 11.2
+  },
+  {
+   "description": "upper difficulty bound 5 -> 6",
+   "family": "arbitration",
+   "file": "agents/multiagent/arbitration.py",
+   "id": "MU09",
+   "killed": true,
+   "o1_failed_tests": [
+    "test_clamping_to_valid_difficulty_range"
+   ],
+   "o2_violating_scenarios": [
+    "coaching:crash",
+    "coaching:malformed",
+    "coaching:stale",
+    "coaching:ungrounded",
+    "nominal",
+    "strategy:adversarial_valid",
+    "strategy:crash",
+    "strategy:crash_always",
+    "strategy:forbidden_key",
+    "strategy:malformed",
+    "strategy:nan_confidence",
+    "strategy:stale",
+    "strategy:timeout"
+   ],
+   "o3_changed_scenarios": [
+    "coaching:crash",
+    "coaching:malformed",
+    "coaching:stale",
+    "coaching:ungrounded",
+    "nominal",
+    "strategy:adversarial_valid",
+    "strategy:crash",
+    "strategy:crash_always",
+    "strategy:forbidden_key",
+    "strategy:malformed",
+    "strategy:nan_confidence",
+    "strategy:stale",
+    "strategy:timeout"
+   ],
+   "oracles": {
+    "O1": true,
+    "O2": true,
+    "O3": true,
+    "O4": true
+   },
+   "replay_error": null,
+   "seconds": 10.7
+  },
+  {
+   "description": "probe concept grounding removed",
+   "family": "arbitration",
+   "file": "agents/multiagent/arbitration.py",
+   "id": "MU10",
+   "killed": false,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [],
+   "o3_changed_scenarios": [],
+   "oracles": {
+    "O1": false,
+    "O2": false,
+    "O3": false,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 12.5
+  },
+  {
+   "description": "infrastructure-failure hard constraint removed",
+   "family": "arbitration",
+   "file": "agents/multiagent/arbitration.py",
+   "id": "MU11",
+   "killed": true,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [
+    "nominal"
+   ],
+   "o3_changed_scenarios": [
+    "nominal"
+   ],
+   "oracles": {
+    "O1": false,
+    "O2": true,
+    "O3": true,
+    "O4": true
+   },
+   "replay_error": null,
+   "seconds": 10.9
+  },
+  {
+   "description": "hub-version comparison removed from stale check",
+   "family": "version",
+   "file": "agents/multiagent/coordinator.py",
+   "id": "MU12",
+   "killed": false,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [],
+   "o3_changed_scenarios": [],
+   "oracles": {
+    "O1": false,
+    "O2": false,
+    "O3": false,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 10.9
+  },
+  {
+   "description": "stale-proposal check removed",
+   "family": "version",
+   "file": "agents/multiagent/coordinator.py",
+   "id": "MU13",
+   "killed": true,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [
+    "coaching:stale",
+    "strategy:stale"
+   ],
+   "o3_changed_scenarios": [
+    "coaching:stale",
+    "strategy:stale"
+   ],
+   "oracles": {
+    "O1": false,
+    "O2": true,
+    "O3": true,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 11.1
+  },
+  {
+   "description": "duplicate-answer rejection removed",
+   "family": "version",
+   "file": "agents/multiagent/coordinator.py",
+   "id": "MU14",
+   "killed": true,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [
+    "nominal"
+   ],
+   "o3_changed_scenarios": [
+    "nominal"
+   ],
+   "oracles": {
+    "O1": false,
+    "O2": true,
+    "O3": true,
+    "O4": true
+   },
+   "replay_error": null,
+   "seconds": 11.1
+  },
+  {
+   "error": "pattern occurs 0 times",
+   "id": "MU15"
+  },
+  {
+   "description": "coaching grounding check disabled in code",
+   "family": "grounding",
+   "file": "agents/multiagent/coordinator.py",
+   "id": "MU16",
+   "killed": true,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [
+    "coaching:ungrounded"
+   ],
+   "o3_changed_scenarios": [
+    "coaching:ungrounded"
+   ],
+   "oracles": {
+    "O1": false,
+    "O2": true,
+    "O3": true,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 11.0
+  },
+  {
+   "description": "schema validation replaced by unvalidated construction",
+   "family": "schema",
+   "file": "agents/multiagent/coordinator.py",
+   "id": "MU17",
+   "killed": true,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [
+    "coaching:malformed",
+    "strategy:malformed",
+    "strategy:nan_confidence"
+   ],
+   "o3_changed_scenarios": [
+    "coaching:malformed",
+    "strategy:malformed",
+    "strategy:nan_confidence"
+   ],
+   "oracles": {
+    "O1": false,
+    "O2": true,
+    "O3": true,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 13.5
+  },
+  {
+   "description": "ungrounded_concepts always empty",
+   "family": "grounding",
+   "file": "agents/multiagent/grounding.py",
+   "id": "MU18",
+   "killed": true,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [
+    "coaching:ungrounded"
+   ],
+   "o3_changed_scenarios": [
+    "coaching:ungrounded"
+   ],
+   "oracles": {
+    "O1": false,
+    "O2": true,
+    "O3": true,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 15.2
+  },
+  {
+   "description": "unknown fields ignored instead of rejected",
+   "family": "schema",
+   "file": "agents/multiagent/contracts.py",
+   "id": "MU19",
+   "killed": false,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [],
+   "o3_changed_scenarios": [],
+   "oracles": {
+    "O1": false,
+    "O2": false,
+    "O3": false,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 19.0
+  },
+  {
+   "description": "protected evaluator-field guard in renderer removed",
+   "family": "authority",
+   "file": "agents/multiagent/coaching_render.py",
+   "id": "MU20",
+   "killed": false,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [],
+   "o3_changed_scenarios": [],
+   "oracles": {
+    "O1": false,
+    "O2": false,
+    "O3": false,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 19.5
+  },
+  {
+   "description": "NaN confidence allowed by schema",
+   "family": "schema",
+   "file": "agents/multiagent/contracts.py",
+   "id": "MU21",
+   "killed": false,
+   "o1_failed_tests": [],
+   "o2_violating_scenarios": [],
+   "o3_changed_scenarios": [],
+   "oracles": {
+    "O1": false,
+    "O2": false,
+    "O3": false,
+    "O4": false
+   },
+   "replay_error": null,
+   "seconds": 19.2
+  }
+ ],
+ "oracle_sha256": "707530a6b4e0bfc2b8c3215e916ca25253d996dd7ed3f583ca43d8ba637c809e",
+ "protocol": "MA-MUT-v2",
+ "protocol_sha256": "6ce62694579bdea5391217f481aa5a7c7b0882a91abf76b7dda834553f2b9b81"
+}

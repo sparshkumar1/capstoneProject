@@ -6,6 +6,13 @@ COPY apps/web/package*.json ./
 RUN npm install
 
 COPY apps/web/ ./
+
+# Vite inlines these at build time, not at container runtime -- must be passed
+# as build args (see docker-compose.yml's frontend.build.args).
+ARG VITE_API_URL
+ARG VITE_WS_URL
+ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_WS_URL=${VITE_WS_URL}
 RUN npm run build
 
 FROM nginx:1.27-alpine

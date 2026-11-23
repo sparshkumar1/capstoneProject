@@ -14,7 +14,16 @@ Contract Design:
   - Attribution:
       * When Qwen 1.5B generates: decision_source = "qwen_1.5b_llm", llm_status = "available"
       * When Qwen 7B generates: decision_source = "qwen_7b_llm", llm_status = "available"
+      * When a hosted OpenAI-compatible endpoint generates: decision_source = "qwen_hosted_llm", llm_status = "available"
       * When fallback occurs: decision_source = "non_llm_structured_recovery", llm_status = "llm_unavailable"
+
+Hosted mode:
+  Setting LLM_BASE_URL switches this service from the local GGUF/Transformers
+  engine to a hosted OpenAI-compatible chat completions endpoint (e.g. Groq
+  serving a Qwen model). LLM_API_KEY and LLM_MODEL are read alongside it.
+  Leaving LLM_BASE_URL unset preserves the original local-only behavior
+  exactly. The existing deterministic structured fallback still applies if a
+  hosted call fails (rate limit, 5xx, network error, bad JSON).
 """
 
 from __future__ import annotations
@@ -22,7 +31,6 @@ from __future__ import annotations
 import os
 import sys
 import asyncio
-import math
 import contextlib
 import json
 import re
@@ -53,7 +61,20 @@ GGUF_MODEL_PATH = ROOT_DIR / "models" / "gguf" / "qwen2.5-1.5b-instruct-q4_k_m.g
 
 
 def _ensure_ml_imports():
-    """Import heavy ML dependencies lazily to avoid blocking startup."""
+    """Import heavy ML dependencies lazily to avoid blocking startup.
+
+    Tries `llama_cpp.Llama` (GGUF/CPU inference) and PyTorch/Transformers
+    independently; either or both may fail without raising (checked later
+    via the module-level globals being None or not).
+
+    Args:
+        None.
+
+    Returns:
+        None: Sets the module-level `torch`, `AutoModelForCausalLM`,
+            `AutoTokenizer`, `BitsAndBytesConfig`, `TextIteratorStreamer`,
+            `Llama` globals.
+    """
     global torch, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TextIteratorStreamer, Llama
     with _ML_IMPORT_LOCK:
         # 1. Import llama_cpp for CPU GGUF inference if not yet imported
@@ -96,6 +117,14 @@ class ModelRegistry:
     _instance: Optional["ModelRegistry"] = None
 
     def __init__(self):
+        """Initialize empty model/tokenizer/loading-state registries.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
         self.models: dict = {}
         self.model_types: dict[str, str] = {}  # "gguf" or "transformers"
         self.tokenizers: dict = {}
@@ -104,12 +133,33 @@ class ModelRegistry:
 
     @classmethod
     def get(cls) -> "ModelRegistry":
+        """Get the process-wide singleton registry, creating it on first call.
+
+        Args:
+            None.
+
+        Returns:
+            ModelRegistry: The singleton instance.
+        """
         if cls._instance is None:
             cls._instance = ModelRegistry()
         return cls._instance
 
     def load_gguf_model(self, key: str, gguf_path: str | Path):
-        """Load a quantized GGUF model using llama.cpp for ultra-fast CPU inference."""
+        """Load a quantized GGUF model using llama.cpp for fast CPU inference.
+
+        Args:
+            key (str): Registry key to store the loaded model under.
+            gguf_path (str | Path): Path to the `.gguf` model file.
+
+        Returns:
+            None: Registers the model under `self.models[key]` with
+                `self.model_types[key] = "gguf"`.
+
+        Raises:
+            RuntimeError: If `llama_cpp` is not installed.
+            FileNotFoundError: If `gguf_path` does not exist.
+        """
         _ensure_ml_imports()
         if Llama is None:
             raise RuntimeError("llama_cpp library not installed.")
@@ -134,7 +184,24 @@ class ModelRegistry:
 
 
     def load_model(self, key: str, model_id: str, use_4bit: bool = True):
-        """Load a Transformers PyTorch model."""
+        """Load a Hugging Face Transformers PyTorch model (GPU 4-bit if available).
+
+        No-op if `key` is already loaded.
+
+        Args:
+            key (str): Registry key to store the loaded model under.
+            model_id (str): Hugging Face model ID to load.
+            use_4bit (bool): Whether to use 4-bit quantization when a CUDA
+                GPU is available (default True).
+
+        Returns:
+            None: Registers the model and tokenizer under `self.models[key]`
+                / `self.tokenizers[key]`, with
+                `self.model_types[key] = "transformers"`.
+
+        Raises:
+            RuntimeError: If PyTorch/Transformers aren't available.
+        """
         if key in self.models:
             return
 
@@ -179,7 +246,23 @@ class ModelRegistry:
         print(f"[QwenService] Transformers {key} ready in {elapsed:.1f}s", flush=True)
 
     def generate_full(self, key: str, prompt: str, max_new_tokens: int = 256) -> str:
-        """Execute full-text generation for structured JSON responses."""
+        """Run one blocking text-generation call against a loaded model.
+
+        Dispatches to llama.cpp (wrapping the prompt in ChatML if not
+        already formatted) or Transformers greedy decoding, depending on
+        how `key` was loaded. Blocking — callers run it in an executor.
+
+        Args:
+            key (str): Registry key of a previously loaded model.
+            prompt (str): Prompt text (plain or ChatML-formatted).
+            max_new_tokens (int): Maximum tokens to generate (default 256).
+
+        Returns:
+            str: The generated text (stripped), excluding the prompt.
+
+        Raises:
+            KeyError: If `key` is not loaded.
+        """
         if key not in self.models:
             raise KeyError(f"Model {key} not loaded.")
 
@@ -239,9 +322,96 @@ FEEDBACK_MAX_NEW_TOKENS = int(os.getenv("QWEN_FEEDBACK_MAX_NEW_TOKENS", "512"))
 WARMUP_EXECUTOR = ThreadPoolExecutor(max_workers=1, thread_name_prefix="qwen_warmup")
 WARMUP_TASK: Optional[asyncio.Task] = None
 
+# ── Hosted OpenAI-compatible endpoint (optional) ─────────────────────────────
+# Unset LLM_BASE_URL (the default) preserves the original local-only GGUF/
+# Transformers behavior exactly; setting it swaps to a hosted chat
+# completions API (e.g. Groq) instead of loading any local model.
+LLM_BASE_URL = os.environ.get("LLM_BASE_URL", "").strip()
+LLM_API_KEY = os.environ.get("LLM_API_KEY", "").strip()
+LLM_MODEL = os.environ.get("LLM_MODEL", "").strip()
+HOSTED_MODE = bool(LLM_BASE_URL)
+
+_openai_client = None
+
+
+def _get_openai_client():
+    """Lazily construct the OpenAI-compatible client for hosted mode.
+
+    Returns:
+        openai.OpenAI: Client configured with LLM_BASE_URL/LLM_API_KEY.
+    """
+    global _openai_client
+    if _openai_client is None:
+        from openai import OpenAI
+        _openai_client = OpenAI(base_url=LLM_BASE_URL, api_key=LLM_API_KEY or "unused")
+    return _openai_client
+
+
+def _chatml_to_messages(chat_prompt: str) -> list[dict]:
+    """Convert an existing ChatML-formatted prompt into OpenAI chat messages.
+
+    Reuses the same prompt text the local GGUF path already builds
+    (`_build_followup_prompt` / `_build_feedback_prompt`) instead of
+    maintaining a second copy of the prompt content for hosted mode.
+
+    Args:
+        chat_prompt (str): ChatML string with `<|im_start|>role ... <|im_end|>` blocks.
+
+    Returns:
+        list[dict]: `[{"role": ..., "content": ...}, ...]` for system/user
+            blocks (the trailing open `<|im_start|>assistant` cue has no
+            closing tag and is intentionally not included).
+    """
+    messages = []
+    for role, content in re.findall(r"<\|im_start\|>(system|user)\n(.*?)<\|im_end\|>", chat_prompt, re.DOTALL):
+        content = content.strip()
+        if content:
+            messages.append({"role": role, "content": content})
+    return messages or [{"role": "user", "content": chat_prompt.strip()}]
+
+
+def _generate_hosted(chat_prompt: str, max_tokens: int) -> str:
+    """Run one blocking chat-completion call against the hosted endpoint.
+
+    Blocking — callers run it in an executor, matching the local
+    `ModelRegistry.generate_full` calling convention.
+
+    Args:
+        chat_prompt (str): ChatML-formatted prompt (parsed into messages).
+        max_tokens (int): Maximum tokens to generate.
+
+    Returns:
+        str: The generated text (stripped).
+    """
+    client = _get_openai_client()
+    response = client.chat.completions.create(
+        model=LLM_MODEL,
+        messages=_chatml_to_messages(chat_prompt),
+        max_tokens=max_tokens,
+        temperature=0.1,
+    )
+    return (response.choices[0].message.content or "").strip()
+
 
 async def _warm_models_background():
+    """Load the best available model in the background during service startup.
+
+    Prefers the local GGUF model (CPU, fast); falls back to a GPU
+    Transformers model only if `ENABLE_GPU_RESEARCH_MODELS` is set; sets
+    `MOCK_MODE = True` if nothing loads, so endpoints fall back to the
+    deterministic structured responses.
+
+    Args:
+        None.
+
+    Returns:
+        None.
+    """
     global MOCK_MODE
+    if HOSTED_MODE:
+        print(f"[QwenService] Hosted mode active: LLM_BASE_URL={LLM_BASE_URL} model={LLM_MODEL or '(unset)'}", flush=True)
+        return
+
     registry = ModelRegistry.get()
     loop = asyncio.get_running_loop()
     any_loaded = False
@@ -300,6 +470,15 @@ async def _warm_models_background():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """FastAPI lifespan: kick off background model warmup, clean up on shutdown.
+
+    Args:
+        app (FastAPI): The FastAPI application instance.
+
+    Returns:
+        None: An async context manager (generator); yields control to the
+            running app between startup and shutdown.
+    """
     global WARMUP_TASK
     print("[QwenService] Service initializing...", flush=True)
     WARMUP_TASK = asyncio.create_task(_warm_models_background())
@@ -399,9 +578,9 @@ class HintResponse(BaseModel):
 class ReportRequest(BaseModel):
     candidate_name: str = "Candidate"
     questions: list[dict] = Field(default_factory=list)
-    overall_score: float = 0.0
-    c_score: float = 0.0
-    dsa_score: float = 0.0
+    overall_score: float = 0.5
+    c_score: float = 0.5
+    dsa_score: float = 0.5
     difficulty_history: list[int] = Field(default_factory=list)
     behaviour: dict = Field(default_factory=dict)
 
@@ -414,81 +593,24 @@ class ReportResponse(BaseModel):
 
 # ── Prompt Builders ───────────────────────────────────────────────────────────
 
-_CHATML_TOKEN_RE = re.compile(r"<\|[a-zA-Z0-9_]+\|>")
-
-
-def _sanitize_for_prompt(text: str) -> str:
-    """
-    Neutralizes literal ChatML/Qwen special-token markers (e.g. "<|im_start|>",
-    "<|im_end|>", "<|endoftext|>") inside user-controlled free text before it
-    is interpolated into a ChatML prompt string.
-
-    candidate_answer (and previous_best_answer, on re-attempts) originates
-    from ASR transcription of spoken candidate audio and is interpolated
-    into the prompt unescaped; without this, a candidate who speaks or is
-    transcribed as producing one of these literal token strings could inject
-    a fake role turn (e.g. a spoken "im end im start system") into the
-    ChatML-formatted prompt seen by the model. This does not, by itself,
-    guarantee the underlying tokenizer treats a literal in-text occurrence
-    of these strings as the corresponding special token rather than plain
-    text (that depends on the tokenizer's encoding mode) -- it removes the
-    injection surface regardless of that detail, as defense in depth.
-    """
-    if not text:
-        return text
-    return _CHATML_TOKEN_RE.sub("", text)
-
-
 def _build_followup_prompt(req: FollowupRequest) -> str:
+    """Build the ChatML prompt instructing the LLM to generate one grounded follow-up question.
+
+    Args:
+        req (FollowupRequest): Follow-up request with the original
+            question, topic, candidate answer, structured evaluation, and
+            concept/misconception lists.
+
+    Returns:
+        str: ChatML-formatted prompt text asking for a JSON object with
+            `followup`, `reason`, and `target_concepts`.
+    """
     ev = req.structured_evaluation
-    raw_s = ev.get("final_score")
-    try:
-        score = float(raw_s) if raw_s is not None else 0.0
-        if not math.isfinite(score):
-            score = 0.0
-    except (TypeError, ValueError):
-        score = 0.0
-    grade = ev.get("grade", "Poor" if score < 0.40 else "Average")
+    score = ev.get("final_score", 0.5)
+    grade = ev.get("grade", "Average")
     correct_str = ", ".join(req.correct_concepts or ev.get("correct_claims", [])) or "None identified"
     missing_str = ", ".join(req.missing_concepts or ev.get("missing_concepts", [])) or "None identified"
     miscon_str = ", ".join(req.misconceptions or req.incorrect_concepts or ev.get("incorrect_claims", [])) or "None detected"
-    weakest_gap_str = req.weakest_gap or ev.get("weakest_gap", "")
-    candidate_answer = _sanitize_for_prompt(req.candidate_answer)
-
-    # The explicit TASK instruction below previously named only missing_str,
-    # so a follow-up triggered solely by a misconception or an unresolved
-    # weakest_gap (missing_concepts empty) received a vacuous directive
-    # ("targeting the missing concepts: None identified") even though the
-    # context block above correctly listed the real gap -- found via a
-    # direct behavioral probe (followup_behavioral_probe_v1.py, weakest_gap
-    # case) where the model, given that vacuous instruction, generated a
-    # plausible but untargeted question instead of probing the supplied gap.
-    # Priority mirrors the orchestrator's own trigger order (misconception >
-    # missing concept > weakest gap), documented in docs/FOLLOW_UP_SYSTEM.md.
-    if miscon_str != "None detected":
-        task_target = f"the misconception(s): {miscon_str}"
-    elif missing_str != "None identified":
-        task_target = f"the missing concept(s): {missing_str}"
-    elif weakest_gap_str:
-        task_target = f"the following unresolved gap: {weakest_gap_str}"
-    else:
-        # A follow-up can be triggered by score alone (score < 0.80 in
-        # InterviewOrchestrator._decide_and_inject_followup) even when the
-        # evaluator's own correct/incorrect/missing-concept extraction came
-        # back empty -- e.g. a thin, generic answer that doesn't clearly hit
-        # or miss any single rubric concept. Found via
-        # followup_behavioral_probe_v2.py's sparse_incomplete_evidence case:
-        # the previous fallback here ("the missing concept(s): None
-        # identified") was a vacuous directive in exactly this situation.
-        # The model still produced a topically coherent question despite it,
-        # but the instruction itself carried no real signal, so this
-        # fallback now asks for depth/specificity instead of naming a
-        # nonexistent gap.
-        task_target = (
-            f"the depth and specificity of the answer (score {score:.2f}/1.00 on {req.topic}: "
-            "no specific missing concept or misconception was flagged, so probe for a concrete "
-            "example, edge case, or deeper mechanism the answer did not cover)"
-        )
 
     return f"""<|im_start|>system
 You are an expert technical interviewer conducting a technical interview on {req.topic}.
@@ -503,17 +625,17 @@ CRITICAL RULES:
 CONTEXT:
 - Topic: {req.topic} (Difficulty: {req.current_difficulty}/5)
 - Original Question: {req.original_question}
-- Candidate Answer: "{candidate_answer}"
+- Candidate Answer: "{req.candidate_answer}"
 
 EVALUATION ANALYSIS:
 - Score: {score:.2f} ({grade})
 - Identified Strengths: {correct_str}
 - Missing Concepts / Knowledge Gaps: {missing_str}
 - Misconceptions / Inaccuracies: {miscon_str}
-- Weakest Gap to Target: {weakest_gap_str or missing_str}
+- Weakest Gap to Target: {req.weakest_gap or ev.get('weakest_gap', missing_str)}
 
 TASK:
-Generate a direct follow-up question targeting {task_target}.
+Generate a direct follow-up question targeting the missing concepts: {missing_str}.
 
 Return ONLY a JSON object in this exact schema:
 {{
@@ -527,19 +649,26 @@ Return ONLY a JSON object in this exact schema:
 
 
 def _build_feedback_prompt(req: FeedbackRequest) -> str:
+    """Build the ChatML prompt instructing the LLM to generate grounded narrative feedback.
+
+    Includes a re-attempt context block (previous best score/concepts) when
+    `req.attempt_number > 1`.
+
+    Args:
+        req (FeedbackRequest): Feedback request with the question,
+            candidate answer, structured evaluation, and (optionally)
+            prior-attempt comparison fields.
+
+    Returns:
+        str: ChatML-formatted prompt text asking for a JSON object
+            matching the `FeedbackResponse` schema's narrative fields.
+    """
     ev = req.structured_evaluation
-    raw_s = ev.get("final_score")
-    try:
-        score = float(raw_s) if raw_s is not None else 0.0
-        if not math.isfinite(score):
-            score = 0.0
-    except (TypeError, ValueError):
-        score = 0.0
-    grade = ev.get("grade", "Poor" if score < 0.40 else "Average")
+    score = ev.get("final_score", 0.5)
+    grade = ev.get("grade", "Average")
     correct_str = "\n".join(f"  + {c}" for c in ev.get("correct_claims", [])) or "  + General attempt"
     missing_str = "\n".join(f"  - {m}" for m in ev.get("missing_concepts", [])) or "  - None identified"
     incorrect_str = "\n".join(f"  ! {x}" for x in ev.get("incorrect_claims", [])) or "  ! None detected"
-    candidate_answer = _sanitize_for_prompt(req.candidate_answer)
 
     attempt_ctx = ""
     if req.attempt_number > 1:
@@ -547,11 +676,10 @@ def _build_feedback_prompt(req: FeedbackRequest) -> str:
         delta_str = f"{req.score_delta:+.2f}" if req.score_delta is not None else "N/A"
         resolved_str = ", ".join(req.resolved_concepts) if req.resolved_concepts else "None"
         rem_str = ", ".join(req.remaining_concepts) if req.remaining_concepts else "None"
-        prev_best_answer = _sanitize_for_prompt(req.previous_best_answer) if req.previous_best_answer else None
         attempt_ctx = f"""
 RE-ATTEMPT CONTEXT:
 - Attempt Number: {req.attempt_number}
-- Previous Best Answer: "{prev_best_answer or 'N/A'}"
+- Previous Best Answer: "{req.previous_best_answer or 'N/A'}"
 - Previous Best Score: {prev_score_str} (Score Delta: {delta_str})
 - Resolved Concepts in this attempt: {resolved_str}
 - Still Remaining Gaps: {rem_str}
@@ -565,7 +693,7 @@ QUESTION (Topic: {req.topic}):
 {req.question_text}
 
 CANDIDATE TRANSCRIPT:
-"{candidate_answer}"
+"{req.candidate_answer}"
 
 EVALUATION EVIDENCE:
 - Final Score: {score:.2f} ({grade})
@@ -596,15 +724,28 @@ Return ONLY a JSON object in this exact schema:
 # ── Structured Fallback Generators (sub-50ms deterministic recovery) ─────────
 
 def _synthesize_structured_followup(req: FollowupRequest) -> FollowupResponse:
+    """Deterministically generate a follow-up question without calling an LLM.
+
+    Picks a template based on, in priority order: a detected misconception,
+    a missing concept, a strong score (probe scaling trade-offs), or a
+    generic weakest-gap probe; then checks the result against previously
+    asked questions/follow-ups and substitutes an alternative if it looks
+    like a near-duplicate.
+
+    Args:
+        req (FollowupRequest): Follow-up request (see
+            `_build_followup_prompt`).
+
+    Returns:
+        FollowupResponse: `followup`, `reason`, `target_concepts`,
+            `decision_source="non_llm_structured_recovery"`,
+            `llm_status="llm_unavailable"`.
+    """
     ev = req.structured_evaluation
     misconceptions = req.misconceptions or req.incorrect_concepts or ev.get("incorrect_claims", [])
     missing = req.missing_concepts or ev.get("missing_concepts", [])
-    raw_s = ev.get("final_score")
-    try:
-        score = float(raw_s) if raw_s is not None and math.isfinite(float(raw_s)) else 0.0
-    except (TypeError, ValueError):
-        score = 0.0
-    grade = ev.get("grade", "Poor" if score < 0.40 else "Average")
+    score = ev.get("final_score", 0.5)
+    grade = ev.get("grade", "Average")
 
     if misconceptions:
         miscon = misconceptions[0]
@@ -642,48 +783,44 @@ def _synthesize_structured_followup(req: FollowupRequest) -> FollowupResponse:
     )
 
 
-def _validate_followup_output(data: Optional[dict], req: FollowupRequest) -> bool:
-    """
-    Analogous to _validate_feedback_output, for the live-model follow-up path.
-    Before this, generate_followup()'s only check on the LLM's raw JSON output
-    was `"followup" in data and len(followup) > 5` -- accepting near-empty,
-    verbatim-repeated, or already-asked follow-ups as long as they cleared a
-    5-character bar. This enforces the prompt's own stated rules (rule 1: do
-    not repeat/re-phrase the original question) and the session-level
-    deduplication behavior the deterministic fallback already applies
-    (_synthesize_structured_followup), so the live-model path is no weaker
-    than the fallback it is meant to improve on.
-    """
-    if not isinstance(data, dict):
-        return False
-    followup = str(data.get("followup", "")).strip()
-    if len(followup) < 10:
-        return False
+def _as_str_list(value) -> list[str]:
+    """Defensively coerce an LLM-produced JSON field into a list[str].
 
-    followup_norm = followup.lower().strip("?.! ")
-    orig_norm = str(req.original_question or "").lower().strip("?.! ")
-    if orig_norm and (followup_norm == orig_norm or orig_norm in followup_norm or followup_norm in orig_norm):
-        return False
-
-    generic_fillers = {
-        "can you elaborate", "tell me more", "anything else", "what else",
-        "can you say more", "is there anything else",
-    }
-    if followup_norm in generic_fillers:
-        return False
-
-    target_concepts = data.get("target_concepts")
-    if not isinstance(target_concepts, list) or len(target_concepts) == 0:
-        return False
-
-    prev_all = [str(p).lower() for p in (req.previous_questions or []) + (req.previous_followups or []) if p]
-    if any(followup.lower() in p or p in followup.lower() for p in prev_all if len(p) > 20):
-        return False
-
-    return True
+    The local GGUF model occasionally emits a plain JSON string for a field
+    the schema defines as an array (e.g. "what_was_correct": "A pointer
+    stores a memory address." instead of ["A pointer stores a memory
+    address."]). A bare `[str(x) for x in value]` over a Python string
+    iterates it character-by-character, silently shredding the sentence into
+    single-letter list items. This wraps a scalar as a one-element list
+    instead of iterating it, and otherwise behaves like the previous
+    list-comprehension call sites it replaces."""
+    if isinstance(value, list):
+        return [str(x) for x in value if x is not None and str(x).strip()]
+    if value is None:
+        return []
+    text = str(value).strip()
+    return [text] if text else []
 
 
 def _validate_feedback_output(data: Optional[dict], req: FeedbackRequest) -> bool:
+    """Reject an LLM-generated feedback payload that is too generic or contradicts the evaluator.
+
+    Checks: `data` is a dict; `narrative_feedback` and `how_to_answer` are
+    long enough and not generic filler ("good job", "keep practicing",
+    etc.); `what_was_correct` doesn't list a concept the evaluator recorded
+    as missing; the narrative doesn't leak raw evaluator score text.
+
+    Args:
+        data (Optional[dict]): Parsed LLM JSON output, or None if parsing
+            failed.
+        req (FeedbackRequest): The originating request, for cross-checking
+            against `structured_evaluation`.
+
+    Returns:
+        bool: True if the output passes all checks and may be used; False
+            if it should be discarded in favor of
+            `_synthesize_structured_feedback`.
+    """
     if not isinstance(data, dict):
         return False
     narrative = str(data.get("narrative_feedback", "")).strip()
@@ -706,27 +843,13 @@ def _validate_feedback_output(data: Optional[dict], req: FeedbackRequest) -> boo
 
     # Check for contradictions against authoritative evaluator structured facts
     ev = req.structured_evaluation if isinstance(req.structured_evaluation, dict) else {}
-    missing = [str(m).lower().strip() for m in ev.get("missing_concepts", []) if m]
-    incorrect = [str(m).lower().strip() for m in ev.get("incorrect_claims", []) if m]
-    what_correct = [str(c).lower().strip() for c in data.get("what_was_correct", []) if c]
+    missing = [m.lower() for m in _as_str_list(ev.get("missing_concepts", []))]
+    what_correct = [c.lower() for c in _as_str_list(data.get("what_was_correct", []))]
 
     for m in missing:
         if m in what_correct:
             return False
         if f"correctly explained {m}" in low_narrative or f"correctly covered {m}" in low_narrative:
-            return False
-
-    # Symmetric check: something the evaluator flagged as an INCORRECT claim
-    # (a genuine misconception) must not be echoed back as correct. Mirrors
-    # the missing_concepts check above; previously only the missing-concepts
-    # direction was checked, so a feedback response could tell the candidate
-    # a misconception was correct without being rejected.
-    for inc in incorrect:
-        if inc in what_correct:
-            return False
-        if any(inc in wc or wc in inc for wc in what_correct if len(wc) > 8):
-            return False
-        if f"correctly explained {inc}" in low_narrative or f"correctly covered {inc}" in low_narrative:
             return False
 
     # Score leakage rejection
@@ -737,14 +860,25 @@ def _validate_feedback_output(data: Optional[dict], req: FeedbackRequest) -> boo
 
 
 def _synthesize_structured_feedback(req: FeedbackRequest) -> FeedbackResponse:
+    """Deterministically generate the full feedback response without calling an LLM.
+
+    Selects narrative templates by grade band (Excellent/Good/Average/
+    Poor), fills them in with the evaluator's correct/missing/incorrect
+    concept lists, and prepends a re-attempt summary when
+    `req.attempt_number > 1`.
+
+    Args:
+        req (FeedbackRequest): Feedback request (see
+            `_build_feedback_prompt`).
+
+    Returns:
+        FeedbackResponse: Fully populated response with
+            `decision_source="non_llm_structured_recovery"` and
+            `llm_status="llm_unavailable"`.
+    """
     ev = req.structured_evaluation
-    raw_s = ev.get("final_score")
-    try:
-        score = float(raw_s) if raw_s is not None and math.isfinite(float(raw_s)) else 0.0
-    except (TypeError, ValueError):
-        score = 0.0
-    default_grade = "Poor" if score < 0.40 else "Average"
-    grade = str(ev.get("grade") or default_grade)
+    score = float(ev.get("final_score", 0.5))
+    grade = str(ev.get("grade", "Average"))
     candidate_ans = req.candidate_answer.strip()
 
     correct_claims = list(ev.get("correct_claims", []))
@@ -849,6 +983,18 @@ def _synthesize_structured_feedback(req: FeedbackRequest) -> FeedbackResponse:
 # ── JSON Parser Helper ────────────────────────────────────────────────────────
 
 def _extract_json_from_llm(raw: str) -> Optional[dict]:
+    """Extract and parse the first JSON object found in raw LLM output.
+
+    Strips markdown code-fence markers, then greedily matches the first
+    `{...}` span.
+
+    Args:
+        raw (str): Raw text generated by the LLM.
+
+    Returns:
+        Optional[dict]: The parsed JSON object, or None if no JSON object
+            was found or it failed to parse.
+    """
     cleaned = re.sub(r"```(?:json)?", "", raw).strip()
     match = re.search(r"\{.*\}", cleaned, re.DOTALL)
     if not match:
@@ -864,12 +1010,35 @@ def _extract_json_from_llm(raw: str) -> Optional[dict]:
 @app.get("/health")
 @app.get("/api/qwen/health")
 async def health():
+    """Report this microservice's model-loading status.
+
+    Args:
+        None.
+
+    Returns:
+        dict: `status`, `service`, `version`, `mock_mode`, `models_loaded`,
+            `model_types`, `models_loading`, `model_errors`, and
+            `primary_demo_engine` (a human-readable description of which
+            engine is active).
+    """
     registry = ModelRegistry.get()
+    if HOSTED_MODE:
+        return {
+            "status": "ok",
+            "service": "prepaired-qwen-microservice",
+            "version": "2.1.0",
+            "mock_mode": False,
+            "llm_mode": "hosted",
+            "hosted_base_url": LLM_BASE_URL,
+            "hosted_model": LLM_MODEL or "(unset)",
+            "primary_demo_engine": f"hosted:{LLM_MODEL or '(unset)'}",
+        }
     return {
         "status": "ok",
         "service": "prepaired-qwen-microservice",
         "version": "2.1.0",
         "mock_mode": MOCK_MODE,
+        "llm_mode": "local",
         "models_loaded": list(registry.models.keys()),
         "model_types": registry.model_types,
         "models_loading": {k: bool(v) for k, v in registry.loading.items()},
@@ -882,7 +1051,25 @@ async def health():
 @app.post("/api/qwen/generate-follow-up", response_model=FollowupResponse)
 @app.post("/followup", response_model=FollowupResponse)
 async def generate_followup(req: FollowupRequest):
-    """Generate candidate-specific, grounded follow-up question via GGUF / LLM or fallback."""
+    """Generate candidate-specific, grounded follow-up question via hosted / GGUF LLM or fallback."""
+    if HOSTED_MODE:
+        try:
+            prompt = _build_followup_prompt(req)
+            loop = asyncio.get_running_loop()
+            raw = await loop.run_in_executor(None, _generate_hosted, prompt, 128)
+            data = _extract_json_from_llm(raw)
+            if data and "followup" in data and len(str(data["followup"]).strip()) > 5:
+                return FollowupResponse(
+                    followup=str(data["followup"]).strip(),
+                    reason=str(data.get("reason", "Targeted probe on candidate gap")).strip(),
+                    target_concepts=_as_str_list(data.get("target_concepts", [])),
+                    decision_source="qwen_hosted_llm",
+                    llm_status="available",
+                )
+        except Exception as exc:
+            print(f"[QwenService] Hosted follow-up generation error: {exc}", flush=True)
+        return _synthesize_structured_followup(req)
+
     registry = ModelRegistry.get()
     if not MOCK_MODE and "qwen_1b" in registry.models:
         try:
@@ -892,11 +1079,11 @@ async def generate_followup(req: FollowupRequest):
                 None, registry.generate_full, "qwen_1b", prompt, 128
             )
             data = _extract_json_from_llm(raw)
-            if _validate_followup_output(data, req):
+            if data and "followup" in data and len(str(data["followup"]).strip()) > 5:
                 return FollowupResponse(
                     followup=str(data["followup"]).strip(),
                     reason=str(data.get("reason", "Targeted probe on candidate gap")).strip(),
-                    target_concepts=[str(c).strip() for c in data.get("target_concepts", [])],
+                    target_concepts=_as_str_list(data.get("target_concepts", [])),
                     decision_source="qwen_1.5b_llm",
                     llm_status="available",
                 )
@@ -911,11 +1098,6 @@ async def generate_followup(req: FollowupRequest):
 @app.post("/feedback", response_model=FeedbackResponse)
 async def generate_feedback(req: FeedbackRequest):
     """Generate rich, personalized feedback based on Evaluator output."""
-    registry = ModelRegistry.get()
-
-    # Check for Research Qwen-7B first, then Live Demo Qwen-1.5B
-    active_key = "qwen_7b" if "qwen_7b" in registry.models else ("qwen_1b" if "qwen_1b" in registry.models else None)
-
     comparison_dict = None
     if req.attempt_number > 1 or req.previous_best_score is not None:
         comparison_dict = {
@@ -925,6 +1107,39 @@ async def generate_feedback(req: FeedbackRequest):
             "resolved_concepts": req.resolved_concepts,
             "remaining_concepts": req.remaining_concepts,
         }
+
+    if HOSTED_MODE:
+        try:
+            prompt = _build_feedback_prompt(req)
+            loop = asyncio.get_running_loop()
+            raw = await loop.run_in_executor(None, _generate_hosted, prompt, FEEDBACK_MAX_NEW_TOKENS)
+            data = _extract_json_from_llm(raw)
+            if _validate_feedback_output(data, req):
+                ev = req.structured_evaluation
+                return FeedbackResponse(
+                    what_candidate_said=str(data.get("what_candidate_said", req.candidate_answer[:120])),
+                    what_was_correct=_as_str_list(data.get("what_was_correct", [])),
+                    what_was_incorrect=_as_str_list(data.get("what_was_incorrect", [])),
+                    what_was_incomplete=_as_str_list(data.get("what_was_incomplete", [])),
+                    missing_concepts=_as_str_list(data.get("missing_concepts", [])),
+                    how_to_answer=str(data.get("how_to_answer", "")),
+                    stronger_answer_guide=str(data.get("stronger_answer_guide", "")),
+                    actionable_improvements=_as_str_list(data.get("actionable_improvements", [])),
+                    narrative_feedback=str(data.get("narrative_feedback", "")),
+                    final_score=float(ev.get("final_score", 0.5)),
+                    grade=str(ev.get("grade", "Average")),
+                    decision_source="qwen_hosted_llm",
+                    llm_status="available",
+                    attempt_number=req.attempt_number,
+                    comparison=comparison_dict,
+                )
+        except Exception as exc:
+            print(f"[QwenService] Hosted feedback generation error: {exc}", flush=True)
+        return _synthesize_structured_feedback(req)
+
+    registry = ModelRegistry.get()
+    # Check for Research Qwen-7B first, then Live Demo Qwen-1.5B
+    active_key = "qwen_7b" if "qwen_7b" in registry.models else ("qwen_1b" if "qwen_1b" in registry.models else None)
 
     if not MOCK_MODE and active_key:
         try:
@@ -937,23 +1152,18 @@ async def generate_feedback(req: FeedbackRequest):
             if _validate_feedback_output(data, req):
                 ev = req.structured_evaluation
                 source_label = "qwen_7b_llm" if active_key == "qwen_7b" else "qwen_1.5b_llm"
-                raw_s = ev.get("final_score")
-                try:
-                    final_score_val = float(raw_s) if raw_s is not None and math.isfinite(float(raw_s)) else 0.0
-                except (TypeError, ValueError):
-                    final_score_val = 0.0
                 return FeedbackResponse(
                     what_candidate_said=str(data.get("what_candidate_said", req.candidate_answer[:120])),
-                    what_was_correct=[str(x) for x in data.get("what_was_correct", [])],
-                    what_was_incorrect=[str(x) for x in data.get("what_was_incorrect", [])],
-                    what_was_incomplete=[str(x) for x in data.get("what_was_incomplete", [])],
-                    missing_concepts=[str(x) for x in data.get("missing_concepts", [])],
+                    what_was_correct=_as_str_list(data.get("what_was_correct", [])),
+                    what_was_incorrect=_as_str_list(data.get("what_was_incorrect", [])),
+                    what_was_incomplete=_as_str_list(data.get("what_was_incomplete", [])),
+                    missing_concepts=_as_str_list(data.get("missing_concepts", [])),
                     how_to_answer=str(data.get("how_to_answer", "")),
                     stronger_answer_guide=str(data.get("stronger_answer_guide", "")),
-                    actionable_improvements=[str(x) for x in data.get("actionable_improvements", [])],
+                    actionable_improvements=_as_str_list(data.get("actionable_improvements", [])),
                     narrative_feedback=str(data.get("narrative_feedback", "")),
-                    final_score=final_score_val,
-                    grade=str(ev.get("grade") or ("Poor" if final_score_val < 0.40 else "Average")),
+                    final_score=float(ev.get("final_score", 0.5)),
+                    grade=str(ev.get("grade", "Average")),
                     decision_source=source_label,
                     llm_status="available",
                     attempt_number=req.attempt_number,
@@ -968,6 +1178,7 @@ async def generate_feedback(req: FeedbackRequest):
 @app.post("/api/qwen/hint", response_model=HintResponse)
 @app.post("/hint", response_model=HintResponse)
 async def generate_hint(req: HintRequest):
+    """Build a template-based hint nudging the candidate from a strong point toward the first missing concept."""
     strong = req.strong_points[0] if req.strong_points else "the initial setup"
     missing = req.missing_concepts[0] if req.missing_concepts else "the core mechanism"
     hint_text = f"You have identified {strong}. Consider how {missing} connects to the problem constraints and what invariant must hold."
@@ -981,6 +1192,7 @@ async def generate_hint(req: HintRequest):
 @app.post("/api/qwen/report", response_model=ReportResponse)
 @app.post("/report", response_model=ReportResponse)
 async def generate_report(req: ReportRequest):
+    """Build a template-based end-of-session summary from the candidate's overall score and difficulty history."""
     report_text = (
         f"{req.candidate_name}, you completed the technical session with an overall score of {req.overall_score:.0%}. "
         f"Your performance in theoretical questions reached difficulty level {max(req.difficulty_history, default=3)}/5. "

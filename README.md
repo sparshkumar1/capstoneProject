@@ -1,13 +1,10 @@
 # PrepAIred — A Personalized Adaptive Framework for Multimodal Technical Interview Assessment and Preparation
 
-[![Research Manuscript](https://img.shields.io/badge/Manuscript-IEEE%20TLT%20Draft-blue.svg)](docs/paper_draft_ieee.md)
-[![Master Booklet](https://img.shields.io/badge/Manual-Master%20Booklet-purple.svg)](docs/PREPAIRED_COMPLETE_BOOKLET.md)
-[![Tester Guide](https://img.shields.io/badge/Reproduction-Friend%20Checklist-teal.svg)](docs/FRIEND_REPRODUCTION_CHECKLIST.md)
-[![Traceability](https://img.shields.io/badge/Results-100%25%20Traceable-success.svg)](docs/PAPER_RESULTS_TRACEABILITY.md)
-[![Tests](https://img.shields.io/badge/Tests-178%20Passed-brightgreen.svg)](docs/SYSTEM_TESTING.md)
-[![Reproducibility](https://img.shields.io/badge/Reproducibility-Verified-orange.svg)](docs/REPRODUCIBILITY.md)
-[![Release Tag: paper-v1.0](https://img.shields.io/badge/Release-paper--v1.0-blueviolet.svg)](docs/GITHUB_RELEASE_DESCRIPTION.md)
+[![Tests](https://img.shields.io/badge/Tests-264%2F283%20passing-brightgreen.svg)](testing_and_evaluation/Master_Results_Table.md)
+[![Canonical Evidence](https://img.shields.io/badge/Evidence-Canonical%20Source%20of%20Truth-blue.svg)](research/CANONICAL_SCIENTIFIC_TRUTH_CURRENT.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+> **Note on this README's figures (2026-11-13):** the badges and "Key Research Findings" below were previously out of date relative to this project's own canonical evidence record and have been corrected here. The sole current authority for every verified metric is [`research/CANONICAL_SCIENTIFIC_TRUTH_CURRENT.md`](research/CANONICAL_SCIENTIFIC_TRUTH_CURRENT.md) — if a number here and that file ever disagree again in the future, the canonical file is correct.
 
 > **PrepAIred** is an open-source, multimodal, closed-loop adaptive technical interview preparation platform. It combines speech prosody analysis, calibrated neural short-answer grading ($S_1+S_2+R$), containerized Docker C execution, and safety-guardrailed Proximal Policy Optimization (PPO) reinforcement learning for dynamic difficulty adaptation.
 
@@ -39,20 +36,17 @@ Candidate (Audio/Code/Text)
 
 ---
 
-## 🔬 Key Research Findings (Pre-Registered $n=480$ Evaluations)
+## 🔬 Key Research Findings (current, verified)
 
-1. **Adaptive Difficulty Adaptation (EXP-1, $n=150$):** `[RESEARCH RESULT]`
-   PPO with safety guardrails achieves statistically significant positive difficulty adaptation ($\rho = +0.1572 \pm 0.08$) relative to static fixed ($\rho = 0.0, p = 6.15 \times 10^{-4}$) and heuristic rule-based controllers ($\rho = -0.2572, p = 5.30 \times 10^{-8}$) in simulation.
-2. **Neural Answer Evaluation (EXP-2, $n=140$):** `[RESEARCH RESULT / HUMAN VALIDATED]`
-   The multi-component scoring pipeline ($S_1+S_2+R$) achieves rank correlation ($\rho = \mathbf{0.6975}, p = \mathbf{6.29 \times 10^{-4}}$, Pearson $r = \mathbf{0.7290}, p = 3.03 \times 10^{-4}, \text{MAE} = 0.2245$) with blinded human expert educator ratings on a 20-sample pilot benchmark. (A multi-expert 3-rater protocol on an expanded 64-case suite is designed and pending human evaluation).
-3. **Formative Feedback Trade-Offs (EXP-3, $n=60$):** `[RESEARCH RESULT]`
-   Generative `Qwen2.5-7B-Instruct` (Tesla T4 GPU) exhibits higher transcript lexical grounding ($0.2496$ vs. $0.0383, p = 2.56 \times 10^{-3}$), while deterministic structured recovery guarantees strictly superior rubric gap coverage ($100.0\%$ vs. $72.5\%, p = 9.11 \times 10^{-4}$) at sub-50ms latency.
-4. **Personalization & Deduplication (EXP-4, $n=60$):** `[RESEARCH RESULT]`
-   3-level deduplication completely eliminates question repetition ($0.0\%$ vs. $6.0\%, p < 0.001$), producing distinct trajectory divergence ($d = 14.21$) between candidate ability profiles in simulation.
-5. **System Behavioral Decoupling (EXP-5, $n=70$):** `[RESEARCH RESULT]`
-   Empirically verified subsystem isolation across 7 leave-one-out conditions without cascading crashes.
+Full detail, uncertainty, and provenance for every figure below: [`research/CANONICAL_SCIENTIFIC_TRUTH_CURRENT.md`](research/CANONICAL_SCIENTIFIC_TRUTH_CURRENT.md) and [`research/claims/CLAIM_REGISTRY.csv`](research/claims/CLAIM_REGISTRY.csv).
 
-*Scientific Boundary: Candidate longitudinal learning gains and whole-system hiring efficacy represent documented future longitudinal trials. External third-party reproduction is pending (independent reproduction protocol provided in docs/FRIEND_REPRODUCTION_CHECKLIST.md).*
+1. **Answer-evaluator human correlation:** the composite evaluator ($S_1+S_2+R$) correlates with human reference scores at Spearman $\rho = 0.3812$ (95% CI [0.158, 0.577]; 3 raters, 64 constructed answers, 8 questions) — reported as **exploratory, initial evidence**, not a validated accuracy claim. An earlier, frequently-cited figure of $\rho = 0.6975$ was a 1-rater, 20-sample pilot and is **superseded**; it is not the current result.
+2. **RL difficulty controller:** a pre-registered confirmatory test finds the trained PPO policy's contribution to difficulty-tracking accuracy, over a trivial constant action under the same deterministic guardrail layer, is **not statistically distinguishable from zero** — the guardrail layer, not the learned policy, accounts for the system's measurable adaptive behavior. Reported as a genuine equivalence finding, not omitted because it is unfavorable.
+3. **Guardrail safety verification:** systematic boundary testing of the deployed guardrail layer found and closed a genuine coverage gap (performance scores in [0.30, 0.40) were previously unguarded against a policy-proposed difficulty escalation).
+4. **Feedback LLM role:** direct code-path verification confirms the locally hosted feedback model (Qwen2.5-1.5B-Instruct, CPU, quantized GGUF, via llama.cpp) never computes or adjusts the numeric score — it is confined to narrative feedback and follow-up-question generation.
+5. **Automated test suite:** 264/283 executable backend tests passing (93.3%); every one of the 19 remaining failures is individually attributed (18 to an unavailable Docker daemon in the test environment, 1 to a single pre-existing, documented known issue) — zero unexplained failures.
+
+*Scientific boundary, stated plainly: all RL training and evaluation is simulation-based (no real-candidate data); the human-correlation study is small and researcher-constructed; no human-subject usability or learning-outcome evaluation has been conducted. These are open, disclosed limitations, not resolved by the figures above.*
 
 
 ---
@@ -116,13 +110,15 @@ python scripts/verify_qwen_live.py
 
 ### 3. Run Automated Verification Suites
 ```bash
-# Backend test suite (178 tests: 177 passed, 1 skipped CUDA)
-python -m pytest tests/ -v
+# Backend test suite (283 executable tests; 264 pass, 19 fail — all individually
+# attributed to an unavailable Docker daemon or one pre-existing known issue,
+# see testing_and_evaluation/Master_Results_Table.md)
+EVALUATOR_MOCK_MODE=1 python -m pytest tests/ -v
 
-# Frontend component suite (7 passed)
+# Frontend component suite (28 passed)
 npm --prefix apps/web test -- --run
 
-# Deterministic Paper Reproduction Harness (480 / 480 verified)
+# Deterministic paper-reproduction harness (figures traced in research/CANONICAL_SCIENTIFIC_TRUTH_CURRENT.md)
 python scripts/reproduce_paper.py
 ```
 
@@ -146,6 +142,30 @@ Open your browser at `http://localhost:3000` to start an interactive mock interv
 
 
 ---
+
+## 🗂️ Repository Structure
+
+| Path | What's there |
+|---|---|
+| `apps/backend/` | FastAPI backend — session orchestration entry point, admin routes |
+| `apps/web/` | React 18 + Vite frontend |
+| `agents/` | Orchestrator, audio/speech pipeline, coding executor, question selector, strategy (RL+guardrails) |
+| `services/evaluator/` | Flask microservice — the composite answer-scoring pipeline (S1+S2+R) |
+| `services/qwen/` | FastAPI microservice — local Qwen2.5-1.5B-Instruct feedback/follow-up generation |
+| `services/storage/` | SQLite persistence layer |
+| `rl/` | PPO environment, training code, and frozen checkpoints |
+| `data/` | Question bank, rubrics, the SQLite database file |
+| `tests/` | The project's pytest/Vitest automated test suites |
+| `testing_and_evaluation/` | The authoritative, ongoing testing/evaluation documentation and scripts (test strategy, baseline results, category-specific test scripts, final-evaluation-phase reports) |
+| `testing_output/` | A self-contained, one-off comprehensive testing report deliverable (PDF/CSV), separate from the above — see `testing_output/README.md` |
+| `research/` | Frozen research results, audits, and the canonical scientific-truth document |
+| `paper/` | The active IEEE-format paper workspace |
+| `final_deliverables/` | Packaged academic deliverables: university report, IEEE paper, presentation |
+| `Independent_Project_Audit/` | A standalone, evidence-first independent audit of the whole project |
+| `experiments/`, `ablation/` | Legacy experiment runners and ablation-study results |
+| `scripts/` | Setup, model-download, and end-to-end verification utility scripts |
+| `docs/` | A large, partly-historical documentation set; treat `research/CANONICAL_SCIENTIFIC_TRUTH_CURRENT.md` as authoritative over anything here that disagrees with it |
+| `Details/`, `capstonePapers/`, `ADCOM2027_Track2_Final/`, `submission/`, `reference_material_analysis/` | External/historical manuscript material — each has its own `README.md` explaining its contents |
 
 ## 📚 Complete Project Documentation Index
 

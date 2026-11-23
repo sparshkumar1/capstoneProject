@@ -12,14 +12,20 @@ Requires: fastapi, uvicorn, python-multipart
 from __future__ import annotations
 
 import asyncio
+import hmac
 import json
 import os
 import pickle
 import re
+import secrets
 import sys
+import logging
 import tempfile
+import threading
 import time
 import uuid
+_PROCESS_START = time.perf_counter()
+from contextlib import asynccontextmanager
 from datetime import UTC, datetime, date
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -29,9 +35,10 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, UploadFile, File, Form
+from fastapi import Depends, FastAPI, Header, WebSocket, WebSocketDisconnect, HTTPException, UploadFile, File, Form
+from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, EmailStr
 
 np = None
@@ -106,6 +113,7 @@ elif EVALUATOR_READY:
 
 
 def _run_integrated_evaluator(transcript: str, question: dict) -> Optional[dict]:
+    """Score a transcript against `question`'s rubric (embedded, looked up by id/parent id, or synthesized), or None if the evaluator isn't loaded."""
     if not EVALUATOR_READY or _evaluator_eval is None:
         return None
 
@@ -199,10 +207,49 @@ score_hesitation = None
 build_state_vector = None
 reset_audio_session = None
 AUDIO_ANALYSIS_READY = False
-_AUDIO_IMPORT_ATTEMPTED = False
+
+# Audio initialisation is an explicit state machine: pending -> loading -> ready | failed.
+# The lock guards state transitions only (never the import itself), and waiters block on an
+# Event with a bounded timeout, so a slow or failed import cannot hang requests indefinitely.
+_audio_log = logging.getLogger("prepaired.audio")
+_AUDIO_STATE = "pending"
+_AUDIO_ERROR: Optional[str] = None
+_AUDIO_STATE_LOCK = threading.Lock()
+_AUDIO_DONE = threading.Event()
+AUDIO_WAIT_TIMEOUT_S = float(os.getenv("PREPAIRED_AUDIO_WAIT_TIMEOUT_S", "180"))
+WARMUP_TIMINGS: Dict[str, Any] = {}
+_WARMUP_ACTIVE = False
 
 
-def _ensure_audio_analysis_imports() -> bool:
+def audio_status() -> Dict[str, Any]:
+    """Current state of the lazily-loaded audio analysis stack, for diagnostics/polling."""
+    return {"state": _AUDIO_STATE, "error": _AUDIO_ERROR, "ready": AUDIO_ANALYSIS_READY,
+            "warmup_seconds": dict(WARMUP_TIMINGS)}
+
+
+def _ensure_audio_analysis_imports(timeout: Optional[float] = None) -> bool:
+    """Return True once the audio stack is usable.
+
+    The first caller performs the import in its own thread; concurrent callers wait (bounded) for it.
+    Never call this directly on the event loop for a request that may trigger the import.
+    """
+    global _AUDIO_STATE
+    if AUDIO_ANALYSIS_READY:
+        return True
+    with _AUDIO_STATE_LOCK:
+        owner = _AUDIO_STATE == "pending"
+        if owner:
+            _AUDIO_STATE = "loading"
+    if owner:
+        _import_audio_analysis()
+    elif not _AUDIO_DONE.wait(AUDIO_WAIT_TIMEOUT_S if timeout is None else timeout):
+        _audio_log.warning("Timed out waiting for audio stack initialisation (state=%s)", _AUDIO_STATE)
+        return False
+    return AUDIO_ANALYSIS_READY
+
+
+def _import_audio_analysis() -> bool:
+    """Import and publish the audio analysis module functions, setting `AUDIO_ANALYSIS_READY` once all succeed."""
     global extract_prosodic_features
     global audio_confidence_score
     global audio_score_breakdown
@@ -212,14 +259,9 @@ def _ensure_audio_analysis_imports() -> bool:
     global build_state_vector
     global reset_audio_session
     global AUDIO_ANALYSIS_READY
-    global _AUDIO_IMPORT_ATTEMPTED
+    global _AUDIO_STATE, _AUDIO_ERROR
 
-    if AUDIO_ANALYSIS_READY:
-        return True
-    if _AUDIO_IMPORT_ATTEMPTED:
-        return False
-
-    _AUDIO_IMPORT_ATTEMPTED = True
+    started = time.perf_counter()
     try:
         from agents.audio.audio_features import extract_prosodic_features as _extract
         from agents.audio.confidence_scorer import score as _score
@@ -230,6 +272,7 @@ def _ensure_audio_analysis_imports() -> bool:
         from agents.audio.rl_state_vector import reset_session as _reset_audio_session
         from agents.audio.transcriber import transcribe_and_align as _transcribe
 
+        # Publish every component first, flag ready last: no request sees a partial stack.
         extract_prosodic_features = _extract
         audio_confidence_score = _score
         audio_score_breakdown = _breakdown
@@ -239,29 +282,112 @@ def _ensure_audio_analysis_imports() -> bool:
         reset_audio_session = _reset_audio_session
         transcribe_and_align = _transcribe
         AUDIO_ANALYSIS_READY = True
+        _AUDIO_STATE = "ready"
+        _audio_log.info("Audio stack ready in %.1fs", time.perf_counter() - started)
         return True
-    except Exception as exc:
+    except BaseException as exc:  # noqa: BLE001 - record any failure so waiters are released
         AUDIO_ANALYSIS_READY = False
+        _AUDIO_STATE = "failed"
+        _AUDIO_ERROR = f"{type(exc).__name__}: {exc}"
+        _audio_log.exception("Audio stack failed to initialise; speech analysis is unavailable")
         print(f"[WARN] Audio_Analysis_agent not loaded — audio confidence analysis disabled: {exc}")
         return False
+    finally:
+        WARMUP_TIMINGS["audio_imports"] = round(time.perf_counter() - started, 2)
+        _AUDIO_DONE.set()
+
+
+def _warm_up_backend() -> None:
+    """Background warm-up: heavy imports/models that would otherwise block the first interview."""
+    t0 = time.perf_counter()
+    WARMUP_TIMINGS["started_after_boot_s"] = round(t0 - _PROCESS_START, 2)
+    # 1. RL stack (needed by session creation) - import only; per-session PPO load stays lazy.
+    try:
+        from agents.strategy.hybrid_orchestrator import _try_load_rl
+        t = time.perf_counter()
+        _try_load_rl()
+        WARMUP_TIMINGS["rl_import"] = round(time.perf_counter() - t, 2)
+    except Exception:
+        _audio_log.exception("RL warm-up failed (session creation will retry lazily)")
+    # 2. Audio/STT modules.
+    _ensure_audio_analysis_imports()
+    # 3. STT model weights (otherwise loaded on the first transcription).
+    if AUDIO_ANALYSIS_READY and os.getenv("PREPAIRED_WARMUP_STT_MODELS", "1") != "0":
+        try:
+            from agents.audio import transcriber as _tr
+            if getattr(_tr, "_WHISPERX_AVAILABLE", False):
+                t = time.perf_counter()
+                _tr._get_models()
+                WARMUP_TIMINGS["stt_models"] = round(time.perf_counter() - t, 2)
+        except Exception:
+            _audio_log.exception("STT model warm-up failed (first transcription will retry)")
+    WARMUP_TIMINGS["total"] = round(time.perf_counter() - t0, 2)
+    _audio_log.info("Backend warm-up finished: %s", WARMUP_TIMINGS)
+
+
+@asynccontextmanager
+async def _lifespan(_app):
+    """FastAPI lifespan hook: kick off background warm-up on startup, nothing to do on shutdown."""
+    global _WARMUP_ACTIVE
+    if os.getenv("PREPAIRED_DISABLE_WARMUP", "0") != "1":
+        _WARMUP_ACTIVE = True
+        threading.Thread(target=_warm_up_backend, name="backend-warmup", daemon=True).start()
+    yield
+    # Warm-up is a daemon thread: model loads cannot be interrupted, and nothing needs flushing.
+
 
 # ── App ─────────────────────────────────────────────────────────────────
-app = FastAPI(title="PrepAIred API", version="1.0.0")
+app = FastAPI(title="PrepAIred API", version="1.0.0", lifespan=_lifespan)
+
+_DEFAULT_CORS_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+_cors_env = os.getenv("CORS_ORIGINS", "")
+CORS_ORIGINS = [o.strip() for o in _cors_env.split(",") if o.strip()] or _DEFAULT_CORS_ORIGINS
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3001",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ── Admin auth ──────────────────────────────────────────────────────────
+# Minimal real gate: admin elevation requires ADMIN_PASSWORD (set via deployment
+# secret, never committed); a verified login gets a short-lived bearer token that
+# admin routes require. No ADMIN_PASSWORD configured => admin login always rejected
+# (previously the client's unauthenticated `admin: true` flag was trusted outright).
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
+ADMIN_TOKEN_TTL_S = 12 * 3600
+_ADMIN_TOKENS: Dict[str, float] = {}  # token -> expiry (epoch seconds)
+
+
+def _issue_admin_token() -> str:
+    """Mint a new admin session token (random, TTL `ADMIN_TOKEN_TTL_S`) and register its expiry."""
+    token = secrets.token_urlsafe(32)
+    _ADMIN_TOKENS[token] = time.time() + ADMIN_TOKEN_TTL_S
+    return token
+
+
+def _check_admin_password(candidate_pass: str) -> bool:
+    """Constant-time check of `candidate_pass` against `ADMIN_PASSWORD` (always False if no password is configured)."""
+    if not ADMIN_PASSWORD:
+        return False
+    return hmac.compare_digest(candidate_pass or "", ADMIN_PASSWORD)
+
+
+async def require_admin_token(x_admin_token: Optional[str] = Header(default=None)):
+    """FastAPI dependency: raise 401 unless `X-Admin-Token` names a current, unexpired admin session."""
+    expiry = _ADMIN_TOKENS.get(x_admin_token or "")
+    if expiry is None or expiry < time.time():
+        _ADMIN_TOKENS.pop(x_admin_token or "", None)
+        raise HTTPException(status_code=401, detail="Admin session required or expired.")
 
 # ── Storage Layer Initialization ──────────────────────────────────────────
 try:
@@ -296,11 +422,23 @@ class CreateSessionRequest(BaseModel):
     num_questions: int = 15
     interview_mode: str = "demo_rl"  # demo_rl | standard
     baseline_questions: int = 2
+    focus_question_ids: List[str] = []  # optional: pin these question ids at the front of a practice session
 
 
 class RunCodeRequest(BaseModel):
     code: str
     session_id: str = ""
+
+
+class BookmarkRequest(BaseModel):
+    question_id: str
+    note: str = ""
+
+
+class StudyGoalRequest(BaseModel):
+    target_date: str = ""
+    minutes_per_day: int = 30
+    plan: dict = {}
 
 # ── Question bank (subset — expand from qns.json in Evaluator/) ─────────
 QUESTION_BANK = {
@@ -357,10 +495,12 @@ QUESTION_BANK = {
 
 
 def _normalize_topic_key(value: str) -> str:
+    """Lowercase `value` and strip non-alphanumeric characters, for use as a topic dict key."""
     return "".join(ch for ch in (value or "").lower() if ch.isalnum())
 
 
 def _difficulty_to_level(value: Any) -> int:
+    """Map a difficulty value (0-1 float or already a 1-5 level) to an integer level in [1, 5]."""
     try:
         v = float(value)
     except (TypeError, ValueError):
@@ -384,6 +524,7 @@ _text_similarity = _lexical_token_overlap
 
 
 def _load_question_bank_from_qns() -> Optional[Dict[str, List[dict]]]:
+    """Load and normalize the question bank from `qns.json` (merging matching rubrics, translating each code question's test-case schema), grouped by topic key."""
     root = Path(__file__).resolve().parent.parent.parent
     candidates = [
         root / "data" / "questions" / "qns.json",
@@ -455,6 +596,22 @@ def _load_question_bank_from_qns() -> Optional[Dict[str, List[dict]]]:
                     "cprogramming", "preprocessor", "linkage", "enum", "structsunions", "bitmanipulation", "advancedc"
                 } else "dsa"
 
+                # qns.json's raw test-case schema (input/expected_output/hidden) does not
+                # match agents.coding_executor's schema (input/expected/is_hidden/is_mandatory);
+                # translate once here so the Docker sandbox receives real test cases instead
+                # of silently scoring against an empty list.
+                test_cases = []
+                for tc_idx, tc in enumerate(row.get("test_cases") or [], 1):
+                    if not isinstance(tc, dict):
+                        continue
+                    test_cases.append({
+                        "id": str(tc.get("id", f"tc_{tc_idx}")),
+                        "input": str(tc.get("input", tc.get("stdin", ""))),
+                        "expected": str(tc.get("expected", tc.get("expected_output", tc.get("stdout", "")))),
+                        "is_hidden": bool(tc.get("is_hidden", tc.get("hidden", False))),
+                        "is_mandatory": bool(tc.get("is_mandatory", False)),
+                    })
+
                 question = {
                     "id": qid,
                     "text": q_text,
@@ -473,6 +630,7 @@ def _load_question_bank_from_qns() -> Optional[Dict[str, List[dict]]]:
                     "rubric": rubric,
                     "constraints": row.get("constraints", ""),
                     "code_template": row.get("code_template") or row.get("starter_code") or "",
+                    "test_cases": test_cases,
                 }
                 grouped.setdefault(topic_key, []).append(question)
 
@@ -632,13 +790,16 @@ def select_questions(
 
 
 
-def _analyze_audio_confidence(audio_path: str, transcript_text: str = "", session_id: str = "") -> Optional[dict]:
+def _analyze_audio_confidence(audio_path: str, transcript_text: str = "", session_id: str = "",
+                              transcription: Optional[dict] = None) -> Optional[dict]:
+    """Run the audio pipeline (prosody, linguistic confidence, hesitation, RL state vector) on `audio_path` and return the combined confidence breakdown, or None if the audio stack isn't ready."""
     if not _ensure_audio_analysis_imports():
         return None
 
     try:
         prosodic = extract_prosodic_features(audio_path)
-        transcription = transcribe_and_align(audio_path) if transcribe_and_align else {}
+        if transcription is None:
+            transcription = transcribe_and_align(audio_path) if transcribe_and_align else {}
 
         # Use authoritative server transcript for linguistic analysis
         effective_transcript = (transcription.get("transcript") or transcript_text or "").strip()
@@ -701,6 +862,7 @@ def _analyze_audio_confidence(audio_path: str, transcript_text: str = "", sessio
 
 # ── Session dict shim (handles both InterviewOrchestrator and legacy dicts)
 def _get_session_dict(session_id: str) -> dict:
+    """Return `session_id`'s session as a plain dict, whether it's stored as an `InterviewOrchestrator` or a legacy dict."""
     obj = SESSIONS.get(session_id)
     if obj is None:
         return {}
@@ -711,12 +873,26 @@ def _get_session_dict(session_id: str) -> dict:
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "pipeline_ready": PIPELINE_READY, "timestamp": datetime.now(UTC).isoformat()}
+    """Liveness/readiness check: pipeline and audio-stack status for monitoring and the frontend."""
+    audio = audio_status()
+    # HTTP 200 always (liveness); `status` says whether required functionality is usable.
+    if audio["state"] == "failed":
+        status = "degraded"
+    elif audio["state"] == "loading" or (audio["state"] == "pending" and _WARMUP_ACTIVE):
+        status = "starting"
+    else:
+        status = "ok"
+    return {"status": status, "pipeline_ready": PIPELINE_READY, "audio": audio,
+            "timestamp": datetime.now(UTC).isoformat()}
 
 
 @app.post("/api/login")
 async def login(req: LoginRequest):
     """Register/login a candidate with persistent identity across sessions."""
+    granted_admin = bool(req.admin) and _check_admin_password(req.adminPass)
+    if req.admin and not granted_admin:
+        raise HTTPException(status_code=401, detail="Incorrect admin password.")
+    admin_token = _issue_admin_token() if granted_admin else None
     try:
         from services.storage.database import get_or_create_candidate
         candidate = get_or_create_candidate(
@@ -727,9 +903,12 @@ async def login(req: LoginRequest):
             roll=req.roll,
             primary_lang=req.primary_lang,
             experience=req.experience,
-            is_admin=req.admin,
+            is_admin=granted_admin,
         )
         cid = candidate["id"]
+        candidate["is_admin"] = granted_admin
+        if admin_token:
+            candidate["admin_token"] = admin_token
         CANDIDATES[cid] = candidate
         return candidate
     except Exception as exc:
@@ -743,11 +922,147 @@ async def login(req: LoginRequest):
             "roll": req.roll,
             "primary_lang": req.primary_lang,
             "experience": req.experience,
-            "is_admin": req.admin,
+            "is_admin": granted_admin,
             "created_at": datetime.now(UTC).isoformat(),
         }
+        if admin_token:
+            candidate["admin_token"] = admin_token
         CANDIDATES[cid] = candidate
         return candidate
+
+
+def _with_focus_questions(base_select, focus_ids: List[str]):
+    """Wrap select_questions so the first call (initial session queue) starts with the requested questions.
+
+    Later calls (difficulty adaptation rebuilds) are delegated unchanged, so the RL/guardrail behaviour is untouched.
+    """
+    state = {"used": False}
+
+    def _select(c_topics, dsa_topics, num, difficulty=2, exclude_ids=None, candidate_state=None):
+        """Delegate to `base_select`, then pin `focus_ids` to the front of the result on the first (unexcluded) call only."""
+        base = base_select(c_topics, dsa_topics, num, difficulty, exclude_ids=exclude_ids, candidate_state=candidate_state)
+        if state["used"] or exclude_ids is not None:
+            return base
+        state["used"] = True
+        by_id = {str(q.get("id")): q for qs in QUESTION_BANK.values() for q in qs}
+        pinned = [by_id[i] for i in focus_ids if i in by_id][:max(num, 1)]
+        pinned_ids = {str(q["id"]) for q in pinned}
+        rest = [q for q in base if str(q.get("id")) not in pinned_ids]
+        return (pinned + rest)[:max(num, len(pinned))]
+
+    return _select
+
+
+def _question_lookup() -> Dict[str, dict]:
+    """Flat question-id -> question dict view of the loaded question bank (read-only, for analytics)."""
+    return {str(q.get("id")): q for qs in QUESTION_BANK.values() for q in qs if isinstance(q, dict)}
+
+
+@app.get("/api/candidates/{candidate_id}/dashboard")
+async def candidate_dashboard(candidate_id: str, tz_offset_minutes: int = 0):
+    """Aggregated progress for one candidate, derived from stored attempts (no fabricated values)."""
+    try:
+        from services.storage.analytics import build_dashboard
+        return build_dashboard(candidate_id, _question_lookup(), tz_offset_minutes=int(tz_offset_minutes))
+    except Exception as exc:
+        raise HTTPException(500, f"Could not build dashboard: {exc}")
+
+
+@app.get("/api/candidates/{candidate_id}/analytics")
+async def candidate_analytics(candidate_id: str, tz_offset_minutes: int = 0):
+    """Detailed analytics (per-topic/trend breakdown) for one candidate, derived from stored attempts."""
+    try:
+        from services.storage.analytics import build_analytics
+        return build_analytics(candidate_id, _question_lookup(), tz_offset_minutes=int(tz_offset_minutes))
+    except Exception as exc:
+        raise HTTPException(500, f"Could not build analytics: {exc}")
+
+
+@app.get("/api/candidates/{candidate_id}/weakness-map")
+async def candidate_weakness_map(candidate_id: str):
+    """Per-topic weakness map for one candidate, derived from stored attempts."""
+    try:
+        from services.storage.analytics import build_weakness_map
+        return build_weakness_map(candidate_id, _question_lookup())
+    except Exception as exc:
+        raise HTTPException(500, f"Could not build weakness map: {exc}")
+
+
+@app.get("/api/candidates/{candidate_id}/compare/{question_id}")
+async def candidate_compare_attempts(candidate_id: str, question_id: str):
+    """Side-by-side comparison of a candidate's attempts on one question."""
+    try:
+        from services.storage.analytics import build_compare
+        return build_compare(candidate_id, question_id, _question_lookup())
+    except Exception as exc:
+        raise HTTPException(500, f"Could not compare attempts: {exc}")
+
+
+# ── Bookmarks ──────────────────────────────────────────────────────────────
+
+@app.get("/api/candidates/{candidate_id}/bookmarks")
+async def list_candidate_bookmarks(candidate_id: str):
+    """List all bookmarked questions for a candidate, with question text/topic attached."""
+    try:
+        from services.storage.database import list_bookmarks
+        bookmarks = list_bookmarks(candidate_id)
+        lookup = _question_lookup()
+        for b in bookmarks:
+            q = lookup.get(str(b.get("question_id")), {})
+            b["question_text"] = q.get("text", "")
+            b["topic"] = q.get("topic", "")
+            b["difficulty"] = q.get("difficulty")
+        return {"bookmarks": bookmarks}
+    except Exception as exc:
+        raise HTTPException(500, f"Could not list bookmarks: {exc}")
+
+
+@app.post("/api/candidates/{candidate_id}/bookmarks")
+async def create_candidate_bookmark(candidate_id: str, req: BookmarkRequest):
+    """Create or update (if already bookmarked) a bookmark with an optional note."""
+    try:
+        from services.storage.database import add_bookmark
+        return add_bookmark(candidate_id, req.question_id, req.note)
+    except Exception as exc:
+        raise HTTPException(500, f"Could not save bookmark: {exc}")
+
+
+@app.delete("/api/candidates/{candidate_id}/bookmarks/{question_id}")
+async def delete_candidate_bookmark(candidate_id: str, question_id: str):
+    """Remove a candidate's bookmark for `question_id`, or 404 if it wasn't bookmarked."""
+    try:
+        from services.storage.database import remove_bookmark
+        removed = remove_bookmark(candidate_id, question_id)
+        if not removed:
+            raise HTTPException(404, "Bookmark not found")
+        return {"status": "removed"}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(500, f"Could not remove bookmark: {exc}")
+
+
+# ── Study goal (server-synced; localStorage remains the offline fallback) ──
+
+@app.get("/api/candidates/{candidate_id}/study-goal")
+async def get_candidate_study_goal(candidate_id: str):
+    """Fetch a candidate's server-synced study goal, or sensible defaults if none is saved."""
+    try:
+        from services.storage.database import get_study_goal
+        goal = get_study_goal(candidate_id)
+        return goal or {"candidate_id": candidate_id, "target_date": "", "minutes_per_day": 30, "plan": {}}
+    except Exception as exc:
+        raise HTTPException(500, f"Could not load study goal: {exc}")
+
+
+@app.put("/api/candidates/{candidate_id}/study-goal")
+async def put_candidate_study_goal(candidate_id: str, req: StudyGoalRequest):
+    """Save (create or overwrite) a candidate's study goal."""
+    try:
+        from services.storage.database import save_study_goal
+        return save_study_goal(candidate_id, req.target_date, req.minutes_per_day, req.plan)
+    except Exception as exc:
+        raise HTTPException(500, f"Could not save study goal: {exc}")
 
 
 @app.post("/api/sessions")
@@ -778,21 +1093,33 @@ async def create_session(req: CreateSessionRequest):
         "defer_rl": True,
     }
 
+    select_fn = select_questions
+    focus_ids = [str(q) for q in (getattr(req, "focus_question_ids", None) or []) if str(q).strip()]
+    if focus_ids:
+        select_fn = _with_focus_questions(select_questions, focus_ids)
+
     if _INTERVIEW_ORCHESTRATOR_READY and InterviewOrchestrator is not None:
-        orchestrator = InterviewOrchestrator(
-            session_id=sid,
-            candidate=candidate,
-            config=config,
-            evaluator_fn=_run_integrated_evaluator,
-            select_questions_fn=select_questions,
-        )
-        SESSIONS[sid] = orchestrator
-        try:
-            from services.storage.database import save_session
-            save_session(orchestrator.to_session_dict())
-        except Exception:
-            pass
-        if _ensure_audio_analysis_imports() and reset_audio_session is not None:
+        def _build_session():
+            """Construct the `InterviewOrchestrator` for this session (run in a worker thread so a cold-start RL import doesn't freeze the event loop)."""
+            orch = InterviewOrchestrator(
+                session_id=sid,
+                candidate=candidate,
+                config=config,
+                evaluator_fn=_run_integrated_evaluator,
+                select_questions_fn=select_fn,
+            )
+            SESSIONS[sid] = orch
+            try:
+                from services.storage.database import save_session
+                save_session(orch.to_session_dict())
+            except Exception:
+                pass
+            return orch
+
+        orchestrator = await run_in_threadpool(_build_session)
+        # Never import the heavy audio stack here; a not-yet-loaded audio module has no state
+        # for this new session id, so there is nothing to reset.
+        if AUDIO_ANALYSIS_READY and reset_audio_session is not None:
             try:
                 reset_audio_session(sid)
             except Exception:
@@ -837,6 +1164,7 @@ async def get_full_candidate_history(candidate_id: str):
 
 @app.get("/api/sessions/{session_id}")
 async def get_session(session_id: str):
+    """Current session state (minus the full question list) for `session_id`."""
     if session_id not in SESSIONS:
         raise HTTPException(404, "Session not found")
     s = _get_session_dict(session_id)
@@ -845,6 +1173,7 @@ async def get_session(session_id: str):
 
 @app.post("/api/sessions/{session_id}/end")
 async def end_session(session_id: str):
+    """End the session, generate and store its final report, and return the report id."""
     if session_id not in SESSIONS:
         raise HTTPException(404, "Session not found")
     obj = SESSIONS[session_id]
@@ -856,6 +1185,7 @@ async def end_session(session_id: str):
 @app.get("/api/reports/{session_id}")
 @app.get("/api/sessions/{session_id}/report")
 async def get_report(session_id: str):
+    """Look up a report by report id or by the session id it's linked to."""
     # Try direct report lookup by report UUID
     if session_id in REPORTS:
         return REPORTS[session_id]
@@ -871,17 +1201,121 @@ async def get_report(session_id: str):
             report = await obj.end()
             REPORTS[report["id"]] = report
             return report
-
-    # If session not in memory, try restoring from persisted snapshot
-    restored = _try_restore_session(session_id)
-    if restored is not None:
-        SESSIONS[session_id] = restored
-        report = await restored.end()
-        REPORTS[report["id"]] = report
-        return report
-
     raise HTTPException(404, "Report not found")
 
+
+@app.get("/api/sessions/{session_id}/report/pdf")
+async def get_report_pdf(session_id: str):
+    """Render the same report data already assembled by `get_report` as a downloadable PDF.
+    Reuses that endpoint's lookup/finalize logic rather than duplicating it -- this route only
+    adds the PDF rendering step on top of an already-correct report dict."""
+    report = await get_report(session_id)
+    try:
+        pdf_bytes = _render_report_pdf(report)
+    except Exception as exc:
+        raise HTTPException(500, f"Could not render PDF report: {exc}")
+    filename = f"prepaired_report_{session_id[:8]}.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+def _render_report_pdf(r: dict) -> bytes:
+    """Build a formatted PDF of a session report dict (the same shape `get_report` returns)
+    using reportlab. Kept in `main.py` next to its only caller rather than as a shared module --
+    it has no other consumer."""
+    import io
+    from reportlab.lib import colors
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import mm
+    from reportlab.platypus import (
+        SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, ListFlowable, ListItem,
+    )
+
+    styles = getSampleStyleSheet()
+    h1 = ParagraphStyle("h1", parent=styles["Heading1"], fontSize=18, spaceAfter=10)
+    h2 = ParagraphStyle("h2", parent=styles["Heading2"], fontSize=13, spaceBefore=14, spaceAfter=6)
+    body = styles["BodyText"]
+    small = ParagraphStyle("small", parent=styles["BodyText"], fontSize=9, textColor=colors.grey)
+
+    buf = io.BytesIO()
+    doc = SimpleDocTemplate(buf, pagesize=A4, topMargin=18 * mm, bottomMargin=18 * mm)
+    story = []
+
+    story.append(Paragraph("PrepAIred — Session Report", h1))
+    meta_bits = []
+    if r.get("session_date"):
+        meta_bits.append(f"Date: {r['session_date']}")
+    if r.get("duration_minutes"):
+        meta_bits.append(f"Duration: {r['duration_minutes']} min")
+    if r.get("total_questions"):
+        meta_bits.append(f"Questions: {r['total_questions']}")
+    if meta_bits:
+        story.append(Paragraph(" &nbsp;|&nbsp; ".join(meta_bits), small))
+    story.append(Spacer(1, 10))
+
+    score_rows = [["Metric", "Score"]]
+    for label, key in [("Overall", "overall_score"), ("C Language", "c_score"), ("DSA", "dsa_score")]:
+        val = r.get(key)
+        score_rows.append([label, f"{round(val * 100)}%" if isinstance(val, (int, float)) else "—"])
+    score_table = Table(score_rows, colWidths=[90 * mm, 40 * mm])
+    score_table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1f2937")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#d1d5db")),
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f3f4f6")]),
+    ]))
+    story.append(score_table)
+
+    def bullet_section(title: str, items: list):
+        """Append a titled bullet list to `story`, or nothing if `items` is empty."""
+        if not items:
+            return
+        story.append(Paragraph(title, h2))
+        story.append(ListFlowable(
+            [ListItem(Paragraph(str(it), body)) for it in items],
+            bulletType="bullet",
+        ))
+
+    bullet_section("Strengths", r.get("strengths") or [])
+    bullet_section("Gaps to address", r.get("missing_concepts") or [])
+    bullet_section("Study recommendations", r.get("recommendations") or [])
+
+    topic_scores = r.get("topic_scores") or {}
+    if topic_scores:
+        story.append(Paragraph("Topic breakdown", h2))
+        rows = [["Topic", "Average score"]]
+        for topic, score in topic_scores.items():
+            rows.append([str(topic).replace("_", " "), f"{round(score * 100)}%" if isinstance(score, (int, float)) else "—"])
+        t = Table(rows, colWidths=[90 * mm, 40 * mm])
+        t.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1f2937")),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#d1d5db")),
+            ("FONTSIZE", (0, 0), (-1, -1), 10),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f3f4f6")]),
+        ]))
+        story.append(t)
+
+    questions = r.get("question_results") or []
+    if questions:
+        story.append(Paragraph("Question-by-question", h2))
+        for i, q in enumerate(questions, 1):
+            qscore = q.get("score")
+            qpct = f"{round(qscore * 100)}%" if isinstance(qscore, (int, float)) else "—"
+            story.append(Paragraph(
+                f"<b>Q{i} ({qpct})</b> — {q.get('question_text', 'Question')}", body,
+            ))
+            if q.get("feedback"):
+                story.append(Paragraph(q["feedback"], small))
+            story.append(Spacer(1, 6))
+
+    doc.build(story)
+    return buf.getvalue()
 
 
 @app.post("/api/transcribe")
@@ -909,26 +1343,39 @@ async def transcribe_audio(
         audio_bytes = await audio.read()
         tmp_path.write_bytes(audio_bytes)
 
-        server_transcript = ""
-        transcription_meta = {}
+        def _run_stt_pipeline():
+            """Blocking STT + acoustic analysis; executed in a worker thread, off the event loop."""
+            meta: dict = {}
+            text = ""
+            error = None
+            # 1. Authoritative server STT pipeline from raw audio (waits, bounded, for audio init)
+            if _ensure_audio_analysis_imports() and transcribe_and_align is not None:
+                meta = transcribe_and_align(str(tmp_path))
+                text = (meta.get("transcript", "") or "").strip()
+                if not text:
+                    error = f"STT produced no transcript (alignment_source={meta.get('alignment_source', 'unknown')})"
+                    _audio_log.error("Authoritative STT unavailable: %s", error)
+            else:
+                error = _AUDIO_ERROR or f"audio stack not ready (state={_AUDIO_STATE})"
+                _audio_log.error("Authoritative STT unavailable: %s", error)
+                if LOGGING_READY:
+                    try:
+                        from logging_agent.stt_processor import STTProcessor
+                        text = (STTProcessor().transcribe(str(tmp_path)) or "").strip()
+                    except Exception:
+                        pass
+            analysis = None
+            if text:
+                # Reuse the transcription already computed above instead of transcribing again.
+                analysis = _analyze_audio_confidence(str(tmp_path), text, session_id, transcription=meta or None)
+            return text, meta, analysis, error
 
-        # 1. Authoritative server STT pipeline from raw audio
-        if _ensure_audio_analysis_imports() and transcribe_and_align is not None:
-            transcription_meta = transcribe_and_align(str(tmp_path))
-            server_transcript = (transcription_meta.get("transcript", "") or "").strip()
-        elif LOGGING_READY:
-            try:
-                from logging_agent.stt_processor import STTProcessor
-                stt = STTProcessor()
-                server_transcript = (stt.transcribe(str(tmp_path)) or "").strip()
-            except Exception:
-                pass
+        server_transcript, transcription_meta, audio_analysis, stt_error = await run_in_threadpool(_run_stt_pipeline)
 
         # Strict STT validation: Never promote browser preview to authoritative evaluation transcript
         if server_transcript:
             stt_status = "success"
             transcript_source = transcription_meta.get("alignment_source", "whisperx")
-            audio_analysis = _analyze_audio_confidence(str(tmp_path), server_transcript, session_id)
         else:
             stt_status = "stt_unavailable"
             transcript_source = "unavailable"
@@ -958,6 +1405,8 @@ async def transcribe_audio(
             "true_speaking_rate": transcription_meta.get("true_speaking_rate", 0.0),
             "session_id": session_id,
             "audio_analysis_ready": AUDIO_ANALYSIS_READY,
+            "audio_init_status": _AUDIO_STATE,
+            "stt_error": stt_error,
             "audio_analysis": audio_analysis,
         }
 
@@ -982,6 +1431,17 @@ async def transcribe_audio(
         tmp_path.unlink(missing_ok=True)
 
 
+def _resolve_active_test_cases(sess, question_id: str = "") -> list:
+    """Server-side lookup of the active question's test cases. Never trust
+    client-supplied test results for scoring — callers must re-run the code
+    against these test cases themselves."""
+    if hasattr(sess, "_get_current_question"):
+        curr_q = sess._get_current_question(question_id or None)
+        if isinstance(curr_q, dict) and curr_q.get("test_cases"):
+            return curr_q["test_cases"]
+    return []
+
+
 @app.post("/api/run_code")
 async def run_code(req: RunCodeRequest):
     """Run C code in authoritative Docker sandbox."""
@@ -990,16 +1450,7 @@ async def run_code(req: RunCodeRequest):
     test_cases = []
     # If session and question are active, try to fetch question test cases
     if req.session_id and req.session_id in SESSIONS:
-        sess = SESSIONS[req.session_id]
-        curr_q = None
-        if hasattr(sess, "_get_current_question") and callable(sess._get_current_question):
-            curr_q = sess._get_current_question()
-        elif hasattr(sess, "current_question"):
-            curr_q = getattr(sess, "current_question")
-        elif hasattr(sess, "_current_question"):
-            curr_q = getattr(sess, "_current_question")
-        if isinstance(curr_q, dict) and curr_q.get("test_cases"):
-            test_cases = curr_q["test_cases"]
+        test_cases = _resolve_active_test_cases(SESSIONS[req.session_id])
 
     result = evaluate_c_submission(req.code, test_cases=test_cases)
     return result
@@ -1008,14 +1459,50 @@ async def run_code(req: RunCodeRequest):
 
 # ── Admin routes ─────────────────────────────────────────────────────────
 
-@app.get("/api/admin/sessions")
-async def admin_sessions(filter: str = "all", sort: str = "date_desc"):
-    sessions_list = []
+def _admin_sessions_merged() -> list[dict]:
+    """Merge persisted (SQLite) sessions with the current process's live in-memory
+    sessions, so the admin view survives a backend restart instead of only reflecting
+    sessions created since the process last started. In-memory data wins on id
+    collision (it is richer -- live score/behaviour detail the `sessions` table does
+    not persist); DB-only rows (from a prior process) are included with the subset of
+    fields the schema actually stores, rather than being silently dropped."""
+    merged: dict[str, dict] = {}
+    try:
+        from services.storage.database import list_sessions as _db_list_sessions
+        for row in _db_list_sessions():
+            sid = str(row.get("id") or "")
+            if not sid:
+                continue
+            merged[sid] = {
+                "id": sid,
+                "candidate_id": row.get("candidate_id"),
+                "candidate_name": row.get("candidate_name"),
+                "candidate_email": row.get("candidate_email"),
+                "college": row.get("college"),
+                "year": row.get("year"),
+                "overall_score": row.get("overall_score"),
+                "c_score": None,
+                "dsa_score": None,
+                "topics": row.get("topics", []),
+                "final_difficulty": None,
+                "duration_minutes": row.get("duration_minutes"),
+                "total_questions": row.get("num_questions"),
+                "status": row.get("status", "unknown"),
+                "created_at": row.get("created_at"),
+                "strengths": [],
+                "missing_concepts": [],
+                "behaviour": None,
+                "source": "persisted",
+            }
+    except Exception as exc:
+        print(f"[ADMIN] Could not load persisted sessions: {exc}", flush=True)
+
     for sid in list(SESSIONS.keys()):
         s = _get_session_dict(sid)
         cand = CANDIDATES.get(s.get("candidate_id", ""), {})
-        entry = {
+        merged[sid] = {
             "id": sid,
+            "candidate_id": s.get("candidate_id"),
             "candidate_name": cand.get("name"),
             "candidate_email": cand.get("email"),
             "college": cand.get("college"),
@@ -1032,8 +1519,15 @@ async def admin_sessions(filter: str = "all", sort: str = "date_desc"):
             "strengths": s.get("strengths", []),
             "missing_concepts": s.get("missing_concepts", []),
             "behaviour": s.get("behaviour"),
+            "source": "live",
         }
-        sessions_list.append(entry)
+    return list(merged.values())
+
+
+@app.get("/api/admin/sessions", dependencies=[Depends(require_admin_token)])
+async def admin_sessions(filter: str = "all", sort: str = "date_desc"):
+    """Admin view: all sessions (live + persisted, merged), sorted by date or score."""
+    sessions_list = _admin_sessions_merged()
 
     # Sort
     reverse = "desc" in sort
@@ -1043,15 +1537,16 @@ async def admin_sessions(filter: str = "all", sort: str = "date_desc"):
     return {"sessions": sessions_list, "total": len(sessions_list)}
 
 
-@app.get("/api/admin/stats")
+@app.get("/api/admin/stats", dependencies=[Depends(require_admin_token)])
 async def admin_stats():
-    total = len(SESSIONS)
-    all_s = [_get_session_dict(sid) for sid in SESSIONS]
+    """Admin dashboard aggregates: totals, average score/duration, active-today count, and pass rate."""
+    all_s = _admin_sessions_merged()
+    total = len(all_s)
     scores = [s.get("overall_score", 0) for s in all_s if s.get("overall_score") is not None]
     today = date.today().isoformat()
     active_today = sum(1 for s in all_s if (s.get("created_at") or "")[:10] == today)
-    unique_cands = len(set(s.get("candidate_id") for s in all_s))
-    durations = [s.get("duration_minutes", 0) for s in all_s]
+    unique_cands = len(set(s.get("candidate_email") or s.get("id") for s in all_s))
+    durations = [s.get("duration_minutes") or 0 for s in all_s]
     pass_rate = sum(1 for sc in scores if sc >= 0.6) / max(len(scores), 1)
 
     return {
@@ -1064,86 +1559,58 @@ async def admin_stats():
     }
 
 
-@app.get("/api/admin/sessions/{session_id}")
+@app.get("/api/admin/sessions/{session_id}", dependencies=[Depends(require_admin_token)])
 async def admin_session_detail(session_id: str):
-    if session_id not in SESSIONS:
-        raise HTTPException(404, "Session not found")
-    s = _get_session_dict(session_id)
-    cand = CANDIDATES.get(s.get("candidate_id", ""), {})
-    report = REPORTS.get(s.get("report_id", ""), {})
-    return {**s, **report, "candidate_name": cand.get("name"), "candidate_email": cand.get("email")}
+    """Full admin detail for one session: live state+report if still in memory, else the persisted record."""
+    if session_id in SESSIONS:
+        s = _get_session_dict(session_id)
+        cand = CANDIDATES.get(s.get("candidate_id", ""), {})
+        report = REPORTS.get(s.get("report_id", ""), {})
+        return {**s, **report, "candidate_name": cand.get("name"), "candidate_email": cand.get("email"), "source": "live"}
+
+    # Not in this process's live memory -- fall back to the persisted record (survives restart).
+    try:
+        from services.storage.database import list_sessions as _db_list_sessions
+        for row in _db_list_sessions():
+            if str(row.get("id")) == session_id:
+                return {**row, "source": "persisted"}
+    except Exception as exc:
+        print(f"[ADMIN] Could not load persisted session {session_id}: {exc}", flush=True)
+
+    raise HTTPException(404, "Session not found")
+
+
+@app.get("/api/admin/candidates/{candidate_id}/sessions", dependencies=[Depends(require_admin_token)])
+async def admin_candidate_sessions(candidate_id: str):
+    """Aggregate, per-candidate view: every session (live or persisted) for one candidate,
+    newest first, plus a lightweight score trend -- for the admin drill-down panel so a
+    faculty/evaluator reviewing one candidate doesn't have to find each session individually
+    in the flat admin table."""
+    all_sessions = _admin_sessions_merged()
+    matches = [
+        s for s in all_sessions
+        if (s.get("candidate_id") and s.get("candidate_id") == candidate_id)
+        or (s.get("candidate_email") and s.get("candidate_email") == candidate_id)
+    ]
+    if not matches:
+        raise HTTPException(404, "No sessions found for this candidate")
+
+    matches.sort(key=lambda s: s.get("created_at") or "", reverse=True)
+    scores = [s.get("overall_score") for s in matches if s.get("overall_score") is not None]
+    candidate_name = next((s.get("candidate_name") for s in matches if s.get("candidate_name")), None)
+    candidate_email = next((s.get("candidate_email") for s in matches if s.get("candidate_email")), candidate_id)
+
+    return {
+        "candidate_id": candidate_id,
+        "candidate_name": candidate_name,
+        "candidate_email": candidate_email,
+        "total_sessions": len(matches),
+        "avg_score": round(sum(scores) / len(scores), 3) if scores else None,
+        "sessions": matches,
+    }
 
 
 # ── WebSocket Interview Handler ───────────────────────────────────────────
-
-def _snapshot_session(orch: "InterviewOrchestrator") -> None:
-    """
-    Best-effort persistence of the orchestrator's resumable state after a
-    turn completes, so a backend restart can resume the session instead of
-    losing it -- SESSIONS is an in-memory dict (see /api/sessions above) with
-    no other persistence path prior to this. Never raises: a failure here
-    must not break the live turn the candidate is in the middle of.
-    """
-    try:
-        from services.storage.database import save_session_snapshot
-        snap = orch.snapshot_state()
-        save_session_snapshot(
-            session_id=snap["state"].get("id", ""),
-            state=snap["state"],
-            question_queue=snap["question_queue"],
-            current_q_index=snap["current_q_index"],
-        )
-    except Exception as exc:
-        print(f"[WS] Session snapshot failed (non-fatal): {exc}")
-
-
-def _try_restore_session(session_id: str) -> Optional["InterviewOrchestrator"]:
-    """
-    Attempts to rebuild a live InterviewOrchestrator for session_id from its
-    last saved snapshot, for the case where the requesting client already has
-    a session_id (from before a backend restart) but SESSIONS no longer has
-    it in memory. Returns None if no snapshot exists or restoration fails --
-    the caller falls back to the existing "Session not found" behavior.
-
-    The resumed orchestrator's current question resumes as freshly asked
-    (see InterviewOrchestrator.snapshot_state()'s docstring for the exact,
-    disclosed scope of what is and is not restored).
-    """
-    try:
-        from services.storage.database import load_session_snapshot, get_candidate_by_id
-        snap = load_session_snapshot(session_id)
-        if snap is None:
-            return None
-        state = snap["state"]
-        cid = str(state.get("candidate_id") or "")
-        candidate = CANDIDATES.get(cid) or get_candidate_by_id(cid) or {"id": cid}
-        config = {
-            "c_topics": state.get("c_topics", []),
-            "dsa_topics": state.get("dsa_topics", []),
-            "duration_minutes": state.get("duration_minutes", 30),
-            "num_questions": state.get("num_questions", 15),
-            "interview_mode": state.get("interview_mode", "standard"),
-            "defer_rl": True,
-        }
-        if not _INTERVIEW_ORCHESTRATOR_READY or InterviewOrchestrator is None:
-            return None
-        orch = InterviewOrchestrator(
-            session_id=session_id,
-            candidate=candidate,
-            config=config,
-            evaluator_fn=_run_integrated_evaluator,
-            select_questions_fn=select_questions,
-        )
-        orch.restore_from_snapshot({
-            "state": state,
-            "question_queue": snap["question_queue"],
-            "current_q_index": snap["current_q_index"],
-        })
-        return orch
-    except Exception as exc:
-        print(f"[WS] Session restore failed for {session_id}: {exc}")
-        return None
-
 
 @app.websocket("/ws/interview/{session_id}")
 async def interview_ws(websocket: WebSocket, session_id: str):
@@ -1170,22 +1637,21 @@ async def interview_ws(websocket: WebSocket, session_id: str):
     await websocket.accept()
 
     if session_id not in SESSIONS:
-        restored = _try_restore_session(session_id)
-        if restored is None:
-            await websocket.send_json({"type": "error", "payload": {"message": "Session not found"}})
-            await websocket.close()
-            return
-        SESSIONS[session_id] = restored
+        await websocket.send_json({"type": "error", "payload": {"message": "Session not found"}})
+        await websocket.close()
+        return
 
     orch: InterviewOrchestrator = SESSIONS[session_id]
 
     async def send(type_: str, payload: dict):
+        """Send a `{type, payload}` WebSocket message, swallowing errors if the client has disconnected."""
         try:
             await websocket.send_json({"type": type_, "payload": payload})
         except Exception:
             pass
 
     async def dispatch_answer(result: dict):
+        """Fan out an evaluated-answer result over the socket as feedback/hint/difficulty_update/session_end messages."""
         await send("feedback", result["feedback"])
         if result.get("hint"):
             await send("hint", {"text": result["hint"]})
@@ -1231,14 +1697,22 @@ async def interview_ws(websocket: WebSocket, session_id: str):
                 await dispatch_answer(result)
 
             elif mtype == "code_submission":
+                from agents.coding_executor.coding_executor import evaluate_c_submission
+
+                submitted_code = payload.get("code", "")
+                submitted_qid = payload.get("question_id", "")
+                # Never trust client-supplied passed/tests_passed/tests_total: re-run
+                # the code server-side against the active question's real test cases.
+                test_cases = _resolve_active_test_cases(orch, submitted_qid)
+                sandbox_result = evaluate_c_submission(submitted_code, test_cases=test_cases)
                 result = await orch.handle_code_submission(
-                    payload.get("code", ""),
-                    payload.get("question_id", ""),
-                    bool(payload.get("passed", False)),
-                    int(payload.get("tests_passed", 0)),
-                    int(payload.get("tests_total", 0)),
-                    payload.get("stdout", ""),
-                    payload.get("stderr", ""),
+                    submitted_code,
+                    submitted_qid,
+                    bool(sandbox_result.get("passed", False)),
+                    int(sandbox_result.get("tests_passed", 0)),
+                    int(sandbox_result.get("tests_total", 0)),
+                    "",
+                    sandbox_result.get("compiler_output", ""),
                 )
                 await dispatch_answer(result)
 
@@ -1260,6 +1734,13 @@ async def interview_ws(websocket: WebSocket, session_id: str):
                     await send("question", res.get("payload", res))
                 else:
                     await send("error", {"message": res.get("message", "Retry failed")})
+
+            elif mtype == "request_hint":
+                res = await orch.request_hint(payload.get("question_id", ""))
+                if res.get("status") == "error":
+                    await send("error", {"message": res.get("text", "Hint unavailable")})
+                else:
+                    await send("hint", {"text": res.get("text", "")})
 
             elif mtype == "skip_question":
 
@@ -1284,9 +1765,6 @@ async def interview_ws(websocket: WebSocket, session_id: str):
                     "overall_score": report.get("overall_score", 0.0),
                 })
                 break
-
-            if mtype in ("start", "voice_answer", "code_submission", "next_question", "retry_question", "retry", "skip_question"):
-                _snapshot_session(orch)
 
     except WebSocketDisconnect:
         orch.mark_abandoned()

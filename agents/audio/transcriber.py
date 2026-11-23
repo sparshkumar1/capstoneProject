@@ -48,6 +48,18 @@ try:
     from pyannote.audio.pipelines.voice_activity_detection import VoiceActivityDetection
 
     def _vas_init_shim(self, segmentation="pyannote/segmentation", fscore=False, token=None, **inference_kwargs):
+        """Compatibility shim: init whisperx's VAD class via the installed pyannote base class.
+
+        Args:
+            segmentation (str): Pyannote segmentation model name.
+            fscore (bool): Passed through to the pyannote base `__init__`.
+            token (Any): Ignored (present only for call-signature
+                compatibility with newer whisperx versions).
+            **inference_kwargs: Forwarded to the pyannote base `__init__`.
+
+        Returns:
+            None.
+        """
         VoiceActivityDetection.__init__(self, segmentation=segmentation, fscore=fscore, **inference_kwargs)
 
     VoiceActivitySegmentation.__init__ = _vas_init_shim
@@ -62,12 +74,28 @@ except ImportError:
     from audio_io import decode_audio, frame_rms
 
 
+import logging
+import threading
+
+# Serialises model loading and inference: the shared model is loaded once and is not
+# guaranteed to be thread-safe, and the backend now calls this from worker threads.
+_MODEL_LOCK = threading.RLock()
 _MODEL = None
 _ALIGN_MODEL = None
 _METADATA = None
 
 
 def _empty_transcription(alignment_source: str = "unavailable") -> dict:
+    """Build a zeroed-out transcription result for total-failure cases.
+
+    Args:
+        alignment_source (str): Value to record in the `alignment_source`
+            field, identifying why no transcript was produced (default
+            "unavailable").
+
+    Returns:
+        dict: All transcription fields present but empty/zero.
+    """
     return {
         "transcript": "",
         "words": [],
@@ -83,6 +111,21 @@ def _empty_transcription(alignment_source: str = "unavailable") -> dict:
 
 
 def _fallback_energy_timing(audio_path: str) -> dict:
+    """Estimate pause/speech timing from audio energy, without any transcript.
+
+    Used when WhisperX isn't available or transcription fails. Detects
+    pauses as low-RMS runs of at least 0.2s against an adaptive threshold.
+
+    Args:
+        audio_path (str): Path to the audio recording.
+
+    Returns:
+        dict: Same schema as a real transcription, but with an empty
+            `transcript`/`words`/`pauses` list, zero `true_speaking_rate`,
+            a fixed low `transcription_confidence` (0.35), and
+            `alignment_source` tagged as an energy-fallback variant (or
+            `_empty_transcription` on decode failure/exception).
+    """
     try:
         y, sr, decode_source = decode_audio(audio_path)
         if y.size == 0:
@@ -135,6 +178,35 @@ def _fallback_energy_timing(audio_path: str) -> dict:
 
 
 def _get_models(device="cpu"):
+    """Get the shared WhisperX transcription and alignment models, loading them if needed.
+
+    Args:
+        device (str): Torch device to load onto (default "cpu").
+
+    Returns:
+        tuple: `(model, align_model, metadata)`, the module-level cached
+            WhisperX model objects.
+    """
+    global _MODEL, _ALIGN_MODEL, _METADATA
+    with _MODEL_LOCK:
+        _load_models_locked(device)
+    return _MODEL, _ALIGN_MODEL, _METADATA
+
+
+def _load_models_locked(device="cpu"):
+    """Load the WhisperX model and alignment model once (caller holds `_MODEL_LOCK`).
+
+    Args:
+        device (str): Torch device to load onto (default "cpu"); selects
+            int8 vs float16 compute type.
+
+    Returns:
+        None: Populates the module-level `_MODEL`, `_ALIGN_MODEL`,
+            `_METADATA` globals. No-op if `_MODEL` is already loaded.
+
+    Raises:
+        ImportError: If `whisperx` is not installed.
+    """
     global _MODEL, _ALIGN_MODEL, _METADATA
     if _MODEL is None:
         if not _WHISPERX_AVAILABLE:
@@ -146,6 +218,16 @@ def _get_models(device="cpu"):
         _orig_torch_load = torch.load
 
         def _compat_torch_load(*args, **kwargs):
+            """Call the original `torch.load` with `weights_only=False` forced.
+
+            Args:
+                *args: Forwarded to `torch.load`.
+                **kwargs: Forwarded to `torch.load`, with `weights_only`
+                    overridden to False.
+
+            Returns:
+                Any: Whatever `torch.load` returns.
+            """
             kwargs["weights_only"] = False
             return _orig_torch_load(*args, **kwargs)
 
@@ -155,13 +237,20 @@ def _get_models(device="cpu"):
             _ALIGN_MODEL, _METADATA = whisperx.load_align_model(language_code="en", device=device)
         finally:
             torch.load = _orig_torch_load
-    return _MODEL, _ALIGN_MODEL, _METADATA
 
 
 def normalize_transcript_text(text: str) -> str:
-    """
-    Standardize whitespace and clean transcription artifacts without altering technical terms,
-    misconceptions, or candidate vocabulary. Never semantically rewrites or corrects candidate errors.
+    """Standardize whitespace in a raw transcript without altering its wording.
+
+    Collapses repeated whitespace while preserving verbatim words and
+    casing; never semantically rewrites or "corrects" candidate errors,
+    misconceptions, or technical terms.
+
+    Args:
+        text (str): Raw transcript text.
+
+    Returns:
+        str: Whitespace-normalized text, or "" if `text` is falsy.
     """
     if not text:
         return ""
@@ -170,6 +259,37 @@ def normalize_transcript_text(text: str) -> str:
 
 
 def transcribe_and_align(audio_path: str) -> dict:
+    """Transcribe an audio file with word-level alignment (thread-safe entry point).
+
+    Args:
+        audio_path (str): Path to the audio recording.
+
+    Returns:
+        dict: See `_transcribe_and_align_impl`.
+    """
+    with _MODEL_LOCK:
+        return _transcribe_and_align_impl(audio_path)
+
+
+def _transcribe_and_align_impl(audio_path: str) -> dict:
+    """Run WhisperX transcription plus forced word-level alignment on one recording.
+
+    Falls back to `_fallback_energy_timing` if WhisperX isn't installed or
+    transcription/alignment raises for any reason (logged, never
+    propagated).
+
+    Args:
+        audio_path (str): Path to the audio recording.
+
+    Returns:
+        dict: `transcript` (normalized text), `words` (list of
+            `{word, start, end, score}`), `pauses` (list of
+            `{start, end, duration}` for gaps >= 0.2s), `pause_count`,
+            `total_pause_time`, `total_speech_time`, `true_speaking_rate`
+            (words/min), `transcription_confidence` (mean word score),
+            `audio_duration`, and `alignment_source` ("whisperx" or an
+            energy-fallback tag).
+    """
     if not _WHISPERX_AVAILABLE:
         return _fallback_energy_timing(audio_path)
 
@@ -236,9 +356,19 @@ def transcribe_and_align(audio_path: str) -> dict:
             "alignment_source": "whisperx",
         }
     except Exception:
+        logging.getLogger("prepaired.audio").exception(
+            "WhisperX transcription failed; falling back to energy-based timing (no transcript)")
         return _fallback_energy_timing(audio_path)
 
 
 def transcribe_audio(audio_path: str) -> tuple[str, float]:
+    """Transcribe an audio file and return just the transcript and its confidence.
+
+    Args:
+        audio_path (str): Path to the audio recording.
+
+    Returns:
+        tuple[str, float]: `(transcript, transcription_confidence)`.
+    """
     transcription = transcribe_and_align(audio_path)
     return transcription.get("transcript", ""), transcription.get("transcription_confidence", 0.0)

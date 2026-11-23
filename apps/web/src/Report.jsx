@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import { SessionContext } from "./contexts";
-import Topbar from "./Topbar";
+import Shell from "./Shell";
 import ScoreRing from "./ScoreRing";
+import BookmarkToggle from "./BookmarkToggle";
 import { api } from "./api";
 import "./Report.css";
 
@@ -34,6 +35,22 @@ export default function Report({ navigate }) {
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [bookmarkedIds, setBookmarkedIds] = useState(() => new Set());
+
+  useEffect(() => {
+    if (!candidate?.id) return;
+    api.getBookmarks(candidate.id)
+      .then((d) => setBookmarkedIds(new Set((d?.bookmarks || []).map((b) => String(b.question_id)))))
+      .catch(() => {});
+  }, [candidate?.id]);
+
+  const toggleBookmark = (questionId, isBookmarked) => {
+    setBookmarkedIds((prev) => {
+      const next = new Set(prev);
+      if (isBookmarked) next.add(String(questionId)); else next.delete(String(questionId));
+      return next;
+    });
+  };
 
   const fetchReport = () => {
     const id = session?.report_id || session?.id;
@@ -65,8 +82,7 @@ export default function Report({ navigate }) {
 
   if (error || !report) {
     return (
-      <div className="report-page page">
-        <Topbar navigate={navigate} />
+      <Shell page="report" navigate={navigate} title="Session report">
         <div className="report-content" style={{ maxWidth: 640, margin: "60px auto" }}>
           <div className="card report-error-card" style={{ padding: "32px", textAlign: "center" }}>
             <div style={{ fontSize: 36, marginBottom: 12 }}>⚠️</div>
@@ -84,7 +100,7 @@ export default function Report({ navigate }) {
             </div>
           </div>
         </div>
-      </div>
+      </Shell>
     );
   }
 
@@ -102,10 +118,8 @@ export default function Report({ navigate }) {
   const tabs = ["overview", "questions", "timeline", "concepts", "behaviour"];
 
   return (
-    <div className="report-page page">
-      <Topbar navigate={navigate} />
-
-      <div className="report-content">
+    <Shell page="report" navigate={navigate} title="Session report" subtitle="Scores and concepts come from the evaluator for this session">
+      <div className="report-content" style={{ padding: 0 }}>
 
         {/* ── Hero ─────────────────────────────────────────── */}
         <div className="report-hero card fade-up">
@@ -159,7 +173,9 @@ export default function Report({ navigate }) {
         </div>
 
         {activeTab === "overview"   && <OverviewTab   r={r} />}
-        {activeTab === "questions"  && <QuestionsTab  r={r} />}
+        {activeTab === "questions"  && (
+          <QuestionsTab r={r} candidateId={candidate?.id} bookmarkedIds={bookmarkedIds} onToggleBookmark={toggleBookmark} />
+        )}
         {activeTab === "timeline"   && <TimelineTab   r={r} />}
         {activeTab === "concepts"   && <ConceptsTab   r={r} />}
         {activeTab === "behaviour"  && <BehaviourTab  r={r} />}
@@ -167,14 +183,24 @@ export default function Report({ navigate }) {
         {/* ── Actions ──────────────────────────────────────── */}
         <div className="report-actions fade-up">
           <button type="button" className="btn btn-primary btn-lg" onClick={() => navigate("topics") }>
-            🔁 Start New Interview
+            Start new interview
           </button>
-          <button type="button" className="btn btn-ghost btn-lg" onClick={() => navigate("admin") }>
-            📊 View All Sessions
+          <button type="button" className="btn btn-ghost btn-lg" onClick={() => navigate("weakness") }>
+            Open Weakness Map
           </button>
+          <button type="button" className="btn btn-ghost btn-lg" onClick={() => navigate("dashboard") }>
+            Back to dashboard
+          </button>
+          <a
+            className="btn btn-ghost btn-lg"
+            href={api.reportPdfUrl(session?.report_id || session?.id || r.session_id || r.id)}
+            download
+          >
+            ⬇ Download PDF
+          </a>
         </div>
       </div>
-    </div>
+    </Shell>
   );
 }
 
@@ -257,7 +283,7 @@ function OverviewTab({ r }) {
 }
 
 // ── Questions tab — full rich feedback per question ───────────────
-function QuestionsTab({ r }) {
+function QuestionsTab({ r, candidateId, bookmarkedIds, onToggleBookmark }) {
   const [expanded, setExpanded] = useState(null);
   const questions = r.question_results || [];
 
@@ -293,13 +319,15 @@ function QuestionsTab({ r }) {
                   </div>
                 </div>
                 <div className="q-row-right">
-                  {q.status === "evaluator_unavailable" || q.grade === "Unscored" ? (
-                    <span className="badge badge-warn" style={{ fontSize: 11 }}>Unavailable</span>
-                  ) : q.status === "stt_unavailable" || q.grade === "Ungraded" ? (
-                    <span className="badge badge-warn" style={{ fontSize: 11 }}>Ungraded</span>
-                  ) : (
-                    <span className="badge badge-neutral" style={{ fontSize: 11 }}>Evaluated</span>
+                  {candidateId && q.question_id && (
+                    <BookmarkToggle
+                      candidateId={candidateId}
+                      questionId={q.question_id}
+                      bookmarked={bookmarkedIds.has(String(q.question_id))}
+                      onChange={(next) => onToggleBookmark(q.question_id, next)}
+                    />
                   )}
+                  <span className="badge badge-neutral" style={{ fontSize: 11 }}>Evaluated</span>
                   <span style={{ color: "var(--text-3)", fontSize: 12 }}>{expanded === i ? "▲" : "▼"}</span>
                 </div>
               </div>

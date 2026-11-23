@@ -1,0 +1,10 @@
+{$PUBLIC_DOMAIN} {
+	encode gzip
+
+	# FastAPI routes + the interview WebSocket go to the backend container;
+	# everything else is the built React/Vite static app.
+	@api path /api/* /ws/*
+	reverse_proxy @api backend:8000
+
+	reverse_proxy frontend:80
+}

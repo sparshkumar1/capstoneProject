@@ -28,6 +28,19 @@ import time
 import signal
 from pathlib import Path
 
+# Fix (2026-11-12, testing_and_evaluation/baseline_results/T-N01_smoke_test_finding.md):
+# this script prints Unicode characters (e.g. the "->" banner arrows below) that raise
+# an unhandled UnicodeEncodeError and crash the whole launcher on a Windows console using
+# the default cp1252 code page (most Windows terminals, unless UTF-8 mode is explicitly
+# enabled). The services themselves started fine when this crash was first found -- only
+# this script's own stdout printing failed. errors="replace" ensures printing still
+# cannot crash the process even on a console that cannot render a given glyph.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 ROOT   = Path(__file__).resolve().parent
 LOGS   = ROOT / "logs"
 LOGS.mkdir(exist_ok=True)

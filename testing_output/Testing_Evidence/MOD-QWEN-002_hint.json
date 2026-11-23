@@ -1,0 +1,12 @@
+{
+  "received": [
+    {
+      "type": "difficulty_update",
+      "payload": {
+        "new_difficulty": 2,
+        "reason": "Turn in progress \u2014 RL adaptation deferred to question finalization",
+        "action": "Pending"
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "received": [
+    {
+      "type": "session_end",
+      "payload": {
+        "report_id": "1e6f2bed-28f2-4109-bf5f-bd1ca422d5e3",
+        "overall_score": 0.087
+      }
+    }
+  ]
+}

@@ -6,11 +6,20 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-COPY requirements/base.txt /tmp/requirements/base.txt
-COPY requirements/backend.txt /tmp/requirements/backend.txt
+# The backend process imports the evaluator (SBERT/FAISS/CrossEncoder), the RL/PPO
+# difficulty controller, and the audio/WhisperX stack in-process (apps/backend/main.py),
+# each guarded by try/except -- so without these, the container starts but silently
+# falls back to mock scores / heuristic difficulty / no transcription. All four are
+# required for the real, evaluated behaviour this app reports.
+COPY requirements/base.txt requirements/backend.txt requirements/evaluator.txt requirements/rl.txt requirements/audio.txt /tmp/requirements/
 
 RUN python -m pip install --upgrade pip && \
-    pip install -r /tmp/requirements/base.txt -r /tmp/requirements/backend.txt
+    pip install \
+      -r /tmp/requirements/base.txt \
+      -r /tmp/requirements/backend.txt \
+      -r /tmp/requirements/evaluator.txt \
+      -r /tmp/requirements/rl.txt \
+      -r /tmp/requirements/audio.txt
 
 COPY . /app
 

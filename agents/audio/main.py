@@ -38,6 +38,29 @@ def run_pipeline(
     question_index: int = 0,
     max_questions: int = 10,
 ) -> dict:
+    """Run the full standalone audio-agent pipeline for one recorded answer.
+
+    Records audio, runs prosodic-feature extraction and speech-to-text in
+    parallel, then chains linguistic-confidence analysis, the blended
+    confidence score, the hesitation score, and the RL state vector, and
+    finally prints a human-readable report.
+
+    Args:
+        duration (int): Recording length in seconds (default 10).
+        session_id (str): Session identifier used to persist/retrieve the
+            running RL session state (default "default").
+        difficulty (float): Current question difficulty, normalized in
+            [0, 1] (default 0.5).
+        question_index (int): Zero-based index of the current question
+            within the session (default 0).
+        max_questions (int): Total number of questions in the session, used
+            to normalize session progress (default 10).
+
+    Returns:
+        dict: `confidence` (float), `hesitation` (dict), `rl_state` (dict),
+            `prosodic` (dict), `transcription` (dict), and `linguistic`
+            (dict) — the full set of intermediate results from this run.
+    """
     print("\nPrepAIred Audio Agent")
     print("-" * 40)
 
@@ -78,6 +101,17 @@ def run_pipeline(
 
 
 def _print_rl(hesitation: dict, rl: dict):
+    """Print the hesitation breakdown and RL state vector to stdout.
+
+    Args:
+        hesitation (dict): Output of `score_hesitation` (score plus
+            sub-components).
+        rl (dict): Output of `build_state_vector`, containing at least
+            `state_vector` and `recommended_action`.
+
+    Returns:
+        None: This function only prints; it does not return a value.
+    """
     s = rl["state_vector"]
     print("\nHesitation Breakdown")
     print(f"  Score          : {hesitation['hesitation_score']:.4f}")

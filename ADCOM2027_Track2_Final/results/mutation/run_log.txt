@@ -1,0 +1,23 @@
+BASELINE {'O1': False, 'replay_error': False, 'O2': False} 12.1 s
+MU01 KILLED {'O1': False, 'O2': False, 'O3': True, 'O4': False}
+MU02 KILLED {'O1': True, 'O2': False, 'O3': True, 'O4': False}
+MU03 PATTERN ERROR 0
+MU04 PATTERN ERROR 0
+MU05 PATTERN ERROR 0
+MU06 SURVIVED {'O1': False, 'O2': False, 'O3': False, 'O4': False}
+MU07 PATTERN ERROR 0
+MU08 KILLED {'O1': True, 'O2': True, 'O3': True, 'O4': True}
+MU09 KILLED {'O1': True, 'O2': True, 'O3': True, 'O4': True}
+MU10 SURVIVED {'O1': False, 'O2': False, 'O3': False, 'O4': False}
+MU11 KILLED {'O1': False, 'O2': True, 'O3': True, 'O4': True}
+MU12 SURVIVED {'O1': False, 'O2': False, 'O3': False, 'O4': False}
+MU13 KILLED {'O1': False, 'O2': True, 'O3': True, 'O4': False}
+MU14 KILLED {'O1': False, 'O2': True, 'O3': True, 'O4': True}
+MU15 PATTERN ERROR 0
+MU16 KILLED {'O1': False, 'O2': True, 'O3': True, 'O4': False}
+MU17 KILLED {'O1': False, 'O2': True, 'O3': True, 'O4': False}
+MU18 KILLED {'O1': False, 'O2': True, 'O3': True, 'O4': False}
+MU19 SURVIVED {'O1': False, 'O2': False, 'O3': False, 'O4': False}
+MU20 SURVIVED {'O1': False, 'O2': False, 'O3': False, 'O4': False}
+MU21 SURVIVED {'O1': False, 'O2': False, 'O3': False, 'O4': False}
+DONE

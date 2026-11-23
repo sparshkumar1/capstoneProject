@@ -2,9 +2,17 @@
 
 Fig. 1 (fig_p2_scatter): composite score vs human reference score for the 64 constructed answers.
   Source: research/results/paper2/paper2_case_level_results.csv (columns human_gold_score [field name],
-  model_score, category, gold_method). Groups follow the construction labels used for the AUROC analysis
-  (correct-reference: concise_correct, verbose_correct, suboptimal_correct, paraphrase; adversarial:
-  keyword_stuffed, misconception, contradictory, incorrect, verbose_wrong; partial_incomplete separate).
+  model_score, category, gold_method). This is a descriptive, full-coverage breakdown of all 64 cases into
+  three groups (correct-reference 22, partial 14, adversarial 28; 22+14+28=64) -- NOT the same grouping as
+  the separate Section V / Table V AUROC discrimination analysis, which deliberately excludes partial and
+  uses a binary correct-reference (22) vs. adversarial (34, "incorrect" included) split for that specific
+  test. The two groupings differ by exactly one category ("incorrect", n=6: here it is "partial" for this
+  descriptive plot; there it is "adversarial" for the discrimination test) because they answer different
+  questions -- this plot describes the whole dataset, Table V tests discriminative power on two of its three
+  slices. Fixed 2026-11-13: this figure previously mislabeled its own "partial" group as "(14)" while only
+  grouping 8 cases under it (partial_incomplete alone) and its "adversarial" group as "(34)" while the
+  descriptive, all-64-cases intent requires 28 -- summing to a self-contradictory 70 instead of 64. See
+  FINAL_SOURCE_OF_TRUTH_AND_RECONCILIATION.md, Figure 2 finding, for the full count-by-count derivation.
   Ring = adjudicated reference score (gold_method != mean_of_three). Spearman is recomputed only to
   print the stored value 0.3812 as a check; the plotted quantity is the raw scores.
 Fig. 2 (fig_p2_category_gap): per-category mean human reference vs mean composite (descriptive, n shown).
@@ -30,10 +38,10 @@ setup()
 
 # ---------- Fig 1: scatter
 GROUP = {**{c: "correct-reference" for c in ["concise_correct", "verbose_correct", "suboptimal_correct", "paraphrase"]},
-         **{c: "adversarial" for c in ["keyword_stuffed", "misconception", "contradictory", "incorrect", "verbose_wrong"]},
-         "partial_incomplete": "partial"}
+         **{c: "adversarial" for c in ["keyword_stuffed", "misconception", "contradictory", "verbose_wrong"]},
+         **{c: "partial" for c in ["partial_incomplete", "incorrect"]}}
 STY = {"correct-reference": (BLUE, "o", "correct-reference (22)"), "partial": ("#7f7f7f", "s", "partial (14)"),
-       "adversarial": (VERM, "^", "adversarial (34)")}
+       "adversarial": (VERM, "^", "adversarial (28)")}
 fig, ax = plt.subplots(figsize=(COL_W, 3.2))
 ax.plot([0, 1], [0, 1], color=GRID, lw=0.8, ls="--", zorder=0)
 for g, (c, m, lab) in STY.items():

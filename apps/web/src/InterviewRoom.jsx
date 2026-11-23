@@ -1,3 +1,4 @@
+import { Icon } from "./ui";
 import { useState, useContext, useEffect, useRef } from "react";
 import { SessionContext } from "./contexts";
 import MonacoEditor from "./MonacoEditor";
@@ -45,6 +46,9 @@ export default function InterviewRoom({ navigate }) {
   const [startStep, setStartStep]         = useState(0);
   const [followUpQueued, setFollowUpQueued] = useState(false);
   const [isFollowup, setIsFollowup]       = useState(false);
+  const [hint, setHint]                   = useState(null);
+  const [hintLoading, setHintLoading]     = useState(false);
+  const [hintUsedFor, setHintUsedFor]     = useState(null);
   const timerRef      = useRef(null);
   const feedbackRef   = useRef(null);
   const evalTimeoutRef = useRef(null);
@@ -71,6 +75,8 @@ export default function InterviewRoom({ navigate }) {
       setAwaitingNext(false);
       setTranscript("");
       setAudioAnalysis(null);
+      setHint(null);
+      setHintLoading(false);
       const followup = isFollowupPayload(payload);
       setFollowUpQueued(followup);
       setIsFollowup(followup);
@@ -125,6 +131,10 @@ export default function InterviewRoom({ navigate }) {
       }
     },
     onCodeResult: (payload) => setCodeResult(payload),
+    onHint: (payload) => {
+      setHintLoading(false);
+      setHint(payload?.text || "No hint available for this question.");
+    },
     onEnd: (payload) => {
       setPhase("done");
       clearInterval(timerRef.current);
@@ -133,6 +143,7 @@ export default function InterviewRoom({ navigate }) {
     },
     onError: (err) => {
       if (evalTimeoutRef.current) { clearTimeout(evalTimeoutRef.current); evalTimeoutRef.current = null; }
+      setHintLoading(false);
       if (phaseRef.current === "evaluating") {
         setPhase("question");
         setStageHint("Evaluation interrupted. Submit your answer again.");
@@ -199,6 +210,13 @@ export default function InterviewRoom({ navigate }) {
     } finally {
       setIsRunningCode(false);
     }
+  };
+
+  const handleRequestHint = () => {
+    if (!question || hintLoading || hintUsedFor === question.id || phase === "evaluating") return;
+    setHintLoading(true);
+    setHintUsedFor(question.id);
+    send("request_hint", { question_id: question.id });
   };
 
   const handleSkip = () => {
@@ -313,6 +331,15 @@ export default function InterviewRoom({ navigate }) {
           <div className={`conn-indicator ${connected ? "online" : "offline"}`}>
             {connected ? "Connected" : "Reconnecting…"}
           </div>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            onClick={() => {
+              if (window.confirm("Leave this interview? Answers already submitted are saved and will appear in your progress.")) navigate("dashboard");
+            }}
+          >
+            <Icon name="logout" size={14} /> Leave
+          </button>
         </div>
       </div>
 
@@ -336,6 +363,10 @@ export default function InterviewRoom({ navigate }) {
             isThinking={phase === "evaluating"}
             onSkip={handleSkip}
             connected={connected}
+            onHint={handleRequestHint}
+            hintLoading={hintLoading}
+            hintDisabled={!question || hintUsedFor === question?.id}
+            hint={hint}
           />
 
           {/* Rich Feedback Card */}

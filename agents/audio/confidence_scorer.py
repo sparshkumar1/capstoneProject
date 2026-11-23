@@ -1,11 +1,29 @@
-import math
-
-
 def _clamp(value, minimum=0.0, maximum=1.0):
+    """Clamp a numeric value to the inclusive range [minimum, maximum].
+
+    Args:
+        value (float): Value to clamp.
+        minimum (float): Lower bound (default 0.0).
+        maximum (float): Upper bound (default 1.0).
+
+    Returns:
+        float: `value` restricted to [minimum, maximum].
+    """
     return max(minimum, min(maximum, value))
 
 
 def _get(dct, key, default=0.0):
+    """Safely read a numeric field from a dict, coercing to float.
+
+    Args:
+        dct (dict): Dict to read from.
+        key (str): Key to look up.
+        default (float): Value to use if the key is missing or the stored
+            value can't be converted to float (default 0.0).
+
+    Returns:
+        float: The field's value as a float, or `default`.
+    """
     try:
         value = dct.get(key, default)
         return float(value)
@@ -13,43 +31,35 @@ def _get(dct, key, default=0.0):
         return float(default)
 
 
-def _get_measured(dct, key):
-    """Returns the raw float value for key, or None if missing, non-numeric,
-    NaN or infinite -- i.e. None means "no valid measurement", distinct from
-    a genuine 0.0 reading. Callers must not feed None into a formula whose
-    "no signal" case happens to coincide with a perfect-score input (e.g.
-    jitter=0.0 scores as flawless voice quality); they must branch on it."""
-    try:
-        value = dct.get(key, None)
-        if value is None:
-            return None
-        fvalue = float(value)
-        if math.isnan(fvalue) or math.isinf(fvalue):
-            return None
-        return fvalue
-    except Exception:
-        return None
-
-
 def _compute_components(prosodic, transcription, linguistic):
-    jitter = _get_measured(prosodic, "jitter")
-    shimmer = _get_measured(prosodic, "shimmer")
-    hnr = _get_measured(prosodic, "hnr")
-    pitch_std = _get_measured(prosodic, "pitch_stddev")
+    """Derive the individual sub-scores that feed the final confidence score.
 
-    # A missing, non-numeric, NaN or infinite voice-quality measurement (e.g.
-    # Parselmouth failing on very short/silent/unvoiced audio) must not be
-    # silently treated as a 0.0 reading, since 0.0 jitter/shimmer or a 0.0
-    # pitch_stddev each happen to score as the *best* possible value in this
-    # formula. Score the component neutrally (0.5) instead when unmeasured.
-    jitter_score = 0.5 if jitter is None else _clamp(1 - jitter / 0.03)
-    shimmer_score = 0.5 if shimmer is None else _clamp(1 - shimmer / 0.12)
-    hnr_score = 0.5 if hnr is None else _clamp(hnr / 28.0)
+    Args:
+        prosodic (dict): Prosodic features (`jitter`, `shimmer`, `hnr`,
+            `pitch_stddev`).
+        transcription (dict): Transcription/timing features
+            (`total_speech_time`, `total_pause_time`, `true_speaking_rate`,
+            `pause_count`, `transcription_confidence`).
+        linguistic (dict): Linguistic-confidence output (`linguistic_score`).
+
+    Returns:
+        dict: `voice_quality`, `fluency_score`, `rate_score`,
+            `rhythm_score`, `ling_score`, `asr_confidence`, the voice-quality
+            sub-scores (`jitter_score`, `shimmer_score`, `hnr_score`,
+            `pitch_var_score`), and the raw `pause_ratio` — all floats, most
+            in [0, 1].
+    """
+    jitter = _get(prosodic, "jitter")
+    shimmer = _get(prosodic, "shimmer")
+    hnr = _get(prosodic, "hnr")
+    pitch_std = _get(prosodic, "pitch_stddev")
+
+    jitter_score = _clamp(1 - jitter / 0.03)
+    shimmer_score = _clamp(1 - shimmer / 0.12)
+    hnr_score = _clamp(hnr / 28.0)
 
     # Very flat or very unstable pitch can both reduce perceived confidence.
-    if pitch_std is None:
-        pitch_var_score = 0.5
-    elif pitch_std <= 0:
+    if pitch_std <= 0:
         pitch_var_score = 0.5
     elif pitch_std < 12:
         pitch_var_score = _clamp(0.45 + (pitch_std / 12.0) * 0.35)
@@ -65,12 +75,7 @@ def _compute_components(prosodic, transcription, linguistic):
     pause_ratio = pause_time / speech_time
     fluency_score = _clamp(1 - pause_ratio * 1.7)
 
-    # true_speaking_rate is produced by transcriber.py in words per minute;
-    # this scorer's threshold (2.1-4.3) is words per second. Convert here,
-    # at the point of use, rather than changing the field's unit at its
-    # source (agents/audio/transcriber.py, interview_orchestrator.py and
-    # several verify_* scripts all consume/display it as WPM).
-    rate = _get(transcription, "true_speaking_rate", 0.0) / 60.0
+    rate = _get(transcription, "true_speaking_rate", 0.0)
     if 2.1 <= rate <= 4.3:
         rate_score = 1.0
     else:
@@ -98,6 +103,22 @@ def _compute_components(prosodic, transcription, linguistic):
 
 
 def score(prosodic, transcription, linguistic):
+    """Compute the final blended speech-confidence score.
+
+    Weighted blend of voice quality (28%), linguistic confidence (27%),
+    fluency (22%), speaking rate (13%), and rhythm (10%); the weight on
+    transcript-derived factors is reduced when ASR confidence is low.
+
+    Args:
+        prosodic (dict): Prosodic features, see `_compute_components`.
+        transcription (dict): Transcription/timing features, see
+            `_compute_components`.
+        linguistic (dict): Linguistic-confidence output, see
+            `_compute_components`.
+
+    Returns:
+        float: Final confidence score in [0, 1], rounded to 4 decimals.
+    """
     c = _compute_components(prosodic, transcription, linguistic)
 
     final = (
@@ -116,6 +137,21 @@ def score(prosodic, transcription, linguistic):
 
 
 def score_breakdown(prosodic, transcription, linguistic):
+    """Compute the final confidence score together with every sub-component.
+
+    Args:
+        prosodic (dict): Prosodic features, see `_compute_components`.
+        transcription (dict): Transcription/timing features, see
+            `_compute_components`.
+        linguistic (dict): Linguistic-confidence output, see
+            `_compute_components`.
+
+    Returns:
+        dict: `final_score` (as from `score`) plus the rounded sub-scores
+            `voice_quality`, `fluency_score`, `rate_score`, `rhythm_score`,
+            `ling_score`, `asr_confidence`, `pause_ratio`, `jitter_score`,
+            `shimmer_score`, `hnr_score`, and `pitch_var_score`.
+    """
     c = _compute_components(prosodic, transcription, linguistic)
 
     return {

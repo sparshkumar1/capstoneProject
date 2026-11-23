@@ -1,0 +1,78 @@
+{
+  "question_text": "Explain your logic to find the two indices in an array that sum up to a target value.",
+  "candidate_answer": "I would use a hash map to store seen values and check the complement in O(n) time.",
+  "expected_concepts": [
+    "single pass iteration through the array with constant-time hash map lookup at each step",
+    "map stores value-to-index mapping; complement existence is checked before inserting current value"
+  ],
+  "candidate_claims": [
+    "I would use a hash map to store seen values and check the complement in O(n) time."
+  ],
+  "correct_claims": [
+    "map stores value-to-index mapping; complement existence is checked before inserting current value",
+    "Arrays core principle"
+  ],
+  "incorrect_claims": [],
+  "missing_concepts": [
+    "single pass iteration through the array with constant-time hash map lookup at each step",
+    "Arrays core principle"
+  ],
+  "weakest_gap": "single pass iteration through the array with constant-time hash map lookup at each step",
+  "strong_points": [
+    "map stores value-to-index mapping; complement existence is checked before inserting current value",
+    "Arrays core principle"
+  ],
+  "reasoning_quality": 0.336,
+  "technical_correctness": 0.3878,
+  "concept_coverage": 0.5,
+  "relevance": 0.299,
+  "depth": 0.412,
+  "communication": 1.0,
+  "evaluation_confidence": 0.9,
+  "S1_semantic": 0.299,
+  "S2_structural": 0.5,
+  "reasoning_score": 0.336,
+  "bonus": 0.0,
+  "penalty": 0.0,
+  "mandatory_pass": false,
+  "final_score": 0.3878,
+  "question_score": 0.3878,
+  "grade": "Poor",
+  "concept_details": [
+    {
+      "concept_index": 0,
+      "matched_sentence": "I would use a hash map to store seen values and check the complement in O(n) time.",
+      "score": 0.154,
+      "covered": false,
+      "concept_text": "single pass iteration through the array with constant-time hash map lookup at each step"
+    },
+    {
+      "concept_index": 1,
+      "matched_sentence": "I would use a hash map to store seen values and check the complement in O(n) time.",
+      "score": 0.501,
+      "covered": true,
+      "concept_text": "map stores value-to-index mapping; complement existence is checked before inserting current value"
+    },
+    {
+      "concept_index": 2,
+      "matched_sentence": "I would use a hash map to store seen values and check the complement in O(n) time.",
+      "score": 0.264,
+      "covered": false,
+      "concept_text": "Arrays core principle"
+    },
+    {
+      "concept_index": 3,
+      "matched_sentence": "I would use a hash map to store seen values and check the complement in O(n) time.",
+      "score": 0.417,
+      "covered": true,
+      "concept_text": "Arrays core principle"
+    }
+  ],
+  "decision_source": "evaluator_cross_encoder",
+  "qid": "1",
+  "session_id": "ffd2192b-87eb-440b-a185-abcb7282efbe",
+  "timestamp": "2026-11-13T09:42:34.775275",
+  "topic": "Arrays",
+  "difficulty": 0.4,
+  "blooms_level": "Apply"
+}

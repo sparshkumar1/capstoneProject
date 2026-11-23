@@ -5,6 +5,22 @@ except ImportError:
 
 
 def format_output(final_score, prosodic, transcription, linguistic):
+    """Print a human-readable speech-confidence report to stdout.
+
+    Args:
+        final_score (float): Blended confidence score in [0, 1].
+        prosodic (dict): Prosodic/voice-quality features (jitter, shimmer,
+            HNR, pitch mean/stddev, signal RMS, etc.) as produced by the
+            audio-features pipeline.
+        transcription (dict): Transcription/fluency features (pause count,
+            pause/speech durations, speaking rate, alignment source, etc.).
+        linguistic (dict): Linguistic-confidence analysis (label,
+            linguistic_score, per-label scores, analysis source).
+
+    Returns:
+        None: This function only prints a formatted report; it does not
+            return a value.
+    """
     breakdown = score_breakdown(prosodic, transcription, linguistic)
 
     if final_score >= 0.70:

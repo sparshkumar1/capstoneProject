@@ -20,6 +20,23 @@ class SimulatedCandidate:
     }
 
     def __init__(self, skill: float = 0.6, seed: int = None, persona: str = "normal"):
+        """Create a simulated candidate with a fixed skill level and behavior persona.
+
+        Args:
+            skill (float): Underlying ability in [0, 1], clamped if outside
+                range (default 0.6).
+            seed (int | None): Seed for this candidate's private random
+                number generator, for reproducible simulated sessions.
+            persona (str): Behavior mode controlling how performance,
+                confidence, and hesitation are skewed; must be one of
+                `VALID_PERSONAS` (default "normal").
+
+        Returns:
+            None.
+
+        Raises:
+            ValueError: If `persona` is not in `VALID_PERSONAS`.
+        """
         self.skill = float(np.clip(skill, 0.0, 1.0))
         self.rng = np.random.RandomState(seed)
         if persona not in self.VALID_PERSONAS:
@@ -27,18 +44,42 @@ class SimulatedCandidate:
         self.persona = persona
 
     def _sigmoid_perf(self, skill, difficulty, slope=8.0, noise=0.05):
+        """Map skill vs. difficulty to a noisy performance probability.
+
+        Args:
+            skill (float): Candidate skill in [0, 1].
+            difficulty (float): Question difficulty in [0, 1].
+            slope (float): Sigmoid steepness; larger values make the
+                skill/difficulty gap more decisive (default 8.0).
+            noise (float): Standard deviation of Gaussian noise added before
+                clamping (default 0.05).
+
+        Returns:
+            float: Simulated performance score in [0, 1].
+        """
         x = (skill - difficulty) * slope
         p = 1.0 / (1.0 + np.exp(-x))
         p = np.clip(p + self.rng.normal(0, noise), 0.0, 1.0)
         return p
 
     def answer_question(self, difficulty: float, hint_applied: bool = False):
-        """
-        Returns a realistic tuple of signals.
-        - performance_score: main objective (0..1)
-        - confidence_score: correlated with perf but noisy
-        - hesitation: inverse of confidence + noise
-        - response_time: seconds (will be normalized by env)
+        """Simulate this candidate's answer to one question at a given difficulty.
+
+        Derives a base performance from the skill/difficulty sigmoid (boosted
+        slightly if a hint was applied), then derives correlated confidence,
+        hesitation, and response-time signals, and finally applies this
+        candidate's persona-specific adjustments (e.g. a "nervous_expert"
+        clamps performance high but hesitation also high).
+
+        Args:
+            difficulty (float): Question difficulty in [0, 1].
+            hint_applied (bool): Whether a hint was given before this
+                answer, which boosts performance slightly (default False).
+
+        Returns:
+            dict: `performance_score`, `confidence_score`, `hesitation`
+                (all floats in [0, 1]), and `response_time` (float seconds,
+                un-normalized — the caller/environment normalizes it).
         """
         # base performance (sigmoid)
         perf = self._sigmoid_perf(self.skill, difficulty, slope=8.0, noise=0.03)
