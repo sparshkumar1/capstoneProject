@@ -133,6 +133,7 @@ class InterviewOrchestrator:
         evaluator_fn=None,
         select_questions_fn=None,
     ):
+        """Initialize session state, sub-agent instances, and the question queue for one interview."""
         self._lock = asyncio.Lock()
 
         # Injected dependencies
@@ -827,6 +828,7 @@ class InterviewOrchestrator:
 
     @staticmethod
     def _is_followup_q(q: Optional[dict]) -> bool:
+        """True if `q` is a follow-up (by id prefix, parent linkage, source agent, or explicit flag)."""
         q = q or {}
         return bool(
             str(q.get("id", "")).startswith("fu_")
@@ -836,9 +838,11 @@ class InterviewOrchestrator:
         )
 
     def _primary_budget(self) -> int:
+        """Configured number of primary questions for this session (`num_questions`, default 15)."""
         return int(self._state.get("num_questions", 15))
 
     def _primary_budget_exhausted(self) -> bool:
+        """True once `main_questions_count` has reached the primary budget."""
         return int(self._state.get("main_questions_count", 0)) >= self._primary_budget()
 
     def _no_further_turn(self) -> bool:
@@ -928,6 +932,7 @@ class InterviewOrchestrator:
             return attempts[0]
 
         def key_fn(item):
+            """Sort key: (score, -missing_concept_count, attempt_number), highest score wins ties by fewer gaps then recency."""
             s = round(float(item.get("raw_score", item.get("validated_score", item.get("score", 0.0)))), 4)
             ev = item.get("eval_result") or item.get("feedback") or {}
             missing_count = len(ev.get("missing_concepts", []))

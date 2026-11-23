@@ -32,6 +32,7 @@ _faiss = None
 
 
 def _ensure_evaluator_assets_loaded():
+    """Lazily load the SBERT embedder, CrossEncoder, FAISS index, and vector metadata (once, on first use)."""
     global embedder, cross_encoder, index, vector_meta, _lookup, _faiss
 
     if _faiss is None:
@@ -60,6 +61,7 @@ def _ensure_evaluator_assets_loaded():
 
 
 def get_vectors_by_type(qid, vtype):
+    """Reconstruct all FAISS-indexed rubric vectors of `vtype` (concept/semantic/bonus/mistake/mandatory) for `qid`."""
     _ensure_evaluator_assets_loaded()
     indices = _lookup[(qid, vtype)]
     if not indices:
@@ -72,15 +74,18 @@ def get_vectors_by_type(qid, vtype):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def split_sentences(text):
+    """Split `text` into trimmed sentences on sentence-ending punctuation, dropping empty fragments."""
     return [s.strip() for s in re.split(r'(?<=[.!?])\s+', text) if s.strip()]
 
 
 def _cosine_similarity(a, b):
+    """Pairwise cosine similarity between rows of `a` and rows of `b`."""
     from sklearn.metrics.pairwise import cosine_similarity
     return cosine_similarity(a, b)
 
 
 def embed(text_list):
+    """Encode `text_list` with the SBERT embedder and L2-normalize the resulting vectors (float32)."""
     _ensure_evaluator_assets_loaded()
     emb = embedder.encode(text_list).astype("float32")
     _faiss.normalize_L2(emb)
@@ -95,7 +100,7 @@ def embed(text_list):
 CONCEPT_THRESHOLD = 0.30   # single source of truth
 
 def concept_detection(candidate, rubric):
-
+    """S2 concept-coverage score: fraction of rubric concept vectors matched above `CONCEPT_THRESHOLD` by any candidate sentence, plus per-concept match details."""
     sentences = split_sentences(candidate)
     if not sentences:
         return 0.0, []
@@ -134,7 +139,7 @@ def concept_detection(candidate, rubric):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def semantic_score(candidate, rubric):
-
+    """S1 semantic-similarity score: mean of each rubric semantic vector's best cosine match among candidate sentences."""
     sentences = split_sentences(candidate)
     if not sentences:
         return 0.0
@@ -158,6 +163,7 @@ def semantic_score(candidate, rubric):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def cross_encoder_verification(qn, candidate, rubric):
+    """R reasoning score: CrossEncoder-predicted entailment between (question+reference answer) and the candidate's answer, rescaled from its ~0.20-0.90 raw range to [0,1]."""
     ref_ans = str(rubric.get("answer") or rubric.get("reference_answer") or "")
     reference = (qn + " " + ref_ans).strip()
     raw_score = float(cross_encoder.predict([(reference, candidate)])[0])
@@ -178,7 +184,7 @@ BONUS_WEIGHT    = 0.03
 BONUS_THRESHOLD = 0.50
 
 def bonus_score(candidate, rubric):
-
+    """Extra credit for matching advanced/bonus rubric concepts, ignoring sentences that negate them (e.g. "avoid X")."""
     sentences = split_sentences(candidate)
     if not sentences:
         return 0.0
@@ -212,7 +218,7 @@ MISTAKE_WEIGHT    = 0.07
 PENALTY_CAP       = 0.30
 
 def mistake_penalty(candidate, rubric, reasoning_score, s2_score):
-
+    """Deduction (capped at `PENALTY_CAP`) for semantic matches to known rubric mistakes, weak reasoning/coverage, or hesitation language paired with weak content."""
     penalty   = 0.0
     sentences = split_sentences(candidate)
     if not sentences:
@@ -260,7 +266,7 @@ def mistake_penalty(candidate, rubric, reasoning_score, s2_score):
 MANDATORY_THRESHOLD = 0.40
 
 def mandatory_check(candidate, rubric):
-
+    """True if the candidate's answer covers at least one rubric mandatory-concept vector above `MANDATORY_THRESHOLD`."""
     sentences = split_sentences(candidate)
     if not sentences:
         return False
@@ -348,6 +354,7 @@ def _detect_misconceptions(candidate, rubric):
 
 
 def evaluate(qn, candidate, rubric):
+    """Score a candidate's answer against a rubric: composite 0.15*S1 + 0.35*S2_eff + 0.50*R (R-dampened S2, mandatory-cap, bonus/penalty applied), with grade and diagnostic breakdown."""
     _ensure_evaluator_assets_loaded()
 
     candidate_text = str(candidate).strip()
@@ -477,6 +484,7 @@ with open(BASE_DIR / "assets" / "rubrics.json", encoding="utf-8") as f:
 
 
 def get_rubric(qid):
+    """Look up the loaded rubric matching `qid`, or None if not found."""
     qid_norm = str(qid)
     for r in rubrics:
         if str(r.get("qid")) == qid_norm:
@@ -565,11 +573,16 @@ except ImportError:
     FLASK_AVAILABLE = False
 
     class _DummyFlask:
+        """No-op stand-in for `Flask` so this module still imports when Flask isn't installed."""
+
         def __init__(self, *_args, **_kwargs):
+            """Accept and discard Flask app constructor args."""
             pass
 
         def route(self, *_args, **_kwargs):
+            """No-op stand-in for `Flask.route`: returns a decorator that leaves the function unchanged."""
             def _decorator(func):
+                """Return `func` unchanged (route registration is a no-op without Flask)."""
                 return func
             return _decorator
 
@@ -577,6 +590,7 @@ except ImportError:
     request = None
 
     def jsonify(payload):
+        """No-op stand-in for `flask.jsonify`: returns `payload` unchanged."""
         return payload
 
 app = Flask(__name__) if FLASK_AVAILABLE else Flask()

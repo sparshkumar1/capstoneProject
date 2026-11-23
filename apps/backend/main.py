@@ -113,6 +113,7 @@ elif EVALUATOR_READY:
 
 
 def _run_integrated_evaluator(transcript: str, question: dict) -> Optional[dict]:
+    """Score a transcript against `question`'s rubric (embedded, looked up by id/parent id, or synthesized), or None if the evaluator isn't loaded."""
     if not EVALUATOR_READY or _evaluator_eval is None:
         return None
 
@@ -221,6 +222,7 @@ _WARMUP_ACTIVE = False
 
 
 def audio_status() -> Dict[str, Any]:
+    """Current state of the lazily-loaded audio analysis stack, for diagnostics/polling."""
     return {"state": _AUDIO_STATE, "error": _AUDIO_ERROR, "ready": AUDIO_ANALYSIS_READY,
             "warmup_seconds": dict(WARMUP_TIMINGS)}
 
@@ -247,6 +249,7 @@ def _ensure_audio_analysis_imports(timeout: Optional[float] = None) -> bool:
 
 
 def _import_audio_analysis() -> bool:
+    """Import and publish the audio analysis module functions, setting `AUDIO_ANALYSIS_READY` once all succeed."""
     global extract_prosodic_features
     global audio_confidence_score
     global audio_score_breakdown
@@ -324,6 +327,7 @@ def _warm_up_backend() -> None:
 
 @asynccontextmanager
 async def _lifespan(_app):
+    """FastAPI lifespan hook: kick off background warm-up on startup, nothing to do on shutdown."""
     global _WARMUP_ACTIVE
     if os.getenv("PREPAIRED_DISABLE_WARMUP", "0") != "1":
         _WARMUP_ACTIVE = True
@@ -365,18 +369,21 @@ _ADMIN_TOKENS: Dict[str, float] = {}  # token -> expiry (epoch seconds)
 
 
 def _issue_admin_token() -> str:
+    """Mint a new admin session token (random, TTL `ADMIN_TOKEN_TTL_S`) and register its expiry."""
     token = secrets.token_urlsafe(32)
     _ADMIN_TOKENS[token] = time.time() + ADMIN_TOKEN_TTL_S
     return token
 
 
 def _check_admin_password(candidate_pass: str) -> bool:
+    """Constant-time check of `candidate_pass` against `ADMIN_PASSWORD` (always False if no password is configured)."""
     if not ADMIN_PASSWORD:
         return False
     return hmac.compare_digest(candidate_pass or "", ADMIN_PASSWORD)
 
 
 async def require_admin_token(x_admin_token: Optional[str] = Header(default=None)):
+    """FastAPI dependency: raise 401 unless `X-Admin-Token` names a current, unexpired admin session."""
     expiry = _ADMIN_TOKENS.get(x_admin_token or "")
     if expiry is None or expiry < time.time():
         _ADMIN_TOKENS.pop(x_admin_token or "", None)
@@ -488,10 +495,12 @@ QUESTION_BANK = {
 
 
 def _normalize_topic_key(value: str) -> str:
+    """Lowercase `value` and strip non-alphanumeric characters, for use as a topic dict key."""
     return "".join(ch for ch in (value or "").lower() if ch.isalnum())
 
 
 def _difficulty_to_level(value: Any) -> int:
+    """Map a difficulty value (0-1 float or already a 1-5 level) to an integer level in [1, 5]."""
     try:
         v = float(value)
     except (TypeError, ValueError):
@@ -515,6 +524,7 @@ _text_similarity = _lexical_token_overlap
 
 
 def _load_question_bank_from_qns() -> Optional[Dict[str, List[dict]]]:
+    """Load and normalize the question bank from `qns.json` (merging matching rubrics, translating each code question's test-case schema), grouped by topic key."""
     root = Path(__file__).resolve().parent.parent.parent
     candidates = [
         root / "data" / "questions" / "qns.json",
@@ -782,6 +792,7 @@ def select_questions(
 
 def _analyze_audio_confidence(audio_path: str, transcript_text: str = "", session_id: str = "",
                               transcription: Optional[dict] = None) -> Optional[dict]:
+    """Run the audio pipeline (prosody, linguistic confidence, hesitation, RL state vector) on `audio_path` and return the combined confidence breakdown, or None if the audio stack isn't ready."""
     if not _ensure_audio_analysis_imports():
         return None
 
@@ -851,6 +862,7 @@ def _analyze_audio_confidence(audio_path: str, transcript_text: str = "", sessio
 
 # ── Session dict shim (handles both InterviewOrchestrator and legacy dicts)
 def _get_session_dict(session_id: str) -> dict:
+    """Return `session_id`'s session as a plain dict, whether it's stored as an `InterviewOrchestrator` or a legacy dict."""
     obj = SESSIONS.get(session_id)
     if obj is None:
         return {}
@@ -861,6 +873,7 @@ def _get_session_dict(session_id: str) -> dict:
 
 @app.get("/health")
 async def health():
+    """Liveness/readiness check: pipeline and audio-stack status for monitoring and the frontend."""
     audio = audio_status()
     # HTTP 200 always (liveness); `status` says whether required functionality is usable.
     if audio["state"] == "failed":
@@ -926,6 +939,7 @@ def _with_focus_questions(base_select, focus_ids: List[str]):
     state = {"used": False}
 
     def _select(c_topics, dsa_topics, num, difficulty=2, exclude_ids=None, candidate_state=None):
+        """Delegate to `base_select`, then pin `focus_ids` to the front of the result on the first (unexcluded) call only."""
         base = base_select(c_topics, dsa_topics, num, difficulty, exclude_ids=exclude_ids, candidate_state=candidate_state)
         if state["used"] or exclude_ids is not None:
             return base
@@ -956,6 +970,7 @@ async def candidate_dashboard(candidate_id: str, tz_offset_minutes: int = 0):
 
 @app.get("/api/candidates/{candidate_id}/analytics")
 async def candidate_analytics(candidate_id: str, tz_offset_minutes: int = 0):
+    """Detailed analytics (per-topic/trend breakdown) for one candidate, derived from stored attempts."""
     try:
         from services.storage.analytics import build_analytics
         return build_analytics(candidate_id, _question_lookup(), tz_offset_minutes=int(tz_offset_minutes))
@@ -965,6 +980,7 @@ async def candidate_analytics(candidate_id: str, tz_offset_minutes: int = 0):
 
 @app.get("/api/candidates/{candidate_id}/weakness-map")
 async def candidate_weakness_map(candidate_id: str):
+    """Per-topic weakness map for one candidate, derived from stored attempts."""
     try:
         from services.storage.analytics import build_weakness_map
         return build_weakness_map(candidate_id, _question_lookup())
@@ -974,6 +990,7 @@ async def candidate_weakness_map(candidate_id: str):
 
 @app.get("/api/candidates/{candidate_id}/compare/{question_id}")
 async def candidate_compare_attempts(candidate_id: str, question_id: str):
+    """Side-by-side comparison of a candidate's attempts on one question."""
     try:
         from services.storage.analytics import build_compare
         return build_compare(candidate_id, question_id, _question_lookup())
@@ -1012,6 +1029,7 @@ async def create_candidate_bookmark(candidate_id: str, req: BookmarkRequest):
 
 @app.delete("/api/candidates/{candidate_id}/bookmarks/{question_id}")
 async def delete_candidate_bookmark(candidate_id: str, question_id: str):
+    """Remove a candidate's bookmark for `question_id`, or 404 if it wasn't bookmarked."""
     try:
         from services.storage.database import remove_bookmark
         removed = remove_bookmark(candidate_id, question_id)
@@ -1028,6 +1046,7 @@ async def delete_candidate_bookmark(candidate_id: str, question_id: str):
 
 @app.get("/api/candidates/{candidate_id}/study-goal")
 async def get_candidate_study_goal(candidate_id: str):
+    """Fetch a candidate's server-synced study goal, or sensible defaults if none is saved."""
     try:
         from services.storage.database import get_study_goal
         goal = get_study_goal(candidate_id)
@@ -1038,6 +1057,7 @@ async def get_candidate_study_goal(candidate_id: str):
 
 @app.put("/api/candidates/{candidate_id}/study-goal")
 async def put_candidate_study_goal(candidate_id: str, req: StudyGoalRequest):
+    """Save (create or overwrite) a candidate's study goal."""
     try:
         from services.storage.database import save_study_goal
         return save_study_goal(candidate_id, req.target_date, req.minutes_per_day, req.plan)
@@ -1080,8 +1100,7 @@ async def create_session(req: CreateSessionRequest):
 
     if _INTERVIEW_ORCHESTRATOR_READY and InterviewOrchestrator is not None:
         def _build_session():
-            # Runs in a worker thread: constructing the orchestrator can import the RL stack on a
-            # cold start, which must not freeze the event loop for other requests.
+            """Construct the `InterviewOrchestrator` for this session (run in a worker thread so a cold-start RL import doesn't freeze the event loop)."""
             orch = InterviewOrchestrator(
                 session_id=sid,
                 candidate=candidate,
@@ -1145,6 +1164,7 @@ async def get_full_candidate_history(candidate_id: str):
 
 @app.get("/api/sessions/{session_id}")
 async def get_session(session_id: str):
+    """Current session state (minus the full question list) for `session_id`."""
     if session_id not in SESSIONS:
         raise HTTPException(404, "Session not found")
     s = _get_session_dict(session_id)
@@ -1153,6 +1173,7 @@ async def get_session(session_id: str):
 
 @app.post("/api/sessions/{session_id}/end")
 async def end_session(session_id: str):
+    """End the session, generate and store its final report, and return the report id."""
     if session_id not in SESSIONS:
         raise HTTPException(404, "Session not found")
     obj = SESSIONS[session_id]
@@ -1164,6 +1185,7 @@ async def end_session(session_id: str):
 @app.get("/api/reports/{session_id}")
 @app.get("/api/sessions/{session_id}/report")
 async def get_report(session_id: str):
+    """Look up a report by report id or by the session id it's linked to."""
     # Try direct report lookup by report UUID
     if session_id in REPORTS:
         return REPORTS[session_id]
@@ -1250,6 +1272,7 @@ def _render_report_pdf(r: dict) -> bytes:
     story.append(score_table)
 
     def bullet_section(title: str, items: list):
+        """Append a titled bullet list to `story`, or nothing if `items` is empty."""
         if not items:
             return
         story.append(Paragraph(title, h2))
@@ -1503,6 +1526,7 @@ def _admin_sessions_merged() -> list[dict]:
 
 @app.get("/api/admin/sessions", dependencies=[Depends(require_admin_token)])
 async def admin_sessions(filter: str = "all", sort: str = "date_desc"):
+    """Admin view: all sessions (live + persisted, merged), sorted by date or score."""
     sessions_list = _admin_sessions_merged()
 
     # Sort
@@ -1515,6 +1539,7 @@ async def admin_sessions(filter: str = "all", sort: str = "date_desc"):
 
 @app.get("/api/admin/stats", dependencies=[Depends(require_admin_token)])
 async def admin_stats():
+    """Admin dashboard aggregates: totals, average score/duration, active-today count, and pass rate."""
     all_s = _admin_sessions_merged()
     total = len(all_s)
     scores = [s.get("overall_score", 0) for s in all_s if s.get("overall_score") is not None]
@@ -1536,6 +1561,7 @@ async def admin_stats():
 
 @app.get("/api/admin/sessions/{session_id}", dependencies=[Depends(require_admin_token)])
 async def admin_session_detail(session_id: str):
+    """Full admin detail for one session: live state+report if still in memory, else the persisted record."""
     if session_id in SESSIONS:
         s = _get_session_dict(session_id)
         cand = CANDIDATES.get(s.get("candidate_id", ""), {})
@@ -1618,12 +1644,14 @@ async def interview_ws(websocket: WebSocket, session_id: str):
     orch: InterviewOrchestrator = SESSIONS[session_id]
 
     async def send(type_: str, payload: dict):
+        """Send a `{type, payload}` WebSocket message, swallowing errors if the client has disconnected."""
         try:
             await websocket.send_json({"type": type_, "payload": payload})
         except Exception:
             pass
 
     async def dispatch_answer(result: dict):
+        """Fan out an evaluated-answer result over the socket as feedback/hint/difficulty_update/session_end messages."""
         await send("feedback", result["feedback"])
         if result.get("hint"):
             await send("hint", {"text": result["hint"]})
