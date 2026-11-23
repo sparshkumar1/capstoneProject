@@ -1,0 +1,153 @@
+{
+ "followup_turns": 122,
+ "role_invocations": {
+  "DifficultyPolicy(PPO+guardrails)": 186,
+  "Evaluator+Validator": 186,
+  "FeedbackAgent": 186,
+  "FollowUpAgent": 186,
+  "Hub:question-dispatch": 194,
+  "Hub:report": 8,
+  "Hub:state-commit": 186,
+  "QuestionSelector": 123
+ },
+ "sessions": 8,
+ "turns": 186,
+ "writes": {
+  "answers": {
+   "Hub:state-commit": 186
+  },
+  "attempt_counts": {
+   "Hub:other": 186
+  },
+  "baseline_complete": {
+   "DifficultyPolicy(PPO+guardrails)": 8
+  },
+  "concepts_mastered": {
+   "Hub:state-commit": 31
+  },
+  "concepts_missed": {
+   "Hub:state-commit": 57
+  },
+  "consecutive_followups": {
+   "Hub:state-commit": 175
+  },
+  "current_difficulty": {
+   "DifficultyPolicy(PPO+guardrails)": 123
+  },
+  "difficulty_history": {
+   "DifficultyPolicy(PPO+guardrails)": 123
+  },
+  "ended_at": {
+   "Hub:report": 8
+  },
+  "followup_history": {
+   "Hub:state-commit": 122
+  },
+  "followups_count": {
+   "Hub:state-commit": 122
+  },
+  "guardrail_applied": {
+   "DifficultyPolicy(PPO+guardrails)": 106
+  },
+  "last_decision_source": {
+   "DifficultyPolicy(PPO+guardrails)": 118
+  },
+  "last_rl_observation": {
+   "DifficultyPolicy(PPO+guardrails)": 145
+  },
+  "last_time_norm": {
+   "Hub:other": 8
+  },
+  "last_topic": {
+   "Hub:state-commit": 64
+  },
+  "main_questions_count": {
+   "Hub:state-commit": 64
+  },
+  "misconceptions": {
+   "Hub:state-commit": 10
+  },
+  "next_question_type": {
+   "DifficultyPolicy(PPO+guardrails)": 106
+  },
+  "overall_score": {
+   "Hub:report": 8
+  },
+  "progress": {
+   "DifficultyPolicy(PPO+guardrails)": 8
+  },
+  "question_history": {
+   "Hub:state-commit": 186
+  },
+  "question_index": {
+   "Hub:question-dispatch": 178
+  },
+  "question_queue": {
+   "FollowUpAgent": 122
+  },
+  "raw_rl_action": {
+   "DifficultyPolicy(PPO+guardrails)": 41
+  },
+  "raw_scores": {
+   "Hub:state-commit": 186
+  },
+  "raw_technical_score": {
+   "Hub:report": 8
+  },
+  "recent_performance": {
+   "Hub:state-commit": 180
+  },
+  "report_id": {
+   "Hub:report": 8
+  },
+  "response_timing": {
+   "Hub:state-commit": 186
+  },
+  "rl_enabled": {
+   "DifficultyPolicy(PPO+guardrails)": 8
+  },
+  "rl_last_action": {
+   "DifficultyPolicy(PPO+guardrails)": 121
+  },
+  "rl_perf_history": {
+   "DifficultyPolicy(PPO+guardrails)": 150
+  },
+  "rl_source": {
+   "DifficultyPolicy(PPO+guardrails)": 8
+  },
+  "rl_status": {
+   "DifficultyPolicy(PPO+guardrails)": 16
+  },
+  "scores": {
+   "Hub:state-commit": 186
+  },
+  "status": {
+   "Hub:other": 8,
+   "Hub:report": 8
+  },
+  "strengths": {
+   "Hub:state-commit": 3
+  },
+  "technical_performance": {
+   "Hub:state-commit": 169
+  },
+  "timing_modifiers": {
+   "Hub:state-commit": 186
+  },
+  "timing_scores": {
+   "Hub:state-commit": 186
+  },
+  "topic_counts": {
+   "Hub:state-commit": 186
+  },
+  "topic_performance": {
+   "Hub:state-commit": 186
+  },
+  "verbal_streak": {
+   "Hub:state-commit": 186
+  },
+  "weaknesses": {
+   "Hub:state-commit": 50
+  }
+ }
+}

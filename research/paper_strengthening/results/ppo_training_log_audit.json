@@ -1,0 +1,128 @@
+{
+  "provenance": {
+    "path": "rl\\env\\training_logs\\interview_data.csv",
+    "git_tracked": false,
+    "gitignored": true,
+    "total_rows": 295291,
+    "unique_personas": [
+      "normal"
+    ],
+    "unique_skills": [
+      0.6
+    ],
+    "episodes_inferred_from_step_resets": 19857,
+    "combined_5_seed_frozen_training_timesteps_for_comparison": 122880,
+    "note": "Row count far exceeds the 5 frozen seeds' combined recorded training timesteps -- this log almost certainly spans more runs than the 5 that were kept as final checkpoints. It cannot be attributed to a specific seed. It is treated here purely as evidence of code behavior under the one training candidate configuration (skill=0.6, persona='normal') that X3_0B_STATIC_CODE_NOTE.md (finding N1, static code reading) already established as the sole training distribution.",
+    "header_bug_note": "The CSV header names column 9 'time_norm', but InterviewEnv.step()'s writer actually puts the 'progress' variable (current_step / max_steps) there, not a response-time-normalized value. Verified: this column's observed values are exact multiples of 1/15 (0.0667, 0.1333, ..., 1.0), consistent with max_steps=15 and progress = step/15, not with any time-based quantity. This is a label/content mismatch in the frozen logger itself, harmless to training (the real progress variable is used correctly inside step()), but relevant to anyone reading this column by its header name."
+  },
+  "oracle_action_distribution": {
+    "Same": 199697,
+    "Harder": 54990,
+    "Easier": 40604
+  },
+  "oracle_action_distribution_share": {
+    "Same": 0.6763,
+    "Harder": 0.1862,
+    "Easier": 0.1375
+  },
+  "ppo_raw_proposal_distribution": {
+    "Same": 152322,
+    "Harder": 85339,
+    "Easier": 57630
+  },
+  "final_action_distribution": {
+    "Same": 188664,
+    "Harder": 62026,
+    "Easier": 44601
+  },
+  "guardrail_activation_counts": {
+    "none": 114320,
+    "g5_partial_same": 91095,
+    "g2_anxiety_stabilizer_same": 52043,
+    "g1_overload_protection": 14977,
+    "g6_strong_harder": 13831,
+    "g4_stuck_easier": 9025
+  },
+  "guardrail_coverage_overall": 0.6129,
+  "forced_action_rate_overall": 0.6129,
+  "g6_strong_harder": {
+    "activations": 13831,
+    "share_of_all_rows": 0.0468,
+    "forced_action_rate_within_g6": 1.0,
+    "note": "g6 fired 0 times in the 5-persona P3 evaluation replay (see the companion guardrail-coverage report); it fires here at a non-trivial rate under the training-matched (skill=0.6, normal) candidate."
+  },
+  "oracle_vs_ppo_raw_confusion_ALL_ROWS": {
+    "Easier": {
+      "Easier": 16362,
+      "Same": 31157,
+      "Harder": 10111
+    },
+    "Same": {
+      "Easier": 16843,
+      "Same": 125135,
+      "Harder": 10344
+    },
+    "Harder": {
+      "Easier": 7399,
+      "Same": 43405,
+      "Harder": 34535
+    }
+  },
+  "harder_signal_quality": {
+    "rows_where_oracle_wants_harder": 54990,
+    "of_those_final_action_is_harder_too": 39652,
+    "of_those_final_action_is_NOT_harder": 15338,
+    "share_correctly_resolved_to_harder": 0.7211,
+    "mean_reward_when_oracle_wants_harder_and_final_is_harder": 0.552,
+    "mean_decision_component_when_oracle_wants_harder_and_final_is_harder": 1.0,
+    "mean_reward_when_oracle_wants_harder_but_final_is_NOT_harder": -0.6755,
+    "overall_mean_reward_all_rows": 0.3903,
+    "guardrail_id_breakdown_when_oracle_wants_harder_but_missed": {
+      "none": 15335,
+      "g2_anxiety_stabilizer_same": 3
+    }
+  },
+  "forced_action_column_semantics_note": "forced_action==True whenever guardrail_id != 'none' (i.e. it means 'a guardrail rule matched', not 'the guardrail changed the action') -- confirmed: forced_action_rate_overall equals guardrail_coverage_overall exactly (0.6129 == 0.6129). The action-changing rate used below is the separately-computed pre_action != action indicator, matching the 'override' definition used in the companion guardrail-coverage-decomposition report.",
+  "action_changed_rate_overall": 0.2258,
+  "action_changed_rate_given_any_guardrail_fired": 0.3684,
+  "action_changed_rate_by_rule": {
+    "g1_overload_protection": {
+      "changed": 6973,
+      "activations": 14977,
+      "changed_share": 0.4656
+    },
+    "g2_anxiety_stabilizer_same": {
+      "changed": 17439,
+      "activations": 52043,
+      "changed_share": 0.3351
+    },
+    "g4_stuck_easier": {
+      "changed": 6679,
+      "activations": 9025,
+      "changed_share": 0.7401
+    },
+    "g5_partial_same": {
+      "changed": 30465,
+      "activations": 91095,
+      "changed_share": 0.3344
+    },
+    "g6_strong_harder": {
+      "changed": 5117,
+      "activations": 13831,
+      "changed_share": 0.37
+    }
+  },
+  "g6_and_correct_harder_proposals": {
+    "g6_total_activations": 13831,
+    "g6_action_changed_count": 5117,
+    "g6_pre_action_distribution": {
+      "Harder": 8714,
+      "Easier": 2587,
+      "Same": 2530
+    },
+    "rows_where_oracle_wants_harder_and_ppo_raw_already_proposes_harder": 34535,
+    "of_those_any_guardrail_changed_it_away_from_harder": 0,
+    "of_those_g6_fired_redundantly_no_change_needed": 8714,
+    "interpretation": "No guardrail ever blocks or changes away from a correct Harder proposal in this log (0 of 34,535 such rows have action != pre_action). g6 fires concurrently with an already-correct Harder proposal in a large share of cases (redundant reconfirmation, the same pattern g5 showed at evaluation time: 0% override rate), and separately forces Harder in the ~37% of its activations where PPO's raw proposal was NOT already Harder (a genuine correction toward the oracle's target, not a block)."
+  }
+}

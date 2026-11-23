@@ -1,0 +1,888 @@
+{
+  "gate_condition": "perf>=0.90 and conf<0.40 and hes>0.60 (verbatim x3a_lib.shield() G6 nervous clause)",
+  "pooled_by_condition": [
+    {
+      "condition": "ConditionA_gated",
+      "n": 600,
+      "mae_mean": 0.4192424242424242,
+      "mae_sd": 0.3415149834636999,
+      "oracle_agreement_mean": 0.6086666666666667
+    },
+    {
+      "condition": "B0_primary_gated",
+      "n": 600,
+      "mae_mean": 0.401060606060606,
+      "mae_sd": 0.33538593232220204,
+      "oracle_agreement_mean": 0.668
+    },
+    {
+      "condition": "B2_primary_gated",
+      "n": 600,
+      "mae_mean": 0.27348484848484844,
+      "mae_sd": 0.22693788465005102,
+      "oracle_agreement_mean": 0.6550000000000001
+    }
+  ],
+  "per_seed_by_condition": [
+    {
+      "condition": "ConditionA_gated",
+      "training_seed": 42,
+      "n": 120,
+      "mae_mean": 0.40075757575757576,
+      "mae_sd": 0.33340133603865474,
+      "oracle_agreement_mean": 0.5966666666666666
+    },
+    {
+      "condition": "ConditionA_gated",
+      "training_seed": 123,
+      "n": 120,
+      "mae_mean": 0.4272727272727272,
+      "mae_sd": 0.3450955072018601,
+      "oracle_agreement_mean": 0.5841666666666666
+    },
+    {
+      "condition": "ConditionA_gated",
+      "training_seed": 456,
+      "n": 120,
+      "mae_mean": 0.425,
+      "mae_sd": 0.3435077721561485,
+      "oracle_agreement_mean": 0.5858333333333333
+    },
+    {
+      "condition": "ConditionA_gated",
+      "training_seed": 789,
+      "n": 120,
+      "mae_mean": 0.4272727272727272,
+      "mae_sd": 0.3450955072018601,
+      "oracle_agreement_mean": 0.6541666666666667
+    },
+    {
+      "condition": "ConditionA_gated",
+      "training_seed": 999,
+      "n": 120,
+      "mae_mean": 0.4159090909090909,
+      "mae_sd": 0.33957567509828696,
+      "oracle_agreement_mean": 0.6225
+    },
+    {
+      "condition": "B0_primary_gated",
+      "training_seed": 42,
+      "n": 120,
+      "mae_mean": 0.38409090909090904,
+      "mae_sd": 0.32755932316580066,
+      "oracle_agreement_mean": 0.7349999999999999
+    },
+    {
+      "condition": "B0_primary_gated",
+      "training_seed": 123,
+      "n": 120,
+      "mae_mean": 0.41439393939393937,
+      "mae_sd": 0.3406151931807036,
+      "oracle_agreement_mean": 0.6458333333333334
+    },
+    {
+      "condition": "B0_primary_gated",
+      "training_seed": 456,
+      "n": 120,
+      "mae_mean": 0.39924242424242423,
+      "mae_sd": 0.334391399257148,
+      "oracle_agreement_mean": 0.6725
+    },
+    {
+      "condition": "B0_primary_gated",
+      "training_seed": 789,
+      "n": 120,
+      "mae_mean": 0.38409090909090904,
+      "mae_sd": 0.32755932316580066,
+      "oracle_agreement_mean": 0.7275000000000001
+    },
+    {
+      "condition": "B0_primary_gated",
+      "training_seed": 999,
+      "n": 120,
+      "mae_mean": 0.42348484848484846,
+      "mae_sd": 0.34457540313858376,
+      "oracle_agreement_mean": 0.5591666666666667
+    },
+    {
+      "condition": "B2_primary_gated",
+      "training_seed": 42,
+      "n": 120,
+      "mae_mean": 0.2651515151515151,
+      "mae_sd": 0.21691022547054412,
+      "oracle_agreement_mean": 0.7
+    },
+    {
+      "condition": "B2_primary_gated",
+      "training_seed": 123,
+      "n": 120,
+      "mae_mean": 0.28106060606060607,
+      "mae_sd": 0.2360416902212355,
+      "oracle_agreement_mean": 0.6075
+    },
+    {
+      "condition": "B2_primary_gated",
+      "training_seed": 456,
+      "n": 120,
+      "mae_mean": 0.2674242424242424,
+      "mae_sd": 0.21458391839766186,
+      "oracle_agreement_mean": 0.6466666666666667
+    },
+    {
+      "condition": "B2_primary_gated",
+      "training_seed": 789,
+      "n": 120,
+      "mae_mean": 0.2651515151515151,
+      "mae_sd": 0.21627427914576056,
+      "oracle_agreement_mean": 0.7133333333333334
+    },
+    {
+      "condition": "B2_primary_gated",
+      "training_seed": 999,
+      "n": 120,
+      "mae_mean": 0.28863636363636364,
+      "mae_sd": 0.2479009677414805,
+      "oracle_agreement_mean": 0.6075
+    }
+  ],
+  "lucky_guesser_cell_by_condition_and_seed": [
+    {
+      "condition": "ConditionA_gated",
+      "training_seed": 42,
+      "n": 5,
+      "mae_mean": 1.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9800000000000001
+    },
+    {
+      "condition": "ConditionA_gated",
+      "training_seed": 123,
+      "n": 5,
+      "mae_mean": 1.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9800000000000001
+    },
+    {
+      "condition": "ConditionA_gated",
+      "training_seed": 456,
+      "n": 5,
+      "mae_mean": 1.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9800000000000001
+    },
+    {
+      "condition": "ConditionA_gated",
+      "training_seed": 789,
+      "n": 5,
+      "mae_mean": 1.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9800000000000001
+    },
+    {
+      "condition": "ConditionA_gated",
+      "training_seed": 999,
+      "n": 5,
+      "mae_mean": 1.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9800000000000001
+    },
+    {
+      "condition": "B0_primary_gated",
+      "training_seed": 42,
+      "n": 5,
+      "mae_mean": 1.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9800000000000001
+    },
+    {
+      "condition": "B0_primary_gated",
+      "training_seed": 123,
+      "n": 5,
+      "mae_mean": 1.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9800000000000001
+    },
+    {
+      "condition": "B0_primary_gated",
+      "training_seed": 456,
+      "n": 5,
+      "mae_mean": 1.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9800000000000001
+    },
+    {
+      "condition": "B0_primary_gated",
+      "training_seed": 789,
+      "n": 5,
+      "mae_mean": 1.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9800000000000001
+    },
+    {
+      "condition": "B0_primary_gated",
+      "training_seed": 999,
+      "n": 5,
+      "mae_mean": 1.0,
+      "mae_sd": 0.0,
+      "oracle_agreement_mean": 0.9800000000000001
+    },
+    {
+      "condition": "B2_primary_gated",
+      "training_seed": 42,
+      "n": 5,
+      "mae_mean": 0.16363636363636364,
+      "mae_sd": 0.06803013430498074,
+      "oracle_agreement_mean": 0.82
+    },
+    {
+      "condition": "B2_primary_gated",
+      "training_seed": 123,
+      "n": 5,
+      "mae_mean": 0.16363636363636364,
+      "mae_sd": 0.06803013430498074,
+      "oracle_agreement_mean": 0.82
+    },
+    {
+      "condition": "B2_primary_gated",
+      "training_seed": 456,
+      "n": 5,
+      "mae_mean": 0.16363636363636364,
+      "mae_sd": 0.06803013430498074,
+      "oracle_agreement_mean": 0.86
+    },
+    {
+      "condition": "B2_primary_gated",
+      "training_seed": 789,
+      "n": 5,
+      "mae_mean": 0.16363636363636364,
+      "mae_sd": 0.06803013430498074,
+      "oracle_agreement_mean": 0.82
+    },
+    {
+      "condition": "B2_primary_gated",
+      "training_seed": 999,
+      "n": 5,
+      "mae_mean": 0.16363636363636364,
+      "mae_sd": 0.06803013430498074,
+      "oracle_agreement_mean": 0.82
+    }
+  ],
+  "regression_vs_own_ungated_base": {
+    "ConditionA_gated": {
+      "n_regressed": 0,
+      "mean_diff": -0.037878787878787866,
+      "cells": [
+        {
+          "skill": 0.2,
+          "k": 0.0,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.2,
+          "k": 0.3,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.2,
+          "k": 0.45,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.2,
+          "k": 0.6,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.0,
+          "gated_mae": 0.16363636363636364,
+          "base_mae": 0.16363636363636364,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.3,
+          "gated_mae": 0.0909090909090909,
+          "base_mae": 0.0909090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.45,
+          "gated_mae": 0.0909090909090909,
+          "base_mae": 0.0909090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.6,
+          "gated_mae": 0.0909090909090909,
+          "base_mae": 0.0909090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.0,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.3,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.45,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.6,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.0,
+          "gated_mae": 0.0,
+          "base_mae": 0.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.3,
+          "gated_mae": 0.0,
+          "base_mae": 0.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.45,
+          "gated_mae": 0.0,
+          "base_mae": 0.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.6,
+          "gated_mae": 0.0,
+          "base_mae": 0.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.0,
+          "gated_mae": 0.8545454545454545,
+          "base_mae": 0.8545454545454545,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.3,
+          "gated_mae": 1.0,
+          "base_mae": 1.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.45,
+          "gated_mae": 1.0,
+          "base_mae": 1.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.6,
+          "gated_mae": 1.0,
+          "base_mae": 1.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.0,
+          "gated_mae": 0.6345454545454546,
+          "base_mae": 0.6345454545454546,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.3,
+          "gated_mae": 0.6818181818181819,
+          "base_mae": 0.6818181818181819,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.45,
+          "gated_mae": 0.6818181818181819,
+          "base_mae": 0.8818181818181817,
+          "gated_minus_base": -0.19999999999999984,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.6,
+          "gated_mae": 0.6818181818181819,
+          "base_mae": 1.3909090909090909,
+          "gated_minus_base": -0.709090909090909,
+          "regressed_ge_0.05": false
+        }
+      ]
+    },
+    "B0_primary_gated": {
+      "n_regressed": 0,
+      "mean_diff": -0.037878787878787866,
+      "cells": [
+        {
+          "skill": 0.2,
+          "k": 0.0,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.2,
+          "k": 0.3,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.2,
+          "k": 0.45,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.2,
+          "k": 0.6,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.0,
+          "gated_mae": 0.10909090909090909,
+          "base_mae": 0.10909090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.3,
+          "gated_mae": 0.0909090909090909,
+          "base_mae": 0.0909090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.45,
+          "gated_mae": 0.0909090909090909,
+          "base_mae": 0.0909090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.6,
+          "gated_mae": 0.0909090909090909,
+          "base_mae": 0.0909090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.0,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.3,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.45,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.6,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.0,
+          "gated_mae": 0.0,
+          "base_mae": 0.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.3,
+          "gated_mae": 0.0,
+          "base_mae": 0.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.45,
+          "gated_mae": 0.0,
+          "base_mae": 0.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.6,
+          "gated_mae": 0.0,
+          "base_mae": 0.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.0,
+          "gated_mae": 0.509090909090909,
+          "base_mae": 0.509090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.3,
+          "gated_mae": 1.0,
+          "base_mae": 1.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.45,
+          "gated_mae": 1.0,
+          "base_mae": 1.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.6,
+          "gated_mae": 1.0,
+          "base_mae": 1.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.0,
+          "gated_mae": 0.5981818181818183,
+          "base_mae": 0.5981818181818183,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.3,
+          "gated_mae": 0.6818181818181819,
+          "base_mae": 0.6818181818181819,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.45,
+          "gated_mae": 0.6818181818181819,
+          "base_mae": 0.8818181818181817,
+          "gated_minus_base": -0.19999999999999984,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.6,
+          "gated_mae": 0.6818181818181819,
+          "base_mae": 1.3909090909090909,
+          "gated_minus_base": -0.709090909090909,
+          "regressed_ge_0.05": false
+        }
+      ]
+    },
+    "B2_primary_gated": {
+      "n_regressed": 0,
+      "mean_diff": 0.0,
+      "cells": [
+        {
+          "skill": 0.2,
+          "k": 0.0,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.2,
+          "k": 0.3,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.2,
+          "k": 0.45,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.2,
+          "k": 0.6,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.0,
+          "gated_mae": 0.1090909090909091,
+          "base_mae": 0.1090909090909091,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.3,
+          "gated_mae": 0.0909090909090909,
+          "base_mae": 0.0909090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.45,
+          "gated_mae": 0.0909090909090909,
+          "base_mae": 0.0909090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.35,
+          "k": 0.6,
+          "gated_mae": 0.0909090909090909,
+          "base_mae": 0.0909090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.0,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.3,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.45,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.5,
+          "k": 0.6,
+          "gated_mae": 0.5,
+          "base_mae": 0.5,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.0,
+          "gated_mae": 0.021818181818181816,
+          "base_mae": 0.021818181818181816,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.3,
+          "gated_mae": 0.0,
+          "base_mae": 0.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.45,
+          "gated_mae": 0.0,
+          "base_mae": 0.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.65,
+          "k": 0.6,
+          "gated_mae": 0.0,
+          "base_mae": 0.0,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.0,
+          "gated_mae": 0.2727272727272727,
+          "base_mae": 0.2727272727272727,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.3,
+          "gated_mae": 0.0909090909090909,
+          "base_mae": 0.0909090909090909,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.45,
+          "gated_mae": 0.16363636363636364,
+          "base_mae": 0.16363636363636364,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.8,
+          "k": 0.6,
+          "gated_mae": 0.16363636363636364,
+          "base_mae": 0.16363636363636364,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.0,
+          "gated_mae": 0.6054545454545456,
+          "base_mae": 0.6054545454545456,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.3,
+          "gated_mae": 0.590909090909091,
+          "base_mae": 0.590909090909091,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.45,
+          "gated_mae": 0.590909090909091,
+          "base_mae": 0.590909090909091,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        },
+        {
+          "skill": 0.9,
+          "k": 0.6,
+          "gated_mae": 0.590909090909091,
+          "base_mae": 0.590909090909091,
+          "gated_minus_base": 0.0,
+          "regressed_ge_0.05": false
+        }
+      ]
+    }
+  },
+  "reference_baselines_from_E1_DEVELOPMENT_RUN_REPORT": {
+    "B0": {
+      "mae_mean": 0.43893939393939385,
+      "n": 600
+    },
+    "B2": {
+      "mae_mean": 0.27348484848484844,
+      "n": 600
+    },
+    "ConditionA": {
+      "mae_mean": 0.4571212121212121,
+      "n": 600
+    },
+    "ConstantSame": {
+      "mae_mean": 0.4621212121212121,
+      "n": 120
+    },
+    "Heuristic": {
+      "mae_mean": 0.2674242424242424,
+      "n": 120
+    }
+  }
+}

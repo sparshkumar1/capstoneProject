@@ -1,0 +1,91 @@
+{
+  "manifest_version": "1.0",
+  "experiment_id": "E1",
+  "run_id": "E1-dev-2026-09-28-001",
+  "status": "completed",
+  "started_utc": "2026-09-28T05:00:07Z",
+  "finished_utc": "2026-09-28T06:30:57Z",
+  "protocol": {
+    "protocol_file": "research/preregistration/E1/PROTOCOL.md",
+    "protocol_sha256": "22ee4b744f4d3d4212b8c02d0ed551c0cc9da0186b41e67a0185245577ef0d6b",
+    "protocol_git_tag": "prereg/E1-ppo-persona-diversity/v4",
+    "protocol_tag_commit": "461e06b"
+  },
+  "code": {
+    "git_commit": "461e06b",
+    "git_tag": "prereg/E1-ppo-persona-diversity/v4",
+    "git_dirty": false,
+    "dirty_diff_sha256": null,
+    "entrypoint": "research/paper_strengthening/scripts/e1_train_condition_b.py",
+    "entrypoint_sha256": "daf094c46a1c670f149363c18af322de9efc59a4a984d45bc7f2abd54c9c53ab",
+    "command_line": "train_condition_b_seed(arm, training_seed, extended_budget=False) for arm in [B0,B2], training_seed in [42,123,456,789,999]"
+  },
+  "config": {
+    "config_path": "research/paper_strengthening/scripts/e1_config.json",
+    "config_sha256": "75dda898ecd03bb95bf68a0610408c2a479a66e1275daf011c740b17a1727553",
+    "extra_config_sha256": {
+      "e1_diverse_persona_env.py": "3fda0e840808dfb7fa03333d04c83fefb4a27732a831933e4b51de12bb1db7ad",
+      "e1_simulate_adapter.py": "0b038b4252da7c090ca6e5190f467b241422b827e45291833a363d06596a96f1"
+    }
+  },
+  "environment": {
+    "lock_id": "LOCK-X3-2026-09-19",
+    "env_lock_sha256": "c8fdfda1f5034c1d56a27f756907fcb64c3a2b1cdd6e5142b8722a62b658aa03",
+    "lock_verified_at_start": true,
+    "lock_mismatches": [],
+    "os": "Windows", "os_version": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7", "python_implementation": "CPython (Anaconda)",
+    "packages": {"numpy": "2.5.2", "torch": "2.11.0+cpu", "stable_baselines3": "2.7.1", "gymnasium": "0.29.1"},
+    "pip_freeze_sha256": "760f9540d5ba068ba18180e77034f5d210836cfc656e032d6eb03871c8c1f439",
+    "hardware": {"cpu": "12th Gen Intel(R) Core(TM) i5-1235U", "cores": 12, "ram_gb": 15.7, "gpu": null, "cuda": null},
+    "determinism": {"pythonhashseed": "unset", "omp_threads": null, "torch_threads": null, "torch_deterministic_algorithms": false,
+      "notes": "Same numpy<2/torch<2.7 pin deviation already documented and accepted for LOCK-X3-2026-09-19; not a new deviation."}
+  },
+  "seeds": {
+    "training": [42, 123, 456, 789, 999],
+    "evaluation": [1001, 2002, 3003, 4004, 5005],
+    "bootstrap": 0,
+    "ordering": 0,
+    "generator": "episode_seed(training_seed, episode_index) = training_seed*100000 + episode_index",
+    "env_seed_policy": "development phase only; confirmatory seeds 21021-40040 and 3 held-out profiles are locked and not touched"
+  },
+  "data": {
+    "datasets": [],
+    "benchmark_item_file_sha256": null,
+    "human_gold_sha256": null
+  },
+  "models": [
+    {"role": "ppo_checkpoint_baseline_A_seed42", "path": "research/experiments/paper3/checkpoints/seed_42/ppo_final.zip", "sha256": "8395b6da753f5d272c46bfad018f7a7ae6e5508be58bcd732094771911b3d465", "training_seed": 42},
+    {"role": "ppo_checkpoint_baseline_A_seed123", "path": "research/experiments/paper3/checkpoints/seed_123/ppo_final.zip", "sha256": "299437ea0dcdd7a5eed51326e80854bd3bb55341194420b619c5da3d675e24e0", "training_seed": 123},
+    {"role": "ppo_checkpoint_baseline_A_seed456", "path": "research/experiments/paper3/checkpoints/seed_456/ppo_final.zip", "sha256": "f9799143aac6a2a67664caadbfa2ce55a113704632bbbe9cfbd1990724a40c55", "training_seed": 456},
+    {"role": "ppo_checkpoint_baseline_A_seed789", "path": "research/experiments/paper3/checkpoints/seed_789/ppo_final.zip", "sha256": "0ebb8800f71d453a48f4e307bea4e6cf18dbeb128a38707ac2029b38e757bbcb", "training_seed": 789},
+    {"role": "ppo_checkpoint_baseline_A_seed999", "path": "research/experiments/paper3/checkpoints/seed_999/ppo_final.zip", "sha256": "16494e754125443275f83b6868a964e1688f065976396e88f400de5f60776adf", "training_seed": 999}
+  ],
+  "outputs": [
+    {"path": "research/paper_strengthening/results/e1_training/training_run_summary.json", "sha256": "71bb83d4626f8eeb77e3d6cb58031809b9ee8fbbb0a40e5a0565abd35218eef3"},
+    {"path": "research/paper_strengthening/results/e1_training/e1_convergence_check.json", "sha256": "4e2d71602883d7d9d5bed31f3a15ca96a85aa6dc88a2a7ec681b4e34adcc9d0b"},
+    {"path": "research/paper_strengthening/results/e1_training_extended/training_run_summary_extended.json", "sha256": "f9e9fbd273228ed35dd8be8a9ac0e4457510d342b92876f32d57cec0f5bd798d"},
+    {"path": "research/paper_strengthening/results/e1_dev_eval/e1_dev_eval_summary.json", "sha256": "7627773e9a48507bfcd2c378b1f4f63ddf15894590d712db74efbcd43d45268b"},
+    {"path": "research/paper_strengthening/results/e1_dev_eval_extended/e1_dev_eval_summary.json", "sha256": "9e785b3110df7358c3372e9bc30787c5bc4c6232ab46731e6919e183f2ddc695"},
+    {"path": "research/paper_strengthening/results/e1_parity/e1_ppo_parity_check.json", "sha256": "eab8e2de20f15e175c0ee8a2cdacdd93fc373d9d72fccbf693b93946b042b648"}
+  ],
+  "logs": {"stdout_sha256": null, "stderr_sha256": null, "run_log": "research/paper_strengthening/results/e1_training_logs/"},
+  "wandb": {"used": false, "run_id": null, "entity_project": null},
+  "extended_budget_decision_rule_predeclared": {
+    "text": "Pre-declared before any primary-budget run: for each arm, pool the 5 seeds' training_curves.csv mean_reward_rolling series (aligned by logged timestep, log_freq=256, 96 points per seed at the 24576-step primary budget). Compute the arm-pooled mean curve. Fit an OLS slope over the final quartile of logged points (timesteps > 18432) and compare the total rise over that quartile to the total rise of the full curve (first logged point to last). If the final-quartile rise exceeds 10% of the full-curve rise for EITHER arm, the curve is judged still-rising (not plateaued) and the 98304-step extended-budget diagnostic is run for BOTH B0 and B2 together. This rule is fixed now, before the primary run, and is applied mechanically to the reward curves only -- never to development or confirmatory MAE.",
+    "applied": true,
+    "result": "TRIGGERED: B0 quartile_rise/full_rise = 0.0577 (below 0.10, not rising); B2 quartile_rise/full_rise = 0.1162 (above 0.10, still rising). Rule triggers on either arm, so the 98304-step extended-budget diagnostic is now run for BOTH B0 and B2 together, per protocol V4 section 1.2's requirement that the extended budget is never used for one arm alone. Full numeric output: research/paper_strengthening/results/e1_training/e1_convergence_check.json. Primary-budget (24576-step) checkpoints and logs are retained unchanged; this is an additional diagnostic run, not a replacement."
+  },
+  "deviations": [
+    "Operational note (not a protocol deviation): e1_train_condition_b.py writes each (arm,seed)'s raw per-step InterviewEnv CSV log to a fixed path (research/paper_strengthening/results/e1_training_logs/<arm>_seed<seed>.csv) that is not parametrized by output_root. Before launching the extended-budget diagnostic (which uses a separate checkpoint output_root, e1_training_extended/, so checkpoints and training_curves.csv are not overwritten), the 10 primary-budget per-step log files were copied to research/paper_strengthening/results/e1_training_logs/primary_budget/ to preserve them; the files remaining at the original path after the extended run are the extended-budget run's own per-step logs. No data was lost; both sets are retained."
+  ],
+  "failures": [],
+  "compute": {
+    "primary_budget_total_training_sec": 831.19,
+    "extended_budget_total_training_sec": 4271.58,
+    "primary_budget_runs": 10, "extended_budget_runs": 10,
+    "n_training_failures": 0,
+    "evaluation_cost": "inference-only; both development-evaluation passes (primary and extended checkpoints, 5 conditions x up to 24 grid cells x 5 dev eval seeds = 2040 simulate_diverse() calls total) completed in well under a minute combined"
+  },
+  "operator": "claude-code-session"
+}

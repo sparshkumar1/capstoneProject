@@ -1,0 +1,140 @@
+{
+  "n_cases": 64,
+  "n_questions": 8,
+  "seed": 20260921,
+  "n_bootstrap": 2000,
+  "note": "Item-level rho values are cross-checks against the frozen ablation CSV, not new results. Question-clustered bootstrap CIs are the honest interval given 8 independent questions, not 64 independent items.",
+  "configurations": {
+    "S1 only": {
+      "item_level_spearman_rho": 0.207,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 2000,
+        "mean": 0.2523,
+        "ci95_low": 0.1473,
+        "ci95_high": 0.3965
+      }
+    },
+    "S2 only": {
+      "item_level_spearman_rho": 0.3021,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 2000,
+        "mean": 0.3286,
+        "ci95_low": 0.1193,
+        "ci95_high": 0.6
+      }
+    },
+    "R only": {
+      "item_level_spearman_rho": 0.4832,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 2000,
+        "mean": 0.4958,
+        "ci95_low": 0.4406,
+        "ci95_high": 0.5768
+      }
+    },
+    "S1+S2 (0.30/0.70)": {
+      "item_level_spearman_rho": 0.2894,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 2000,
+        "mean": 0.3304,
+        "ci95_low": 0.1691,
+        "ci95_high": 0.5825
+      }
+    },
+    "S1+R (0.23/0.77)": {
+      "item_level_spearman_rho": 0.4884,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 2000,
+        "mean": 0.5089,
+        "ci95_low": 0.4339,
+        "ci95_high": 0.6265
+      }
+    },
+    "S2+R (0.41/0.59)": {
+      "item_level_spearman_rho": 0.4171,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 2000,
+        "mean": 0.4532,
+        "ci95_low": 0.3376,
+        "ci95_high": 0.6283
+      }
+    },
+    "Full composite (stored final_score, incl. bonus/penalty/cap)": {
+      "item_level_spearman_rho": 0.3812,
+      "question_clustered_bootstrap": {
+        "n_valid_boot": 2000,
+        "mean": 0.4141,
+        "ci95_low": 0.2994,
+        "ci95_high": 0.5868
+      }
+    }
+  },
+  "paired_full_vs_R_only": {
+    "mean_abs_error_full": 0.292,
+    "mean_abs_error_R_only": 0.2763,
+    "question_clustered_bootstrap_of_mean_diff_full_minus_R": {
+      "mean": 0.0153,
+      "ci95_low": -0.0149,
+      "ci95_high": 0.0511
+    },
+    "interpretation": "CI excludes 0 => full composite's error is significantly different from R-only's, at the question-clustered level. CI includes 0 => no significant difference detectable given only 8 independent questions."
+  },
+  "per_question_breakdown": [
+    {
+      "qid": 1,
+      "n_items": 8.0,
+      "mean_human": 0.478,
+      "mean_final_score": 0.404,
+      "mean_R": 0.435
+    },
+    {
+      "qid": 3,
+      "n_items": 8.0,
+      "mean_human": 0.492,
+      "mean_final_score": 0.542,
+      "mean_R": 0.551
+    },
+    {
+      "qid": 7,
+      "n_items": 8.0,
+      "mean_human": 0.473,
+      "mean_final_score": 0.173,
+      "mean_R": 0.338
+    },
+    {
+      "qid": 10,
+      "n_items": 8.0,
+      "mean_human": 0.406,
+      "mean_final_score": 0.469,
+      "mean_R": 0.461
+    },
+    {
+      "qid": 15,
+      "n_items": 8.0,
+      "mean_human": 0.472,
+      "mean_final_score": 0.23,
+      "mean_R": 0.43
+    },
+    {
+      "qid": 22,
+      "n_items": 8.0,
+      "mean_human": 0.385,
+      "mean_final_score": 0.239,
+      "mean_R": 0.427
+    },
+    {
+      "qid": 41,
+      "n_items": 8.0,
+      "mean_human": 0.482,
+      "mean_final_score": 0.484,
+      "mean_R": 0.352
+    },
+    {
+      "qid": 50,
+      "n_items": 8.0,
+      "mean_human": 0.49,
+      "mean_final_score": 0.066,
+      "mean_R": 0.244
+    }
+  ]
+}

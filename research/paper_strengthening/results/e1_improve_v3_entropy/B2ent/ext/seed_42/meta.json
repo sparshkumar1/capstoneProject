@@ -1,0 +1,11 @@
+{
+  "arm": "B2ent",
+  "training_seed": 42,
+  "timesteps": 98304,
+  "extended_budget": true,
+  "ent_coef": 0.01,
+  "elapsed_sec": 452.72,
+  "per_step_log": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_training_logs\\B2ent_ext_seed42.csv",
+  "model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_42\\ppo_final.zip",
+  "norm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1_improve_v3_entropy\\B2ent\\ext\\seed_42\\vecnormalize.pkl"
+}

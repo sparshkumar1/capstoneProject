@@ -1,0 +1,15 @@
+{
+  "sessions": 160,
+  "proposals": 3814,
+  "mode|confidence": {
+    "recover|0.70": 312,
+    "recover|0.80": 928,
+    "remediate|0.80": 1300,
+    "steady|0.45": 1274
+  },
+  "git": {
+    "commit": "5b3ba257a4f8ff04824eb7158d4af8505f85d67f",
+    "dirty": true,
+    "branch": "research/adcom2027-multiagent-final"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "arm": "MMO",
+  "factor_a": "matched",
+  "factor_b": "matched",
+  "factor_c": "original",
+  "training_seed": 456,
+  "elapsed_sec": 70.58,
+  "final_model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1dynmatch_v1\\MMO\\seed_456\\MMO_seed456_final_24576.zip",
+  "final_vecnorm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1dynmatch_v1\\MMO\\seed_456\\MMO_seed456_vecnormalize_final_24576.pkl"
+}

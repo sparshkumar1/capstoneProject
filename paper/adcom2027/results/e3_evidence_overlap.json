@@ -1,0 +1,32 @@
+{
+ "by_question": {
+  "1": 2,
+  "3": 1,
+  "7": 2,
+  "10": 5,
+  "41": 7
+ },
+ "case_ids": [
+  "BM-006",
+  "BM-008",
+  "BM-014",
+  "BM-019",
+  "BM-021",
+  "BM-022",
+  "BM-023",
+  "BM-024",
+  "BM-025",
+  "BM-027",
+  "BM-028",
+  "BM-029",
+  "BM-030",
+  "BM-031",
+  "BM-032",
+  "BM-034",
+  "BM-036"
+ ],
+ "covered_and_incorrect_same_string": 0,
+ "covered_and_missing_same_string": 17,
+ "payloads": 64,
+ "payloads_with_any_overlap": 17
+}

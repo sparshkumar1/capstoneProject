@@ -1,0 +1,351 @@
+{
+  "label": "before",
+  "wpm_sweep": [
+    {
+      "rate_input": "40.0_WPM",
+      "rate_raw_value": 40.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "60.0_WPM",
+      "rate_raw_value": 60.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "80.0_WPM",
+      "rate_raw_value": 80.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "100.0_WPM",
+      "rate_raw_value": 100.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "120.0_WPM",
+      "rate_raw_value": 120.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "126.0_WPM",
+      "rate_raw_value": 126.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "140.0_WPM",
+      "rate_raw_value": 140.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "160.0_WPM",
+      "rate_raw_value": 160.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "180.0_WPM",
+      "rate_raw_value": 180.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "200.0_WPM",
+      "rate_raw_value": 200.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "220.0_WPM",
+      "rate_raw_value": 220.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "258.0_WPM",
+      "rate_raw_value": 258.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "280.0_WPM",
+      "rate_raw_value": 280.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "320.0_WPM",
+      "rate_raw_value": 320.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    }
+  ],
+  "wps_sweep_direct_field_value": [
+    {
+      "rate_input": "0.5_direct",
+      "rate_raw_value": 0.5,
+      "confidence_rate_score": 0.1562,
+      "confidence_final_score": 0.6427,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.8438,
+      "hesitation_score": 0.1896,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "1.0_direct",
+      "rate_raw_value": 1.0,
+      "confidence_rate_score": 0.3125,
+      "confidence_final_score": 0.663,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.6875,
+      "hesitation_score": 0.1818,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "1.5_direct",
+      "rate_raw_value": 1.5,
+      "confidence_rate_score": 0.4688,
+      "confidence_final_score": 0.6833,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.5312,
+      "hesitation_score": 0.174,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "2.0_direct",
+      "rate_raw_value": 2.0,
+      "confidence_rate_score": 0.625,
+      "confidence_final_score": 0.7036,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.375,
+      "hesitation_score": 0.1662,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "2.1_direct",
+      "rate_raw_value": 2.1,
+      "confidence_rate_score": 1.0,
+      "confidence_final_score": 0.7524,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.0,
+      "hesitation_score": 0.1474,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "2.5_direct",
+      "rate_raw_value": 2.5,
+      "confidence_rate_score": 1.0,
+      "confidence_final_score": 0.7524,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.0,
+      "hesitation_score": 0.1474,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "3.0_direct",
+      "rate_raw_value": 3.0,
+      "confidence_rate_score": 1.0,
+      "confidence_final_score": 0.7524,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.0,
+      "hesitation_score": 0.1474,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "3.2_direct",
+      "rate_raw_value": 3.2,
+      "confidence_rate_score": 1.0,
+      "confidence_final_score": 0.7524,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.0,
+      "hesitation_score": 0.1474,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "3.5_direct",
+      "rate_raw_value": 3.5,
+      "confidence_rate_score": 1.0,
+      "confidence_final_score": 0.7524,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.0,
+      "hesitation_score": 0.1474,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "4.0_direct",
+      "rate_raw_value": 4.0,
+      "confidence_rate_score": 1.0,
+      "confidence_final_score": 0.7524,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.0,
+      "hesitation_score": 0.1474,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "4.3_direct",
+      "rate_raw_value": 4.3,
+      "confidence_rate_score": 1.0,
+      "confidence_final_score": 0.7524,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.0,
+      "hesitation_score": 0.1474,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "4.5_direct",
+      "rate_raw_value": 4.5,
+      "confidence_rate_score": 0.5938,
+      "confidence_final_score": 0.6996,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.4062,
+      "hesitation_score": 0.1677,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "5.0_direct",
+      "rate_raw_value": 5.0,
+      "confidence_rate_score": 0.4375,
+      "confidence_final_score": 0.6793,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.5625,
+      "hesitation_score": 0.1755,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "6.0_direct",
+      "rate_raw_value": 6.0,
+      "confidence_rate_score": 0.125,
+      "confidence_final_score": 0.6386,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.875,
+      "hesitation_score": 0.1912,
+      "hesitation_error": null
+    }
+  ],
+  "invalid_inputs": [
+    {
+      "rate_input": "invalid_0.0",
+      "rate_raw_value": 0.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "invalid_-10.0",
+      "rate_raw_value": -10.0,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "invalid_None",
+      "rate_raw_value": null,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.0,
+      "hesitation_score": 0.1474,
+      "hesitation_error": null
+    },
+    {
+      "rate_input": "invalid_'not_a_number'",
+      "rate_raw_value": "not_a_number",
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": null,
+      "hesitation_score": null,
+      "hesitation_error": "TypeError: '<=' not supported between instances of 'float' and 'str'"
+    },
+    {
+      "rate_input": "invalid_nan",
+      "rate_raw_value": NaN,
+      "confidence_rate_score": 1.0,
+      "confidence_final_score": 0.7524,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 1.0,
+      "hesitation_score": 0.1974,
+      "hesitation_error": null
+    }
+  ],
+  "missing_field": [
+    {
+      "rate_input": "missing_field_default",
+      "rate_raw_value": null,
+      "confidence_rate_score": 0.0,
+      "confidence_final_score": 0.6224,
+      "confidence_error": null,
+      "hesitation_rate_deviation": 0.0,
+      "hesitation_score": 0.1474,
+      "hesitation_error": null
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "B0": {
+    "full_curve_first_point": [
+      256,
+      0.04546
+    ],
+    "full_curve_last_point": [
+      24576,
+      0.1963
+    ],
+    "full_rise": 0.15084,
+    "quartile_first_point": [
+      18688,
+      0.1876
+    ],
+    "quartile_last_point": [
+      24576,
+      0.1963
+    ],
+    "quartile_rise": 0.008700000000000013,
+    "quartile_rise_over_full_rise_ratio": 0.05767700875099452,
+    "still_rising": false
+  },
+  "B2": {
+    "full_curve_first_point": [
+      256,
+      0.030679999999999995
+    ],
+    "full_curve_last_point": [
+      24576,
+      0.13256
+    ],
+    "full_rise": 0.10188000000000001,
+    "quartile_first_point": [
+      18688,
+      0.12072000000000001
+    ],
+    "quartile_last_point": [
+      24576,
+      0.13256
+    ],
+    "quartile_rise": 0.011840000000000003,
+    "quartile_rise_over_full_rise_ratio": 0.11621515508441305,
+    "still_rising": true
+  },
+  "extended_budget_triggered": true,
+  "rule_applied": "quartile_rise / full_rise > 0.10 for EITHER arm triggers extended budget for BOTH arms"
+}

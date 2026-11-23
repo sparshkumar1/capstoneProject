@@ -1,0 +1,15 @@
+fault,variant,invariant,predicted_violation,basis,observed_sessions_violating,sessions,match
+F1,V6,I1,True,known,8,8,yes
+F2,V6,I1,True,known,160,160,yes
+F3,V0,I1,True,known (full system),160,160,yes
+F3,V1,I2,True,unsure,160,160,yes
+F4,V1,I3,True,known,8,8,yes
+F0,V5,I5,True,known,8,8,yes
+F0,V5,I4,True,known,8,8,yes
+F5,V7,I6,True,unsure,8,8,yes
+F0,V2,I7,True,unsure,3,8,yes
+F0,V4,I5,False,trivial,0,8,yes
+F1,V0,I1,False,known,0,8,yes
+F2,V0,I1,False,known,0,160,yes
+F4,V0,I3,False,known,0,8,yes
+F5,V0,I6,False,known,0,8,yes

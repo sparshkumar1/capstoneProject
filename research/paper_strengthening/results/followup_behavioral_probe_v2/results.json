@@ -1,0 +1,418 @@
+{
+  "status": "MEASURED",
+  "env": {
+    "MOCK_MODE": false,
+    "gguf_model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\models\\gguf\\qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "gguf_model_exists": true,
+    "models_loaded": [
+      "qwen_1b"
+    ],
+    "load_status": "loaded_this_run",
+    "sampling": {
+      "temperature": 0.1,
+      "top_p": 0.9,
+      "note": "read from services/qwen/app.py generate_full(), gguf branch"
+    }
+  },
+  "n_generate_followup_calls": 15,
+  "n_cases_including_skip_verification": 12,
+  "summary": {
+    "n_llm_path_used": 15,
+    "n_fallback_path_used": 0,
+    "n_with_keyword_overlap_on_probe_target": 14,
+    "n_flagged_possibly_repeating_original_question": 6,
+    "n_flagged_redundant_with_prior_followup": 0,
+    "strong_answer_skip_case_matches_expectation": true
+  },
+  "by_category": {
+    "misconception": {
+      "n": 3,
+      "n_overlap": 3
+    },
+    "missing_concept": {
+      "n": 1,
+      "n_overlap": 1
+    },
+    "below_threshold": {
+      "n": 1,
+      "n_overlap": 1
+    },
+    "weakest_gap": {
+      "n": 5,
+      "n_overlap": 5
+    },
+    "combined": {
+      "n": 1,
+      "n_overlap": 1
+    },
+    "conflicting_evidence": {
+      "n": 1,
+      "n_overlap": 1
+    },
+    "ambiguous": {
+      "n": 1,
+      "n_overlap": 0
+    },
+    "incomplete_evidence": {
+      "n": 1,
+      "n_overlap": 1
+    },
+    "non_redundancy": {
+      "n": 1,
+      "n_overlap": 1
+    }
+  },
+  "repeat_run_variability": {
+    "misconception": {
+      "n_runs": 3,
+      "all_identical_text": false,
+      "mean_pairwise_keyword_jaccard": 0.852,
+      "texts": [
+        "Can you explain how a hash map uses a hash function to achieve average O(1) lookup time?",
+        "Can you explain how a hash map uses a hash function to achieve average O(1) lookup time?",
+        "Can you explain how a hash function is used in a hash map to achieve average O(1) lookup time?"
+      ]
+    },
+    "weakest_gap_reasoning_depth": {
+      "n_runs": 3,
+      "all_identical_text": false,
+      "mean_pairwise_keyword_jaccard": 0.689,
+      "texts": [
+        "Could you explain the reasoning behind each step in the reversal process, and how the reversal affects the structure of the linked list?",
+        "Could you explain the reasoning behind each step of the reversal process, particularly focusing on how the reversal affects the order of nodes?",
+        "Could you explain the reasoning behind each step in the reversal process, and how the reversal affects the structure of the linked list?"
+      ]
+    }
+  },
+  "cases": [
+    {
+      "case_id": "misconception",
+      "category": "misconception",
+      "repeat_index": 0,
+      "probe_target": "linear search misconception / O(1) average case",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain how a hash map uses a hash function to achieve average O(1) lookup time?",
+      "generated_reason": "This question directly probes the candidate's understanding of the hash function and how it contributes to the average O(1) time complexity.",
+      "generated_target_concepts": [
+        "hash function",
+        "average-case constant time"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "average"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": true,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "misconception",
+      "category": "misconception",
+      "repeat_index": 1,
+      "probe_target": "linear search misconception / O(1) average case",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain how a hash map uses a hash function to achieve average O(1) lookup time?",
+      "generated_reason": "This question directly probes the candidate's understanding of the hash function and how it is used to map keys to indices, which is a critical concept in achieving constant time lookup.",
+      "generated_target_concepts": [
+        "hash function",
+        "average-case constant time"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "average"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": true,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "misconception",
+      "category": "misconception",
+      "repeat_index": 2,
+      "probe_target": "linear search misconception / O(1) average case",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain how a hash function is used in a hash map to achieve average O(1) lookup time?",
+      "generated_reason": "This question directly probes the missing concept of the hash function and how it contributes to the average O(1) lookup time.",
+      "generated_target_concepts": [
+        "hash function",
+        "average-case constant time"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "average"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": true,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "missing_concept",
+      "category": "missing_concept",
+      "repeat_index": 0,
+      "probe_target": "visited set / cycle avoidance",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain how the visited set helps in avoiding revisiting nodes during BFS?",
+      "generated_reason": "This question directly addresses the candidate's gap by asking about the role of the visited set in BFS, which is crucial for avoiding revisiting nodes.",
+      "generated_target_concepts": [
+        "visited set",
+        "revisiting nodes"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "set",
+        "visited"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": false,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "below_threshold_score",
+      "category": "below_threshold",
+      "repeat_index": 0,
+      "probe_target": "base case / stack frames (answer too shallow)",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you provide an example of a problem where the base case is crucial for the recursion to work correctly?",
+      "generated_reason": "This question addresses the candidate's gap by asking about the importance of the base case in recursion, which is a critical concept in understanding how recursion works.",
+      "generated_target_concepts": [
+        "base case",
+        "call stack / stack frames"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "base",
+        "case"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": false,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "weakest_gap_reasoning_depth",
+      "category": "weakest_gap",
+      "repeat_index": 0,
+      "probe_target": "reasoning depth / mechanistic explanation",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Could you explain the reasoning behind each step in the reversal process, and how the reversal affects the structure of the linked list?",
+      "generated_reason": "This question addresses the candidate's gap by focusing on the reasoning behind each step and the impact on the linked list structure.",
+      "generated_target_concepts": [
+        "pointer manipulation",
+        "list reversal"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "reasoning"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": false,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "weakest_gap_reasoning_depth",
+      "category": "weakest_gap",
+      "repeat_index": 1,
+      "probe_target": "reasoning depth / mechanistic explanation",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Could you explain the reasoning behind each step of the reversal process, particularly focusing on how the reversal affects the order of nodes?",
+      "generated_reason": "This question addresses the candidate's gap by focusing on the reasoning behind each step, which is crucial for understanding the reversal process.",
+      "generated_target_concepts": [
+        "order of nodes",
+        "reversal effect"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "reasoning"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": false,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "weakest_gap_reasoning_depth",
+      "category": "weakest_gap",
+      "repeat_index": 2,
+      "probe_target": "reasoning depth / mechanistic explanation",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Could you explain the reasoning behind each step in the reversal process, and how the reversal affects the structure of the linked list?",
+      "generated_reason": "This question probes the candidate's understanding of the reversal process and how it affects the linked list's structure, which is a key aspect of the reversal operation.",
+      "generated_target_concepts": [
+        "next pointers",
+        "head and tail manipulation"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "reasoning"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": false,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "weakest_gap_mandatory_omitted",
+      "category": "weakest_gap",
+      "repeat_index": 0,
+      "probe_target": "time complexity O(n log n) / space complexity O(n)",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain the specific time and space complexity of merge sort in more detail, and how it compares to other sorting algorithms?",
+      "generated_reason": "This question addresses the candidate's gap by asking for a deeper understanding of the time and space complexity, which is a crucial aspect of the algorithm's efficiency.",
+      "generated_target_concepts": [
+        "time complexity",
+        "space complexity"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "complexity",
+        "space",
+        "time"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": true,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "weakest_gap_misconception_format",
+      "category": "weakest_gap",
+      "repeat_index": 0,
+      "probe_target": "shared memory space / address space (threads vs processes)",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain why threads are considered separate from processes in terms of memory space?",
+      "generated_reason": "This question directly probes the candidate's understanding of why threads are not considered separate entities in terms of memory space, addressing the misconception that threads have their own separate memory space like processes.",
+      "generated_target_concepts": [
+        "memory space",
+        "separate memory space"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "memory",
+        "processes",
+        "space",
+        "threads"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": false,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "combined_missing_and_misconception",
+      "category": "combined",
+      "repeat_index": 0,
+      "probe_target": "mutual exclusion/locking; global-variable misconception",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain how mutual exclusion and critical sections work to prevent race conditions in multithreading?",
+      "generated_reason": "This question directly addresses the candidate's misconception by asking about the mechanisms that prevent race conditions, which is a key concept in understanding concurrency.",
+      "generated_target_concepts": [
+        "mutual exclusion",
+        "critical section"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "exclusion",
+        "mutual"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": true,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "conflicting_evidence",
+      "category": "conflicting_evidence",
+      "repeat_index": 0,
+      "probe_target": "UDP unreliability / no delivery guarantee",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain why UDP is considered connectionless and how this affects its reliability compared to TCP?",
+      "generated_reason": "This question directly probes the candidate's understanding of UDP's connectionless nature and how it impacts reliability, addressing the misconception that UDP guarantees reliable delivery.",
+      "generated_target_concepts": [
+        "connectionless",
+        "reliability"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "udp"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": false,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "ambiguous_partial_credit",
+      "category": "ambiguous",
+      "repeat_index": 0,
+      "probe_target": "write overhead on insert/update/delete",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Can you explain how an index is updated when data is inserted, updated, or deleted in a database?",
+      "generated_reason": "This question directly probes the write-side overhead of index updates, which is a critical concept that the candidate missed.",
+      "generated_target_concepts": [
+        "write-side overhead",
+        "index must be updated on insert/update/delete"
+      ],
+      "keyword_overlap_with_probe_target": [],
+      "has_keyword_overlap": false,
+      "coarse_repeats_original_question_flag": false,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "sparse_incomplete_evidence",
+      "category": "incomplete_evidence",
+      "repeat_index": 0,
+      "probe_target": "polymorphism example (override/runtime dispatch)",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Could you provide an example of how polymorphism works in a real-world scenario, such as a class hierarchy where different subclasses implement the same method differently?",
+      "generated_reason": "This question probes the candidate's understanding of how polymorphism works in practice, specifically focusing on the implementation of the same method differently in different subclasses.",
+      "generated_target_concepts": [
+        "class hierarchy",
+        "method implementation"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "example",
+        "polymorphism"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": false,
+      "coarse_redundant_with_prior_followup_flag": false
+    },
+    {
+      "case_id": "non_redundancy_against_prior_followup",
+      "category": "non_redundancy",
+      "repeat_index": 0,
+      "probe_target": "worst-case O(n) depth / unbalanced tree",
+      "decision_source": "qwen_1.5b_llm",
+      "llm_status": "available",
+      "generated_followup": "Discuss the potential impact of an unbalanced binary search tree on the time complexity of operations like search, insert, and delete.",
+      "generated_reason": "This question directly addresses the candidate's gap by focusing on the worst-case scenario of an unbalanced tree, which is crucial for understanding the performance implications.",
+      "generated_target_concepts": [
+        "worst-case O(n) depth",
+        "unbalanced tree"
+      ],
+      "keyword_overlap_with_probe_target": [
+        "tree",
+        "unbalanced"
+      ],
+      "has_keyword_overlap": true,
+      "coarse_repeats_original_question_flag": true,
+      "coarse_redundant_with_prior_followup_flag": false
+    }
+  ],
+  "strong_answer_skip_verification": {
+    "case_id": "strong_answer_no_followup_expected",
+    "category": "strong_answer_skip",
+    "method": "verified_via_production_skip_predicate_not_llm_call",
+    "skip_predicate_source": "score >= 0.85 and not missing and not incorrect and (not weakest_gap or 'None' in str(weakest_gap))",
+    "eval_result_used": {
+      "final_score": 0.9,
+      "missing_concepts": [],
+      "incorrect_claims": [],
+      "weakest_gap": "None \u2014 comprehensive answer"
+    },
+    "predicate_says_skip": true,
+    "matches_expectation": true
+  },
+  "method_caveats": [
+    "Keyword overlap is a coarse, disclosed heuristic (shared content words between the generated follow-up and a hand-written description of the probed gap), not a semantic or human-judged groundedness measurement. It can under-detect true grounding but cannot over-detect it beyond incidental word overlap.",
+    "N=12 constructed cases (15 generate_followup() calls after repeats) plus 1 skip-predicate verification -- indicative of current qualitative behavior across evidence categories, not a powered or statistically analyzed study, and not a random or representative sample of real candidate answers.",
+    "Subjective rubric dimensions (technical correctness, specificity, answerability, evidence grounding beyond keyword overlap, non-redundancy beyond the coarse flag above, target relevance) are NOT scored by this script. They are read and rated manually in a separate companion pass after this script runs, and that manual pass is a single, non-blinded read by the same research agent that built this probe -- not an independent or expert rating, and not to be cited as such.",
+    "The strong-answer skip case does not call generate_followup(); it is verified by re-applying the production gate predicate (quoted in SKIP_PREDICATE_SOURCE) to a constructed eval_result, since production itself never calls generate_followup() in that situation.",
+    "The repeat-run variability check (3 same-input calls for 2 cases) uses the real GGUF sampling settings (temperature=0.1, top_p=0.9, no explicit per-call seed) and is a within-session observation of 2 cases, not a systematic study of generation stability."
+  ]
+}

@@ -21,15 +21,19 @@ In PrepAIred, follow-up questions are strictly auxiliary pedagogical probes desi
 
 Following answer evaluation, the orchestrator evaluates whether to trigger a follow-up:
 
+**Corrected 2026-09-28 against the actual implementation** (`agents/orchestrator/interview_orchestrator.py::_decide_and_inject_followup`, verified by direct code read and by a test exercising the real method, not a copy). The table below previously described a "High Mastery" depth-probe branch and a `word_count`-gated "Vague / Low Depth" branch; **neither exists in the shipped code** and both rows are removed rather than left to describe unimplemented behavior. If that behavior is wanted, it needs to be implemented and tested, not just documented.
+
 | Condition | Candidate State / Evaluator Evidence | Trigger Action | Probe Strategy |
 |---|---|---|---|
-| **Misconception** | $\text{incorrect\_claims} \neq \emptyset$ | **Trigger FU #1** | Probe contradictory edge case where the flawed reasoning fails |
-| **Missing Core Concept** | $\text{missing\_concepts} \neq \emptyset \land S_{\text{tech}} \in [0.35, 0.65]$ | **Trigger FU #1** | Ask for the missing operational mechanism or invariant |
-| **High Mastery** | $S_{\text{tech}} \ge 0.75 \land \text{grade} = \text{"Excellent"}$ | **Trigger FU #1** | Probe scalability, cache locality, memory overhead, or concurrency |
-| **Vague / Low Depth** | $S_{\text{tech}} < 0.40 \land \text{word\_count} < 20$ | **Trigger FU #1** | Prompt for concrete step-by-step variable transition and complexity |
-| **Gap Resolved** | Follow-up answer score $\ge 0.70$ | **Proceed to Next** | Stop follow-ups; resume main question queue |
-| **Gap Persists** | Follow-up answer score $< 0.50$ | **Trigger FU #2** | Re-probe with alternative phrasing |
-| **Hard Cap Reached** | $\text{consecutive\_followups} \ge 2$ | **Proceed to Next** | Enforce hard cap; proceed to next main question |
+| **Hard Cap Reached** (checked first) | $\text{consecutive\_followups} \ge 2$ | **Proceed to Next** | Enforce hard cap; proceed to next main question |
+| **Strong Answer** (checked second) | $S_{\text{tech}} \ge 0.85 \land \text{missing\_concepts} = \emptyset \land \text{incorrect\_claims} = \emptyset \land \text{no weakest\_gap}$ | **Skip** | No follow-up; proceed to next main question |
+| **Misconception** | $\text{incorrect\_claims} \neq \emptyset$ | **Trigger FU** | `_inject_followup_question` — probes the identified misconceptions/missing concepts (see prompt in `services/qwen/app.py::_build_followup_prompt`) |
+| **Missing Concept** | $\text{missing\_concepts} \neq \emptyset$ (no score-range gate) | **Trigger FU** | as above |
+| **Below-threshold score** | $S_{\text{tech}} < 0.80$ | **Trigger FU** | as above |
+| **Unresolved gap** | $\text{weakest\_gap}$ present and non-trivial | **Trigger FU** | as above |
+| **Otherwise** (score in $[0.80, 0.85)$ with no missing/incorrect/gap) | — | **Skip** | No follow-up |
+
+There is no separate "Gap Resolved / Gap Persists" branch inside `_decide_and_inject_followup` itself — a follow-up's own answer re-enters the same evaluation and trigger-decision path as any other turn (subject to the hard cap above), not a distinct scored-threshold rule.
 
 ---
 
@@ -50,7 +54,7 @@ To maintain pacing and prevent derailment:
                  ┌───────────────────┴───────────────────┐
                  ▼                                       ▼
        [Live Qwen Service]                     [Offline Recovery Path]
-      - Ollama / GPU active                   - Microservice offline / error
+      - In-process llama.cpp/GGUF loaded      - Microservice offline / error
       - Prompt grounded in gaps               - Deterministic rubric gap probe
       - decision_source: "qwen_1.5b_llm"      - decision_source: "non_llm_structured_recovery"
       - llm_status: "available"               - llm_status: "llm_unavailable"

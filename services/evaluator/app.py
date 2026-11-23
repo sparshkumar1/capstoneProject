@@ -68,7 +68,6 @@ def get_vectors_by_type(qid, vtype):
         return np.array([])
     return np.array([index.reconstruct(i) for i in indices])
 
-
 # ─────────────────────────────────────────────────────────────────────────────
 # UTILITIES
 # ─────────────────────────────────────────────────────────────────────────────
@@ -90,7 +89,6 @@ def embed(text_list):
     emb = embedder.encode(text_list).astype("float32")
     _faiss.normalize_L2(emb)
     return emb
-
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CONCEPT DETECTION
@@ -351,7 +349,6 @@ def _detect_misconceptions(candidate, rubric):
             if np.max(row) > MISTAKE_THRESHOLD:
                 detected.append(mistake_texts[idx])
     return detected
-
 
 def evaluate(qn, candidate, rubric):
     """Score a candidate's answer against a rubric: composite 0.15*S1 + 0.35*S2_eff + 0.50*R (R-dampened S2, mandatory-cap, bonus/penalty applied), with grade and diagnostic breakdown."""

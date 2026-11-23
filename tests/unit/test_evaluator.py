@@ -11,7 +11,7 @@ Verifies the authoritative evaluation system (services/evaluator/app.py):
 """
 
 import pytest
-from services.evaluator.app import evaluate, get_rubric, _ensure_evaluator_assets_loaded
+from services.evaluator.app import evaluate, get_rubric, _ensure_evaluator_assets_loaded, dedupe_repeated_sentences
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -232,6 +232,113 @@ def test_paraphrased_correct_answer():
 # ─────────────────────────────────────────────────────────────────────────────
 # TEST 11: Score Ordering Invariant Across Test Cases
 # ─────────────────────────────────────────────────────────────────────────────
+def test_high_concept_coverage_with_weak_reasoning_is_penalized():
+    """A previously-unpenalized gap: an answer that names the right data
+    structures/terms (high concept coverage) but whose actual described
+    mechanism is backwards or self-contradictory (reasoning_score in this
+    file's own documented "partial/weak reasoning" band, ~0.30-0.50 post-
+    calibration) must receive a nonzero mistake penalty. The pre-existing
+    penalty rule only fired when concept coverage was ALSO low, so it never
+    caught "correct terminology, incorrect reasoning" misconceptions with
+    moderate-to-high concept coverage."""
+    rubric = get_rubric("1")
+    qn = "Explain your logic to find the two indices in an array that sum up to a target value."
+    # Names the right structure (hash map) and the right complexity vocabulary,
+    # but asserts a backwards/false complexity comparison as justification.
+    ans = (
+        "Using a hash map for complement lookups here is a bad idea because "
+        "hash map lookups are O(n) time, much slower than the O(1) time of "
+        "nested loops, so nested loops are the better approach."
+    )
+
+    result = evaluate(qn, ans, rubric)
+
+    assert result["concept_coverage"] >= 0.60, "This case only exercises the fix when concept coverage is high"
+    assert 0.30 <= result["reasoning_score"] < 0.50, "This case only exercises the fix when reasoning is in the weak band"
+    assert result["penalty"] > 0.0, "High-concept-coverage answers with weak/contradictory reasoning must be penalized"
+
+
+def test_weak_reasoning_penalty_does_not_fire_on_strong_answers():
+    """The new high-S2/weak-reasoning penalty tier must not fire for answers
+    whose reasoning score is already strong -- it targets the specific gap
+    band, not correct answers in general."""
+    rubric = get_rubric("1")
+    qn = "Explain your logic to find the two indices in an array that sum up to a target value."
+    ans = (
+        "To find the two indices that sum to a target value in an array, I will use a hash map to achieve an O(n) single pass solution. "
+        "As I iterate through the array, for each element, I calculate the complement as target minus the current element. "
+        "I check if this complement is already present in the hash map in O(1) constant time lookup. "
+        "If the complement exists, I return the index stored in the hash map along with the current index."
+    )
+
+    result = evaluate(qn, ans, rubric)
+
+    assert result["reasoning_score"] >= 0.50
+    assert result["penalty"] == 0.0
+
+
+def test_verbatim_repetition_does_not_inflate_score():
+    """A demonstrated defect: stating the exact same correct sentences twice
+    (or three times) previously raised the cross-encoder reasoning_score
+    (0.375 -> 0.494 for one measured base case) with no new information
+    present, purely from input-length effects on the cross-encoder call.
+    Repeating an answer must not score higher than stating it once."""
+    rubric = get_rubric("1")
+    qn = "Explain your logic to find the two indices in an array that sum up to a target value."
+    base = (
+        "I will use a hash map to store elements as I iterate through the array. "
+        "I store the values and indices in the map to make lookups fast."
+    )
+
+    result_once = evaluate(qn, base, rubric)
+    result_twice = evaluate(qn, base + " " + base, rubric)
+    result_thrice = evaluate(qn, base + " " + base + " " + base, rubric)
+
+    assert result_once["final_score"] == result_twice["final_score"] == result_thrice["final_score"]
+    assert result_once["reasoning_score"] == result_twice["reasoning_score"]
+
+
+def test_dedup_does_not_alter_returned_candidate_answer_or_claims():
+    """Deduplication must only affect the internal scoring path, never the
+    candidate_answer/candidate_claims fields returned to callers, which must
+    reflect what the candidate actually said (verbatim, including repeats)."""
+    rubric = get_rubric("1")
+    qn = "Explain your logic to find the two indices in an array that sum up to a target value."
+    base = "I will use a hash map to store elements as I iterate through the array."
+    ans = base + " " + base
+
+    result = evaluate(qn, ans, rubric)
+
+    assert result["candidate_answer"] == ans
+    assert len(result["candidate_claims"]) == 2
+
+
+def test_dedupe_repeated_sentences_helper():
+    assert dedupe_repeated_sentences("A cat sat. A cat sat.") == "A cat sat."
+    assert dedupe_repeated_sentences("A cat sat. a CAT sat.  ") == "A cat sat."
+    assert dedupe_repeated_sentences("A cat sat. A dog ran.") == "A cat sat. A dog ran."
+    assert dedupe_repeated_sentences("") == ""
+
+
+def test_paraphrase_stability_across_multiple_wordings():
+    """Three independently-worded, technically-equivalent correct answers to
+    the same question must land in a tight score band and receive the same
+    grade -- verifying paraphrase robustness rather than assuming it."""
+    rubric = get_rubric("4")
+    qn = "Explain Floyd's Cycle-Finding algorithm to detect a loop in a linked list."
+    paraphrases = [
+        "We use two pointers, a slow pointer moving one step and a fast pointer moving two steps; if they meet, there is a cycle.",
+        "A slow reference advances one node at a time while a fast reference advances two nodes at a time; a collision between them indicates a loop exists.",
+        "By moving one pointer at single-node speed and another at double-node speed through the list, we can tell there is a cycle when the two eventually land on the same node.",
+    ]
+
+    scores = [evaluate(qn, ans, rubric)["final_score"] for ans in paraphrases]
+    grades = [evaluate(qn, ans, rubric)["grade"] for ans in paraphrases]
+
+    assert max(scores) - min(scores) <= 0.10, f"Paraphrase score spread too wide: {scores}"
+    assert len(set(grades)) == 1, f"Paraphrases received different grades: {grades}"
+
+
 def test_score_ordering_invariants():
     """Verify that score ordering strictly holds: Correct > Partial > Keyword-Stuffed > Wrong > Off-Topic."""
     rubric = get_rubric("1")

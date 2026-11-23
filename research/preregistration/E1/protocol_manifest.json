@@ -1,0 +1,43 @@
+{
+  "experiment": "E1",
+  "experiment_full_name": "E1 -- PPO Persona-Diversity Development Experiment",
+  "protocol": "research/preregistration/E1/PROTOCOL.md",
+  "protocol_source": "research/paper_strengthening/E1_PPO_PERSONA_DIVERSITY_PROTOCOL_V4.md",
+  "lock_id": "LOCK-X3-2026-09-19",
+  "env_lock_sha256": "c8fdfda1f5034c1d56a27f756907fcb64c3a2b1cdd6e5142b8722a62b658aa03",
+  "env_lock_note": "E1 reuses X3-A's environment lock unchanged: E1's adapter (e1_simulate_adapter.py) imports x3a_lib.py directly and must run in the same environment for the runtime parity check to be meaningful. Verified at manifest-write time that the live .venv matches this lock's installed_packages (numpy 2.5.2, torch 2.11.0+cpu, stable_baselines3 2.7.1, gymnasium 0.29.1, python 3.12.7, Windows-11-10.0.26200-SP0) -- this is the same documented, user-accepted numpy<2/torch<2.7 pin deviation already recorded for LOCK-X3-2026-09-19, not a new or additional deviation.",
+  "decision_notes": [
+    "Development-stage gate (protocol V4 section 4.3): proceed to confirmatory evaluation only if B2 shows a directional mechanism-check improvement over B0 on development seeds 1001-5005, with no per-persona regression >=0.05 MAE units relative to B0",
+    "Confirmatory seeds (21021-40040) and the three held-out profiles (HOLDOUT-1/2/3) are locked and must not be inspected or evaluated during this development-phase run",
+    "No arm or checkpoint may be selected using confirmatory-seed MAE -- the development gate is the only selection mechanism",
+    "Episode-seed formula (protocol V4 section 1.2): seed = training_seed * 100_000 + episode_index, identical for B0 and B2 at matching cells",
+    "If the extended-budget diagnostic triggers, it applies to both B0 and B2 together, never one arm alone"
+  ],
+  "files": {
+    "research/preregistration/E1/PROTOCOL.md": "22ee4b744f4d3d4212b8c02d0ed551c0cc9da0186b41e67a0185245577ef0d6b",
+    "research/paper_strengthening/E1_PPO_PERSONA_DIVERSITY_PROTOCOL_V4.md": "22ee4b744f4d3d4212b8c02d0ed551c0cc9da0186b41e67a0185245577ef0d6b",
+    "research/paper_strengthening/E1_IMPLEMENTATION_REPORT.md": "096497ef132edbab6fce328ddd42b50fa1702f07a32ffe5e97f749698a74e037",
+    "research/paper_strengthening/scripts/e1_config.json": "75dda898ecd03bb95bf68a0610408c2a479a66e1275daf011c740b17a1727553",
+    "research/paper_strengthening/scripts/e1_diverse_persona_env.py": "3fda0e840808dfb7fa03333d04c83fefb4a27732a831933e4b51de12bb1db7ad",
+    "research/paper_strengthening/scripts/e1_simulate_adapter.py": "0b038b4252da7c090ca6e5190f467b241422b827e45291833a363d06596a96f1",
+    "research/paper_strengthening/scripts/e1_train_condition_b.py": "daf094c46a1c670f149363c18af322de9efc59a4a984d45bc7f2abd54c9c53ab",
+    "research/paper_strengthening/scripts/tests/test_e1_diverse_persona.py": "ce6d956c804f41b1a1ee47cb841442516dc3acbda19880e2573ce7652d32a213",
+    "research/scripts/execute_paper3_study.py": "29aa61d6231eacdc70f4b191c88a72ef874071782471df412d3184dfc723c0a7",
+    "research/confirmatory/X3-A/x3a_lib.py": "3badbb39dbf4974a53899ab013c9d0091f40aad718d34fc1b7502e6d4771e506",
+    "rl/env/interview_env.py": "117af6c8a7dea0cda90cc28aead0796a25f6332a329670bbe1215a412256e4b1",
+    "rl/training/simulated_candidate.py": "6e2c55c3326eac4626d4233784db75f6fdc2994e30c84060841d3540801ecec8",
+    "rl/guardrails.py": "c4198975227a03f9a672e982d0a3aa62ea60c41331c51ef55285410c409666ba",
+    "research/experiments/paper3/frozen_config.yaml": "d3da218479ef15f61d9f760e40b2398ee571b4672d1370954ead23ecb3104d9e",
+    "research/experiments/paper3/checkpoints/seed_42/ppo_final.zip": "8395b6da753f5d272c46bfad018f7a7ae6e5508be58bcd732094771911b3d465",
+    "research/experiments/paper3/checkpoints/seed_42/vecnormalize.pkl": "0e24cdd77e27170137ee5739d6b9258418a98bdf5a1a1bea23e8208ed85debcf",
+    "research/experiments/paper3/checkpoints/seed_123/ppo_final.zip": "299437ea0dcdd7a5eed51326e80854bd3bb55341194420b619c5da3d675e24e0",
+    "research/experiments/paper3/checkpoints/seed_123/vecnormalize.pkl": "f9c752bbc09e0bed5750e5d2beb3838dce58d4da1cd6de20191830f91393087d",
+    "research/experiments/paper3/checkpoints/seed_456/ppo_final.zip": "f9799143aac6a2a67664caadbfa2ce55a113704632bbbe9cfbd1990724a40c55",
+    "research/experiments/paper3/checkpoints/seed_456/vecnormalize.pkl": "69c6605d52e97a52ce1cfe2c4a9394d1b05cac1778b286d2a559e08d09bdeefd",
+    "research/experiments/paper3/checkpoints/seed_789/ppo_final.zip": "0ebb8800f71d453a48f4e307bea4e6cf18dbeb128a38707ac2029b38e757bbcb",
+    "research/experiments/paper3/checkpoints/seed_789/vecnormalize.pkl": "f4884dcc0c92d7edf0959791cd29d512941f53a6ffbf0d0d205431f47fa290c9",
+    "research/experiments/paper3/checkpoints/seed_999/ppo_final.zip": "16494e754125443275f83b6868a964e1688f065976396e88f400de5f60776adf",
+    "research/experiments/paper3/checkpoints/seed_999/vecnormalize.pkl": "a9ba7fff3d065591558fe6e4e6b9c0c627e7fd7b6b15c6a5497c0d3a9a1ce809"
+  },
+  "checkpoint_hashes_verified_against": "research/preregistration/X3-A/protocol_manifest.json (all 10 checkpoint file hashes above are byte-identical to X3-A's own frozen registration, confirming zero drift since that study)"
+}

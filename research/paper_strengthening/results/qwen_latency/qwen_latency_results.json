@@ -1,0 +1,54 @@
+{
+  "status": "MEASURED",
+  "env": {
+    "gguf_model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\models\\gguf\\qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "gguf_model_load_s": 11.29,
+    "MOCK_MODE": false,
+    "active_model_key": "qwen_1b",
+    "model_type": "gguf",
+    "models_loaded": [
+      "qwen_1b"
+    ],
+    "python": "3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "cpu_count": 12
+  },
+  "load_plus_first_call_s": 10.27,
+  "rss_before_load_mb": 1597.5,
+  "rss_after_load_mb": 1974.5,
+  "rss_after_run_mb": 1997.0,
+  "followup_generation": {
+    "label": "followup (max_new_tokens=128)",
+    "n": 6,
+    "mean_ms": 5586.3,
+    "median_ms": 5540.1,
+    "p95_ms": 6067.7,
+    "min_ms": 5157.5,
+    "max_ms": 6222.0,
+    "raw_ms": [
+      6222.0,
+      5507.9,
+      5157.5,
+      5605.0,
+      5572.3,
+      5452.8
+    ]
+  },
+  "feedback_generation": {
+    "label": "feedback (max_new_tokens=256)",
+    "n": 6,
+    "mean_ms": 16642.7,
+    "median_ms": 15475.4,
+    "p95_ms": 21022.4,
+    "min_ms": 15012.7,
+    "max_ms": 22650.2,
+    "raw_ms": [
+      22650.2,
+      15752.5,
+      15103.2,
+      15012.7,
+      16139.0,
+      15198.3
+    ]
+  }
+}

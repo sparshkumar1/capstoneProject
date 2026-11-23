@@ -1,0 +1,72 @@
+{
+ "C0_faithful": {
+  "accepted": 47,
+  "applicable": 64,
+  "by_question": {
+   "1": 2,
+   "3": 1,
+   "7": 2,
+   "10": 5,
+   "41": 7
+  },
+  "disagree_with_intended_label": 17,
+  "excluded_no_applicable_evidence": 0,
+  "rejected": 17
+ },
+ "C1_verbatim_missing_as_correct": {
+  "accepted": 0,
+  "applicable": 57,
+  "by_question": {},
+  "disagree_with_intended_label": 0,
+  "excluded_no_applicable_evidence": 7,
+  "rejected": 57
+ },
+ "C2_verbatim_incorrect_as_correct": {
+  "accepted": 0,
+  "applicable": 10,
+  "by_question": {},
+  "disagree_with_intended_label": 0,
+  "excluded_no_applicable_evidence": 54,
+  "rejected": 10
+ },
+ "C3_narrative_correctly_explained_missing": {
+  "accepted": 0,
+  "applicable": 57,
+  "by_question": {},
+  "disagree_with_intended_label": 0,
+  "excluded_no_applicable_evidence": 7,
+  "rejected": 57
+ },
+ "C4_truncated_paraphrase_credit": {
+  "accepted": 40,
+  "applicable": 57,
+  "by_question": {
+   "1": 5,
+   "3": 4,
+   "7": 6,
+   "10": 1,
+   "15": 8,
+   "22": 8,
+   "50": 8
+  },
+  "disagree_with_intended_label": 40,
+  "excluded_no_applicable_evidence": 7,
+  "rejected": 17
+ },
+ "C5_score_leak": {
+  "accepted": 0,
+  "applicable": 64,
+  "by_question": {},
+  "disagree_with_intended_label": 0,
+  "excluded_no_applicable_evidence": 0,
+  "rejected": 64
+ },
+ "C6_generic_fluff": {
+  "accepted": 0,
+  "applicable": 64,
+  "by_question": {},
+  "disagree_with_intended_label": 0,
+  "excluded_no_applicable_evidence": 0,
+  "rejected": 64
+ }
+}

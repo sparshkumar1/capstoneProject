@@ -1,0 +1,21 @@
+{
+  "experiment": "E1-Improve-V1",
+  "parent_experiment": "E1",
+  "status": "exploratory, development-only, one bounded iteration",
+  "protocol": "research/paper_strengthening/E1_IMPROVE_V1_PROTOCOL.md",
+  "protocol_sha256": "0fb518e2c838af5bed44b90a46bf4a152c6c4c8edad29d952b692c8b0af7fe4b",
+  "config_reused_unchanged": "research/paper_strengthening/scripts/e1_config.json (sha256 75dda898ecd03bb95bf68a0610408c2a479a66e1275daf011c740b17a1727553)",
+  "lock_id": "LOCK-X3-2026-09-19",
+  "files": {
+    "research/paper_strengthening/scripts/e1improve_train_b2_checkpointed.py": "4e2f148d975cb8bdb327d0cb21ec199ddfdbe2836d1e15e8ba5a48980c57db99",
+    "research/paper_strengthening/scripts/e1improve_hybrid_gate.py": "31a6c08e9fcc553e22d8c140c9626cd6935f8eb72130bfd3aa777a38762e86e0",
+    "research/paper_strengthening/scripts/e1improve_eval_hybrid.py": "38227bd36942a7d4243539697df4efe48b6b1d3e6c2ae3d980d010e1762a8cbc",
+    "research/paper_strengthening/scripts/e1improve_eval_checkpoint_trace.py": "d9172189fad32cd955938146c08f2920ba2ffa2df9fad0a0204fa5165c8ad959"
+  },
+  "decision_notes": [
+    "Intervention A (checkpoint-interval trace) and Intervention B (deterministic hybrid gate) fixed before execution; decision criteria fixed in the protocol section 3 before either was run",
+    "No confirmatory seed or held-out profile touched by either intervention",
+    "No reward/state/action/guardrail/evaluator-scoring definition changed",
+    "Original E1 primary/extended results and checkpoints preserved unmodified; new artifacts only"
+  ]
+}

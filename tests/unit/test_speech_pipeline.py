@@ -19,7 +19,7 @@ from agents.audio.transcriber import (
 )
 from agents.audio.audio_io import _read_wav_bytes, _pcm_to_float, frame_rms
 from agents.audio.hesitation_scorer import score_hesitation
-from agents.audio.confidence_scorer import score as audio_confidence_score
+from agents.audio.confidence_scorer import score as audio_confidence_score, score_breakdown
 from agents.audio.nlp_analyzer import analyze_linguistic_confidence
 from apps.backend.main import app
 
@@ -113,7 +113,7 @@ def test_filler_words_hesitation_scoring():
         "pause_count": 0,
         "total_pause_time": 0.0,
         "total_speech_time": 3.0,
-        "true_speaking_rate": 3.0,
+        "true_speaking_rate": 180.0,  # words/minute, as produced by transcriber.py (=3.0 words/sec)
     }
     transcription_hesitant = {
         "transcript": "Um like basically uh I guess you know sort of maybe",
@@ -122,7 +122,7 @@ def test_filler_words_hesitation_scoring():
         "total_pause_time": 2.5,
         "total_speech_time": 2.0,
         "audio_duration": 4.5,
-        "true_speaking_rate": 2.0,
+        "true_speaking_rate": 120.0,  # words/minute (=2.0 words/sec)
         "pauses": [{"duration": 0.8}, {"duration": 1.7}],
     }
     hes_fluent = score_hesitation({}, transcription_fluent)
@@ -183,7 +183,7 @@ def test_audio_confidence_scoring():
         "words": [{"word": w} for w in "We will use a hash map because it gives O(1) average lookup time.".split()],
         "total_speech_time": 4.0,
         "total_pause_time": 0.4,
-        "true_speaking_rate": 3.25,
+        "true_speaking_rate": 195.0,  # words/minute, as produced by transcriber.py (=3.25 words/sec)
         "transcription_confidence": 0.95,
         "pause_count": 1,
     }
@@ -192,6 +192,125 @@ def test_audio_confidence_scoring():
 
     assert 0.0 <= conf_score <= 1.0
     assert conf_score >= 0.65  # Clear assertive statement with fluent acoustics
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TEST 9: Speaking-rate unit handling (regression test for the WPM/WPS defect
+# found and fixed in this pass — see research/paper_strengthening/SPEAKING_RATE_PROTOCOL.md
+# and research/paper_strengthening/results/speaking_rate_sweep/).
+# transcriber.py's true_speaking_rate is words per minute; the scorers convert
+# it to words per second internally. These tests exercise that conversion
+# directly, using WPM-scale inputs as the real pipeline would produce.
+# ─────────────────────────────────────────────────────────────────────────────
+_BASE_TRANSCRIPTION = {
+    "total_speech_time": 4.0,
+    "total_pause_time": 0.4,
+    "transcription_confidence": 0.9,
+    "pause_count": 1,
+    "words": [],
+    "transcript": "",
+    "audio_duration": 4.4,
+    "pauses": [],
+}
+_BASE_PROSODIC = {"jitter": 0.015, "shimmer": 0.05, "hnr": 20.0, "pitch_stddev": 35.0}
+
+
+def test_speaking_rate_realistic_wpm_range_discriminates():
+    """A realistic conversational rate (140 WPM) must score near-optimal; a very
+    slow (40 WPM) or very fast (320 WPM) rate must score materially worse. Before
+    the fix, every WPM value in this range collapsed to the same worst-case score."""
+    def rate_score_for(wpm):
+        t = dict(_BASE_TRANSCRIPTION, true_speaking_rate=wpm)
+        return score_breakdown(_BASE_PROSODIC, t, {"linguistic_score": 0.6})["rate_score"]
+
+    slow = rate_score_for(40.0)
+    optimal = rate_score_for(140.0)
+    fast = rate_score_for(320.0)
+
+    assert optimal == 1.0
+    assert slow < optimal
+    assert fast < optimal
+    assert slow != fast  # not just "not optimal" -- genuinely discriminating, not a second pinned constant
+
+
+def test_speaking_rate_wpm_boundaries_match_wps_thresholds():
+    """126 WPM and 258 WPM are exactly 2.1 and 4.3 words/sec -- the documented
+    optimal boundary -- and must score 1.0; just outside must not."""
+    def rate_score_for(wpm):
+        t = dict(_BASE_TRANSCRIPTION, true_speaking_rate=wpm)
+        return score_breakdown(_BASE_PROSODIC, t, {"linguistic_score": 0.6})["rate_score"]
+
+    assert rate_score_for(126.0) == 1.0
+    assert rate_score_for(258.0) == 1.0
+    assert rate_score_for(125.0) < 1.0
+    assert rate_score_for(259.0) < 1.0
+
+
+def test_speaking_rate_invalid_inputs_do_not_crash():
+    """Zero, negative, missing, and non-numeric true_speaking_rate values must
+    not raise -- confidence_scorer already handled this; hesitation_scorer did
+    not (a bare string value raised TypeError before this pass's fix)."""
+    for bad_value in (0.0, -10.0, "not_a_number"):
+        t = dict(_BASE_TRANSCRIPTION, true_speaking_rate=bad_value)
+        conf = score_breakdown(_BASE_PROSODIC, t, {"linguistic_score": 0.6})
+        hes = score_hesitation(_BASE_PROSODIC, t)
+        assert 0.0 <= conf["rate_score"] <= 1.0
+        assert 0.0 <= hes["rate_deviation"] <= 1.0
+
+    # missing field entirely (not even the key) must also not crash
+    t_missing = dict(_BASE_TRANSCRIPTION)
+    conf = score_breakdown(_BASE_PROSODIC, t_missing, {"linguistic_score": 0.6})
+    hes = score_hesitation(_BASE_PROSODIC, t_missing)
+    assert 0.0 <= conf["rate_score"] <= 1.0
+    assert 0.0 <= hes["rate_deviation"] <= 1.0
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TEST 8b: NaN/Inf prosodic features must not fabricate a best- or worst-case
+# score (regression test for the sixth research-improvement pass). Parselmouth
+# can return NaN for jitter/shimmer/hnr/pitch_stddev on very short, silent or
+# unvoiced audio segments. Before this fix, _clamp(nan) evaluated to 1.0 (a
+# Python min()/max() quirk: min(1.0, nan) keeps the first argument since the
+# nan comparison is always False), so a failed jitter/shimmer/hnr measurement
+# silently scored as flawless voice quality, and a failed jitter measurement
+# in hesitation_scorer silently scored as maximum pitch instability.
+# ─────────────────────────────────────────────────────────────────────────────
+def test_nan_prosodic_features_score_neutrally_not_best_or_worst_case():
+    """A NaN or infinite jitter/shimmer/hnr/pitch_stddev must score its
+    component neutrally (0.5), not silently fabricate the best possible
+    confidence score or the worst possible hesitation contribution."""
+    nan_prosodic = {
+        "jitter": float("nan"), "shimmer": float("nan"),
+        "hnr": float("nan"), "pitch_stddev": float("nan"),
+    }
+    t = dict(_BASE_TRANSCRIPTION)
+
+    conf = score_breakdown(nan_prosodic, t, {"linguistic_score": 0.6})
+    assert conf["jitter_score"] == 0.5
+    assert conf["shimmer_score"] == 0.5
+    assert conf["hnr_score"] == 0.5
+    assert conf["pitch_var_score"] == 0.5
+    assert conf["voice_quality"] == 0.5
+    assert 0.0 <= conf["final_score"] <= 1.0
+
+    hes = score_hesitation(nan_prosodic, t)
+    assert hes["pitch_instability"] == 0.5
+    assert 0.0 <= hes["hesitation_score"] <= 1.0
+
+    # +inf/-inf must behave the same as NaN (also caught, also neutral)
+    inf_prosodic = {"jitter": float("inf"), "shimmer": 0.05, "hnr": float("-inf"), "pitch_stddev": 35.0}
+    conf_inf = score_breakdown(inf_prosodic, t, {"linguistic_score": 0.6})
+    assert conf_inf["jitter_score"] == 0.5
+    assert conf_inf["hnr_score"] == 0.5
+    assert conf_inf["shimmer_score"] != 0.5  # valid input must still be scored normally
+
+    # a genuinely good, in-range jitter measurement must not be affected by
+    # the None-vs-float branch introduced by this fix (non-regression check)
+    good = {"jitter": 0.015, "shimmer": 0.05, "hnr": 20.0, "pitch_stddev": 35.0}
+    conf_good = score_breakdown(good, t, {"linguistic_score": 0.6})
+    assert conf_good["jitter_score"] == pytest.approx(0.5, abs=1e-6)  # 1 - 0.015/0.03 = 0.5, unaffected by the fix
+    hes_good = score_hesitation(good, t)
+    assert hes_good["pitch_instability"] == pytest.approx(0.3, abs=1e-6)  # 0.015/0.05 = 0.3, unaffected by the fix
 
 
 # ─────────────────────────────────────────────────────────────────────────────

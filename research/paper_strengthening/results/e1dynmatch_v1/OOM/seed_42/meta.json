@@ -1,0 +1,10 @@
+{
+  "arm": "OOM",
+  "factor_a": "original",
+  "factor_b": "original",
+  "factor_c": "matched",
+  "training_seed": 42,
+  "elapsed_sec": 104.94,
+  "final_model_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1dynmatch_v1\\OOM\\seed_42\\OOM_seed42_final_24576.zip",
+  "final_vecnorm_path": "C:\\Users\\spars\\Downloads\\PrepAIred\\research\\paper_strengthening\\results\\e1dynmatch_v1\\OOM\\seed_42\\OOM_seed42_vecnormalize_final_24576.pkl"
+}

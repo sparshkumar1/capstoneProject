@@ -1,0 +1,23 @@
+{
+  "schema_version": "evaluator_benchmark_v2-proposed",
+  "status": "PROPOSAL ONLY -- not applied to any frozen file",
+  "changes_from_v1_benchmark_dataset_csv": [
+    "Add a `qid_status` column: 'matched' | 'mismatched' | 'retired' per case, computed from qid_mapping.json rather than assumed.",
+    "Add a `rubric_source` column: 'production_rubrics_json' (for matched cases) | 'benchmark_self_contained_reference_answer' (for mismatched cases, until re-indexed) -- makes explicit, per case, which scoring path is valid, so a future evaluate() caller cannot silently use get_rubric(qid) on a known-mismatched case without an explicit override.",
+    "For any case whose qid is later reused for re-indexed rubric content, add a `benchmark_qid` column distinct from the production `qid`, so the benchmark's own identity does not silently follow a future production renumbering again."
+  ],
+  "fields_requiring_human_authorship_or_approval_before_a_full_repair": [
+    {
+      "field": "mandatory_concepts",
+      "why": "not present anywhere in benchmark_dataset.csv for the 4 mismatched questions; inventing them would not reflect what the original human raters saw or scored against"
+    },
+    {
+      "field": "common_mistakes_addressed / bonus indicator text",
+      "why": "same reason; no source content exists in the benchmark file"
+    },
+    {
+      "field": "new held-out human ratings (if cases are replaced rather than re-indexed)",
+      "why": "requires new rater recruitment and a documented independence/blinding protocol, not something this pass can produce"
+    }
+  ]
+}

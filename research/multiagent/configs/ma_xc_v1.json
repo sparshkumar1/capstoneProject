@@ -1,0 +1,8 @@
+{
+  "protocol": "MA-XC-v1",
+  "recorded_sessions": 8,
+  "order_seeds": 20,
+  "timeout_s": 2.0,
+  "taus": {"TAU0": 0.0, "TAU5": 0.5, "TAU6": 0.6, "TAU7": 0.7, "TAU8": 0.8, "TAU9": 0.9},
+  "bootstrap": {"B": 10000, "seed": 20270101}
+}
